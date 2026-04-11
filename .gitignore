@@ -1,0 +1,17 @@
+﻿# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Environment Variables (CRITICAL: NEVER COMMIT THESE)
+.env
+.env.*
+.dev.vars
+!.env.example
+
+# Cloudflare & OS
+.wrangler/
+.DS_Store
+Thumbs.db

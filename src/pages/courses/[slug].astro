@@ -1,0 +1,106 @@
+---
+// src/pages/courses/[slug].astro
+import Page from '../../layouts/Page.astro';
+import { courses } from '../../data/courses';
+
+// 1. Tell Astro to generate a page for every item in the Brain
+export function getStaticPaths() {
+  return courses.map(course => ({
+    params: { slug: course.slug },
+    props: { course }, // We pass the entire course object into the page
+  }));
+}
+
+// 2. Extract the specific course data for the current page
+const { course } = Astro.props;
+
+// 3. 🧠 INVISIBLE SEO: Tell Google exactly what this course is
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": course.title,
+  "description": course.longDesc,
+  "provider": {
+    "@type": "Organization",
+    "name": "Quranific Academy",
+    "sameAs": "https://quranific.com"
+  },
+  "educationalCredentialAwarded": "Certificate of Completion",
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "Online",
+    "courseWorkload": course.duration
+  }
+});
+---
+
+<Page 
+  title={`${course.title} | Quranific Academy`}
+  description={course.shortDesc}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={schema} />
+  </Fragment>
+
+  <div class="bg-emerald-950 pt-32 pb-6 px-4 border-b border-emerald-900/50">
+    <div class="max-w-4xl mx-auto flex items-center gap-2 text-xs font-bold text-emerald-200/60">
+      <a href="/" class="hover:text-white transition-colors">Home</a>
+      <span>/</span>
+      <a href="/courses" class="hover:text-white transition-colors">Courses</a>
+      <span>/</span>
+      <span class="text-emerald-400">{course.title}</span>
+    </div>
+  </div>
+
+  <section class="py-16 md:py-24 bg-emerald-950 text-center px-4 border-b border-emerald-900">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-6xl mb-6 group-hover:scale-110 transition-transform">{course.icon}</div>
+      
+      <div class="flex items-center justify-center gap-4 mb-6">
+        <span class="px-3 py-1 rounded-full bg-emerald-900 text-emerald-300 text-xs font-bold border border-emerald-800">
+          {course.level}
+        </span>
+        <span class="px-3 py-1 rounded-full bg-emerald-900 text-emerald-300 text-xs font-bold border border-emerald-800">
+          ⏱️ {course.duration}
+        </span>
+      </div>
+      
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white font-serif mb-8 tracking-tight">
+        {course.title}
+      </h1>
+      
+      <p class="text-lg md:text-xl text-emerald-100/80 leading-relaxed max-w-2xl mx-auto mb-10">
+        {course.longDesc}
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="/funnel/signup" class="w-full sm:w-auto px-8 py-4 text-base font-bold text-emerald-950 bg-emerald-400 hover:bg-emerald-300 rounded-xl shadow-lg hover:shadow-emerald-400/20 active:scale-95 transition-all">
+          Start Your Free Trial
+        </a>
+        <a href="https://wa.me/1234567890" class="w-full sm:w-auto px-8 py-4 text-base font-bold text-white bg-transparent border border-emerald-700 hover:bg-emerald-900 rounded-xl transition-all">
+          Ask a Question
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-[#fefdf9]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="bg-white rounded-3xl p-8 md:p-12 border border-emerald-100 shadow-sm">
+        <h2 class="text-2xl md:text-3xl font-black text-emerald-950 font-serif mb-8">What You Will Learn</h2>
+        
+        <div class="grid sm:grid-cols-2 gap-6">
+          {course.features.map(feature => (
+            <div class="flex items-start gap-4 p-4 rounded-2xl bg-emerald-50/50 border border-emerald-50">
+              <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold">✓</div>
+              <div class="pt-1 font-bold text-emerald-900 text-sm leading-relaxed">{feature}</div>
+            </div>
+          ))}
+        </div>
+        
+      </div>
+      
+    </div>
+  </section>
+</Page>

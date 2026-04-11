@@ -1,0 +1,76 @@
+---
+// src/components/sections/TrustStrip.astro
+import { SITE } from '../../constants/site';
+
+const PinIcon = `<svg class="w-3.5 h-3.5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`;
+const countries = SITE.trustCountries;
+---
+
+<div
+  class="border-y border-slate-200/60 bg-slate-50 py-4 flex flex-row w-full relative z-10 overflow-hidden group"
+  role="region"
+  aria-label="Families trust us from around the world"
+>
+  <div class="relative z-20 flex items-center shrink-0 px-5 md:px-8 bg-slate-50 border-r border-slate-200/50 shadow-[8px_0_15px_-3px_rgba(248,250,252,1)]">
+    <span class="text-[11px] font-black tracking-widest uppercase text-slate-400 whitespace-nowrap">
+      Families from
+    </span>
+  </div>
+
+  <div class="flex-1 relative overflow-hidden flex items-center">
+    
+    <div class="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" aria-hidden="true"></div>
+
+    <div class="flex flex-row flex-nowrap w-max shrink-0 animate-q-marquee group-hover:[animation-play-state:paused] will-change-transform">
+      
+      {[0, 1].map((pass) => (
+        <div 
+          class="flex flex-row flex-nowrap items-center gap-8 md:gap-12 pl-8 md:pl-12 shrink-0"
+          aria-hidden={pass === 1 ? "true" : "false"}
+        >
+          {countries.map((c) => (
+            <span class="flex flex-row items-center gap-1.5 text-[13px] font-bold text-slate-600 transition-colors duration-300 ease-in-out hover:text-emerald-700 cursor-default whitespace-nowrap shrink-0">
+              <Fragment set:html={PinIcon} />
+              {c.name}
+            </span>
+          ))}
+        </div>
+      ))}
+
+    </div>
+
+  </div>
+
+  <ul class="sr-only" role="list" aria-label="Countries we serve">
+    {countries.map((c) => (
+      <li>{c.name}</li>
+    ))}
+  </ul>
+</div>
+
+<style is:global>
+  /* The Animation Engine */
+  .animate-q-marquee {
+    animation: q-scroll 35s linear infinite;
+  }
+
+  /* Moves exactly 50% of the track (which equals exactly 1 full list), then instantly snaps back to 0 */
+  /* Using translate3d forces hardware acceleration for smoother animation */
+  @keyframes q-scroll {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+  }
+
+  /* Accessibility Kill-Switch */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-q-marquee {
+      animation: none !important;
+      width: auto !important;
+      flex-wrap: wrap !important;
+    }
+    /* Hide the duplicate list if animation is off */
+    div[aria-hidden="true"] {
+      display: none !important;
+    }
+  }
+</style>

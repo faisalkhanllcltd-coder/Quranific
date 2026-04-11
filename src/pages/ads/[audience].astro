@@ -1,0 +1,139 @@
+---
+// src/pages/ads/[audience].astro
+import Base from '../../layouts/Base.astro';
+import Button from '../../components/ui/Button.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { audience: 'kids' } },
+    { params: { audience: 'adults' } },
+    { params: { audience: 'ladies' } }
+  ];
+}
+
+const { audience } = Astro.params;
+
+const Icons = {
+  kids: `<svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+  adults: `<svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>`,
+  ladies: `<svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" /></svg>`,
+  check: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`
+};
+
+// 🧠 The Ad "Mini-Brain": Custom SEO and Copywriting for each demographic
+// Fixed dynamic tailwind classes by mapping them directly to safe utility classes
+const adCopy = {
+  kids: {
+    seoTitle: "Quran Classes for Kids | Fun & Engaging Online Tutors",
+    seoDesc: "Enroll your child in engaging, 1-on-1 online Quran classes. Our certified tutors specialize in teaching kids Tajweed, Qaida, and Hifz.",
+    title: "Give Your Child the Gift of the Quran.",
+    subtitle: "Engaging, fun, and patient 1-on-1 online Quran classes designed specifically for children. Watch them build a lifelong love for Islam.",
+    theme: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200", iconCol: "text-amber-500", glow: "bg-amber-400" },
+    icon: Icons.kids,
+    benefits: ["Patient & Certified Tutors", "Interactive & Fun Lessons", "Flexible Parent Schedules", "Progress Tracking Dashboard"]
+  },
+  adults: {
+    seoTitle: "Quran Classes for Adults | Flexible 1-on-1 Online Tutors",
+    seoDesc: "Master the Quran with flexible, 1-on-1 online classes for adults. Start from zero, improve your Tajweed, or begin your Hifz journey today.",
+    title: "Master the Quran, No Matter Your Schedule.",
+    subtitle: "1-on-1 personalized sessions for busy professionals. Whether you are starting from zero or pursuing an Ijazah, we build the schedule around you.",
+    theme: { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200", iconCol: "text-emerald-600", glow: "bg-emerald-500" },
+    icon: Icons.adults,
+    benefits: ["24/7 Flexible Scheduling", "Learn at Your Own Pace", "Tajweed & Hifz Tracks", "Private 1-on-1 Focus"]
+  },
+  ladies: {
+    seoTitle: "Quran Classes for Ladies | 100% Female Arab Tutors",
+    seoDesc: "Learn the Quran in a private, comfortable online environment exclusively with certified female scholars. Specialized in Tajweed and Tafsir for sisters.",
+    title: "Learn the Quran in a 100% Private Environment.",
+    subtitle: "Exclusive 1-on-1 classes taught strictly by certified female Arab scholars. A safe, comfortable, and empowering space for sisters to learn.",
+    theme: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200", iconCol: "text-purple-600", glow: "bg-purple-500" },
+    icon: Icons.ladies,
+    benefits: ["100% Female Tutors", "Complete Privacy Guaranteed", "Comfortable Learning Pace", "Tajweed & Tafsir Focus"]
+  }
+};
+
+const content = adCopy[audience as keyof typeof adCopy];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": content.seoTitle,
+  "description": content.seoDesc
+};
+---
+
+<Base 
+  title={content.seoTitle} 
+  description={content.seoDesc}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  
+  <main class="min-h-screen bg-cream-50 flex items-center selection:bg-emerald-200 selection:text-emerald-950">
+    <section class="relative py-20 lg:py-32 overflow-hidden w-full">
+      <div class={`absolute top-0 right-0 w-[800px] h-[800px] ${content.theme.glow}/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/4 translate-x-1/4`} aria-hidden="true"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <div class="mb-12">
+          <a href="/" class="inline-flex items-center gap-2 font-serif font-black text-2xl text-emerald-950 hover:opacity-80 transition-opacity">
+            Quranific<span class="text-emerald-600">.</span>
+          </a>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          
+          <div class="animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div class={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full ${content.theme.bg} ${content.theme.text} text-xs font-bold uppercase tracking-widest mb-8 border ${content.theme.border} shadow-sm`}>
+              Tailored Learning Path
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-emerald-950 font-serif mb-6 leading-tight tracking-tight text-balance">
+              {content.title}
+            </h1>
+            
+            <p class="text-lg md:text-xl text-emerald-900/80 mb-10 leading-relaxed max-w-xl font-medium">
+              {content.subtitle}
+            </p>
+            
+            <ul class="space-y-4 mb-12 max-w-md">
+              {content.benefits.map(benefit => (
+                <li class="flex items-center gap-4 text-emerald-950 font-bold bg-white px-5 py-4 rounded-2xl border border-emerald-100 shadow-sm">
+                  <div class={`w-6 h-6 rounded-full ${content.theme.bg} ${content.theme.text} flex items-center justify-center shrink-0`}>
+                    <span set:html={Icons.check}></span>
+                  </div>
+                  {benefit}
+                </li>
+              ))}
+            </ul>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+              <Button href={`/funnel/signup?source=ad_${audience}`} variant="primary" class="w-full sm:w-auto px-10 py-5 text-lg shadow-xl">
+                Start Free Trial Now
+              </Button>
+              <Button href="https://wa.me/923112112122" target="_blank" variant="ghost" class="w-full sm:w-auto px-10 py-5 text-lg">
+                Chat on WhatsApp
+              </Button>
+            </div>
+          </div>
+
+          <div class="relative hidden lg:block animate-in fade-in zoom-in duration-1000 delay-150">
+            <div class={`absolute inset-0 ${content.theme.bg} rounded-[3rem] transform rotate-3 scale-105 opacity-80 border ${content.theme.border}`} aria-hidden="true"></div>
+            <div class="absolute inset-0 bg-white rounded-[3rem] transform -rotate-2 scale-100 opacity-50 border border-emerald-100" aria-hidden="true"></div>
+            
+            <div class="relative bg-white p-12 rounded-[3rem] border border-emerald-100 shadow-2xl flex flex-col items-center justify-center min-h-[500px] text-center">
+              <div class={`mb-8 ${content.theme.iconCol}`} aria-hidden="true">
+                <span set:html={content.icon}></span>
+              </div>
+              <div class="text-3xl font-black font-serif text-emerald-950 mb-4">Top Rated Academy</div>
+              <div class="flex items-center gap-1 mb-4 text-amber-400 text-2xl" aria-hidden="true">
+                ★★★★★
+              </div>
+              <div class="text-emerald-800/80 font-bold text-lg max-w-xs">Trusted by thousands of students globally.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>

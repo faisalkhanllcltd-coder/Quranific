@@ -1,0 +1,18 @@
+---
+// src/components/sections/ValuePillars.astro
+// Pure HTML/Tailwind. Zero Hydration Cost.
+---
+
+<div class="grid md:grid-cols-3 gap-6">
+  {[
+    { i: '🧠', t: 'Pedagogical Empathy', d: 'Every lesson is designed around how children actually learn — not how they used to be taught. Short sessions, high engagement, zero punishment.' },
+    { i: '🛡️', t: 'Zero Financial Risk', d: 'Your first class is completely free. If you join and you're not satisfied in your first month, we refund every penny — no forms, no friction, no questions.' },
+    { i: '🔒', t: 'Safe & Transparent', d: 'Every teacher holds an ijazah and is background-checked. Sessions are private and secure. You can sit in on any class, any time — without notice.' }
+  ].map((pillar, i) => (
+    <div class="bg-white border border-emerald-100 rounded-3xl p-8 transition-[color,background-color,border-color,box-shadow,opacity,transform] hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-900/5">
+      <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner">{pillar.i}</div>
+      <h3 class="font-bold text-lg text-emerald-950 mb-3">{pillar.t}</h3>
+      <p class="text-sm text-emerald-700/80 leading-relaxed font-medium">{pillar.d}</p>
+    </div>
+  ))}
+</div>

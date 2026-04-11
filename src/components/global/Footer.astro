@@ -1,0 +1,165 @@
+---
+// src/components/global/Footer.astro
+// Global Footer Component — 100% HTML/CSS, Edge Cacheable, Zero JS.
+import { SITE, FOOTER_NAVIGATION } from '../../constants/site';
+
+const currentYear = new Date().getFullYear();
+
+// Social icons: converted to strings to prevent Astro JSX compilation errors
+const socialLinks = [
+  {
+    label: 'Facebook',
+    href: SITE.social.facebook,
+    svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10v4h3v7h4v-7h3l1-4h-4v-2a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2h-3"/>',
+  },
+  {
+    label: 'Instagram',
+    href: SITE.social.instagram,
+    svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 8a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/><path d="M16.5 7.5v.01"/>',
+  },
+  {
+    label: 'TikTok',
+    href: SITE.social.tiktok,
+    svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 12a4 4 0 1 0 4 4v-12a5 5 0 0 0 5 5"/>',
+  },
+] as const;
+---
+
+<footer class="bg-[#021f18] pt-20 pb-10 border-t border-emerald-950">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
+
+      <div class="flex flex-col">
+        <a href="/" class="inline-flex items-center gap-3 mb-6 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-lg p-1 -ml-1">
+          <img
+            src="/images/logo.png"
+            alt="Quranific Logo"
+            width="48"
+            height="48"
+            loading="lazy"
+            decoding="async"
+            class="w-12 h-12 group-hover:scale-105 transition-transform duration-300"
+          />
+          <span class="text-2xl font-black font-serif text-white tracking-tight">Quranific</span>
+        </a>
+        <p class="text-emerald-100/70 font-medium leading-relaxed text-[15px] pr-4">
+          Empowering the global Ummah to master the Quran with certified scholars from Al-Azhar, 24/7.
+        </p>
+      </div>
+
+      <div class="flex flex-col mt-2 lg:mt-0">
+        <h3 class="text-white font-bold mb-6 tracking-wide uppercase text-sm">Explore</h3>
+        <ul class="space-y-4">
+          {FOOTER_NAVIGATION.explore.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-emerald-200/80 hover:text-white transition-colors font-medium text-[15px] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="flex flex-col mt-2 lg:mt-0">
+        <h3 class="text-white font-bold mb-6 tracking-wide uppercase text-sm">Legal</h3>
+        <ul class="space-y-4">
+          {FOOTER_NAVIGATION.legal.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-emerald-200/80 hover:text-white transition-colors font-medium text-[15px] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="flex flex-col mt-2 lg:mt-0">
+        <h3 class="text-white font-bold mb-6 tracking-wide uppercase text-sm">Stay Updated</h3>
+        <p class="text-emerald-200/70 text-[15px] leading-relaxed mb-6">
+          Subscribe to our newsletter for the latest Quranic insights and offers.
+        </p>
+        <form
+          action="/api/newsletter"
+          method="POST"
+          class="flex mb-10"
+          aria-label="Newsletter signup"
+        >
+          <label for="footer-email" class="sr-only">Email address</label>
+          <input
+            id="footer-email"
+            type="email"
+            name="email"
+            placeholder="Email address"
+            required
+            autocomplete="email"
+            class="w-full bg-emerald-950/50 border border-emerald-800/80 text-white placeholder-emerald-500/50 rounded-l-xl px-4 py-3 text-[15px] focus:outline-none focus:border-amber-500 focus:bg-emerald-950 transition-colors shadow-inner"
+          />
+          <button
+            type="submit"
+            class="bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-5 py-3 rounded-r-xl text-[15px] shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white min-h-[44px]"
+          >
+            Join
+          </button>
+        </form>
+
+        <div class="flex gap-4">
+          {socialLinks.map((social) => (
+            <a
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={social.label}
+              class="w-11 h-11 rounded-full bg-emerald-900 border border-emerald-800/50 flex flex-shrink-0 items-center justify-center text-emerald-400 hover:bg-emerald-800 hover:text-white hover:border-emerald-700 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                set:html={social.svg}
+              />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-8 border-t border-emerald-900/40 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-emerald-100/50 text-[13px] font-medium text-center md:text-left">
+        &copy; {currentYear} {SITE.name}. All rights reserved.
+      </p>
+      <div class="flex items-center gap-2 text-emerald-100/40 text-[13px] font-medium">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-4 h-4"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+          <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+          <path d="M12 2l0 4"></path>
+          <path d="M12 18l0 4"></path>
+          <path d="M2 12l4 0"></path>
+          <path d="M18 12l4 0"></path>
+        </svg>
+        Architected for Edge Performance
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,167 @@
+---
+// src/components/global/Header.astro
+import MobileMenu from './MobileMenu.astro';
+import { courses } from '../../data/courses';
+import { SITE, MAIN_NAVIGATION } from '../../constants/site';
+---
+
+<header
+  id="main-header"
+  class="fixed top-0 left-0 right-0 z-50 transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 py-6 bg-transparent border-b border-transparent"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+
+    <a href="/" class="flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg">
+      <img
+        src="/images/quranific-logo-green.svg"
+        alt="Quranific — Home"
+        width="160"
+        height="40"
+        fetchpriority="high"
+        loading="eager"
+        decoding="async"
+        class="h-9 md:h-10 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+      />
+    </a>
+
+    <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-8">
+      {MAIN_NAVIGATION.map((item) =>
+        item.hasDropdown ? (
+          <div class="group relative" data-dropdown>
+            <a
+              href={item.href}
+              id="courses-menu-trigger"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="courses-dropdown"
+              class="flex items-center gap-1.5 py-4 text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded"
+            >
+              {item.label}
+              <svg
+                class="w-4 h-4 text-emerald-600/70 group-hover:rotate-180 group-focus-within:rotate-180 transition-transform duration-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </a>
+            
+            <div
+              id="courses-dropdown"
+              role="region"
+              aria-label="Course categories"
+              class="absolute top-full left-1/2 -translate-x-1/2 w-[650px] bg-white rounded-2xl shadow-xl border border-emerald-100 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 overflow-hidden"
+            >
+              <div class="p-6 grid grid-cols-2 gap-4">
+                {courses.map((course) => (
+                  <a
+                    href={`/courses/${course.slug}`}
+                    class="flex items-start gap-4 p-3 rounded-xl hover:bg-emerald-50 transition-colors group/item focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
+                  >
+                    <div class="text-2xl pt-1 group-hover/item:scale-110 transition-transform" aria-hidden="true">
+                      {course.icon}
+                    </div>
+                    <div>
+                      <div class="text-sm font-bold text-emerald-950 mb-0.5">{course.title}</div>
+                      <div class="text-xs text-emerald-700/80 leading-snug">{course.shortDesc}</div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+              <div class="bg-emerald-50 p-4 text-center border-t border-emerald-100">
+                <a
+                  href="/courses"
+                  class="text-sm font-bold text-emerald-700 hover:text-emerald-900 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded"
+                >
+                  View All Course Tracks →
+                </a>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <a
+            href={item.href}
+            class="text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded"
+          >
+            {item.label}
+          </a>
+        )
+      )}
+    </nav>
+
+    <div class="hidden md:flex items-center gap-6">
+      <a
+        href={SITE.whatsappLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-sm font-bold text-emerald-700 hover:text-emerald-900 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded"
+      >
+        Support
+      </a>
+      <a
+        href="/funnel/signup"
+        class="px-6 py-2.5 text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-xl shadow-sm hover:shadow active:scale-95 transition-[color,background-color,border-color,box-shadow,opacity,transform] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+      >
+        Start Free Trial
+      </a>
+    </div>
+    
+    <MobileMenu />
+
+  </div>
+</header>
+
+<script>
+  // AbortController pattern ensures SPA navigations never accumulate duplicate listeners.
+  let headerAbortController: AbortController | null = null;
+
+  function initHeaderScroll(): void {
+    const header = document.getElementById('main-header');
+    if (!header) return;
+
+    headerAbortController?.abort();
+    headerAbortController = new AbortController();
+    const { signal } = headerAbortController;
+
+    const handleScroll = (): void => {
+      if (window.scrollY > 20) {
+        header.classList.remove('py-6', 'bg-transparent', 'border-transparent');
+        header.classList.add('py-4', 'bg-white/90', 'backdrop-blur-md', 'border-emerald-100', 'shadow-sm');
+      } else {
+        header.classList.add('py-6', 'bg-transparent', 'border-transparent');
+        header.classList.remove('py-4', 'bg-white/90', 'backdrop-blur-md', 'border-emerald-100', 'shadow-sm');
+      }
+    };
+
+    handleScroll(); // sync initial state
+    window.addEventListener('scroll', handleScroll, { passive: true, signal });
+  }
+
+  function initDropdownAria(): void {
+    document.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((container) => {
+      const trigger = container.querySelector<HTMLElement>('[aria-haspopup]');
+      if (!trigger) return;
+
+      container.addEventListener('focusin', () => trigger.setAttribute('aria-expanded', 'true'));
+      container.addEventListener('focusout', (e: FocusEvent) => {
+        if (!container.contains(e.relatedTarget as Node | null)) {
+          trigger.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      container.addEventListener('mouseenter', () => trigger.setAttribute('aria-expanded', 'true'));
+      container.addEventListener('mouseleave', () => {
+        if (!container.matches(':focus-within')) {
+          trigger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    initHeaderScroll();
+    initDropdownAria();
+  });
+</script>

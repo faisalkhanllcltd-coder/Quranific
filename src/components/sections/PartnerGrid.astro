@@ -1,0 +1,22 @@
+---
+// src/components/sections/PartnerGrid.astro
+// B2B Affiliates & Schools Grid.
+---
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {[
+    { title: 'Islamic Schools', desc: 'Integrate our verified teachers into your curriculum to handle 1-on-1 reading assessments.', icon: '🏫' },
+    { title: 'Local Mosques', desc: 'Outsource your waitlisted Maktab students to our premium online platform seamlessly.', icon: '🕌' },
+    { title: 'Community Centers', desc: 'Offer high-quality Quranic education without the overhead of hiring full-time local staff.', icon: '🤝' }
+  ].map(partner => (
+    <div class="bg-white border border-emerald-100 rounded-3xl p-8 flex items-start gap-4">
+      <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-2xl shrink-0 border border-emerald-100/50">
+        {partner.icon}
+      </div>
+      <div>
+        <h3 class="text-lg font-bold text-emerald-950 mb-2">{partner.title}</h3>
+        <p class="text-sm text-emerald-700/80 font-medium leading-relaxed">{partner.desc}</p>
+      </div>
+    </div>
+  ))}
+</div>

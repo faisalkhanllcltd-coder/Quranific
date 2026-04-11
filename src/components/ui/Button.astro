@@ -1,0 +1,38 @@
+---
+// src/components/ui/Button.astro
+import type { HTMLAttributes } from 'astro/types';
+
+// Accepts all standard <a> and <button> attributes (target, rel, aria-label, etc.)
+interface Props extends HTMLAttributes<'button'>, Omit<HTMLAttributes<'a'>, 'type'> {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'white';
+}
+
+const { href, variant = 'primary', class: className, type = 'button', ...rest } = Astro.props;
+
+const variants = {
+  primary: "bg-emerald-700 text-white hover:bg-emerald-800 shadow-md hover:shadow-emerald-900/20",
+  secondary: "bg-amber-500 text-white hover:bg-amber-400 shadow-md hover:shadow-amber-500/20",
+  ghost: "bg-transparent text-emerald-950 border-2 border-emerald-100 hover:border-emerald-200 hover:bg-emerald-50",
+  white: "bg-white text-emerald-950 hover:bg-emerald-50 shadow-md"
+};
+
+const baseStyle = "inline-flex justify-center items-center px-8 py-3.5 text-sm md:text-base font-bold rounded-xl transition-all duration-300 active:scale-95 text-center min-h-[44px]";
+---
+{href ? (
+  <a 
+    href={href} 
+    class:list={[baseStyle, variants[variant], className]} 
+    {...rest}
+  >
+    <slot />
+  </a>
+) : (
+  <button 
+    type={type as "button" | "submit" | "reset"} 
+    class:list={[baseStyle, variants[variant], className]} 
+    {...rest}
+  >
+    <slot />
+  </button>
+)}

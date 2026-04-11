@@ -1,0 +1,81 @@
+---
+// src/components/sections/TestimonialGrid.astro
+const CheckIcon = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
+---
+
+<section class="py-10 md:py-20 lg:py-32 bg-[#022c22] content-visibility-auto" id="testimonials" aria-labelledby="testimonials-heading">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center mb-16 max-w-3xl mx-auto">
+      <span class="text-xs font-black tracking-widest uppercase text-[#6ee7b7] block mb-3">Real Families. Real Results.</span>
+      <h2 id="testimonials-heading" class="text-4xl lg:text-5xl font-semibold text-white mb-6 tracking-tight">
+        Don't take our word for it.
+      </h2>
+      <p class="text-lg text-emerald-100/80 font-medium">
+        These are unedited reviews from parents across our community.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 mb-16">
+      <blockquote class="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col hover:-translate-y-1 transition-all duration-300 ease-in-out">
+        <div class="text-[#fbbf24] text-lg tracking-widest mb-6" aria-hidden="true">★★★★★</div>
+        <p class="font-serif text-xl italic text-white/95 mb-8 flex-1 leading-relaxed">"My daughter used to cry before her old Quran class. After two months with Quranific, she reminds ME it's time for her lesson. I didn't think that was possible."</p>
+        <footer class="flex items-center gap-4 pt-6 border-t border-white/10">
+          <div class="w-12 h-12 rounded-full bg-[#fef3c7] text-[#b45309] flex items-center justify-center font-bold text-lg shrink-0" aria-hidden="true">SA</div>
+          <div>
+            <cite class="font-bold text-white text-sm not-italic">Sarah A.</cite>
+            <div class="text-xs text-emerald-100/60 font-medium">Manchester, UK · Daughter, age 8</div>
+          </div>
+        </footer>
+        <div class="mt-4 text-[11px] font-bold text-emerald-400/60 flex items-center gap-1.5 uppercase tracking-wider"><Fragment set:html={CheckIcon} /> Verified · Enrolled 14 months</div>
+      </blockquote>
+
+      <blockquote class="bg-[#047857] border border-emerald-500/50 rounded-3xl p-8 flex flex-col shadow-2xl hover:-translate-y-1 transition-all duration-300 ease-in-out relative transform md:-translate-y-4">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4=')] opacity-5 mix-blend-overlay rounded-3xl pointer-events-none" aria-hidden="true"></div>
+        <div class="text-[#fbbf24] text-lg tracking-widest mb-6 relative z-10" aria-hidden="true">★★★★★</div>
+        <p class="font-serif text-xl italic text-white mb-8 flex-1 leading-relaxed relative z-10">"As a father working long hours, the guilt was real. Quranific didn't just teach my sons tajweed — they gave me back the peace of knowing I didn't drop the ball on their deen."</p>
+        <footer class="flex items-center gap-4 pt-6 border-t border-white/20 relative z-10">
+          <div class="w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center font-bold text-lg shrink-0" aria-hidden="true">KH</div>
+          <div>
+            <cite class="font-bold text-white text-sm not-italic">Khalid H.</cite>
+            <div class="text-xs text-emerald-100/80 font-medium">Houston, USA · Two sons, ages 9 & 12</div>
+          </div>
+        </footer>
+        <div class="mt-4 text-[11px] font-bold text-emerald-100/60 flex items-center gap-1.5 uppercase tracking-wider relative z-10"><Fragment set:html={CheckIcon} /> Verified · Enrolled 8 months</div>
+      </blockquote>
+
+      <blockquote class="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col hover:-translate-y-1 transition-all duration-300 ease-in-out">
+        <div class="text-[#fbbf24] text-lg tracking-widest mb-6" aria-hidden="true">★★★★★</div>
+        <p class="font-serif text-xl italic text-white/95 mb-8 flex-1 leading-relaxed">"The make-up class policy alone is worth it. We travel a lot for work and previous academies just let sessions disappear. Quranific has never let us miss a lesson."</p>
+        <footer class="flex items-center gap-4 pt-6 border-t border-white/10">
+          <div class="w-12 h-12 rounded-full bg-[#ecfdf5] text-[#047857] flex items-center justify-center font-bold text-lg shrink-0" aria-hidden="true">NM</div>
+          <div>
+            <cite class="font-bold text-white text-sm not-italic">Nadia M.</cite>
+            <div class="text-xs text-emerald-100/60 font-medium">Dubai, UAE · Son, age 7</div>
+          </div>
+        </footer>
+        <div class="mt-4 text-[11px] font-bold text-emerald-400/60 flex items-center gap-1.5 uppercase tracking-wider"><Fragment set:html={CheckIcon} /> Verified · Enrolled 11 months</div>
+      </blockquote>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-emerald-900/40 border border-emerald-800/50 rounded-3xl overflow-hidden backdrop-blur-sm">
+      <div class="bg-emerald-950/60 p-8 text-center">
+        <div class="font-serif text-4xl lg:text-5xl font-semibold text-white mb-2">3,200<span class="text-[#f59e0b] text-3xl" aria-hidden="true">+</span></div>
+        <div class="text-sm font-medium text-emerald-100/60">Families enrolled</div>
+      </div>
+      <div class="bg-emerald-950/60 p-8 text-center">
+        <div class="font-serif text-4xl lg:text-5xl font-semibold text-white mb-2">22</div>
+        <div class="text-sm font-medium text-emerald-100/60">Countries served</div>
+      </div>
+      <div class="bg-emerald-950/60 p-8 text-center">
+        <div class="font-serif text-4xl lg:text-5xl font-semibold text-white mb-2">94<span class="text-[#f59e0b] text-3xl" aria-hidden="true">%</span></div>
+        <div class="text-sm font-medium text-emerald-100/60">Retention after month 1</div>
+      </div>
+      <div class="bg-emerald-950/60 p-8 text-center">
+        <div class="font-serif text-4xl lg:text-5xl font-semibold text-white mb-2">4.9<span class="text-[#f59e0b] text-3xl" aria-hidden="true">★</span></div>
+        <div class="text-sm font-medium text-emerald-100/60">Average rating</div>
+      </div>
+    </div>
+
+  </div>
+</section>

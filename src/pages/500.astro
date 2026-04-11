@@ -1,0 +1,65 @@
+---
+// src/pages/500.astro
+import Base from '../layouts/Base.astro';
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import Button from '../components/ui/Button.astro';
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Server Error | Quranific",
+  "description": "We are experiencing some technical difficulties.",
+  "url": "https://quranific.com/500",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Quranific",
+    "url": "https://quranific.com"
+  }
+};
+
+const Icons = {
+  alert: `<svg class="w-10 h-10 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`,
+  refresh: `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>`
+};
+---
+
+<Base title="Server Error | Quranific" description="We are experiencing some technical difficulties.">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <meta name="robots" content="noindex, nofollow" slot="head" />
+  
+  <Header />
+
+  <main class="min-h-[85vh] flex items-center justify-center py-10 md:py-20 px-4 sm:px-6 relative overflow-hidden bg-gradient-to-b from-cream-50 to-white selection:bg-emerald-200 selection:text-emerald-950">
+    
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-400/10 rounded-full blur-[100px] pointer-events-none" aria-hidden="true"></div>
+
+    <div class="max-w-2xl mx-auto text-center relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      
+      <div class="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-amber-100 shadow-sm rotate-3" aria-hidden="true">
+        <span set:html={Icons.alert}></span>
+      </div>
+
+      <h1 class="text-4xl md:text-5xl font-black text-emerald-950 mb-4 tracking-tight">
+        Technical Difficulties
+      </h1>
+      
+      <p class="text-lg text-emerald-800/80 mb-10 font-medium max-w-md mx-auto leading-relaxed">
+        Alhamdulillah, our engineers have been automatically notified. Something went wrong on our end, but we are working quickly to restore service.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <Button onclick="window.location.reload()" variant="primary" class="w-full sm:w-auto flex items-center justify-center gap-2 px-8">
+          <span set:html={Icons.refresh}></span>
+          Try Again
+        </Button>
+        <Button href="/" variant="white" class="w-full sm:w-auto flex items-center justify-center gap-2 px-8 border-2 border-emerald-100 hover:border-emerald-300">
+          Return Home
+        </Button>
+      </div>
+      
+    </div>
+  </main>
+
+  <Footer />
+</Base>

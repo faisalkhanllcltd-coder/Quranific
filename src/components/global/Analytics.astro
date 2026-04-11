@@ -1,0 +1,19 @@
+---
+// src/components/global/Analytics.astro
+// Only rendered when GA_ID is set in environment. Loaded via Partytown off main thread.
+import { ENV } from '../../utils/env';
+
+const gaId = ENV.GA_ID;
+---
+
+{gaId && (
+  <>
+    <script type="text/partytown" async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+    <script type="text/partytown" define:vars={{ gaId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', gaId);
+    </script>
+  </>
+)}

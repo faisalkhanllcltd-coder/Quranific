@@ -1,0 +1,20 @@
+---
+// src/components/ui/Card.astro
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  hover?: boolean;
+}
+
+const { class: className, hover = false, ...rest } = Astro.props;
+---
+<div 
+  class:list={[
+    "bg-white border border-emerald-100 rounded-3xl p-6 md:p-8 shadow-sm",
+    hover && "hover:shadow-xl hover:shadow-emerald-900/5 hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 ease-out",
+    className
+  ]}
+  {...rest}
+>
+  <slot />
+</div>

@@ -1,0 +1,83 @@
+---
+// src/components/sections/AdEntryPoints.astro
+
+const personas = [
+  {
+    id: "kids",
+    title: "Quran for Kids",
+    desc: "Fun, engaging, and structured 1-on-1 lessons designed to build a lifelong love for the Quran in a child-friendly environment.",
+    link: "/ads/kids",
+    badge: "Most Popular",
+    badgeStyles: "bg-[#fffbeb] text-[#d97706] border-[#fde68a]", // Gold theme
+    icon: "🧒",
+    hoverGlow: "hover:border-[#fcd34d] hover:shadow-lg hover:shadow-[#fffbeb]"
+  },
+  {
+    id: "adults",
+    title: "Quran for Adults",
+    desc: "Flexible scheduling for busy professionals. Master Tajweed, start Hifz, or dive deep into Translation at your own pace.",
+    link: "/ads/adults",
+    badge: "Flexible Times",
+    badgeStyles: "bg-[#ecfdf5] text-[#059669] border-[#a7f3d0]", // Emerald theme
+    icon: "👨‍💻",
+    hoverGlow: "hover:border-[#6ee7b7] hover:shadow-lg hover:shadow-[#ecfdf5]"
+  },
+  {
+    id: "ladies",
+    title: "Quran for Ladies",
+    desc: "Learn in a 100% secure, comfortable, and private environment exclusively with our highly qualified female Arab tutors.",
+    link: "/ads/ladies",
+    badge: "100% Private",
+    badgeStyles: "bg-[#f3e8ff] text-[#7e22ce] border-[#e9d5ff]", // Purple theme
+    icon: "🧕",
+    hoverGlow: "hover:border-[#d8b4fe] hover:shadow-lg hover:shadow-[#f3e8ff]"
+  }
+];
+---
+
+<section id="learning-paths" class="py-12 md:py-24 bg-white relative overflow-hidden border-b border-[#d1fae5]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-5xl font-black font-serif text-[#022c22] mb-6 tracking-tight">
+        Tailored Learning for <span class="text-[#047857]">Everyone</span>
+      </h2>
+      <p class="text-lg text-[#064e3b]/70">
+        Choose your specialized learning path. We match you with the perfect tutor based on your age, goals, and schedule.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      {personas.map(persona => (
+        <a 
+          href={persona.link} 
+          class={`group block bg-[#fefdf9] rounded-3xl p-8 border border-[#d1fae5] transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 transform hover:-translate-y-2 bg-white ${persona.hoverGlow}`}
+        >
+          <div class="flex justify-between items-start mb-8">
+            <div class={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${persona.badgeStyles}`}>
+              {persona.badge}
+            </div>
+            <div class="text-4xl group-hover:scale-110 transition-transform duration-300 origin-top-right">
+              {persona.icon}
+            </div>
+          </div>
+
+          <h3 class="text-2xl font-black font-serif text-[#022c22] mb-3 group-hover:text-[#047857] transition-colors">
+            {persona.title}
+          </h3>
+          <p class="text-[#064e3b]/70 text-sm leading-relaxed mb-8 min-h-[80px]">
+            {persona.desc}
+          </p>
+
+          <div class="flex items-center text-sm font-bold text-[#047857] group-hover:text-[#059669]">
+            Explore Program 
+            <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</section>

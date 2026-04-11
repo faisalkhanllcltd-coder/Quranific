@@ -1,0 +1,161 @@
+﻿---
+// src/layouts/Base.astro
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { SITE } from '../constants/site';
+
+/* THE ELITE 3-FONT SYSTEM (Self-Hosted, Zero Latency) */
+import '@fontsource-variable/inter';
+import '@fontsource/merriweather/400.css';
+import '@fontsource/merriweather/700.css';
+import '@fontsource/merriweather/900.css';
+import '@fontsource/amiri/400.css';
+import '@fontsource/amiri/700.css';
+
+/* Vite ?url imports: Resolves content-hashed public paths at build time.
+   Preloading these eliminates FOUT/CLS.
+*/
+import interVarUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import merriweather700Url from '@fontsource/merriweather/files/merriweather-latin-700-normal.woff2?url';
+import merriweather400Url from '@fontsource/merriweather/files/merriweather-latin-400-normal.woff2?url';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+  lang?: string;
+  dir?: 'ltr' | 'rtl';
+  ogType?: string;
+  twitterCard?: string;
+  robots?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  image = SITE.defaultImage,
+  canonical,
+  lang = 'en',
+  dir = 'ltr',
+  ogType = 'website',
+  twitterCard = 'summary_large_image',
+  robots = 'index, follow',
+  ogImageWidth = 1200,
+  ogImageHeight = 630,
+} = Astro.props;
+
+// Mathematically pure canonical routing
+const siteBase = (Astro.site?.href ?? SITE.url).replace(/\/$/, '');
+const rawCanonical = canonical ?? new URL(Astro.url.pathname, siteBase).href;
+const canonicalURL = rawCanonical.replace(siteBase, '').length > 1 
+  ? rawCanonical.replace(/\/$/, '') 
+  : rawCanonical;
+const socialImageURL = image.startsWith('http') ? image : new URL(image, siteBase).href;
+
+// Read edge-detected connection speed from Cloudflare via Astro Locals safely
+const isSlow: boolean = Astro.locals?.isSlowConnection ?? false;
+
+// Global Base Entity Schema
+const baseSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE.url}/#website`,
+      "url": SITE.url,
+      "name": SITE.name,
+      "description": SITE.description,
+      "publisher": {
+        "@id": `${SITE.url}/#organization`
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": `${SITE.url}/#organization`,
+      "name": SITE.name,
+      "url": SITE.url,
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${SITE.url}/images/logo.png`
+      },
+      "sameAs": Object.values(SITE.social)
+    }
+  ]
+};
+---
+<!doctype html>
+<html lang={lang} dir={dir} class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <link rel="preload" as="font" type="font/woff2" href={interVarUrl} crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href={merriweather700Url} crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href={merriweather400Url} crossorigin="anonymous" />
+
+    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <meta name="theme-color" content={SITE.themeColor} />
+    <meta name="color-scheme" content="light" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={lang === 'ar' ? 'ar_AR' : 'en_US'} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImageURL} />
+    <meta property="og:image:width" content={String(ogImageWidth)} />
+    <meta property="og:image:height" content={String(ogImageHeight)} />
+    <meta property="og:image:alt" content={title} />
+
+    <meta name="twitter:card" content={twitterCard} />
+    <meta name="twitter:site" content="@quranific_" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL} />
+    <meta name="twitter:image:alt" content={title} />
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/icons/site.webmanifest" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(baseSchema)} />
+
+    <slot name="head" />
+
+    {!isSlow && (
+      <script type="speculationrules" is:inline>
+      {
+        "prerender": [
+          {
+            "eagerness": "moderate",
+            "source": "list",
+            "urls": ["/funnel/signup", "/courses", "/tuition-fee"]
+          }
+        ]
+      }
+      </script>
+    )}
+
+    <ClientRouter />
+  </head>
+  <body
+    class="bg-[#fefdf9] font-sans text-emerald-950 antialiased selection:bg-emerald-200 selection:text-emerald-950 flex flex-col min-h-screen overflow-x-clip"
+    style="padding-bottom: env(safe-area-inset-bottom);"
+  >
+    <slot />
+    {isSlow && <div class="hidden" aria-hidden="true" data-connection="slow">Low-data mode active</div>}
+  </body>
+</html>

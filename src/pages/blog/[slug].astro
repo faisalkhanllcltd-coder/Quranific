@@ -1,0 +1,187 @@
+---
+// src/pages/blog/[slug].astro
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+import Section from '../../components/ui/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  
+  if (!posts || posts.length === 0) {
+    return [];
+  }
+  
+  return posts.map(post => ({
+    // CRITICAL FIX: Fallback to post.id to prevent Astro 5/6 routing crashes
+    params: { slug: post.slug || post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const pubDate = post.data.date || post.data.pubDate;
+const formattedDate = new Date(pubDate).toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric'
+});
+
+// Dynamic Article SEO Schema: Fortified for Google Discover integration
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": post.data.title,
+  "description": post.data.description,
+  "datePublished": pubDate,
+  "image": post.data.image ? [new URL(post.data.image, Astro.site).toString()] : undefined,
+  "author": {
+    "@type": "Person",
+    "name": post.data.author || "Quranific Editorial"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Quranific"
+  }
+};
+---
+
+<Base title={`${post.data.title} | Quranific Blog`} description={post.data.description}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  
+  <Header />
+
+  <main class="min-h-screen bg-cream-50 pt-32 pb-24 lg:pt-40 lg:pb-32 selection:bg-emerald-200 selection:text-emerald-950 overflow-hidden">
+    <article class="max-w-3xl mx-auto px-4 sm:px-6 relative z-10">
+      
+      <header class="mb-12 lg:mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest">{formattedDate}</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-200" aria-hidden="true"></span>
+          <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest">{post.data.category || 'Article'}</span>
+        </div>
+        
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-emerald-950 mb-8 tracking-tighter leading-[1.15] text-balance">
+          {post.data.title}
+        </h1>
+        
+        <div class="flex items-center justify-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-emerald-100 border-2 border-white shadow-sm flex items-center justify-center text-emerald-800 font-bold text-lg" aria-hidden="true">
+            {(post.data.author || 'Q').charAt(0)}
+          </div>
+          <div class="text-left">
+            <p class="font-bold text-emerald-950 text-sm leading-tight">{post.data.author || 'Quranific Editorial'}</p>
+            <p class="text-xs text-emerald-700 font-medium">Author</p>
+          </div>
+        </div>
+      </header>
+
+      {post.data.image && (
+        <div class="w-full aspect-[16/9] bg-emerald-50 rounded-3xl mb-12 overflow-hidden border border-emerald-100 shadow-sm animate-in fade-in duration-1000">
+          <img src={post.data.image} alt={post.data.title} width="800" height="450" class="w-full h-full object-cover" loading="eager" />
+        </div>
+      )}
+
+      <Section height={800} class="quranific-prose animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+        <Content />
+      </Section>
+
+      <div class="mt-16 pt-10 border-t border-emerald-100 flex justify-center">
+        <Button href="/blog" variant="ghost">← Back to all articles</Button>
+      </div>
+
+    </article>
+  </main>
+
+  <Footer />
+</Base>
+
+<style is:global>
+  .quranific-prose {
+    color: var(--color-emerald-900, #064e3b);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    font-weight: 500;
+  }
+  .quranific-prose p {
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+  .quranific-prose h2 {
+    font-size: 2rem;
+    line-height: 1.2;
+    font-weight: 900;
+    color: var(--color-emerald-950, #022c22);
+    margin-top: 4rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
+  }
+  .quranific-prose h3 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+    font-weight: 700;
+    color: var(--color-emerald-950, #022c22);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+  .quranific-prose ul {
+    list-style-type: disc;
+    list-style-position: outside;
+    padding-left: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .quranific-prose ol {
+    list-style-type: decimal;
+    list-style-position: outside;
+    padding-left: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .quranific-prose ul > li, .quranific-prose ol > li {
+    margin-top: 0.75rem;
+    padding-left: 0.5rem;
+  }
+  .quranific-prose a {
+    color: var(--color-emerald-700, #047857);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--color-emerald-200, #a7f3d0);
+    text-underline-offset: 4px;
+    transition: all 150ms ease;
+  }
+  .quranific-prose a:hover {
+    text-decoration-color: var(--color-emerald-500, #10b981);
+    color: var(--color-emerald-900, #064e3b);
+  }
+  .quranific-prose blockquote {
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-color: var(--color-amber-400, #fbbf24);
+    padding: 1.5rem 1.5rem 1.5rem 2rem;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    font-size: 1.25rem;
+    font-family: var(--font-serif, serif);
+    font-style: italic;
+    color: var(--color-emerald-900, #064e3b);
+    background-color: var(--color-amber-50, #fffbeb);
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+  }
+  .quranific-prose strong {
+    font-weight: 800;
+    color: var(--color-emerald-950, #022c22);
+  }
+  .quranific-prose img {
+    width: 100%;
+    border-radius: 1.5rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    border: 1px solid var(--color-emerald-100, #d1fae5);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+  }
+</style>

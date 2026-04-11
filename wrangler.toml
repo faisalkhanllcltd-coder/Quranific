@@ -1,0 +1,16 @@
+name = "quranific"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-11-12"
+compatibility_flags = ["nodejs_compat"]
+
+# Mandate 1 & 8: Dynamic global edge execution routing
+[placement]
+mode = "smart"
+
+[vars]
+ENVIRONMENT = "production"
+
+# Uncomment and add your IDs when you need to store global state (like user sessions)
+# [[kv_namespaces]]
+# binding = "SESSION"
+# id = "your_kv_id_here"

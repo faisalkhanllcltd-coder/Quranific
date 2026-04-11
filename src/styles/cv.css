@@ -1,0 +1,7 @@
+﻿/* The 110% Rendering Engine. 
+  Any section with this class is mathematically skipped by the browser until the user scrolls to it.
+*/
+.cv-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px; /* Default placeholder height */
+}

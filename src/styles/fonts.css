@@ -1,0 +1,27 @@
+﻿/* src/styles/fonts.css */
+
+/* NOTE: Real font files are injected via @fontsource in Base.astro. 
+  This file ONLY contains the anti-jitter (CLS) fallback calculations.
+*/
+
+/* Anti-Jitter for Inter (Workhorse) */
+@font-face {
+  font-family: 'Inter Fallback';
+  src:
+    local('BlinkMacSystemFont'), local('Segoe UI'), local('Roboto'), local('Helvetica Neue'),
+    local('Arial');
+  size-adjust: 107.4%;
+  ascent-override: 90.2%;
+  descent-override: 22.48%;
+  line-gap-override: 0%;
+}
+
+/* Anti-Jitter for Merriweather (Authority) */
+@font-face {
+  font-family: 'Merriweather Fallback';
+  src: local('Georgia'), local('Times New Roman'), local('Times'), serif;
+  size-adjust: 98.44%;
+  ascent-override: 99.58%;
+  descent-override: 27.28%;
+  line-gap-override: 0%;
+}
