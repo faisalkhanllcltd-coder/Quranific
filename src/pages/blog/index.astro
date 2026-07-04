@@ -8,7 +8,7 @@ import { getCollection } from 'astro:content';
 
 // Safely fetch posts and sort by date. 
 const allPosts = (await getCollection('blog')) || [];
-const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date || b.data.pubDate).valueOf() - new Date(a.data.date || a.data.pubDate).valueOf());
+const sortedPosts = allPosts.sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf());
 
 const hasPosts = sortedPosts.length > 0;
 const featuredPost = hasPosts ? sortedPosts[0] : null;
@@ -34,7 +34,7 @@ const jsonLd = {
 ---
 
 <Base title="Blog | Quranific - Insights on Quran & Tajweed" description="Read the latest articles, guides, and insights from our expert Quran tutors.">
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
   
   <Header />
 
@@ -61,11 +61,11 @@ const jsonLd = {
       ) : (
         <>
           {featuredPost && (
-            <a href={`/blog/${featuredPost.slug}`} class="block group mb-16 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+            <a href={`/blog/${featuredPost.id}`} class="block group mb-16 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
               <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 bg-white rounded-[2rem] p-4 lg:p-6 border border-emerald-100 shadow-sm hover:shadow-xl transition-all duration-300">
                 <div class="aspect-video lg:aspect-square w-full bg-emerald-50 rounded-[1.5rem] overflow-hidden relative border border-emerald-100/50">
-                  {featuredPost.data.image ? (
-                    <img src={featuredPost.data.image} alt={featuredPost.data.title} width="800" height="800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="eager" />
+                  {featuredPost.data.heroImage ? (
+                    <img src={featuredPost.data.heroImage} alt={featuredPost.data.title} width="800" height="800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="eager" />
                   ) : (
                     <div class="absolute inset-0 bg-gradient-to-br from-emerald-800 to-emerald-950 flex items-center justify-center group-hover:scale-105 transition-transform duration-700" aria-hidden="true">
                       <span set:html={Icons.imagePlaceholderLarge}></span>
@@ -74,9 +74,9 @@ const jsonLd = {
                 </div>
                 <div class="flex flex-col justify-center py-6 lg:pr-8">
                   <div class="flex items-center gap-3 mb-4">
-                    <span class="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold uppercase tracking-wider rounded-md">{featuredPost.data.category || 'Guide'}</span>
+                    <span class="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold uppercase tracking-wider rounded-md">Guide</span>
                     <span class="text-sm font-bold text-emerald-700/70">
-                      {new Date(featuredPost.data.date || featuredPost.data.pubDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                      {new Date(featuredPost.data.pubDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                     </span>
                   </div>
                   <h2 class="text-3xl lg:text-4xl font-black text-emerald-950 mb-4 group-hover:text-emerald-700 transition-colors tracking-tight leading-tight">
@@ -99,10 +99,10 @@ const jsonLd = {
           <Section height={800}>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {regularPosts.map((post) => (
-                <a href={`/blog/${post.slug}`} class="group flex flex-col bg-white rounded-3xl border border-emerald-100 shadow-sm hover:shadow-xl transition-all duration-300 p-4">
+                <a href={`/blog/${post.id}`} class="group flex flex-col bg-white rounded-3xl border border-emerald-100 shadow-sm hover:shadow-xl transition-all duration-300 p-4">
                   <div class="aspect-video w-full bg-emerald-50 border border-emerald-100/50 rounded-2xl mb-6 overflow-hidden relative shrink-0">
-                    {post.data.image ? (
-                      <img src={post.data.image} alt={post.data.title} width="800" height="450" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    {post.data.heroImage ? (
+                      <img src={post.data.heroImage} alt={post.data.title} width="800" height="450" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     ) : (
                       <div class="absolute inset-0 bg-emerald-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-500" aria-hidden="true">
                         <span set:html={Icons.imagePlaceholder}></span>
@@ -111,7 +111,7 @@ const jsonLd = {
                   </div>
                   <div class="flex-1 flex flex-col px-2">
                     <div class="text-xs font-bold text-emerald-700/70 mb-3 uppercase tracking-wider">
-                      {new Date(post.data.date || post.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {new Date(post.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </div>
                     <h3 class="text-xl font-bold text-emerald-950 mb-3 group-hover:text-emerald-700 transition-colors leading-snug">
                       {post.data.title}

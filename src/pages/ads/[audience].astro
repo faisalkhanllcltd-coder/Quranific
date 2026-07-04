@@ -66,7 +66,7 @@ const jsonLd = {
   title={content.seoTitle} 
   description={content.seoDesc}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
   
   <main class="min-h-screen bg-cream-50 flex items-center selection:bg-emerald-200 selection:text-emerald-950">
     <section class="relative py-20 lg:py-32 overflow-hidden w-full">

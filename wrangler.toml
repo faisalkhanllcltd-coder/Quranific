@@ -10,7 +10,8 @@ mode = "smart"
 [vars]
 ENVIRONMENT = "production"
 
-# Uncomment and add your IDs when you need to store global state (like user sessions)
-# [[kv_namespaces]]
-# binding = "SESSION"
-# id = "your_kv_id_here"
+# C-1 FIX: Uncommented the SESSION KV binding so the API routes can perform
+# idempotency checks and store dead-letter leads when Resend fails.
+[[kv_namespaces]]
+binding = "SESSION"
+id = "your_kv_id_here"

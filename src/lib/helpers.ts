@@ -1,5 +1,5 @@
 // src/utils/helpers.ts
-import { SITE } from '../CONSTANTS/site';
+import { SITE } from '../constants/site';
 
 // ==========================================
 // 1. FORM DROPDOWN CONSTANTS

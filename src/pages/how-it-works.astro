@@ -6,6 +6,9 @@ import Footer from '../components/global/Footer.astro';
 import Section from '../components/ui/Section.astro';
 import Button from '../components/ui/Button.astro';
 
+// SECURITY & MAINTENANCE FIX: Import canonical SITE data for WhatsApp links
+import { SITE } from '../constants/site';
+
 // Elite Edge SEO: HowTo Schema for Google Rich Snippets
 const jsonLd = [
   {
@@ -46,18 +49,18 @@ const jsonLd = [
 
 // Reusable SVGs
 const Check = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
-const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`;
+
 ---
 
 <Base 
   title="How It Works — Quranific | Simple, honest, no surprises." 
   description="Discover exactly how our online Quran classes work. From booking a free trial to your child's first live session and weekly progress reports."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
 
   <Header />
 
-  <main class="bg-cream-50 selection:bg-emerald-100 selection:text-emerald-900 font-sans overflow-hidden">
+  <main id="main-content" class="bg-cream-50 selection:bg-emerald-100 selection:text-emerald-900 font-sans overflow-hidden">
     
     <Section height={600} class="pt-16 md:pt-32 pb-10 md:pb-20 lg:pt-48 lg:pb-32 px-4 sm:px-6 relative">
       <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none"></div>
@@ -84,7 +87,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
             <Button href="/funnel/signup" variant="primary" class="w-full sm:w-auto">
               Book Your Free Class →
             </Button>
-            <Button href="https://wa.me/923112112122" target="_blank" variant="ghost" class="w-full sm:w-auto">
+            <Button href={`https://wa.me/${SITE.whatsappNumber.replace(/\D/g, '')}`} target="_blank" variant="ghost" class="w-full sm:w-auto">
               Have a question?
             </Button>
           </div>
@@ -103,8 +106,8 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
         <div class="bg-white rounded-3xl shadow-xl shadow-emerald-900/10 border border-emerald-100 p-8 transform lg:-rotate-1 hover:rotate-0 transition-transform duration-700 animate-[flyY_6s_ease-in-out_infinite]">
           <div class="flex items-center justify-between mb-8 pb-6 border-b border-emerald-50">
             <div>
-              <h3 class="text-lg font-bold text-emerald-950">Your journey to first lesson</h3>
-              <p class="text-xs font-medium text-emerald-800/60 mt-1">Average time: under 24 hours</p>
+              <h2 class="text-lg font-bold text-emerald-950">Your journey to first lesson</h2>
+              <p class="text-xs font-medium text-emerald-800/80 mt-1">Average time: under 24 hours</p>
             </div>
             <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 border border-green-200 text-green-600 text-[10px] font-bold uppercase tracking-wider rounded-full">
               <span class="w-1.5 h-1.5 bg-green-600 rounded-full animate-pulse" aria-hidden="true"></span> In progress
@@ -117,38 +120,38 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
             <div class="flex gap-5 relative z-10">
               <div class="w-9 h-9 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-sm shrink-0" set:html={Check}></div>
               <div>
-                <h4 class="font-bold text-emerald-950 text-sm">You book the free class</h4>
-                <p class="text-[11px] text-emerald-900/60 font-medium mb-1.5">2-minute form. No credit card. No commitment.</p>
+                <h3 class="font-bold text-emerald-950 text-sm">You book the free class</h3>
+                <p class="text-[11px] text-emerald-900/70 font-medium mb-1.5">2-minute form. No credit card. No commitment.</p>
                 <span class="inline-block px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-md">✓ Complete · 2 mins</span>
               </div>
             </div>
             <div class="flex gap-5 relative z-10">
               <div class="w-9 h-9 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-sm shrink-0" set:html={Check}></div>
               <div>
-                <h4 class="font-bold text-emerald-950 text-sm">We match your child to a teacher</h4>
-                <p class="text-[11px] text-emerald-900/60 font-medium mb-1.5">Hand-selected based on age, level and personality notes.</p>
+                <h3 class="font-bold text-emerald-950 text-sm">We match your child to a teacher</h3>
+                <p class="text-[11px] text-emerald-900/70 font-medium mb-1.5">Hand-selected based on age, level and personality notes.</p>
                 <span class="inline-block px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-md">✓ Complete · 3 hours</span>
               </div>
             </div>
             <div class="flex gap-5 relative z-10">
               <div class="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-sm shrink-0 ring-4 ring-amber-500/20 animate-pulse">→</div>
               <div>
-                <h4 class="font-bold text-emerald-950 text-sm">You receive the teacher's profile</h4>
-                <p class="text-[11px] text-emerald-900/60 font-medium mb-1.5">Certifications, bio, and confirmed session time in your inbox.</p>
+                <h3 class="font-bold text-emerald-950 text-sm">You receive the teacher's profile</h3>
+                <p class="text-[11px] text-emerald-900/70 font-medium mb-1.5">Certifications, bio, and confirmed session time in your inbox.</p>
                 <span class="inline-block px-2 py-0.5 bg-amber-50 border border-amber-200 text-amber-600 text-[10px] font-bold rounded-md">⏳ Happening now</span>
               </div>
             </div>
             <div class="flex gap-5 relative z-10 opacity-50">
-              <div class="w-9 h-9 rounded-full bg-white border-2 border-emerald-100 text-emerald-900/40 flex items-center justify-center font-bold text-sm shrink-0">4</div>
+              <div class="w-9 h-9 rounded-full bg-white border-2 border-emerald-100 text-emerald-900/70 flex items-center justify-center font-bold text-sm shrink-0">4</div>
               <div>
-                <h4 class="font-bold text-emerald-950 text-sm">First free session — live</h4>
-                <p class="text-[11px] text-emerald-900/60 font-medium mb-1.5">Your child meets their teacher. You watch progress in real time.</p>
+                <h3 class="font-bold text-emerald-950 text-sm">First free session — live</h3>
+                <p class="text-[11px] text-emerald-900/70 font-medium mb-1.5">Your child meets their teacher. You watch progress in real time.</p>
                 <span class="inline-block px-2 py-0.5 bg-gray-100 text-gray-500 text-[10px] font-bold rounded-md">⏱ Tomorrow, 4:30 PM</span>
               </div>
             </div>
           </div>
           
-          <div class="mt-8 pt-5 border-t border-emerald-50 text-[11px] text-emerald-900/60 font-medium">
+          <div class="mt-8 pt-5 border-t border-emerald-50 text-[11px] text-emerald-900/70 font-medium">
             <strong class="text-emerald-950 font-bold block mb-0.5">Zero risk, always</strong>
             First class free. Full refund if unsatisfied in month one.
           </div>
@@ -162,19 +165,19 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
         <div class="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-emerald-100">
           <div class="p-8 text-center hover:bg-emerald-50 transition-colors duration-300">
             <div class="font-serif text-4xl font-bold text-emerald-700 mb-2">2 min</div>
-            <div class="text-[13px] font-semibold text-emerald-800/70 uppercase tracking-wide">To book your free class</div>
+            <div class="text-[13px] font-semibold text-emerald-800/80 uppercase tracking-wide">To book your free class</div>
           </div>
           <div class="p-8 text-center hover:bg-emerald-50 transition-colors duration-300">
             <div class="font-serif text-4xl font-bold text-emerald-700 mb-2">24 hrs</div>
-            <div class="text-[13px] font-semibold text-emerald-800/70 uppercase tracking-wide">From signup to first lesson</div>
+            <div class="text-[13px] font-semibold text-emerald-800/80 uppercase tracking-wide">From signup to first lesson</div>
           </div>
           <div class="p-8 text-center hover:bg-emerald-50 transition-colors duration-300">
             <div class="font-serif text-4xl font-bold text-emerald-700 mb-2">30 min</div>
-            <div class="text-[13px] font-semibold text-emerald-800/70 uppercase tracking-wide">Per session — built for children</div>
+            <div class="text-[13px] font-semibold text-emerald-800/80 uppercase tracking-wide">Per session — built for children</div>
           </div>
           <div class="p-8 text-center hover:bg-emerald-50 transition-colors duration-300">
             <div class="font-serif text-4xl font-bold text-emerald-700 mb-2">1-on-1</div>
-            <div class="text-[13px] font-semibold text-emerald-800/70 uppercase tracking-wide">Always — no group classes</div>
+            <div class="text-[13px] font-semibold text-emerald-800/80 uppercase tracking-wide">Always — no group classes</div>
           </div>
         </div>
       </div>
@@ -212,33 +215,33 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
               <div class="bg-white border border-emerald-100 rounded-3xl p-8 shadow-xl shadow-emerald-900/5">
                 <div class="space-y-4 mb-6">
                   <div>
-                    <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-900/50 mb-1.5">Child's name</div>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-900/70 mb-1.5">Child's name</div>
                     <input type="text" value="Yusuf" class="w-full bg-cream-50 border border-emerald-100 rounded-lg px-4 py-2.5 text-sm font-bold text-emerald-950 outline-none" readonly>
                   </div>
                   <div class="grid grid-cols-2 gap-4">
                     <div>
-                      <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-900/50 mb-1.5">Age</div>
+                      <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-900/70 mb-1.5">Age</div>
                       <div class="w-full bg-cream-50 border border-emerald-100 rounded-lg px-4 py-2.5 text-sm font-medium text-emerald-950">9 years old</div>
                     </div>
                     <div>
-                      <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-900/50 mb-1.5">Level</div>
+                      <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-900/70 mb-1.5">Level</div>
                       <div class="w-full bg-cream-50 border border-emerald-100 rounded-lg px-4 py-2.5 text-sm font-medium text-emerald-950">Beginner</div>
                     </div>
                   </div>
                 </div>
                 <div class="mb-6">
-                  <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-900/50 mb-2">Pick 3 preferred time slots</div>
+                  <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-900/70 mb-2">Pick 3 preferred time slots</div>
                   <div class="grid grid-cols-3 gap-2">
                     <div class="slot-btn bg-emerald-700 border-emerald-700 text-white text-xs font-bold text-center py-2.5 rounded-lg border cursor-pointer select-none">Mon 4pm</div>
-                    <div class="slot-btn bg-cream-50 border-emerald-100 text-emerald-900/60 text-xs font-bold text-center py-2.5 rounded-lg border cursor-pointer select-none hover:bg-emerald-50 hover:border-emerald-700 hover:text-emerald-700 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Mon 6pm</div>
+                    <div class="slot-btn bg-cream-50 border-emerald-100 text-emerald-900/80 text-xs font-bold text-center py-2.5 rounded-lg border cursor-pointer select-none hover:bg-emerald-50 hover:border-emerald-700 hover:text-emerald-700 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Mon 6pm</div>
                     <div class="slot-btn bg-emerald-700 border-emerald-700 text-white text-xs font-bold text-center py-2.5 rounded-lg border cursor-pointer select-none">Wed 4pm</div>
-                    <div class="slot-btn bg-cream-50 border-emerald-100 text-emerald-900/60 text-xs font-bold text-center py-2.5 rounded-lg border cursor-pointer select-none hover:bg-emerald-50 hover:border-emerald-700 hover:text-emerald-700 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Thu 5pm</div>
-                    <div class="bg-cream-50 border-emerald-100 text-emerald-900/30 text-xs font-bold text-center py-2.5 rounded-lg border opacity-50 cursor-not-allowed">Fri 4pm</div>
+                    <div class="slot-btn bg-cream-50 border-emerald-100 text-emerald-900/80 text-xs font-bold text-center py-2.5 rounded-lg border cursor-pointer select-none hover:bg-emerald-50 hover:border-emerald-700 hover:text-emerald-700 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Thu 5pm</div>
+                    <div class="bg-cream-50 border-emerald-100 text-emerald-900/70 text-xs font-bold text-center py-2.5 rounded-lg border opacity-50 cursor-not-allowed">Fri 4pm</div>
                     <div class="slot-btn bg-emerald-700 border-emerald-700 text-white text-xs font-bold text-center py-2.5 rounded-lg border cursor-pointer select-none">Sat 10am</div>
                   </div>
                 </div>
                 <Button variant="primary" class="w-full" onclick="this.textContent='Booked! ✓'">Book Free Class →</Button>
-                <div class="text-center text-[11px] font-medium text-emerald-900/50 mt-3">No credit card · No commitment · Cancel anytime</div>
+                <div class="text-center text-[11px] font-medium text-emerald-900/70 mt-3">No credit card · No commitment · Cancel anytime</div>
               </div>
             </div>
           </div>
@@ -266,7 +269,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                   <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-xl shrink-0" aria-hidden="true">🤝</div>
                   <div>
                     <h4 class="font-bold text-emerald-950 text-sm">Your teacher match is ready</h4>
-                    <p class="text-xs text-emerald-900/60 font-medium">Based on Yusuf's age, level and schedule</p>
+                    <p class="text-xs text-emerald-900/70 font-medium">Based on Yusuf's age, level and schedule</p>
                   </div>
                 </div>
                 <div class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-5 mb-5">
@@ -278,12 +281,12 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                     </div>
                   </div>
                   <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="px-2.5 py-1 bg-white border border-emerald-100 text-emerald-900/70 text-[10px] font-bold rounded-full">Ages 5–12</span>
-                    <span class="px-2.5 py-1 bg-white border border-emerald-100 text-emerald-900/70 text-[10px] font-bold rounded-full">Beginners specialist</span>
-                    <span class="px-2.5 py-1 bg-white border border-emerald-100 text-emerald-900/70 text-[10px] font-bold rounded-full">Patience-first</span>
+                    <span class="px-2.5 py-1 bg-white border border-emerald-100 text-emerald-900/80 text-[10px] font-bold rounded-full">Ages 5–12</span>
+                    <span class="px-2.5 py-1 bg-white border border-emerald-100 text-emerald-900/80 text-[10px] font-bold rounded-full">Beginners specialist</span>
+                    <span class="px-2.5 py-1 bg-white border border-emerald-100 text-emerald-900/80 text-[10px] font-bold rounded-full">Patience-first</span>
                   </div>
                   <div class="pt-4 border-t border-emerald-100 flex justify-between items-center">
-                    <span class="text-xs font-medium text-emerald-900/60">Compatibility score for Yusuf</span>
+                    <span class="text-xs font-medium text-emerald-900/70">Compatibility score for Yusuf</span>
                     <span class="text-sm font-bold text-emerald-700">97% match ✓</span>
                   </div>
                 </div>
@@ -291,7 +294,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                   <div class="text-white" aria-hidden="true">✅</div>
                   <div>
                     <strong class="text-white text-sm block mb-0.5">First session confirmed</strong>
-                    <span class="text-emerald-50/80 text-xs font-medium">Wednesday, 4:30 PM · 30 mins · Free trial</span>
+                    <span class="text-emerald-50/90 text-xs font-medium">Wednesday, 4:30 PM · 30 mins · Free trial</span>
                   </div>
                 </div>
               </div>
@@ -322,7 +325,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-500 text-white flex items-center justify-center font-serif text-xl font-bold">ف</div>
                     <div>
                       <div class="font-bold text-emerald-950 text-sm">Ustadha Fatima K.</div>
-                      <div class="text-[11px] font-medium text-emerald-900/60">Session with Yusuf, age 9</div>
+                      <div class="text-[11px] font-medium text-emerald-900/70">Session with Yusuf, age 9</div>
                     </div>
                   </div>
                   <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 border border-green-200 text-green-600 text-[10px] font-bold rounded-full">
@@ -331,12 +334,12 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                 </div>
                 
                 <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 mb-6">
-                  <div class="font-serif text-3xl text-emerald-700 leading-relaxed text-right mb-2" dir="rtl">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div>
+                  <div class="font-arabic text-3xl text-emerald-700 leading-relaxed text-right mb-2" lang="ar" dir="rtl">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div>
                   <div class="text-xs font-bold text-emerald-700 text-right">Al-Fatiha · Verse 2</div>
                 </div>
 
                 <div class="mb-6">
-                  <div class="flex justify-between text-xs font-bold text-emerald-900/60 mb-2">
+                  <div class="flex justify-between text-xs font-bold text-emerald-900/70 mb-2">
                     <span>Session progress</span><span>72% complete</span>
                   </div>
                   <div class="w-full h-2 bg-emerald-50 rounded-full overflow-hidden">
@@ -346,7 +349,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
 
                 <div class="flex items-center gap-3 bg-cream-50 border border-emerald-100 rounded-xl p-4">
                   <div class="text-lg" aria-hidden="true">📊</div>
-                  <p class="text-xs font-medium text-emerald-900/70 leading-relaxed">Progress report sent to <strong class="text-emerald-950">parent's email</strong> within 30 mins of session ending.</p>
+                  <p class="text-xs font-medium text-emerald-900/80 leading-relaxed">Progress report sent to <strong class="text-emerald-950">parent's email</strong> within 30 mins of session ending.</p>
                 </div>
               </div>
             </div>
@@ -374,7 +377,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                 <div class="flex items-center justify-between mb-6">
                   <div>
                     <h4 class="font-bold text-emerald-950 text-[15px]">Weekly Progress Report</h4>
-                    <p class="text-[11px] text-emerald-900/60 font-medium">Wednesday · Ustadha Fatima K.</p>
+                    <p class="text-[11px] text-emerald-900/70 font-medium">Wednesday · Ustadha Fatima K.</p>
                   </div>
                   <div class="inline-flex items-center px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full">✓ Delivered</div>
                 </div>
@@ -383,27 +386,27 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                   <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-purple-400 flex items-center justify-center text-white font-bold text-sm">Y</div>
                   <div>
                     <div class="font-bold text-emerald-950 text-[13px]">Yusuf · Age 9</div>
-                    <div class="text-[11px] font-medium text-emerald-900/60">Week 3 · Session 7</div>
+                    <div class="text-[11px] font-medium text-emerald-900/70">Week 3 · Session 7</div>
                   </div>
                 </div>
 
                 <div class="space-y-4 mb-6">
                   <div>
-                    <div class="flex justify-between text-[11px] font-bold text-emerald-900/60 mb-1.5"><span>Tajweed accuracy</span><span class="text-emerald-700">88%</span></div>
+                    <div class="flex justify-between text-[11px] font-bold text-emerald-900/70 mb-1.5"><span>Tajweed accuracy</span><span class="text-emerald-700">88%</span></div>
                     <div class="w-full h-1.5 bg-emerald-50 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-emerald-700 to-emerald-500 rounded-full w-[88%]"></div></div>
                   </div>
                   <div>
-                    <div class="flex justify-between text-[11px] font-bold text-emerald-900/60 mb-1.5"><span>Verses memorised</span><span class="text-amber-500">65%</span></div>
+                    <div class="flex justify-between text-[11px] font-bold text-emerald-900/70 mb-1.5"><span>Verses memorised</span><span class="text-amber-500">65%</span></div>
                     <div class="w-full h-1.5 bg-emerald-50 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full w-[65%]"></div></div>
                   </div>
                   <div>
-                    <div class="flex justify-between text-[11px] font-bold text-emerald-900/60 mb-1.5"><span>Fluency and rhythm</span><span class="text-purple-600">78%</span></div>
+                    <div class="flex justify-between text-[11px] font-bold text-emerald-900/70 mb-1.5"><span>Fluency and rhythm</span><span class="text-purple-600">78%</span></div>
                     <div class="w-full h-1.5 bg-emerald-50 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-purple-600 to-purple-400 rounded-full w-[78%]"></div></div>
                   </div>
                 </div>
 
                 <div class="bg-emerald-700 rounded-2xl p-5">
-                  <div class="text-[10px] font-bold tracking-widest uppercase text-white/50 mb-2">Teacher's note</div>
+                  <div class="text-[10px] font-bold tracking-widest uppercase text-white/80 mb-2">Teacher's note</div>
                   <p class="font-serif italic text-white/90 text-sm leading-relaxed">"Yusuf recited Al-Fatiha without any prompting for the first time today. Very proud of him."</p>
                 </div>
               </div>
@@ -421,58 +424,58 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
         <div class="grid lg:grid-cols-[1.1fr_1fr] gap-16 lg:gap-20 items-center">
           
           <div>
-            <span class="text-xs font-bold tracking-[0.2em] uppercase text-emerald-500/50 block mb-4">Inside Every Session</span>
+            <span class="text-xs font-bold tracking-[0.2em] uppercase text-emerald-500/80 block mb-4">Inside Every Session</span>
             <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6 tracking-tight leading-tight">What actually happens <br/>in those <em class="font-serif italic text-amber-400 font-medium">30 minutes.</em></h2>
-            <p class="text-[17px] text-emerald-100/70 font-medium leading-relaxed mb-10 max-w-lg">
+            <p class="text-[17px] text-emerald-100/80 font-medium leading-relaxed mb-10 max-w-lg">
               Every Quranific session follows a structured, child-centred framework — not just recitation. It is a carefully sequenced experience that builds love for the Quran alongside skill.
             </p>
 
             <div class="space-y-4">
               <div class="bg-white/5 border border-white/10 rounded-2xl p-5 flex items-start gap-4 hover:bg-white/10 transition-colors">
                 <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg shrink-0" aria-hidden="true">🎯</div>
-                <div><h4 class="font-bold text-white text-[15px] mb-1">Every session has one clear goal</h4><p class="text-[13px] text-emerald-100/60 font-medium leading-relaxed">Teacher sets a specific objective before class. Your child always knows exactly what they are working toward that day.</p></div>
+                <div><h3 class="font-bold text-white text-[15px] mb-1">Every session has one clear goal</h3><p class="text-[13px] text-emerald-100/80 font-medium leading-relaxed">Teacher sets a specific objective before class. Your child always knows exactly what they are working toward that day.</p></div>
               </div>
               <div class="bg-white/5 border border-white/10 rounded-2xl p-5 flex items-start gap-4 hover:bg-white/10 transition-colors">
                 <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg shrink-0" aria-hidden="true">💚</div>
-                <div><h4 class="font-bold text-white text-[15px] mb-1">Positive reinforcement — no exceptions</h4><p class="text-[13px] text-emerald-100/60 font-medium leading-relaxed">Mistakes are progress points, not failures. Teacher celebrates the attempt before gently correcting. Zero raised voices. Ever.</p></div>
+                <div><h3 class="font-bold text-white text-[15px] mb-1">Positive reinforcement — no exceptions</h3><p class="text-[13px] text-emerald-100/80 font-medium leading-relaxed">Mistakes are progress points, not failures. Teacher celebrates the attempt before gently correcting. Zero raised voices. Ever.</p></div>
               </div>
               <div class="bg-white/5 border border-white/10 rounded-2xl p-5 flex items-start gap-4 hover:bg-white/10 transition-colors">
                 <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg shrink-0" aria-hidden="true">😊</div>
-                <div><h4 class="font-bold text-white text-[15px] mb-1">Mood check-in after every session</h4><p class="text-[13px] text-emerald-100/60 font-medium leading-relaxed">We track how your child feels after each class. If they are consistently disengaged, we flag it to you immediately.</p></div>
+                <div><h3 class="font-bold text-white text-[15px] mb-1">Mood check-in after every session</h3><p class="text-[13px] text-emerald-100/80 font-medium leading-relaxed">We track how your child feels after each class. If they are consistently disengaged, we flag it to you immediately.</p></div>
               </div>
             </div>
           </div>
 
           <div class="bg-white/5 border border-white/10 rounded-[2rem] p-8 lg:p-10 backdrop-blur-md">
-            <div class="text-[11px] font-bold tracking-widest uppercase text-white/40 mb-8">30-minute session breakdown</div>
+            <div class="text-[11px] font-bold tracking-widest uppercase text-white/80 mb-8">30-minute session breakdown</div>
             
             <div class="space-y-0 relative">
               <div class="absolute left-[45px] sm:left-[55px] top-[20px] bottom-[30px] w-0.5 bg-white/10"></div>
               
               <div class="flex gap-4 sm:gap-6 relative z-10 pb-6">
-                <div class="w-8 pt-2 text-right text-[11px] font-bold text-white/30 shrink-0">0–3</div>
+                <div class="w-8 pt-2 text-right text-[11px] font-bold text-white/80 shrink-0">0–3</div>
                 <div class="w-10 h-10 rounded-full bg-amber-50/10 border border-amber-200/30 flex items-center justify-center text-lg shrink-0" aria-hidden="true">👋</div>
-                <div class="pt-1"><h4 class="font-bold text-white/90 text-sm mb-1">Warm-up and check-in</h4><p class="text-xs text-white/50 font-medium leading-relaxed">Teacher greets child warmly. Quick emotional check — tired? excited? Lesson adjusted accordingly.</p></div>
+                <div class="pt-1"><h3 class="font-bold text-white/90 text-sm mb-1">Warm-up and check-in</h3><p class="text-xs text-white/80 font-medium leading-relaxed">Teacher greets child warmly. Quick emotional check — tired? excited? Lesson adjusted accordingly.</p></div>
               </div>
               <div class="flex gap-4 sm:gap-6 relative z-10 pb-6">
-                <div class="w-8 pt-2 text-right text-[11px] font-bold text-white/30 shrink-0">3–8</div>
+                <div class="w-8 pt-2 text-right text-[11px] font-bold text-white/80 shrink-0">3–8</div>
                 <div class="w-10 h-10 rounded-full bg-emerald-700/30 border border-emerald-500/50 flex items-center justify-center text-lg shrink-0" aria-hidden="true">🔁</div>
-                <div class="pt-1"><h4 class="font-bold text-white/90 text-sm mb-1">Revision of last session</h4><p class="text-xs text-white/50 font-medium leading-relaxed">Recite what was learned before. Build confidence. Memory reinforced through spaced repetition.</p></div>
+                <div class="pt-1"><h3 class="font-bold text-white/90 text-sm mb-1">Revision of last session</h3><p class="text-xs text-white/80 font-medium leading-relaxed">Recite what was learned before. Build confidence. Memory reinforced through spaced repetition.</p></div>
               </div>
               <div class="flex gap-4 sm:gap-6 relative z-10 pb-6">
-                <div class="w-8 pt-2 text-right text-[11px] font-bold text-white/30 shrink-0">8–20</div>
+                <div class="w-8 pt-2 text-right text-[11px] font-bold text-white/80 shrink-0">8–20</div>
                 <div class="w-10 h-10 rounded-full bg-purple-600/20 border border-purple-400/40 flex items-center justify-center text-lg shrink-0" aria-hidden="true">📖</div>
-                <div class="pt-1"><h4 class="font-bold text-white/90 text-sm mb-1">New learning — the core block</h4><p class="text-xs text-white/50 font-medium leading-relaxed">New verse, Tajweed rule, or Makhaarij sound. Broken into small pieces. Repeated with encouragement.</p></div>
+                <div class="pt-1"><h3 class="font-bold text-white/90 text-sm mb-1">New learning — the core block</h3><p class="text-xs text-white/80 font-medium leading-relaxed">New verse, Tajweed rule, or Makhaarij sound. Broken into small pieces. Repeated with encouragement.</p></div>
               </div>
               <div class="flex gap-4 sm:gap-6 relative z-10 pb-6">
-                <div class="w-8 pt-2 text-right text-[11px] font-bold text-white/30 shrink-0">20–27</div>
+                <div class="w-8 pt-2 text-right text-[11px] font-bold text-white/80 shrink-0">20–27</div>
                 <div class="w-10 h-10 rounded-full bg-green-600/20 border border-green-400/40 flex items-center justify-center text-lg shrink-0" aria-hidden="true">✅</div>
-                <div class="pt-1"><h4 class="font-bold text-white/90 text-sm mb-1">Independent practice</h4><p class="text-xs text-white/50 font-medium leading-relaxed">Child practices while teacher listens. Gentle corrections. Teacher notes what to focus on next.</p></div>
+                <div class="pt-1"><h3 class="font-bold text-white/90 text-sm mb-1">Independent practice</h3><p class="text-xs text-white/80 font-medium leading-relaxed">Child practices while teacher listens. Gentle corrections. Teacher notes what to focus on next.</p></div>
               </div>
               <div class="flex gap-4 sm:gap-6 relative z-10">
-                <div class="w-8 pt-2 text-right text-[11px] font-bold text-white/30 shrink-0">27–30</div>
+                <div class="w-8 pt-2 text-right text-[11px] font-bold text-white/80 shrink-0">27–30</div>
                 <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-lg shrink-0" aria-hidden="true">⭐</div>
-                <div class="pt-1"><h4 class="font-bold text-white/90 text-sm mb-1">Celebration and preview</h4><p class="text-xs text-white/50 font-medium leading-relaxed">Teacher celebrates what was achieved. Sets a small goal for next session. Child leaves feeling accomplished.</p></div>
+                <div class="pt-1"><h3 class="font-bold text-white/90 text-sm mb-1">Celebration and preview</h3><p class="text-xs text-white/80 font-medium leading-relaxed">Teacher celebrates what was achieved. Sets a small goal for next session. Child leaves feeling accomplished.</p></div>
               </div>
             </div>
           </div>
@@ -493,19 +496,19 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
             <div class="space-y-4">
               <div class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-4 hover:bg-emerald-50 hover:border-emerald-200 transition-colors">
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-lg shrink-0" aria-hidden="true">📊</div>
-                <div><h4 class="font-bold text-emerald-950 text-[15px] mb-1">Progress report after every session</h4><p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed">Detailed. Honest. In your inbox within 30 minutes — no login needed to read it.</p></div>
+                <div><h3 class="font-bold text-emerald-950 text-[15px] mb-1">Progress report after every session</h3><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Detailed. Honest. In your inbox within 30 minutes — no login needed to read it.</p></div>
               </div>
               <div class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-4 hover:bg-emerald-50 hover:border-emerald-200 transition-colors">
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-lg shrink-0" aria-hidden="true">🔁</div>
-                <div><h4 class="font-bold text-emerald-950 text-[15px] mb-1">Make-up class guaranteed</h4><p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed">Travel, illness, school events — notify us and a replacement is scheduled that same week.</p></div>
+                <div><h3 class="font-bold text-emerald-950 text-[15px] mb-1">Make-up class guaranteed</h3><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Travel, illness, school events — notify us and a replacement is scheduled that same week.</p></div>
               </div>
               <div class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-4 hover:bg-emerald-50 hover:border-emerald-200 transition-colors">
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-lg shrink-0" aria-hidden="true">👁</div>
-                <div><h4 class="font-bold text-emerald-950 text-[15px] mb-1">Sit in on any class, any time</h4><p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed">No notice required. Your child's teacher expects and welcomes this. Transparency is the standard.</p></div>
+                <div><h3 class="font-bold text-emerald-950 text-[15px] mb-1">Sit in on any class, any time</h3><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">No notice required. Your child's teacher expects and welcomes this. Transparency is the standard.</p></div>
               </div>
               <div class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-4 hover:bg-emerald-50 hover:border-emerald-200 transition-colors">
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-lg shrink-0" aria-hidden="true">🔄</div>
-                <div><h4 class="font-bold text-emerald-950 text-[15px] mb-1">Change teacher with one message</h4><p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed">Not the right fit? We switch immediately — same day, no questions, no awkwardness.</p></div>
+                <div><h3 class="font-bold text-emerald-950 text-[15px] mb-1">Change teacher with one message</h3><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Not the right fit? We switch immediately — same day, no questions, no awkwardness.</p></div>
               </div>
             </div>
           </div>
@@ -513,8 +516,8 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
           <div class="bg-cream-50 border border-emerald-100 rounded-[2rem] p-8 shadow-xl shadow-emerald-900/5">
             <div class="flex items-center justify-between mb-6 pb-6 border-b border-emerald-50">
               <div>
-                <h4 class="font-bold text-emerald-950 text-[16px]">Session Progress Report</h4>
-                <p class="text-xs font-medium text-emerald-900/60 mt-1">Wednesday · Ustadha Fatima K.</p>
+                <h3 class="font-bold text-emerald-950 text-[16px]">Session Progress Report</h3>
+                <p class="text-xs font-medium text-emerald-900/70 mt-1">Wednesday · Ustadha Fatima K.</p>
               </div>
               <div class="inline-flex items-center px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full">✓ Delivered</div>
             </div>
@@ -523,11 +526,11 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
               <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-purple-400 flex items-center justify-center text-white font-bold text-sm">Y</div>
               <div>
                 <div class="font-bold text-emerald-950 text-[14px] mb-0.5">Yusuf · Age 9</div>
-                <div class="text-[11px] font-medium text-emerald-900/60">Week 3 · Session 7 of ongoing programme</div>
+                <div class="text-[11px] font-medium text-emerald-900/70">Week 3 · Session 7 of ongoing programme</div>
               </div>
             </div>
 
-            <div class="text-[10px] font-bold uppercase tracking-widest text-emerald-900/50 mb-3">Surahs covered this session</div>
+            <div class="text-[10px] font-bold uppercase tracking-widest text-emerald-900/70 mb-3">Surahs covered this session</div>
             
             <div class="space-y-0 mb-6">
               <div class="flex items-center justify-between py-3 border-b border-emerald-50">
@@ -554,7 +557,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
             </div>
 
             <div class="bg-emerald-700 rounded-2xl p-5">
-              <div class="text-[10px] font-bold tracking-widest uppercase text-white/50 mb-2">Teacher's personal note</div>
+              <div class="text-[10px] font-bold tracking-widest uppercase text-white/80 mb-2">Teacher's personal note</div>
               <p class="font-serif italic text-white/90 text-[15px] leading-relaxed">"Yusuf was confident today — he recited Al-Fatiha without any prompting for the first time. His Makhaarij on the ح is improving noticeably. Very proud of him."</p>
             </div>
           </div>
@@ -587,7 +590,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                 <div class="flex items-start gap-2.5 text-[13px] font-medium text-emerald-800/80"><div class="w-4 h-4 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 mt-0.5" set:html={Check}></div><strong class="text-emerald-950">Basic Tajweed</strong> rules</div>
               </div>
               <div class="pt-5 border-t border-emerald-50 flex justify-between items-center text-xs font-bold">
-                <span class="text-emerald-900/50">Avg. 6–12 months</span>
+                <span class="text-emerald-900/70">Avg. 6–12 months</span>
                 <span class="bg-emerald-700 text-white px-2.5 py-0.5 rounded-md">Beginner</span>
               </div>
             </div>
@@ -608,7 +611,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                 <div class="flex items-start gap-2.5 text-[13px] font-medium text-emerald-800/80"><div class="w-4 h-4 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 mt-0.5" set:html={Check}></div><strong class="text-emerald-950">Introduction to Hifz</strong></div>
               </div>
               <div class="pt-5 border-t border-emerald-50 flex justify-between items-center text-xs font-bold">
-                <span class="text-emerald-900/50">Avg. 12–24 months</span>
+                <span class="text-emerald-900/70">Avg. 12–24 months</span>
                 <span class="bg-emerald-700 text-white px-2.5 py-0.5 rounded-md">Intermediate</span>
               </div>
             </div>
@@ -629,7 +632,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                 <div class="flex items-start gap-2.5 text-[13px] font-medium text-emerald-800/80"><div class="w-4 h-4 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 mt-0.5" set:html={Check}></div><strong class="text-emerald-950">Ijazah-holding specialist</strong></div>
               </div>
               <div class="pt-5 border-t border-emerald-50 flex justify-between items-center text-xs font-bold">
-                <span class="text-emerald-900/50">Long-term commitment</span>
+                <span class="text-emerald-900/70">Long-term commitment</span>
                 <span class="bg-emerald-700 text-white px-2.5 py-0.5 rounded-md">Advanced</span>
               </div>
             </div>
@@ -660,39 +663,39 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
         <div class="grid md:grid-cols-3 gap-6 mb-8">
           <div class="bg-white border border-emerald-100 rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
             <div class="w-12 h-12 rounded-xl bg-green-50 border border-green-200 flex items-center justify-center text-xl mb-4" aria-hidden="true">🔒</div>
-            <h4 class="font-bold text-emerald-950 text-[15px] mb-2">Private 1-on-1 sessions only</h4>
-            <p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed">Sessions are strictly between your child and their teacher. No other students. The link is unique and expires after each class.</p>
+            <h3 class="font-bold text-emerald-950 text-[15px] mb-2">Private 1-on-1 sessions only</h3>
+            <p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Sessions are strictly between your child and their teacher. No other students. The link is unique and expires after each class.</p>
           </div>
           <div class="bg-white border border-emerald-100 rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
             <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-xl mb-4" aria-hidden="true">📱</div>
-            <h4 class="font-bold text-emerald-950 text-[15px] mb-2">Works on any device</h4>
-            <p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed">Browser-based. Laptop, tablet, iPad, or phone — any device with a camera and microphone works. No downloads, ever.</p>
+            <h3 class="font-bold text-emerald-950 text-[15px] mb-2">Works on any device</h3>
+            <p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Browser-based. Laptop, tablet, iPad, or phone — any device with a camera and microphone works. No downloads, ever.</p>
           </div>
           <div class="bg-white border border-emerald-100 rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
             <div class="w-12 h-12 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-xl mb-4" aria-hidden="true">🛡️</div>
-            <h4 class="font-bold text-emerald-950 text-[15px] mb-2">All teachers background-checked</h4>
-            <p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed">Full safeguarding check before every teacher joins Quranific. Renewed annually. All teachers complete safeguarding training.</p>
+            <h3 class="font-bold text-emerald-950 text-[15px] mb-2">All teachers background-checked</h3>
+            <p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Full safeguarding check before every teacher joins Quranific. Renewed annually. All teachers complete safeguarding training.</p>
           </div>
           <div class="bg-white border border-emerald-100 rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
             <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-xl mb-4" aria-hidden="true">📹</div>
-            <h4 class="font-bold text-emerald-950 text-[15px] mb-2">No recording without consent</h4>
-            <p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed">Sessions are never recorded by default. You can enable recordings for revision purposes — but it requires your explicit opt-in.</p>
+            <h3 class="font-bold text-emerald-950 text-[15px] mb-2">No recording without consent</h3>
+            <p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Sessions are never recorded by default. You can enable recordings for revision purposes — but it requires your explicit opt-in.</p>
           </div>
           <div class="bg-white border border-emerald-100 rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
             <div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-xl mb-4" aria-hidden="true">⏰</div>
-            <h4 class="font-bold text-emerald-950 text-[15px] mb-2">Automatic session reminders</h4>
-            <p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed">Email and WhatsApp reminders sent 24 hours and 1 hour before each session. No more forgotten classes.</p>
+            <h3 class="font-bold text-emerald-950 text-[15px] mb-2">Automatic session reminders</h3>
+            <p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Email and WhatsApp reminders sent 24 hours and 1 hour before each session. No more forgotten classes.</p>
           </div>
           <div class="bg-white border border-emerald-100 rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
             <div class="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center text-xl mb-4" aria-hidden="true">🚨</div>
-            <h4 class="font-bold text-emerald-950 text-[15px] mb-2">Open-door safeguarding policy</h4>
-            <p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed">Parents can join any session without notice. Teachers know from day one to treat every class as if a parent might enter.</p>
+            <h3 class="font-bold text-emerald-950 text-[15px] mb-2">Open-door safeguarding policy</h3>
+            <p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Parents can join any session without notice. Teachers know from day one to treat every class as if a parent might enter.</p>
           </div>
         </div>
 
         <div class="bg-white border border-emerald-100 rounded-3xl p-8 lg:p-10 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
           <div>
-            <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/40 mb-2">Our data promise</div>
+            <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/70 mb-2">Our data promise</div>
             <h3 class="font-serif text-2xl font-bold text-emerald-950">Your child's data is <em class="italic text-emerald-700">yours, not ours.</em></h3>
           </div>
           <div class="flex flex-wrap gap-4">
@@ -720,14 +723,14 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
               <div class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80"><div class="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0" set:html={Check}></div> <strong class="text-emerald-950">Make-up classes</strong> included in every plan</div>
             </div>
             
-            <Button href="/tuition-fees" variant="primary">See Full Pricing Details →</Button>
+            <Button href="/tuition-fee" variant="primary">See Full Pricing Details →</Button>
           </div>
 
           <div class="grid sm:grid-cols-2 gap-6">
             <div class="bg-cream-50 border border-emerald-100 rounded-3xl p-8 hover:shadow-lg hover:border-emerald-100 transition-[color,background-color,border-color,box-shadow,opacity,transform] flex flex-col">
-              <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/50 mb-2">Starter</div>
+              <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/70 mb-2">Starter</div>
               <div class="font-serif text-5xl font-bold text-emerald-950 mb-1">$39</div>
-              <div class="text-[13px] font-medium text-emerald-900/60 mb-6">per month · 2 sessions/week</div>
+              <div class="text-[13px] font-medium text-emerald-900/80 mb-6">per month · 2 sessions/week</div>
               <div class="space-y-2 mb-8 flex-1">
                 <div class="flex items-center gap-2 text-[13px] font-medium text-emerald-800/80"><span class="w-1.5 h-1.5 bg-emerald-700 rounded-full" aria-hidden="true"></span> 8 sessions per month</div>
                 <div class="flex items-center gap-2 text-[13px] font-medium text-emerald-800/80"><span class="w-1.5 h-1.5 bg-emerald-700 rounded-full" aria-hidden="true"></span> 1-on-1 private sessions</div>
@@ -736,9 +739,9 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
               <Button href="/funnel/signup" variant="ghost" class="w-full">Choose Starter</Button>
             </div>
             <div class="bg-emerald-700 border border-emerald-900 rounded-3xl p-8 hover:shadow-xl transition-[color,background-color,border-color,box-shadow,opacity,transform] flex flex-col shadow-lg transform sm:-translate-y-4">
-              <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-100/50 mb-2">Most Popular</div>
+              <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-100/80 mb-2">Most Popular</div>
               <div class="font-serif text-5xl font-bold text-white mb-1">$59</div>
-              <div class="text-[13px] font-medium text-emerald-50/70 mb-4">per month · 3 sessions/week</div>
+              <div class="text-[13px] font-medium text-emerald-50/80 mb-4">per month · 3 sessions/week</div>
               <span class="inline-block self-start px-2.5 py-1 bg-amber-500 text-white text-[10px] font-bold rounded-full mb-6">⭐ Best value</span>
               <div class="space-y-2 mb-8 flex-1">
                 <div class="flex items-center gap-2 text-[13px] font-medium text-emerald-50/90"><span class="w-1.5 h-1.5 bg-amber-400 rounded-full" aria-hidden="true"></span> 12 sessions per month</div>
@@ -750,7 +753,7 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
           </div>
 
         </div>
-        <p class="text-center text-[11px] text-emerald-900/40 italic mt-8">Pricing shown is indicative and confirmed at signup based on your location.</p>
+        <p class="text-center text-[11px] text-emerald-900/70 italic mt-8">Pricing shown is indicative and confirmed at signup based on your location.</p>
       </div>
     </Section>
 
@@ -776,11 +779,11 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
           <Button href="/funnel/signup" variant="white" class="w-full sm:w-auto px-10 py-5 text-lg">
             Book Your Free Class
           </Button>
-          <a href="https://wa.me/923112112122" target="_blank" rel="noopener" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-10 py-5 bg-transparent border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/60 font-bold rounded-xl transition-[color,background-color,border-color,box-shadow,opacity,transform] text-lg">
+          <a href={`https://wa.me/${SITE.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-10 py-5 bg-transparent border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white font-bold rounded-xl transition-[color,background-color,border-color,box-shadow,opacity,transform] text-lg">
             Still have questions?
           </a>
         </div>
-        <p class="text-sm font-medium text-emerald-100/50">First class free · Full refund in month 1 · Cancel anytime</p>
+        <p class="text-sm font-medium text-emerald-100/80">First class free · Full refund in month 1 · Cancel anytime</p>
       </div>
     </Section>
 
@@ -795,24 +798,14 @@ const XIcon = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
         if ((btn as any).dataset.bound) return;
         (btn as any).dataset.bound = 'true';
 
-        btn.addEventListener('click', function() {
-          const el = this as HTMLElement;
-          if (el.classList.contains('opacity-50')) return; // Disabled state
-          
-          if (el.classList.contains('bg-emerald-700')) {
-            // Deselect: Swap Tailwind v4 theme utility classes
-            el.classList.replace('bg-emerald-700', 'bg-cream-50');
-            el.classList.replace('border-emerald-700', 'border-emerald-100');
-            el.classList.replace('text-white', 'text-emerald-900/60');
-          } else {
-            // Select (limit to 3 visual selections for the mockup)
-            const selectedCount = document.querySelectorAll('.slot-btn.bg-emerald-700').length;
-            if (selectedCount < 3) {
-              el.classList.replace('bg-cream-50', 'bg-emerald-700');
-              el.classList.replace('border-emerald-100', 'border-emerald-700');
-              el.classList.replace('text-emerald-900/60', 'text-white');
-            }
-          }
+        btn.addEventListener('click', (e) => {
+          document.querySelectorAll('.slot-btn').forEach(b => {
+            b.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700');
+            b.classList.add('bg-cream-50', 'text-emerald-900/80', 'border-emerald-100');
+          });
+          const target = e.target as HTMLElement;
+          target.classList.remove('bg-cream-50', 'text-emerald-900/80', 'border-emerald-100');
+          target.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
         });
       });
     });

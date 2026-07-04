@@ -5,7 +5,7 @@ import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 import Section from '../../components/ui/Section.astro';
 import Button from '../../components/ui/Button.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -16,15 +16,15 @@ export async function getStaticPaths() {
   
   return posts.map(post => ({
     // CRITICAL FIX: Fallback to post.id to prevent Astro 5/6 routing crashes
-    params: { slug: post.slug || post.id },
+    params: { slug: post.id },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 
-const pubDate = post.data.date || post.data.pubDate;
+const pubDate = post.data.pubDate;
 const formattedDate = new Date(pubDate).toLocaleDateString('en-US', {
   month: 'long',
   day: 'numeric',
@@ -38,7 +38,7 @@ const jsonLd = {
   "headline": post.data.title,
   "description": post.data.description,
   "datePublished": pubDate,
-  "image": post.data.image ? [new URL(post.data.image, Astro.site).toString()] : undefined,
+  "image": post.data.heroImage ? [new URL(post.data.heroImage, Astro.site).toString()] : undefined,
   "author": {
     "@type": "Person",
     "name": post.data.author || "Quranific Editorial"
@@ -51,7 +51,7 @@ const jsonLd = {
 ---
 
 <Base title={`${post.data.title} | Quranific Blog`} description={post.data.description}>
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
   
   <Header />
 
@@ -62,7 +62,7 @@ const jsonLd = {
         <div class="flex items-center justify-center gap-3 mb-6">
           <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest">{formattedDate}</span>
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-200" aria-hidden="true"></span>
-          <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest">{post.data.category || 'Article'}</span>
+          <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest">Article</span>
         </div>
         
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-emerald-950 mb-8 tracking-tighter leading-[1.15] text-balance">
@@ -80,9 +80,9 @@ const jsonLd = {
         </div>
       </header>
 
-      {post.data.image && (
+      {post.data.heroImage && (
         <div class="w-full aspect-[16/9] bg-emerald-50 rounded-3xl mb-12 overflow-hidden border border-emerald-100 shadow-sm animate-in fade-in duration-1000">
-          <img src={post.data.image} alt={post.data.title} width="800" height="450" class="w-full h-full object-cover" loading="eager" />
+          <img src={post.data.heroImage} alt={post.data.title} width="800" height="450" class="w-full h-full object-cover" loading="eager" />
         </div>
       )}
 

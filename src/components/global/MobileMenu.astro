@@ -136,6 +136,21 @@ import { MOBILE_NAVIGATION } from '../../constants/site';
       }
     }, { signal });
 
+    // Outside-click closure: fires only when the menu is open and the click
+    // lands outside both the drawer panel and the hamburger toggle button.
+    document.addEventListener('click', (e: MouseEvent) => {
+      const isOpen = !drawer!.hasAttribute('inert');
+      if (!isOpen) return;
+
+      const target = e.target as Node | null;
+      const clickedInsideDrawer  = drawer!.contains(target);
+      const clickedToggleBtn     = toggleBtn!.contains(target);
+
+      if (!clickedInsideDrawer && !clickedToggleBtn) {
+        closeMenu();
+      }
+    }, { signal });
+
     toggleBtn.addEventListener('click', openMenu, { signal });
     closeBtn.addEventListener('click', closeMenu, { signal });
 

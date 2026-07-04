@@ -43,7 +43,7 @@ const Icons = {
   title="Tuition Fees — Quranific | Simple, Honest Pricing" 
   description="Honest pricing. Nothing hidden. Everything included. Calculate your monthly fee for private 1-on-1 Quran classes with certified scholars."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
 
   <Header />
 
@@ -587,7 +587,7 @@ const Icons = {
 
   <Footer />
 
-  <script>
+  <script is:inline>
     document.addEventListener('astro:page-load', () => {
       
       // --- 1. MAIN FEE CALCULATOR ---
@@ -600,8 +600,8 @@ const Icons = {
       };
 
       document.querySelectorAll('.calc-btn').forEach(btn => {
-        if ((btn as any).dataset.bound) return;
-        (btn as any).dataset.bound = 'true';
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = 'true';
 
         btn.addEventListener('click', function() {
           const parent = this.parentElement;
@@ -620,7 +620,7 @@ const Icons = {
           this.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
 
           // Update state & label using pure JS
-          (calcState as any)[type] = val;
+          calcState[type] = val;
           const valElem = document.getElementById(`calc-${type}-val`);
           if (valElem) valElem.textContent = label;
 
@@ -635,7 +635,7 @@ const Icons = {
         if(!calcState.who || !calcState.freq) return;
         
         // Pure JS property access
-        const whoPrices = (basePrices as any)[calcState.who];
+        const whoPrices = basePrices[calcState.who];
         const base = whoPrices ? (whoPrices[calcState.freq] || 39) : 39;
         
         const monthly = base;
@@ -643,7 +643,7 @@ const Icons = {
         const isAnnual = calcState.cycle === 'annual';
         const price = isAnnual ? annual : monthly;
         const saving = isAnnual ? Math.round((monthly - annual) * 12) : 0;
-        const sessions = parseInt(calcState.freq as string) * 4;
+        const sessions = parseInt(calcState.freq) * 4;
         const perSesh = (price / sessions).toFixed(2);
 
         const html = `
@@ -669,15 +669,15 @@ const Icons = {
 
       // --- 2. BILLING TOGGLE ---
       let isAnnualPricing = true;
-      const planPrices: Record<string, Record<string, number>> = {
+      const planPrices = {
         light: { m: 39, a: 33 },
         standard: { m: 59, a: 50 },
         intensive: { m: 89, a: 76 }
       };
 
       const billingToggle = document.getElementById('billing-toggle');
-      if (billingToggle && !(billingToggle as any).dataset.bound) {
-        (billingToggle as any).dataset.bound = 'true';
+      if (billingToggle && !billingToggle.dataset.bound) {
+        billingToggle.dataset.bound = 'true';
         
         billingToggle.addEventListener('click', () => {
           isAnnualPricing = !isAnnualPricing;
@@ -700,7 +700,7 @@ const Icons = {
 
           const p = isAnnualPricing ? 'a' : 'm';
           const suf = isAnnualPricing ? 'per month, billed annually' : 'per month, billed monthly';
-          const orig: Record<string, string> = {
+          const orig = {
             light: isAnnualPricing ? '$39/mo when billed monthly' : '',
             standard: isAnnualPricing ? '$59/mo when billed monthly' : '',
             intensive: isAnnualPricing ? '$89/mo when billed monthly' : ''
@@ -728,8 +728,8 @@ const Icons = {
 
       // --- 3. SIBLING CALCULATOR ---
       const addBtn = document.getElementById('sib-add-btn');
-      if (addBtn && !(addBtn as any).dataset.bound) {
-        (addBtn as any).dataset.bound = 'true';
+      if (addBtn && !addBtn.dataset.bound) {
+        addBtn.dataset.bound = 'true';
         
         addBtn.addEventListener('click', function addSibling(e) {
           const row2 = document.getElementById('child2-row');

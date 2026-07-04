@@ -17,19 +17,32 @@ const {
   description={description}
   robots="noindex, nofollow"
 >
+  <!--
+    B-2 FIX: Cloudflare Turnstile widget script loaded once at the layout level.
+    Using async defer so it never blocks the main thread. The is:inline directive
+    suppresses the Astro 4000 warning since this is a third-party script.
+  -->
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer
+    is:inline
+    slot="head"
+  ></script>
+
   <div class="flex flex-col lg:flex-row min-h-screen bg-[#fefdf9] w-full">
 
     <aside aria-label="Brand panel" class="lg:w-[clamp(32%,35vw,45%)] bg-emerald-950 relative flex flex-row lg:flex-col justify-between items-center lg:items-stretch lg:sticky lg:top-0 lg:h-screen overflow-hidden shadow-md lg:shadow-2xl z-20 py-3 px-5 lg:p-0 shrink-0">
-      
+
       <div class="absolute -top-32 -left-32 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none hidden lg:block" aria-hidden="true"></div>
-      
+
       <div class="relative z-10 lg:p-8 xl:p-10 flex justify-between items-center lg:items-start lg:flex-col w-full">
         <a href="/" class="group transition-transform active:scale-95 inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded">
           <span class="text-xl sm:text-2xl lg:text-3xl font-black tracking-tighter uppercase bg-gradient-to-br from-white via-emerald-100 to-emerald-500 bg-clip-text text-transparent drop-shadow-sm">
             QURANIFIC
           </span>
         </a>
-        
+
         <div class="lg:hidden flex items-center gap-1.5 text-emerald-100 text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-900/50 border border-emerald-800" aria-label="Secure checkout">
           <svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
           Secure
@@ -46,7 +59,7 @@ const {
             <cite class="text-xs font-bold tracking-widest uppercase not-italic">Sahih Al-Bukhari</cite>
           </footer>
         </blockquote>
-        
+
         <div class="bg-emerald-900/40 border border-emerald-800/50 p-4 xl:p-5 rounded-xl backdrop-blur-sm">
           <div class="flex items-center gap-1 mb-2 text-amber-400 text-xs" aria-hidden="true">★★★★★</div>
           <p class="text-emerald-100 text-sm leading-relaxed mb-2">

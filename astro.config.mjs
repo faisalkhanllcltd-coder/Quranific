@@ -1,3 +1,4 @@
+// astro.config.mjs
 import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
 import cloudflare from '@astrojs/cloudflare';
@@ -8,7 +9,7 @@ import partytown from '@astrojs/partytown';
 
 export default defineConfig({
   site: 'https://quranific.com',
-  output: 'static',
+  output: 'server',
   adapter: cloudflare({
     imageService: 'cloudflare',
     platformProxy: {
@@ -28,13 +29,9 @@ export default defineConfig({
     }),
   ],
   vite: {
+    // CONFIG FIX (L-06): Removed redundant LightningCSS. Tailwind v4 (Oxide engine) handles this natively.
     plugins: [tailwindcss()],
-    css: {
-      transformer: 'lightningcss',
-      lightningcss: { drafts: { customMedia: true } }
-    },
     build: {
-      cssMinify: 'lightningcss',
       target: 'esnext'
     }
   },

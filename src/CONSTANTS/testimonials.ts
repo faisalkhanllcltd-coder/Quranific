@@ -1,4 +1,4 @@
-﻿// src/constants/testimonials.ts
+// src/constants/testimonials.ts
 export interface Testimonial {
   id: string;
   initials: string;
@@ -38,3 +38,5 @@ export const TESTIMONIALS_DATA: Testimonial[] = [
     theme: 'light'
   }
 ];
+
+export const TESTIMONIALS_LEGAL_DISCLAIMER = "Results may vary. Testimonials represent individual experiences of enrolled families. All reviews are verified against active student accounts; however, individual progress depends on student attendance, practice, and starting level. No compensation was provided for these reviews.";

@@ -1,15 +1,48 @@
 ---
 // src/components/global/Header.astro
 import MobileMenu from './MobileMenu.astro';
-import { courses } from '../../data/courses';
+import { courses } from '../../constants/courses';
 import { SITE, MAIN_NAVIGATION } from '../../constants/site';
 ---
 
+{SITE.announcement.enabled && (
+  <div 
+    id="promo-bar" 
+    class="relative z-40 bg-gradient-to-r from-[#022c22] via-[#064e3b] to-[#022c22] border-b border-emerald-900/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] text-emerald-50 py-1.5 px-4 sm:px-6 flex items-center justify-center text-[11px] md:text-xs font-medium tracking-wide transition-all duration-300 overflow-hidden"
+  >
+    <div class="relative flex items-center flex-wrap justify-center gap-1.5 md:gap-2 text-center pr-6 md:pr-10">
+      
+      <span class="leading-tight drop-shadow-sm">
+        <span class="opacity-90">{SITE.announcement.text}</span> 
+        <span class="text-emerald-300 font-extrabold tracking-wide mx-0.5">{SITE.announcement.highlight}</span> 
+        <span class="opacity-90">{SITE.announcement.suffix}</span>
+      </span>
+      
+      <a 
+        href={SITE.announcement.linkUrl} 
+        class="inline-flex items-center text-emerald-300 hover:text-white underline decoration-emerald-500/40 hover:decoration-emerald-300 underline-offset-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-sm ml-1"
+      >
+        <span set:html={SITE.announcement.linkText} class="font-bold uppercase tracking-wider" />
+      </a>
+    </div>
+
+    <button 
+      id="close-promo"
+      aria-label="Close promotion"
+      class="absolute right-1 md:right-2 top-1/2 -translate-y-1/2 p-3 text-emerald-400/80 hover:text-emerald-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-full transition-colors active:scale-95"
+    >
+      <svg class="w-3.5 h-3.5 md:w-4 md:h-4 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+)}
+
 <header
   id="main-header"
-  class="fixed top-0 left-0 right-0 z-50 transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 py-6 bg-transparent border-b border-transparent"
+  class="sticky top-0 z-50 w-full transition-all duration-300 ease-out h-[88px] bg-transparent border-b border-transparent"
 >
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-full">
 
     <a href="/" class="flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg">
       <img
@@ -24,21 +57,21 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
       />
     </a>
 
-    <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-8">
+    <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-8 h-full">
       {MAIN_NAVIGATION.map((item) =>
         item.hasDropdown ? (
-          <div class="group relative" data-dropdown>
+          <div class="group relative h-full flex items-center" data-dropdown>
             <a
               href={item.href}
               id="courses-menu-trigger"
               aria-haspopup="true"
               aria-expanded="false"
               aria-controls="courses-dropdown"
-              class="flex items-center gap-1.5 py-4 text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded"
+              class="flex items-center gap-1.5 py-4 text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded relative"
             >
               {item.label}
               <svg
-                class="w-4 h-4 text-emerald-600/70 group-hover:rotate-180 group-focus-within:rotate-180 transition-transform duration-300"
+                class="w-4 h-4 text-emerald-600/70 group-hover:rotate-180 transition-transform duration-300"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -52,7 +85,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
               id="courses-dropdown"
               role="region"
               aria-label="Course categories"
-              class="absolute top-full left-1/2 -translate-x-1/2 w-[650px] bg-white rounded-2xl shadow-xl border border-emerald-100 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 overflow-hidden"
+              class="absolute top-full left-1/2 -translate-x-1/2 w-[650px] bg-white rounded-2xl shadow-xl border border-emerald-100 opacity-0 invisible translate-y-2 transition-all duration-200 ease-out overflow-hidden"
             >
               <div class="p-6 grid grid-cols-2 gap-4">
                 {courses.map((course) => (
@@ -64,7 +97,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
                       {course.icon}
                     </div>
                     <div>
-                      <div class="text-sm font-bold text-emerald-950 mb-0.5">{course.title}</div>
+                      <div class="text-sm font-bold text-emerald-950 mb-0.5">{course.shortTitle}</div>
                       <div class="text-xs text-emerald-700/80 leading-snug">{course.shortDesc}</div>
                     </div>
                   </a>
@@ -83,7 +116,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
         ) : (
           <a
             href={item.href}
-            class="text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded"
+            class="text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded relative flex items-center h-full"
           >
             {item.label}
           </a>
@@ -102,7 +135,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
       </a>
       <a
         href="/funnel/signup"
-        class="px-6 py-2.5 text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-xl shadow-sm hover:shadow active:scale-95 transition-[color,background-color,border-color,box-shadow,opacity,transform] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+        class="px-6 py-3 text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-xl shadow-sm hover:shadow active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
       >
         Start Free Trial
       </a>
@@ -114,11 +147,47 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
 </header>
 
 <script>
-  // AbortController pattern ensures SPA navigations never accumulate duplicate listeners.
+  // ---------------------------------------------------------------------------
+  // PROMO BAR LOGIC (Edge Standard)
+  // ---------------------------------------------------------------------------
+  function initPromoBar(): void {
+    const promoBar = document.getElementById('promo-bar');
+    const closeBtn = document.getElementById('close-promo');
+    const PROMO_KEY = 'quranific_promo_dismissed';
+
+    if (!promoBar || !closeBtn) return;
+
+    if (sessionStorage.getItem(PROMO_KEY) === 'true') {
+      promoBar.style.display = 'none';
+      return;
+    }
+
+    closeBtn.addEventListener('click', () => {
+      sessionStorage.setItem(PROMO_KEY, 'true');
+      promoBar.style.opacity = '0';
+      promoBar.style.height = promoBar.offsetHeight + 'px'; 
+      
+      requestAnimationFrame(() => {
+        promoBar.style.height = '0px';
+        promoBar.style.paddingTop = '0px';
+        promoBar.style.paddingBottom = '0px';
+        promoBar.style.borderBottomWidth = '0px';
+      });
+
+      setTimeout(() => {
+        promoBar.style.display = 'none';
+      }, 300);
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // HEADER SCROLL LOGIC
+  // ---------------------------------------------------------------------------
   let headerAbortController: AbortController | null = null;
 
   function initHeaderScroll(): void {
     const header = document.getElementById('main-header');
+    const promoBar = document.getElementById('promo-bar');
     if (!header) return;
 
     headerAbortController?.abort();
@@ -126,41 +195,69 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
     const { signal } = headerAbortController;
 
     const handleScroll = (): void => {
-      if (window.scrollY > 20) {
-        header.classList.remove('py-6', 'bg-transparent', 'border-transparent');
-        header.classList.add('py-4', 'bg-white/90', 'backdrop-blur-md', 'border-emerald-100', 'shadow-sm');
+      const triggerPoint = promoBar && promoBar.style.display !== 'none' ? promoBar.offsetHeight : 20;
+
+      if (window.scrollY > triggerPoint) {
+        header.classList.remove('h-[88px]', 'bg-transparent', 'border-transparent');
+        header.classList.add('h-[64px]', 'bg-white/90', 'backdrop-blur-2xl', 'border-emerald-100', 'shadow-sm');
       } else {
-        header.classList.add('py-6', 'bg-transparent', 'border-transparent');
-        header.classList.remove('py-4', 'bg-white/90', 'backdrop-blur-md', 'border-emerald-100', 'shadow-sm');
+        header.classList.add('h-[88px]', 'bg-transparent', 'border-transparent');
+        header.classList.remove('h-[64px]', 'bg-white/90', 'backdrop-blur-2xl', 'border-emerald-100', 'shadow-sm');
       }
     };
 
-    handleScroll(); // sync initial state
+    handleScroll(); 
     window.addEventListener('scroll', handleScroll, { passive: true, signal });
   }
 
+  // ---------------------------------------------------------------------------
+  // DROPDOWN ACCESSIBILITY LOGIC
+  // ---------------------------------------------------------------------------
   function initDropdownAria(): void {
+    let hoverTimeout: ReturnType<typeof setTimeout>; 
+
     document.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((container) => {
       const trigger = container.querySelector<HTMLElement>('[aria-haspopup]');
-      if (!trigger) return;
+      const menu = container.querySelector<HTMLElement>('[role="region"]');
+      
+      if (!trigger || !menu) return;
 
-      container.addEventListener('focusin', () => trigger.setAttribute('aria-expanded', 'true'));
-      container.addEventListener('focusout', (e: FocusEvent) => {
-        if (!container.contains(e.relatedTarget as Node | null)) {
-          trigger.setAttribute('aria-expanded', 'false');
-        }
+      function openMenu() {
+        menu!.classList.remove('opacity-0', 'invisible', 'translate-y-2');
+        menu!.classList.add('opacity-100', 'visible', 'translate-y-0');
+        trigger!.setAttribute('aria-expanded', 'true');
+      }
+
+      function closeMenu() {
+        menu!.classList.add('opacity-0', 'invisible', 'translate-y-2');
+        menu!.classList.remove('opacity-100', 'visible', 'translate-y-0');
+        trigger!.setAttribute('aria-expanded', 'false');
+      }
+
+      container.addEventListener('mouseenter', () => {
+        clearTimeout(hoverTimeout);
+        hoverTimeout = setTimeout(openMenu, 120);
       });
 
-      container.addEventListener('mouseenter', () => trigger.setAttribute('aria-expanded', 'true'));
       container.addEventListener('mouseleave', () => {
-        if (!container.matches(':focus-within')) {
-          trigger.setAttribute('aria-expanded', 'false');
+        clearTimeout(hoverTimeout);
+        closeMenu();
+      });
+
+      container.addEventListener('focusin', openMenu);
+      container.addEventListener('focusout', (e: FocusEvent) => {
+        if (!container.contains(e.relatedTarget as Node | null)) {
+          closeMenu();
         }
       });
     });
   }
 
+  // ---------------------------------------------------------------------------
+  // INITIALIZATION
+  // ---------------------------------------------------------------------------
   document.addEventListener('astro:page-load', () => {
+    initPromoBar();
     initHeaderScroll();
     initDropdownAria();
   });

@@ -5,7 +5,7 @@ import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
 import Section from '../components/ui/Section.astro';
 import Button from '../components/ui/Button.astro';
-import { SITE } from '../constants/site';
+
 
 // Elite Edge SEO: Upgraded to JobPosting Schema for Google Jobs native indexing
 const jsonLd = [
@@ -53,14 +53,14 @@ const jsonLd = [
 ];
 
 // Reusable SVGs
-const Check = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
+
 ---
 
 <Base 
   title="Careers — Quranific | Join the Team Building Something That Matters" 
   description="At Quranific we are not just building a product. We are rebuilding the relationship between Muslim children and the Quran. Explore our remote-first roles."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
 
   <Header />
 
@@ -92,7 +92,7 @@ const Check = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" str
             <Button href="#teacher-path" variant="ghost" class="w-full sm:w-auto">Apply as a Teacher</Button>
           </div>
 
-          <div class="grid grid-cols-3 gap-6 pt-6 border-t border-emerald-100">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-emerald-100">
             <div>
               <div class="font-serif text-3xl font-bold text-emerald-700 mb-1">48</div>
               <div class="text-[11px] font-bold text-emerald-900/50 uppercase tracking-widest">Team members</div>
@@ -673,37 +673,37 @@ const Check = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" str
 
   <Footer />
 
-  <script>
+  <script is:inline>
     document.addEventListener('astro:page-load', () => {
       
       // 1. Setup Role Filtering
       const filterBtns = document.querySelectorAll('button[data-dept]');
       filterBtns.forEach(btn => {
-        if ((btn as any).dataset.bound) return;
-        (btn as any).dataset.bound = 'true';
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = 'true';
         
         btn.addEventListener('click', function() { 
-          filterRoles(this.getAttribute('data-dept'), this as HTMLElement); 
+          filterRoles(this.getAttribute('data-dept'), this); 
         });
       });
 
       // 2. Setup Role Card Clicking
       const roleCards = document.querySelectorAll('.role-card');
       roleCards.forEach(card => {
-        if ((card as any).dataset.bound) return;
-        (card as any).dataset.bound = 'true';
+        if (card.dataset.bound) return;
+        card.dataset.bound = 'true';
         
         card.addEventListener('click', function() { 
-          openRole(this as HTMLElement); 
+          openRole(this); 
         });
       });
 
       // 3. Setup File Input UI
       const fileInput = document.querySelector('.app-file-input');
-      if (fileInput && !(fileInput as any).dataset.bound) {
-        (fileInput as any).dataset.bound = 'true';
+      if (fileInput && !fileInput.dataset.bound) {
+        fileInput.dataset.bound = 'true';
         fileInput.addEventListener('change', function(e) {
-          const target = e.target as HTMLInputElement;
+          const target = e.target;
           const labelText = target.parentElement?.querySelector('.file-label-text');
           if (labelText && target.files && target.files.length > 0) {
             labelText.textContent = 'File attached ✓';
@@ -714,8 +714,8 @@ const Check = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" str
 
       // 4. Setup Form Submission
       const appForm = document.getElementById('app-form');
-      if (appForm && !(appForm as any).dataset.bound) {
-        (appForm as any).dataset.bound = 'true';
+      if (appForm && !appForm.dataset.bound) {
+        appForm.dataset.bound = 'true';
         appForm.addEventListener('submit', function(e) { 
           e.preventDefault(); 
           const submitBtn = document.getElementById('app-submit-btn');
@@ -728,7 +728,7 @@ const Check = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" str
       }
 
       // --- Helper Functions ---
-      function filterRoles(dept: string | null, el: HTMLElement) {
+      function filterRoles(dept, el) {
         if(!dept) return;
         
         // Reset all buttons
@@ -755,15 +755,13 @@ const Check = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" str
 
         // Filter Cards
         const cards = document.querySelectorAll('.role-card');
-        let visibleCount = 0;
 
         cards.forEach(card => {
           const cardDept = card.getAttribute('data-dept');
           if (dept === 'all' || cardDept === dept) {
-            (card as HTMLElement).style.display = 'block';
-            visibleCount++;
+            card.style.display = 'block';
           } else {
-            (card as HTMLElement).style.display = 'none';
+            card.style.display = 'none';
           }
         });
 
@@ -778,14 +776,14 @@ const Check = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" str
         }
       }
 
-      function openRole(card: HTMLElement) {
+      function openRole(card) {
         const titleElement = card.querySelector('.role-title');
         if (!titleElement || !titleElement.textContent) return;
         
         const fullTitle = titleElement.textContent.trim();
         const baseTitle = fullTitle.split('—')[0].trim();
 
-        const select = document.getElementById('role-select') as HTMLSelectElement;
+        const select = document.getElementById('role-select');
         if (select) {
           let matched = false;
           for (let i = 0; i < select.options.length; i++) {

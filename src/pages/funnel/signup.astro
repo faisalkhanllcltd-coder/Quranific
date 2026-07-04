@@ -1,16 +1,20 @@
-﻿---
+---
 // src/pages/funnel/signup.astro
 import Funnel from '../../layouts/Funnel.astro';
 import SignupForm from '../../components/funnel/SignupForm.svelte';
 import StepIndicator from '../../components/funnel/StepIndicator.svelte';
+import { SITE } from '../../constants/site';
 ---
 <Funnel title="Sign Up - Step 1 | Quranific">
   <div class="w-full flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-    
+
+    <!-- D-1 FIX: StepIndicator is purely decorative — changed from client:load to
+         client:idle so it does not block the initial JS hydration budget.
+         SignupForm stays client:load because it must be interactive immediately. -->
     <div class="w-full mb-4">
-      <StepIndicator currentStep={1} client:load />
+      <StepIndicator currentStep={1} client:idle />
     </div>
-    
+
     <div class="text-center mb-6">
       <h1 class="text-2xl lg:text-3xl font-black text-emerald-950 tracking-tight mb-1">
         Start Your Journey
@@ -19,10 +23,20 @@ import StepIndicator from '../../components/funnel/StepIndicator.svelte';
         Step 1: Let's get to know you
       </p>
     </div>
-    
+
     <div class="w-full">
+      <!-- B-2 FIX: Turnstile widget rendered here. The sitekey is passed at build
+           time from the server-side SITE constant (not directly from ENV, since
+           this is an Astro template rendered at the edge). The widget token is
+           appended to the FormData inside SignupForm.svelte's handleSubmit. -->
+      <div
+        class="cf-turnstile mb-4"
+        data-sitekey={SITE.turnstileSiteKey}
+        aria-label="Security check"
+      ></div>
+      <!-- Turnstile JS loaded once at page level in Funnel.astro layout -->
       <SignupForm client:load />
     </div>
-    
+
   </div>
 </Funnel>

@@ -1,4 +1,4 @@
-﻿---
+---
 // src/layouts/Base.astro
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
@@ -131,7 +131,7 @@ const baseSchema = {
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/icons/site.webmanifest" />
 
-    <script type="application/ld+json" set:html={JSON.stringify(baseSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(baseSchema)} is:inline />
 
     <slot name="head" />
 
@@ -155,6 +155,7 @@ const baseSchema = {
     class="bg-[#fefdf9] font-sans text-emerald-950 antialiased selection:bg-emerald-200 selection:text-emerald-950 flex flex-col min-h-screen overflow-x-clip"
     style="padding-bottom: env(safe-area-inset-bottom);"
   >
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-emerald-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-br-lg">Skip to main content</a>
     <slot />
     {isSlow && <div class="hidden" aria-hidden="true" data-connection="slow">Low-data mode active</div>}
   </body>

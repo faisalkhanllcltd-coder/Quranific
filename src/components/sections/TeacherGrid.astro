@@ -3,30 +3,38 @@
 // Faculty Directory Grid.
 
 const teachers = [
-  { name: 'Ustadha Fatima K.', role: 'Senior Tajweed Instructor', badges: ['Hafiza', 'Ijazah'], exp: '6 Years' },
-  { name: 'Ustadh Omar M.', role: 'Hifz Program Lead', badges: ['Hafiz', 'Qiraat'], exp: '10 Years' },
-  { name: 'Ustadha Aisha R.', role: 'Beginner Qaida Specialist', badges: ['Ijazah', 'Child Psych'], exp: '4 Years' },
-  { name: 'Ustadh Bilal H.', role: 'Advanced Arabic Tutor', badges: ['Alim', 'Ijazah'], exp: '8 Years' }
+  { name: "Ustadha Fatima K.", role: "Senior Tajweed Instructor", badges: ["Hafiza", "Ijazah"], exp: "6 Years" },
+  { name: "Ustadh Omar M.", role: "Hifz Program Lead", badges: ["Hafiz", "Qiraat"], exp: "10 Years" },
+  { name: "Ustadha Aisha R.", role: "Beginner Qaida Specialist", badges: ["Ijazah", "Child Psych"], exp: "4 Years" },
+  { name: "Ustadh Bilal H.", role: "Advanced Arabic Tutor", badges: ["Alim", "Ijazah"], exp: "8 Years" }
 ];
 ---
 
 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
   {teachers.map(teacher => (
-    <div class="bg-white border border-emerald-100 rounded-3xl p-6 hover:shadow-xl hover:shadow-emerald-900/5 hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform] group">
-      <div class="w-20 h-20 bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-2xl flex items-center justify-center text-3xl text-white font-serif font-bold shadow-inner mb-5 mx-auto group-hover:scale-105 transition-transform">
-        {teacher.name.charAt(0)}
+    /* EDGE UI FIX: Smooth scaling replacing jittery translate-y */
+    <div class="bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 hover:shadow-2xl hover:shadow-emerald-900/10 hover:border-emerald-200 transition-all duration-500 hover:scale-[1.02] group">
+      
+      <div class="w-20 h-20 bg-gradient-to-br from-emerald-700 to-emerald-600 rounded-full flex items-center justify-center shadow-inner mb-6 mx-auto overflow-hidden">
+         <span class="text-3xl text-white font-serif font-bold leading-none pt-1 group-hover:scale-110 transition-transform duration-500 ease-out">
+           {teacher.name.charAt(0)}
+         </span>
       </div>
+      
       <div class="text-center">
-        <h3 class="text-lg font-bold text-emerald-950 mb-1">{teacher.name}</h3>
-        <p class="text-sm text-emerald-700/80 font-medium mb-4">{teacher.role}</p>
-        <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
+        <h3 class="text-lg font-bold text-emerald-950 mb-1 group-hover:text-emerald-700 transition-colors">{teacher.name}</h3>
+        <p class="text-sm text-emerald-900/70 font-medium mb-5">{teacher.role}</p>
+        
+        <div class="flex flex-wrap items-center justify-center gap-2 mb-5">
           {teacher.badges.map(badge => (
-            <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-black tracking-widest uppercase rounded-full border border-emerald-100">
+            /* EDGE UI FIX: High-contrast, premium badges */
+            <span class="px-2.5 py-1 text-emerald-700 text-[10px] font-black tracking-widest uppercase rounded-full border border-emerald-100 bg-[#fefdf9]">
               {badge}
             </span>
           ))}
         </div>
-        <div class="text-xs font-bold text-amber-600 bg-amber-50 rounded-full py-1.5 inline-block px-4">
+        
+        <div class="text-xs font-bold text-amber-700 bg-amber-50/50 border border-amber-100 rounded-full py-1.5 inline-block px-4">
           {teacher.exp} Experience
         </div>
       </div>

@@ -21,14 +21,13 @@ const jsonLd = {
 
 // Reusable SVGs
 const Check = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
-const XIcon = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`;
 ---
 
 <Base 
   title="Courses — Quranific | Find the Perfect Quran Programme for Your Child" 
   description="Not every child starts in the same place. Find the perfect 1-on-1 online Quran course for your child or yourself. Foundation, Tajweed, Hifz, and Special Needs."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
 
   <Header />
 
@@ -898,7 +897,7 @@ const XIcon = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" str
 
   <Footer />
 
-  <script>
+  <script is:inline>
     document.addEventListener('DOMContentLoaded', () => {
       // Attach event listeners
       document.querySelectorAll('#who-btns button').forEach(btn => {

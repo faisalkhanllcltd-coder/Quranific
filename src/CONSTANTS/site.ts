@@ -1,4 +1,4 @@
-﻿// src/constants/site.ts
+// src/constants/site.ts
 
 export const SITE = {
   name: 'Quranific',
@@ -9,6 +9,29 @@ export const SITE = {
   defaultImage: '/images/og/default.webp', // Optimized for Edge CDN delivery
   whatsappNumber: '923112112122',
   whatsappLink: 'https://wa.me/message/FF4LDK3JR2GPN1',
+  email: 'admin@quranific.com',
+
+  // B-2 FIX: Turnstile site key exposed at build time for the funnel widget.
+  // This is the PUBLIC site key (safe to embed in HTML). The SECRET key stays
+  // in environment variables and is never committed to the repository.
+  // TODO: Replace this placeholder with your real Cloudflare Turnstile site key.
+  turnstileSiteKey: '0x4AAAAAAA_REPLACE_WITH_REAL_KEY',
+
+  // G-5 FIX: phone and address added so pages that access SITE.phone / SITE.address
+  // resolve to a real value instead of undefined. Fill in real details before go-live.
+  // If no phone number exists, remove SITE.phone references from contact.astro and impressum.astro.
+  phone: '',    // TODO: e.g. '+44 20 XXXX XXXX'
+  address: '',  // TODO: e.g. 'London, United Kingdom'
+
+  // MARKETING ENGINE: Global Announcement Bar
+  announcement: {
+    enabled: true, // Flip to false to hide the bar across the entire site
+    text: 'Limited Time Offer: Get',
+    highlight: '1 Month Free',
+    suffix: 'Quran Classes!',
+    linkText: 'Claim Offer &rarr;',
+    linkUrl: '/funnel/signup'
+  },
 
   // Synced with all actual mailto links across the platform
   emails: {
@@ -75,22 +98,15 @@ export const FOOTER_NAVIGATION = {
   explore: [
     { label: 'How it Works', href: '/how-it-works' },
     { label: 'Programs & Courses', href: '/courses' },
-    { label: 'Expert Teachers', href: '/teachers' }, // FIXED: Was broken route '/tutors'
-    { label: 'Pricing & Fees', href: '/tuition-fee' }, // FIXED: Was broken route '/pricing'
+    { label: 'Expert Teachers', href: '/teachers' },
+    { label: 'Pricing & Fees', href: '/tuition-fee' },
     { label: 'Student Portals', href: '/portals' }
-  ],
-  company: [ // ADDED: Ensures all newly built pages are indexed by Google
-    { label: 'Our Story', href: '/about' },
-    { label: 'Careers', href: '/careers' },
-    { label: 'Partnerships', href: '/partners' },
-    { label: 'Contact Support', href: '/contact' },
-    { label: 'FAQ', href: '/faq' }
   ],
   legal: [
     { label: 'Privacy Policy', href: '/legal/privacy' },
     { label: 'Terms of Service', href: '/legal/terms' },
     { label: 'Refund Policy', href: '/legal/refund' },
     { label: 'XML Sitemap', href: '/sitemap-index.xml' },
-    { label: 'AI/LLM Context', href: '/llm.txt' } // ADDED: Explicit bot routing
+    { label: 'AI/LLM Context', href: '/llms.txt' }
   ]
 } as const;
