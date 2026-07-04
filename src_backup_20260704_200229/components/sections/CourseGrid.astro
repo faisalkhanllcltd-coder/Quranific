@@ -1,0 +1,36 @@
+---
+// src/components/sections/CourseGrid.astro
+import { courses } from '../../constants/courses';
+---
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+  {courses.map(course => (
+    /* EDGE UI FIX: 
+       1. Replaced jerky -translate-y-1 with smooth scale-[1.02] duration-500.
+       2. Added unified shadow-2xl.
+       3. Added strict focus-visible accessibility rings. 
+    */
+    <a 
+      href={`/courses/${course.slug}`} 
+      class="group flex flex-col bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 hover:shadow-2xl hover:shadow-emerald-900/10 hover:border-emerald-200 transition-all duration-500 hover:scale-[1.02] focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500/10 focus-visible:border-emerald-400"
+    >
+      
+      <div class="w-14 h-14 bg-gradient-to-br from-emerald-50 to-emerald-100/50 border border-emerald-100/50 shadow-sm rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 ease-out">
+        <span class="drop-shadow-sm">{course.icon}</span>
+      </div>
+      
+      <h3 class="text-xl font-bold text-emerald-950 mb-3 group-hover:text-emerald-700 transition-colors text-balance">
+        {course.title}
+      </h3>
+      
+      <p class="text-sm text-emerald-900/70 font-medium leading-relaxed mb-8 flex-1 line-clamp-3">
+        {course.shortDesc}
+      </p>
+      
+      <div class="mt-auto inline-flex items-center text-sm font-bold text-emerald-700 group-hover:text-amber-600 transition-colors">
+        View Syllabus 
+        <span class="ml-1.5 text-lg leading-none transform group-hover:translate-x-1.5 transition-transform duration-300">→</span>
+      </div>
+
+    </a>
+  ))}
+</div>

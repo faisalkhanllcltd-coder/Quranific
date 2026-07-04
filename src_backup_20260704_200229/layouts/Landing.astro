@@ -1,0 +1,17 @@
+﻿---
+// src/layouts/Landing.astro
+import Base from './Base.astro';
+import type { ComponentProps } from 'astro/types';
+
+// Automatically inherit all possible SEO props from Base.astro
+type Props = ComponentProps<typeof Base>;
+
+const props = Astro.props;
+---
+<Base {...props} robots="noindex, nofollow">
+  <slot name="head" slot="head" />
+  
+  <main class="min-h-screen flex flex-col w-full relative">
+    <slot />
+  </main>
+</Base>

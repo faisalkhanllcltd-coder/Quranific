@@ -1,0 +1,133 @@
+---
+// src/pages/partners.astro
+import Base from '../layouts/Base.astro';
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+
+// Reusable SVGs mapped for DOM injection
+const Icons = {
+  school: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" /></svg>`,
+  community: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>`,
+  affiliate: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>`,
+  check: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`
+};
+
+const PARTNER_TYPES = [
+  {
+    title: 'Islamic Schools & Madrasas',
+    desc: 'Outsource your online Quran and Tajweed departments to our vetted scholars. We provide white-labeled solutions and dedicated faculty for your students.',
+    icon: Icons.school
+  },
+  {
+    title: 'Community Centers',
+    desc: 'Offer premium online Quran classes to your local community members. We handle the scheduling, curriculum, and quality assurance.',
+    icon: Icons.community
+  },
+  {
+    title: 'Affiliate Partners',
+    desc: 'Join our lucrative affiliate program. Refer students to Quranific and earn recurring commissions for every successful enrollment.',
+    icon: Icons.affiliate
+  }
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Partner with Quranific | B2B & Affiliate Programs",
+  "description": "Collaborate with a global leader in online Quranic education. We offer solutions for Islamic schools, community centers, and affiliate marketers."
+};
+---
+
+<Base 
+  title="Partner With Us | Quranific B2B Programs" 
+  description="Collaborate with a global leader in online Quranic education. We offer solutions for Islamic schools, community centers, and affiliate marketers."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+  
+  <Header />
+
+  <main class="bg-cream-50 selection:bg-emerald-200 selection:text-emerald-950 font-sans overflow-hidden">
+    
+    <Section height={500} class="pt-16 md:pt-32 pb-12 lg:pt-40 lg:pb-16 px-4 sm:px-6 lg:px-8 relative">
+      <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" aria-hidden="true"></div>
+      
+      <div class="max-w-4xl mx-auto text-center animate-in fade-in slide-in-from-bottom-4 duration-700 relative z-10">
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-800 text-sm font-bold tracking-widest uppercase rounded-full mb-6 border border-emerald-200/50 shadow-sm">
+          Partnerships
+        </span>
+        <h1 class="text-4xl lg:text-5xl xl:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-emerald-950 to-emerald-700 mb-6 tracking-tight leading-tight">
+          Let's Elevate Islamic<br/>Education Together.
+        </h1>
+        <p class="text-lg lg:text-xl text-emerald-800/80 font-medium max-w-2xl mx-auto leading-relaxed">
+          Partner with a global infrastructure of elite scholars. We provide the technology, the teachers, and the curriculum so you can scale your impact.
+        </p>
+      </div>
+    </Section>
+
+    <Section height={200} class="py-12 border-y border-emerald-100/50 bg-white/50 relative z-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="text-[11px] font-bold text-emerald-900/40 uppercase tracking-widest mb-8">Trusted by leading Islamic organizations</p>
+        <div class="flex flex-wrap justify-center gap-10 md:gap-20 items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+          <div class="font-serif text-2xl md:text-3xl font-bold text-emerald-950 tracking-tight">Quranable</div>
+          <div class="font-serif text-2xl md:text-3xl font-bold text-emerald-950 tracking-tight">Quran Gateway</div>
+          <div class="font-serif text-2xl md:text-3xl font-bold text-emerald-950 tracking-tight">Tajweed Central</div>
+        </div>
+      </div>
+    </Section>
+
+    <Section height={600} class="py-16 lg:py-24 px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-6 lg:gap-8">
+        {PARTNER_TYPES.map((type) => (
+          <div class="bg-white rounded-3xl p-8 lg:p-10 border border-emerald-100 shadow-sm hover:shadow-xl hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 group">
+            <div class="w-14 h-14 bg-emerald-50 text-emerald-700 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-emerald-700 group-hover:text-white transition-all shadow-inner" aria-hidden="true">
+              <span set:html={type.icon}></span>
+            </div>
+            <h3 class="text-2xl font-bold text-emerald-950 mb-4">{type.title}</h3>
+            <p class="text-emerald-800/80 font-medium leading-relaxed">
+              {type.desc}
+            </p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section height={500} class="pb-12 md:pb-24 lg:pb-32 px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-6xl mx-auto bg-emerald-950 rounded-3xl p-10 lg:p-16 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center gap-12 border border-emerald-900">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" aria-hidden="true"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-amber-400/10 rounded-full blur-[80px] pointer-events-none" aria-hidden="true"></div>
+        
+        <div class="flex-1 relative z-10">
+          <h2 class="text-3xl lg:text-4xl font-black text-white mb-6 tracking-tight">Built for Scale and Reliability.</h2>
+          <p class="text-emerald-50/80 text-lg font-medium leading-relaxed mb-8 max-w-xl">
+            When you partner with Quranific, you aren't just getting tutors. You are integrating with a world-class Quality Assurance team, dedicated customer support, and an enterprise-grade scheduling platform.
+          </p>
+          <ul class="space-y-4">
+            {['100% Vetted & Certified Tutors', 'Dedicated Account Manager', 'Custom Revenue Share Models'].map(item => (
+              <li class="flex items-center gap-3 text-emerald-50 font-bold">
+                <div class="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center shrink-0 text-emerald-950" aria-hidden="true">
+                  <span set:html={Icons.check}></span>
+                </div>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="shrink-0 relative z-10 w-full md:w-auto">
+          <div class="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl text-center">
+            <h3 class="text-white font-bold text-xl mb-2">Initiate a Partnership</h3>
+            <p class="text-emerald-100/70 text-sm mb-6">Contact our B2B team directly.</p>
+            <Button href="mailto:partners@quranific.com" variant="white" class="w-full">
+              partners@quranific.com
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+  </main>
+
+  <Footer />
+</Base>

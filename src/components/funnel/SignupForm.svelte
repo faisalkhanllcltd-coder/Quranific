@@ -100,6 +100,7 @@
         class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-base disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 placeholder:text-emerald-900/30"
         placeholder="+1234..."
       />
+      <p class="text-xs text-gray-500 mt-1">We'll message you here to confirm your child's trial time.</p>
     </div>
     <div class="space-y-2">
       <label for="country" class="block text-sm font-semibold text-emerald-950">Country</label>

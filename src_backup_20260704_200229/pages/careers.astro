@@ -1,0 +1,818 @@
+---
+// src/pages/careers.astro
+import Base from '../layouts/Base.astro';
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+
+
+// Elite Edge SEO: Upgraded to JobPosting Schema for Google Jobs native indexing
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Careers - Quranific",
+    "description": "Join the team building something that matters. Fully remote, mission-driven careers at Quranific."
+  },
+  {
+    "@context": "https://schema.org/",
+    "@type": "JobPosting",
+    "title": "Senior Full-Stack Engineer",
+    "description": "<p>We are rebuilding our core platform on Astro 5 and Svelte 5. You will own the funnel experience, teacher-parent reporting pipeline, and our Cloudflare Workers architecture.</p>",
+    "identifier": {
+      "@type": "PropertyValue",
+      "name": "Quranific",
+      "value": "ENG-01"
+    },
+    "datePosted": "2024-03-01",
+    "validThrough": "2024-12-31",
+    "employmentType": "FULL_TIME",
+    "hiringOrganization": {
+      "@type": "Organization",
+      "name": "Quranific",
+      "sameAs": "https://quranific.com",
+      "logo": "https://quranific.com/logo.png"
+    },
+    "jobLocationType": "TELECOMMUTE",
+    "applicantLocationRequirements": {
+      "@type": "Country",
+      "name": "Worldwide"
+    },
+    "baseSalary": {
+      "@type": "MonetaryAmount",
+      "currency": "USD",
+      "value": {
+        "@type": "QuantitativeValue",
+        "minValue": 90000,
+        "maxValue": 120000,
+        "unitText": "YEAR"
+      }
+    }
+  }
+];
+
+// Reusable SVGs
+
+---
+
+<Base 
+  title="Careers — Quranific | Join the Team Building Something That Matters" 
+  description="At Quranific we are not just building a product. We are rebuilding the relationship between Muslim children and the Quran. Explore our remote-first roles."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+
+  <Header />
+
+  <main class="bg-cream-50 selection:bg-emerald-100 selection:text-emerald-900 font-sans">
+    
+    <Section height={700} class="pt-16 md:pt-32 pb-10 md:pb-20 lg:pt-48 lg:pb-32 px-4 sm:px-6 relative overflow-hidden">
+      <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-emerald-700/10 rounded-full blur-[100px] pointer-events-none" aria-hidden="true"></div>
+
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-center relative z-10">
+        
+        <div>
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest rounded-full mb-8 shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+            We are hiring · Remote-first
+          </div>
+          
+          <h1 class="text-5xl lg:text-[4rem] font-bold text-emerald-950 leading-[1.05] tracking-tight mb-6">
+            Join the team building<br/>
+            <em class="font-serif italic text-emerald-700 font-medium">something that matters.</em>
+          </h1>
+          
+          <p class="text-lg text-emerald-900/80 font-medium leading-relaxed mb-10 max-w-xl">
+            At Quranific we are not just building a product. We are rebuilding the relationship between Muslim children and the Quran — one lesson, one family, one teacher at a time. If that mission pulls at you, read on.
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-center gap-4 mb-12">
+            <Button href="#open-roles" variant="primary" class="w-full sm:w-auto">See Open Roles ↓</Button>
+            <Button href="#teacher-path" variant="ghost" class="w-full sm:w-auto">Apply as a Teacher</Button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-emerald-100">
+            <div>
+              <div class="font-serif text-3xl font-bold text-emerald-700 mb-1">48</div>
+              <div class="text-[11px] font-bold text-emerald-900/50 uppercase tracking-widest">Team members</div>
+            </div>
+            <div>
+              <div class="font-serif text-3xl font-bold text-emerald-700 mb-1">22</div>
+              <div class="text-[11px] font-bold text-emerald-900/50 uppercase tracking-widest">Countries</div>
+            </div>
+            <div>
+              <div class="font-serif text-3xl font-bold text-emerald-700 mb-1">100%</div>
+              <div class="text-[11px] font-bold text-emerald-900/50 uppercase tracking-widest">Remote-first</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-xl shadow-emerald-900/10 border border-emerald-100 p-8 transform lg:-rotate-1 hover:rotate-0 transition-transform duration-700 animate-[flyY_6s_ease-in-out_infinite]">
+          <div class="mb-6 pb-6 border-b border-emerald-50">
+            <div class="text-[11px] font-bold uppercase tracking-widest text-emerald-900/50 mb-4">From the team</div>
+            <p class="font-serif text-2xl italic text-emerald-950 leading-relaxed mb-6">"I joined Quranific because I saw parents crying in WhatsApp groups about failing their children's deen. I wanted to be part of fixing that."</p>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-purple-400 text-white flex items-center justify-center font-serif text-xl font-bold shadow-inner" aria-hidden="true">SA</div>
+              <div>
+                <div class="font-bold text-emerald-950 text-sm">Sara Ahmed</div>
+                <div class="text-xs font-medium text-emerald-800/70">Head of Education · Joined 2022</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-widest text-emerald-900/50 mb-4">What we stand for</div>
+            <div class="space-y-4">
+              <div class="flex items-start gap-3"><div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-sm shrink-0" aria-hidden="true">🌍</div><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed pt-1.5"><strong class="text-emerald-950">Remote-first,</strong> always — no surprise return-to-office policies</p></div>
+              <div class="flex items-start gap-3"><div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-sm shrink-0" aria-hidden="true">🧠</div><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed pt-1.5"><strong class="text-emerald-950">Mission over metrics</strong> — we optimise for families helped, not just revenue</p></div>
+              <div class="flex items-start gap-3"><div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-sm shrink-0" aria-hidden="true">🤝</div><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed pt-1.5"><strong class="text-emerald-950">Honest culture</strong> — we share the hard news internally before the good news</p></div>
+              <div class="flex items-start gap-3"><div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-sm shrink-0" aria-hidden="true">🌙</div><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed pt-1.5"><strong class="text-emerald-950">Faith-aware</strong> — prayer times, Ramadan, and Eid leave respected instantly</p></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </Section>
+
+    <Section height={800} class="py-12 md:py-24 bg-white border-y border-emerald-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 max-w-3xl mx-auto">
+          <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3">Why Quranific</span>
+          <h2 class="text-4xl font-bold text-emerald-950 mb-6 tracking-tight">Work that <em class="font-serif italic text-emerald-700 font-medium">means something.</em></h2>
+          <p class="text-[17px] text-emerald-900/80 font-medium leading-relaxed">
+            We are a small, intentional team. Every person here chose Quranific because the mission resonated with something personal. Here is what makes working here different.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="bg-cream-50 border border-emerald-100 rounded-3xl p-8 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" aria-hidden="true"></div>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors" aria-hidden="true">🌙</div>
+            <h3 class="text-lg font-bold text-emerald-950 mb-3">Real impact you can see</h3>
+            <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed">Every week you will read progress reports from teachers describing a child who used to cry before Quran class — and now asks to start early. That is not abstract. That is the work you will be contributing to, directly.</p>
+          </div>
+
+          <div class="bg-cream-50 border border-emerald-100 rounded-3xl p-8 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" aria-hidden="true"></div>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors" aria-hidden="true">🌍</div>
+            <h3 class="text-lg font-bold text-emerald-950 mb-3">Truly remote — not remote-ish</h3>
+            <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed">We have never had an office and never will. Our team spans 14 time zones. Async communication is how we actually work, not an afterthought. You will have genuine flexibility to build a life around work, not the other way.</p>
+          </div>
+
+          <div class="bg-cream-50 border border-emerald-100 rounded-3xl p-8 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" aria-hidden="true"></div>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors" aria-hidden="true">📈</div>
+            <h3 class="text-lg font-bold text-emerald-950 mb-3">Early-stage leverage</h3>
+            <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed">We are still small enough that each person shapes the product and culture meaningfully. If you have an idea and build a case for it, it gets heard. Bureaucracy has not arrived yet and we intend to keep it that way.</p>
+          </div>
+
+          <div class="bg-cream-50 border border-emerald-100 rounded-3xl p-8 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" aria-hidden="true"></div>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors" aria-hidden="true">💚</div>
+            <h3 class="text-lg font-bold text-emerald-950 mb-3">Values without performance</h3>
+            <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed">We are faith-aware but not performative. Prayer times are respected. Ramadan hours are adjusted. Eid is a holiday without you needing to negotiate it. We do not need to be reminded because we care about the same things you do.</p>
+          </div>
+
+          <div class="bg-cream-50 border border-emerald-100 rounded-3xl p-8 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" aria-hidden="true"></div>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors" aria-hidden="true">📚</div>
+            <h3 class="text-lg font-bold text-emerald-950 mb-3">Learning budget, no strings</h3>
+            <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed">Every full-time team member receives an annual learning budget to spend on courses, books, conferences, or tools. No approval forms. No pre-approved list. We trust you to invest in yourself — and by extension, us.</p>
+          </div>
+
+          <div class="bg-cream-50 border border-emerald-100 rounded-3xl p-8 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" aria-hidden="true"></div>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl mb-6 group-hover:bg-emerald-700 group-hover:text-white transition-colors" aria-hidden="true">🛡️</div>
+            <h3 class="text-lg font-bold text-emerald-950 mb-3">Honest about what we are not</h3>
+            <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed">We are not a high-growth VC-backed startup chasing an exit. We grow at a pace that lets us serve families well. If you want rocket-ship scale above all else, we are probably not the right fit — and we would rather tell you now.</p>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <Section height={400} class="py-12 md:py-24 lg:py-32 bg-emerald-950 relative overflow-hidden text-center">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] border border-white/5 rounded-full pointer-events-none" aria-hidden="true"></div>
+      
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
+        <span class="text-xs font-bold tracking-[0.2em] uppercase text-amber-400 block mb-8">Our North Star</span>
+        
+        <p class="font-serif text-4xl sm:text-5xl lg:text-6xl font-medium italic text-white leading-tight tracking-tight mb-16 text-balance mx-auto">
+          Every Muslim child in the world growing up with a <strong class="text-amber-400 not-italic font-bold">genuine love for the Quran</strong> — not a fear of it.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-3 lg:gap-4">
+          <div class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm">
+            <span class="text-lg" aria-hidden="true">🧠</span> Empathy-led teaching
+          </div>
+          <div class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm">
+            <span class="text-lg" aria-hidden="true">🛡️</span> Zero financial risk
+          </div>
+          <div class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm">
+            <span class="text-lg" aria-hidden="true">📊</span> Full transparency
+          </div>
+          <div class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm">
+            <span class="text-lg" aria-hidden="true">🌍</span> 22 countries and growing
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <Section height={900} class="py-12 md:py-24 bg-cream-50" id="open-roles">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-16">
+          <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3">Open Roles</span>
+          <h2 class="text-4xl font-bold text-emerald-950 mb-4 tracking-tight">Find your <em class="font-serif italic text-emerald-700 font-medium">place on the team.</em></h2>
+          <p class="text-lg text-emerald-900/80 font-medium">All roles are fully remote unless stated. We welcome applications from anywhere in the world.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-[280px_1fr] gap-12 items-start">
+          
+          <div class="lg:sticky lg:top-32">
+            <div class="text-sm font-bold text-emerald-950 mb-4 uppercase tracking-wider">Filter by department</div>
+            <div class="space-y-2 mb-8">
+              <button class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 rf active bg-emerald-700 text-white border border-emerald-700 shadow-md" data-dept="all">
+                <span>All roles</span>
+                <span class="rf-count px-2.5 py-0.5 rounded-full bg-white/20 text-white text-xs border-transparent border">8</span>
+              </button>
+              <button class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 rf bg-transparent text-emerald-900/70 border border-transparent hover:bg-emerald-50 hover:text-emerald-950" data-dept="teaching">
+                <span>Teaching</span>
+                <span class="rf-count px-2.5 py-0.5 rounded-full bg-white border border-emerald-100 text-emerald-900/50 text-xs">3</span>
+              </button>
+              <button class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 rf bg-transparent text-emerald-900/70 border border-transparent hover:bg-emerald-50 hover:text-emerald-950" data-dept="product">
+                <span>Product & Tech</span>
+                <span class="rf-count px-2.5 py-0.5 rounded-full bg-white border border-emerald-100 text-emerald-900/50 text-xs">2</span>
+              </button>
+              <button class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 rf bg-transparent text-emerald-900/70 border border-transparent hover:bg-emerald-50 hover:text-emerald-950" data-dept="operations">
+                <span>Operations</span>
+                <span class="rf-count px-2.5 py-0.5 rounded-full bg-white border border-emerald-100 text-emerald-900/50 text-xs">2</span>
+              </button>
+              <button class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 rf bg-transparent text-emerald-900/70 border border-transparent hover:bg-emerald-50 hover:text-emerald-950" data-dept="marketing">
+                <span>Marketing</span>
+                <span class="rf-count px-2.5 py-0.5 rounded-full bg-white border border-emerald-100 text-emerald-900/50 text-xs">1</span>
+              </button>
+            </div>
+
+            <div class="bg-white border border-emerald-100 rounded-2xl p-6 shadow-sm">
+              <h4 class="font-bold text-emerald-950 text-sm mb-2">Don't see your role?</h4>
+              <p class="text-[13px] text-emerald-800/70 font-medium leading-relaxed mb-4">We hire for attitude and mission-fit before we hire for a specific role. If Quranific sounds like home, reach out anyway.</p>
+              <a href="mailto:careers@quranific.com" class="block text-center px-4 py-3 bg-emerald-700 text-white text-sm font-bold rounded-xl hover:bg-emerald-900 transition-colors shadow-sm">Send an open application</a>
+            </div>
+          </div>
+
+          <div class="space-y-4" id="roles-list">
+            
+            <div class="role-card bg-white border border-emerald-100 rounded-3xl p-8 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group" data-dept="product">
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300" aria-hidden="true"></div>
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="role-title text-xl font-bold text-emerald-950 mb-1.5">Senior Full-Stack Engineer</h3>
+                  <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Product & Tech</div>
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                  <span class="px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] font-bold rounded-full">Full-time</span>
+                  <span class="px-3 py-1 bg-cream-50 border border-emerald-100 text-emerald-900/60 text-[11px] font-bold rounded-full">Remote</span>
+                  <span class="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-600 text-[11px] font-bold rounded-full">New</span>
+                </div>
+              </div>
+              <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed mb-6">We are rebuilding our core platform on Astro 5 and Svelte 5. You will own the funnel experience, teacher-parent reporting pipeline, and our Cloudflare Workers architecture. You will be the third engineer on a product used by 3,200 families daily.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-emerald-50">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-[13px] font-medium text-emerald-900/60">
+                  <div class="flex items-center gap-1.5" aria-hidden="true"><span class="text-lg">💰</span> $90–120k</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> Astro · Svelte</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> 3–5 yrs exp.</div>
+                </div>
+                <div class="text-emerald-700 font-bold text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all duration-300">Apply now →</div>
+              </div>
+            </div>
+
+            <div class="role-card bg-white border border-emerald-100 rounded-3xl p-8 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group" data-dept="product">
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300" aria-hidden="true"></div>
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="role-title text-xl font-bold text-emerald-950 mb-1.5">Product Designer — UX Lead</h3>
+                  <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Product & Tech</div>
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                  <span class="px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] font-bold rounded-full">Full-time</span>
+                  <span class="px-3 py-1 bg-cream-50 border border-emerald-100 text-emerald-900/60 text-[11px] font-bold rounded-full">Remote</span>
+                </div>
+              </div>
+              <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed mb-6">Own the end-to-end design of our parent dashboard, teacher session interface, and onboarding funnel. You will be our first dedicated designer — meaning you build the design system from scratch and have total creative ownership.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-emerald-50">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-[13px] font-medium text-emerald-900/60">
+                  <div class="flex items-center gap-1.5" aria-hidden="true"><span class="text-lg">💰</span> $70–95k</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> Figma · UI/UX</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> 4+ yrs exp.</div>
+                </div>
+                <div class="text-emerald-700 font-bold text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all duration-300">Apply now →</div>
+              </div>
+            </div>
+
+            <div class="role-card bg-white border border-emerald-100 rounded-3xl p-8 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group" data-dept="operations">
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300" aria-hidden="true"></div>
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="role-title text-xl font-bold text-emerald-950 mb-1.5">Head of Teacher Operations</h3>
+                  <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Operations</div>
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                  <span class="px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] font-bold rounded-full">Full-time</span>
+                  <span class="px-3 py-1 bg-cream-50 border border-emerald-100 text-emerald-900/60 text-[11px] font-bold rounded-full">Remote</span>
+                  <span class="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-600 text-[11px] font-bold rounded-full">New</span>
+                </div>
+              </div>
+              <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed mb-6">Manage all 48 active teachers: onboarding, quality reviews, scheduling, performance conversations, and growth paths. You will also lead the expansion of our teacher pool as we grow toward 10,000 families.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-emerald-50">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-[13px] font-medium text-emerald-900/60">
+                  <div class="flex items-center gap-1.5" aria-hidden="true"><span class="text-lg">💰</span> $60–80k</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> EdTech ops preferred</div>
+                </div>
+                <div class="text-emerald-700 font-bold text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all duration-300">Apply now →</div>
+              </div>
+            </div>
+
+            <div class="role-card bg-white border border-emerald-100 rounded-3xl p-8 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group" data-dept="operations">
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300" aria-hidden="true"></div>
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="role-title text-xl font-bold text-emerald-950 mb-1.5">Parent Success Manager</h3>
+                  <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Operations</div>
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                  <span class="px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] font-bold rounded-full">Full-time</span>
+                  <span class="px-3 py-1 bg-cream-50 border border-emerald-100 text-emerald-900/60 text-[11px] font-bold rounded-full">Remote</span>
+                </div>
+              </div>
+              <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed mb-6">Be the first human voice families hear when they have a concern, a question, or a request to switch teachers. You will handle onboarding support, retention conversations, and WhatsApp-based parent engagement across all timezones.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-emerald-50">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-[13px] font-medium text-emerald-900/60">
+                  <div class="flex items-center gap-1.5" aria-hidden="true"><span class="text-lg">💰</span> $40–55k</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> Customer success</div>
+                </div>
+                <div class="text-emerald-700 font-bold text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all duration-300">Apply now →</div>
+              </div>
+            </div>
+
+            <div class="role-card bg-white border border-emerald-100 rounded-3xl p-8 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group" data-dept="marketing">
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300" aria-hidden="true"></div>
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="role-title text-xl font-bold text-emerald-950 mb-1.5">Content Strategist & Writer</h3>
+                  <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Marketing</div>
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                  <span class="px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] font-bold rounded-full">Part-time</span>
+                  <span class="px-3 py-1 bg-cream-50 border border-emerald-100 text-emerald-900/60 text-[11px] font-bold rounded-full">Remote</span>
+                </div>
+              </div>
+              <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed mb-6">Own our editorial voice across blog, email sequences, and parent-facing content. You understand the Muslim diaspora parent deeply. You can write with warmth, specificity, and zero cliché. SEO experience is a plus but voice is the priority.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-emerald-50">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-[13px] font-medium text-emerald-900/60">
+                  <div class="flex items-center gap-1.5" aria-hidden="true"><span class="text-lg">💰</span> $30–45k (pro-rata)</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> Portfolio required</div>
+                </div>
+                <div class="text-emerald-700 font-bold text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all duration-300">Apply now →</div>
+              </div>
+            </div>
+
+            <div class="role-card bg-white border border-emerald-100 rounded-3xl p-8 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group" data-dept="teaching">
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300" aria-hidden="true"></div>
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="role-title text-xl font-bold text-emerald-950 mb-1.5">Quran Teacher — Children (5–10)</h3>
+                  <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Teaching</div>
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                  <span class="px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] font-bold rounded-full">Part-time</span>
+                  <span class="px-3 py-1 bg-cream-50 border border-emerald-100 text-emerald-900/60 text-[11px] font-bold rounded-full">Remote</span>
+                  <span class="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-600 text-[11px] font-bold rounded-full">Multiple spots</span>
+                </div>
+              </div>
+              <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed mb-6">Teach 1-on-1 sessions with children aged 5–10, focusing on Noorani Qaida, short Surahs, and foundational Tajweed. You hold an ijazah, you have patience as a default setting, and you believe every child can fall in love with the Quran.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-emerald-50">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-[13px] font-medium text-emerald-900/60">
+                  <div class="flex items-center gap-1.5" aria-hidden="true"><span class="text-lg">💰</span> Per-session rate</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> Ijazah required</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> Flexible hours</div>
+                </div>
+                <div class="text-emerald-700 font-bold text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all duration-300">Apply now →</div>
+              </div>
+            </div>
+
+            <div class="role-card bg-white border border-emerald-100 rounded-3xl p-8 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group" data-dept="teaching">
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300" aria-hidden="true"></div>
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="role-title text-xl font-bold text-emerald-950 mb-1.5">Quran Teacher — Adults & Teens</h3>
+                  <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Teaching</div>
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                  <span class="px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] font-bold rounded-full">Part-time</span>
+                  <span class="px-3 py-1 bg-cream-50 border border-emerald-100 text-emerald-900/60 text-[11px] font-bold rounded-full">Remote</span>
+                </div>
+              </div>
+              <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed mb-6">Teach adult learners and teenagers improving their Tajweed and recitation in private 1-on-1 sessions. You are comfortable with learners who feel embarrassed about their level. Your patience creates psychological safety before the first word is recited.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-emerald-50">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-[13px] font-medium text-emerald-900/60">
+                  <div class="flex items-center gap-1.5" aria-hidden="true"><span class="text-lg">💰</span> Per-session rate</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> Ijazah required</div>
+                </div>
+                <div class="text-emerald-700 font-bold text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all duration-300">Apply now →</div>
+              </div>
+            </div>
+
+            <div class="role-card bg-white border border-emerald-100 rounded-3xl p-8 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group" data-dept="teaching">
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300" aria-hidden="true"></div>
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                <div>
+                  <h3 class="role-title text-xl font-bold text-emerald-950 mb-1.5">Specialist Teacher — Learning Differences</h3>
+                  <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Teaching</div>
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                  <span class="px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] font-bold rounded-full">Part-time</span>
+                  <span class="px-3 py-1 bg-cream-50 border border-emerald-100 text-emerald-900/60 text-[11px] font-bold rounded-full">Remote</span>
+                  <span class="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-600 text-[11px] font-bold rounded-full">Urgent</span>
+                </div>
+              </div>
+              <p class="text-[14px] text-emerald-800/80 font-medium leading-relaxed mb-6">Teach children with ADHD, dyslexia, autism, or anxiety in sessions adapted to their specific learning profile. You hold an ijazah and have formal or informal experience in special educational needs. This is one of our highest-impact roles.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-emerald-50">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-[13px] font-medium text-emerald-900/60">
+                  <div class="flex items-center gap-1.5" aria-hidden="true"><span class="text-lg">💰</span> Premium rate</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> Ijazah + SEN experience required</div>
+                </div>
+                <div class="text-emerald-700 font-bold text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all duration-300">Apply now →</div>
+              </div>
+            </div>
+
+            <div id="no-roles" class="hidden bg-white border border-emerald-100 rounded-3xl p-16 text-center shadow-sm">
+              <div class="text-5xl mb-4" aria-hidden="true">🔍</div>
+              <h3 class="text-xl font-bold text-emerald-950 mb-2">No open roles in this department right now</h3>
+              <p class="text-[15px] text-emerald-800/70 font-medium max-w-md mx-auto">Send us an open application — we hire great people before we know exactly what role they will fill.</p>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </Section>
+
+    <Section height={800} class="py-12 md:py-24 lg:py-32 bg-emerald-50 border-y border-emerald-100" id="teacher-path">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-[1fr_1fr] gap-16 items-center">
+          
+          <div>
+            <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3">Become a Quranific Teacher</span>
+            <h2 class="text-4xl font-bold text-emerald-950 mb-6 tracking-tight leading-tight">Teach with <em class="font-serif italic text-emerald-700 font-medium">the freedom to teach well.</em></h2>
+            <p class="text-[17px] text-emerald-900/80 font-medium leading-relaxed mb-10">We are not a marketplace. We are a community of qualified teachers who have chosen to practice their craft somewhere that respects it. Here is what we look for and what we offer in return.</p>
+            
+            <div class="space-y-4 mb-10">
+              <div class="bg-white border border-emerald-100 rounded-2xl p-5 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-xl shrink-0" aria-hidden="true">📜</div>
+                <div><h4 class="font-bold text-emerald-950 text-[15px] mb-1">Verified Ijazah — non-negotiable</h4><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">A chain of transmission connecting you to the Prophet ﷺ. We verify independently before any interview proceeds.</p></div>
+              </div>
+              <div class="bg-white border border-emerald-100 rounded-2xl p-5 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-xl shrink-0" aria-hidden="true">💚</div>
+                <div><h4 class="font-bold text-emerald-950 text-[15px] mb-1">Patience as a default, not an effort</h4><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">You do not get tired of beginners. You see a struggling child and feel motivated, not frustrated. You either have it or you do not.</p></div>
+              </div>
+              <div class="bg-white border border-emerald-100 rounded-2xl p-5 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-xl shrink-0" aria-hidden="true">🌐</div>
+                <div><h4 class="font-bold text-emerald-950 text-[15px] mb-1">Confident in English (or Urdu/Arabic)</h4><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Our parent base is primarily English-speaking diaspora. Clear communication with parents is critical.</p></div>
+              </div>
+              <div class="bg-white border border-emerald-100 rounded-2xl p-5 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-xl shrink-0" aria-hidden="true">📱</div>
+                <div><h4 class="font-bold text-emerald-950 text-[15px] mb-1">Reliable device, stable internet</h4><p class="text-[13px] text-emerald-800/80 font-medium leading-relaxed">Sessions run over video. A quiet, well-lit space and consistent connectivity are prerequisites.</p></div>
+              </div>
+            </div>
+            
+            <Button href="#apply-form" variant="primary">Apply as a Teacher →</Button>
+          </div>
+
+          <div class="bg-white border border-emerald-100 rounded-3xl p-8 lg:p-10 shadow-xl shadow-emerald-900/5">
+            <h3 class="text-xl font-bold text-emerald-950 mb-8">Our 4-stage teacher vetting process</h3>
+            
+            <div class="space-y-6 relative mb-8">
+              <div class="absolute left-[19px] top-[20px] bottom-[20px] w-0.5 bg-gradient-to-b from-emerald-700 to-emerald-100" aria-hidden="true"></div>
+              
+              <div class="flex gap-5 relative z-10 group">
+                <div class="w-10 h-10 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-sm shrink-0 transition-transform group-hover:scale-110 shadow-md ring-4 ring-emerald-50" aria-hidden="true">1</div>
+                <div>
+                  <h4 class="font-bold text-emerald-950 text-[15px] mb-1">Application review</h4>
+                  <p class="text-[13px] text-emerald-800/70 font-medium mb-2 leading-relaxed">We read every application personally. If your background matches, we reach out within 5 working days.</p>
+                  <span class="inline-block px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-full">⏱ 1–5 working days</span>
+                </div>
+              </div>
+              <div class="flex gap-5 relative z-10 group">
+                <div class="w-10 h-10 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-sm shrink-0 transition-transform group-hover:scale-110 shadow-md ring-4 ring-emerald-50" aria-hidden="true">2</div>
+                <div>
+                  <h4 class="font-bold text-emerald-950 text-[15px] mb-1">Ijazah verification</h4>
+                  <p class="text-[13px] text-emerald-800/70 font-medium mb-2 leading-relaxed">We verify your chain of transmission independently with our scholarly advisory board before proceeding.</p>
+                  <span class="inline-block px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-full">⏱ 3–7 days</span>
+                </div>
+              </div>
+              <div class="flex gap-5 relative z-10 group">
+                <div class="w-10 h-10 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-sm shrink-0 transition-transform group-hover:scale-110 shadow-md ring-4 ring-emerald-50" aria-hidden="true">3</div>
+                <div>
+                  <h4 class="font-bold text-emerald-950 text-[15px] mb-1">Live recitation assessment</h4>
+                  <p class="text-[13px] text-emerald-800/70 font-medium mb-2 leading-relaxed">A recorded full recitation reviewed by our Head of Teachers, Khaled Rashid, a Hafiz with 15 years experience.</p>
+                  <span class="inline-block px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-full">⏱ 1–3 days for feedback</span>
+                </div>
+              </div>
+              <div class="flex gap-5 relative z-10 group">
+                <div class="w-10 h-10 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-sm shrink-0 transition-transform group-hover:scale-110 shadow-md ring-4 ring-emerald-50" aria-hidden="true">4</div>
+                <div>
+                  <h4 class="font-bold text-emerald-950 text-[15px] mb-1">Teaching interview & background check</h4>
+                  <p class="text-[13px] text-emerald-800/70 font-medium mb-2 leading-relaxed">A live teaching simulation with a child, a safeguarding check, and a 30-minute interview. If all pass, you join the team.</p>
+                  <span class="inline-block px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-full">⏱ 1 week</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-emerald-700 rounded-2xl p-6 flex gap-4 items-start">
+              <div class="text-2xl shrink-0" aria-hidden="true">🤝</div>
+              <div>
+                <h4 class="font-bold text-white text-[15px] mb-1">Our promise to every teacher</h4>
+                <p class="text-[13px] text-emerald-50/80 font-medium leading-relaxed">Consistent students, session support, fair per-session pay, and a team that treats your craft with the respect it deserves.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </Section>
+
+    <Section height={900} class="py-12 md:py-24 lg:py-32 bg-emerald-950 relative overflow-hidden text-center">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] border border-white/5 rounded-full pointer-events-none" aria-hidden="true"></div>
+
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6 tracking-tight leading-tight">Our hiring process is <em class="font-serif italic text-amber-400 font-medium">honest and fast.</em></h2>
+          <p class="text-[17px] text-emerald-100/70 font-medium max-w-2xl mx-auto leading-relaxed">
+            We respect your time. We will not make you do a 5-stage process to find out the salary does not match. Here is exactly what to expect.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 relative mb-20">
+          <div class="hidden lg:block absolute top-[36px] left-[12.5%] right-[12.5%] h-[2px] bg-white/10 z-0" aria-hidden="true"></div>
+          
+          <div class="text-center relative z-10 px-4 group">
+            <div class="w-[72px] h-[72px] rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center font-serif text-3xl font-bold text-white/50 mx-auto mb-5 transition-all duration-300 group-hover:bg-amber-500 group-hover:border-amber-500 group-hover:text-white group-hover:ring-8 group-hover:ring-amber-500/20" aria-hidden="true">1</div>
+            <h4 class="font-bold text-white/90 text-[15px] mb-2">You apply</h4>
+            <p class="text-[13px] text-white/50 font-medium leading-relaxed mb-3">Short form. CV and a short cover note. We read every application — no ATS filtering. No keyword games.</p>
+            <span class="inline-block px-3 py-1 bg-white/5 border border-white/10 text-white/40 text-[11px] font-bold rounded-full">⏱ 10 mins</span>
+          </div>
+          <div class="text-center relative z-10 px-4 group">
+            <div class="w-[72px] h-[72px] rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center font-serif text-3xl font-bold text-white/50 mx-auto mb-5 transition-all duration-300 group-hover:bg-amber-500 group-hover:border-amber-500 group-hover:text-white group-hover:ring-8 group-hover:ring-amber-500/20" aria-hidden="true">2</div>
+            <h4 class="font-bold text-white/90 text-[15px] mb-2">We respond</h4>
+            <p class="text-[13px] text-white/50 font-medium leading-relaxed mb-3">Within 5 working days — always. A clear yes, a clear no, or a request for a 20-minute intro call. No ghosting.</p>
+            <span class="inline-block px-3 py-1 bg-white/5 border border-white/10 text-white/40 text-[11px] font-bold rounded-full">⏱ Within 5 days</span>
+          </div>
+          <div class="text-center relative z-10 px-4 group">
+            <div class="w-[72px] h-[72px] rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center font-serif text-3xl font-bold text-white/50 mx-auto mb-5 transition-all duration-300 group-hover:bg-amber-500 group-hover:border-amber-500 group-hover:text-white group-hover:ring-8 group-hover:ring-amber-500/20" aria-hidden="true">3</div>
+            <h4 class="font-bold text-white/90 text-[15px] mb-2">Two conversations</h4>
+            <p class="text-[13px] text-white/50 font-medium leading-relaxed mb-3">First with the hiring manager. Then with one team member. We discuss the role, the salary, and ask a small task.</p>
+            <span class="inline-block px-3 py-1 bg-white/5 border border-white/10 text-white/40 text-[11px] font-bold rounded-full">⏱ 1–2 weeks</span>
+          </div>
+          <div class="text-center relative z-10 px-4 group">
+            <div class="w-[72px] h-[72px] rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center font-serif text-3xl font-bold text-white/50 mx-auto mb-5 transition-all duration-300 group-hover:bg-amber-500 group-hover:border-amber-500 group-hover:text-white group-hover:ring-8 group-hover:ring-amber-500/20" aria-hidden="true">4</div>
+            <h4 class="font-bold text-white/90 text-[15px] mb-2">Decision and offer</h4>
+            <p class="text-[13px] text-white/50 font-medium leading-relaxed mb-3">We decide within 48 hours of your final conversation. If we make an offer, it is in writing. If we don't, we tell you why.</p>
+            <span class="inline-block px-3 py-1 bg-white/5 border border-white/10 text-white/40 text-[11px] font-bold rounded-full">⏱ 48 hours</span>
+          </div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-3xl p-8 lg:p-12 backdrop-blur-sm max-w-4xl mx-auto text-left" id="apply-form">
+          <h3 class="text-2xl font-bold text-white mb-2">Send your application</h3>
+          <p class="text-[15px] text-white/60 font-medium mb-8">For any role — open or speculative. We read everything.</p>
+          
+          <form class="space-y-5" id="app-form">
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label for="app-name" class="block text-[11px] font-bold uppercase tracking-widest text-white/40 mb-2">Full name</label>
+                <input type="text" id="app-name" required class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors placeholder:text-white/30" placeholder="Your full name">
+              </div>
+              <div>
+                <label for="app-email" class="block text-[11px] font-bold uppercase tracking-widest text-white/40 mb-2">Email address</label>
+                <input type="email" id="app-email" required class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors placeholder:text-white/30" placeholder="you@example.com">
+              </div>
+            </div>
+            
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label for="role-select" class="block text-[11px] font-bold uppercase tracking-widest text-white/40 mb-2">Role you're applying for</label>
+                <select required id="role-select" class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors appearance-none cursor-pointer [&>option]:bg-emerald-950 [&>option]:text-white">
+                  <option value="">Select a role</option>
+                  <option value="Senior Full-Stack Engineer">Senior Full-Stack Engineer</option>
+                  <option value="Product Designer">Product Designer — UX Lead</option>
+                  <option value="Head of Teacher Operations">Head of Teacher Operations</option>
+                  <option value="Parent Success Manager">Parent Success Manager</option>
+                  <option value="Content Strategist & Writer">Content Strategist & Writer</option>
+                  <option value="Quran Teacher — Children">Quran Teacher — Children (5–10)</option>
+                  <option value="Quran Teacher — Adults">Quran Teacher — Adults & Teens</option>
+                  <option value="Specialist Teacher">Specialist Teacher — Learning Differences</option>
+                  <option value="Open">Open / Speculative application</option>
+                </select>
+              </div>
+              <div>
+                <label for="app-location" class="block text-[11px] font-bold uppercase tracking-widest text-white/40 mb-2">Current location</label>
+                <input type="text" id="app-location" required class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors placeholder:text-white/30" placeholder="City, Country">
+              </div>
+            </div>
+
+            <div>
+              <label for="app-why" class="block text-[11px] font-bold uppercase tracking-widest text-white/40 mb-2">Why Quranific? (3–4 sentences is plenty)</label>
+              <textarea id="app-why" required class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors placeholder:text-white/30 min-h-[120px] resize-y" placeholder="Tell us what draws you to this mission specifically — not just remote work or the role itself..."></textarea>
+            </div>
+
+            <div class="mb-6">
+              <label class="flex items-center justify-center w-full bg-white/5 border-2 border-dashed border-white/20 rounded-xl py-4 cursor-pointer hover:bg-white/10 hover:border-white/40 transition-colors text-sm font-bold text-white/70 group">
+                <span aria-hidden="true">📎</span> <span class="ml-2 group-hover:text-white file-label-text">Attach your CV / Portfolio (PDF, max 5MB)</span>
+                <input type="file" class="hidden app-file-input" accept=".pdf">
+              </label>
+            </div>
+
+            <button type="submit" id="app-submit-btn" class="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl transition-all duration-300 shadow-lg text-[15px]">Submit Application →</button>
+            <p class="text-center text-[11px] text-white/30 font-medium mt-4">Your data is used only for this application and deleted after 90 days if unsuccessful. We do not share it with third parties.</p>
+          </form>
+        </div>
+
+      </div>
+    </Section>
+
+    <Section height={400} class="py-12 md:py-24 lg:py-32 bg-cream-50 text-center relative overflow-hidden">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest rounded-full mb-8 shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-700 animate-pulse" aria-hidden="true"></span>
+          Remote · Mission-driven · Hiring now
+        </div>
+        
+        <h2 class="text-4xl lg:text-6xl font-bold text-emerald-950 mb-6 tracking-tight leading-tight">
+          Still reading?<br/>
+          That means <em class="font-serif italic text-emerald-700 font-medium">this is for you.</em>
+        </h2>
+        
+        <p class="text-lg lg:text-xl text-emerald-900/80 font-medium mb-10 leading-relaxed max-w-2xl mx-auto">
+          The people who thrive at Quranific are the ones who felt something reading this page — not just interest in a job, but recognition of a problem they have personally felt. If that is you, we want to hear from you.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+          <Button href="#open-roles" variant="primary" class="w-full sm:w-auto px-10 py-5 text-lg">
+            See Open Roles
+          </Button>
+          <Button href="mailto:careers@quranific.com" variant="ghost" class="w-full sm:w-auto px-10 py-5 text-lg">
+            Send open application
+          </Button>
+        </div>
+        <p class="text-sm font-semibold text-emerald-900/50">We respond to every application within 5 working days. No exceptions.</p>
+      </div>
+    </Section>
+
+  </main>
+
+  <Footer />
+
+  <script is:inline>
+    document.addEventListener('astro:page-load', () => {
+      
+      // 1. Setup Role Filtering
+      const filterBtns = document.querySelectorAll('button[data-dept]');
+      filterBtns.forEach(btn => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = 'true';
+        
+        btn.addEventListener('click', function() { 
+          filterRoles(this.getAttribute('data-dept'), this); 
+        });
+      });
+
+      // 2. Setup Role Card Clicking
+      const roleCards = document.querySelectorAll('.role-card');
+      roleCards.forEach(card => {
+        if (card.dataset.bound) return;
+        card.dataset.bound = 'true';
+        
+        card.addEventListener('click', function() { 
+          openRole(this); 
+        });
+      });
+
+      // 3. Setup File Input UI
+      const fileInput = document.querySelector('.app-file-input');
+      if (fileInput && !fileInput.dataset.bound) {
+        fileInput.dataset.bound = 'true';
+        fileInput.addEventListener('change', function(e) {
+          const target = e.target;
+          const labelText = target.parentElement?.querySelector('.file-label-text');
+          if (labelText && target.files && target.files.length > 0) {
+            labelText.textContent = 'File attached ✓';
+            target.parentElement?.classList.add('bg-white/20', 'border-white/50', 'text-white');
+          }
+        });
+      }
+
+      // 4. Setup Form Submission
+      const appForm = document.getElementById('app-form');
+      if (appForm && !appForm.dataset.bound) {
+        appForm.dataset.bound = 'true';
+        appForm.addEventListener('submit', function(e) { 
+          e.preventDefault(); 
+          const submitBtn = document.getElementById('app-submit-btn');
+          if(submitBtn) {
+            submitBtn.textContent = 'Application sent! We will reply within 5 days ✓';
+            submitBtn.classList.remove('bg-amber-500', 'hover:bg-amber-600');
+            submitBtn.classList.add('bg-emerald-700', 'pointer-events-none');
+          }
+        });
+      }
+
+      // --- Helper Functions ---
+      function filterRoles(dept, el) {
+        if(!dept) return;
+        
+        // Reset all buttons
+        document.querySelectorAll('.rf').forEach(btn => {
+          btn.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700', 'shadow-md');
+          btn.classList.add('bg-transparent', 'text-emerald-900/70', 'border-transparent');
+          
+          const countSpan = btn.querySelector('.rf-count');
+          if(countSpan) {
+            countSpan.classList.remove('bg-white/20', 'text-white', 'border-transparent');
+            countSpan.classList.add('bg-white', 'border', 'border-emerald-100', 'text-emerald-900/50');
+          }
+        });
+
+        // Activate clicked button
+        el.classList.remove('bg-transparent', 'text-emerald-900/70', 'border-transparent');
+        el.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700', 'shadow-md');
+        
+        const elCountSpan = el.querySelector('.rf-count');
+        if(elCountSpan) {
+          elCountSpan.classList.remove('bg-white', 'border', 'border-emerald-100', 'text-emerald-900/50');
+          elCountSpan.classList.add('bg-white/20', 'text-white', 'border-transparent');
+        }
+
+        // Filter Cards
+        const cards = document.querySelectorAll('.role-card');
+
+        cards.forEach(card => {
+          const cardDept = card.getAttribute('data-dept');
+          if (dept === 'all' || cardDept === dept) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // Fallback UI
+        const noRolesMsg = document.getElementById('no-roles');
+        if (noRolesMsg) {
+          if (visibleCount === 0) {
+            noRolesMsg.classList.remove('hidden');
+          } else {
+            noRolesMsg.classList.add('hidden');
+          }
+        }
+      }
+
+      function openRole(card) {
+        const titleElement = card.querySelector('.role-title');
+        if (!titleElement || !titleElement.textContent) return;
+        
+        const fullTitle = titleElement.textContent.trim();
+        const baseTitle = fullTitle.split('—')[0].trim();
+
+        const select = document.getElementById('role-select');
+        if (select) {
+          let matched = false;
+          for (let i = 0; i < select.options.length; i++) {
+            if (select.options[i].text.includes(baseTitle)) {
+              select.selectedIndex = i;
+              matched = true;
+              break;
+            }
+          }
+          if (!matched) {
+            select.selectedIndex = select.options.length - 1; 
+          }
+        }
+
+        const formElement = document.getElementById('apply-form');
+        if(formElement) {
+          formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        if (select) {
+          setTimeout(() => {
+            select.classList.add('ring-2', 'ring-emerald-500', 'border-emerald-500');
+            setTimeout(() => {
+              select.classList.remove('ring-2', 'ring-emerald-500', 'border-emerald-500');
+            }, 1500);
+          }, 500);
+        }
+      }
+      
+    });
+  </script>
+</Base>

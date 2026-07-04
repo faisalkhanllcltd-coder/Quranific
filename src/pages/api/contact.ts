@@ -95,8 +95,9 @@ export const POST: APIRoute = async (context) => {
             }
         };
 
-        if ((context.locals as any).runtime?.ctx?.waitUntil) {
-            (context.locals as any).runtime.ctx.waitUntil(sendEmailTask());
+        const localsRuntime = (context.locals as { runtime?: { ctx?: { waitUntil: (p: Promise<unknown>) => void } } }).runtime;
+        if (localsRuntime?.ctx?.waitUntil) {
+            localsRuntime.ctx.waitUntil(sendEmailTask());
         } else {
             sendEmailTask().catch(console.error);
         }

@@ -14,4 +14,4 @@ ENVIRONMENT = "production"
 # idempotency checks and store dead-letter leads when Resend fails.
 [[kv_namespaces]]
 binding = "SESSION"
-id = "your_kv_id_here"
+id = "14eab319d57e4c58b5f903bce3eb3931"

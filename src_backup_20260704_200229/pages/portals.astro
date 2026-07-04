@@ -1,0 +1,114 @@
+---
+// src/pages/portals.astro
+import Base from '../layouts/Base.astro';
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+
+const Icons = {
+  login: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>`,
+  student: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>`,
+  tutor: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>`,
+  partner: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>`
+};
+
+// Update these links when your actual LMS/Billing dashboards are ready
+// CRITICAL: Full Tailwind class strings must be used here so the JIT compiler catches them.
+const PORTALS = [
+  {
+    id: 'student',
+    title: 'Student & Parent Portal',
+    desc: 'Access your class schedule, track Tajweed progress, and manage your billing.',
+    icon: Icons.student,
+    topBarClass: 'bg-emerald-500',
+    iconBgClass: 'bg-emerald-50',
+    iconTextClass: 'text-emerald-700',
+    link: '#' // e.g., https://app.quranific.com/login
+  },
+  {
+    id: 'tutor',
+    title: 'Tutor Dashboard',
+    desc: 'Manage your global class schedule, student notes, and payment reports.',
+    icon: Icons.tutor,
+    topBarClass: 'bg-amber-400',
+    iconBgClass: 'bg-amber-50',
+    iconTextClass: 'text-amber-600',
+    link: '#' // e.g., https://tutors.quranific.com/login
+  },
+  {
+    id: 'partner',
+    title: 'Partner Analytics',
+    desc: 'View your affiliate referrals, active student counts, and revenue share.',
+    icon: Icons.partner,
+    topBarClass: 'bg-slate-400',
+    iconBgClass: 'bg-slate-50',
+    iconTextClass: 'text-slate-600',
+    link: '#' // e.g., https://partners.quranific.com/login
+  }
+];
+
+// Prevents search engines from indexing the routing hub, but allows following links
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Login Portals | Quranific",
+  "description": "Select your portal to log in to your Quranific dashboard.",
+  "url": "https://quranific.com/portals",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Quranific",
+    "url": "https://quranific.com"
+  }
+};
+---
+
+<Base title="Login Portals | Quranific" description="Select your portal to log in to your Quranific dashboard.">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+  <meta name="robots" content="noindex, follow" slot="head" />
+  
+  <Header />
+
+  <main class="min-h-[85vh] bg-cream-50 pt-16 md:pt-32 pb-12 md:pb-24 flex items-center justify-center relative overflow-hidden selection:bg-emerald-200 selection:text-emerald-950">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" aria-hidden="true"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 w-full relative z-10">
+      
+      <div class="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-emerald-100 flex items-center justify-center mx-auto mb-6 text-emerald-700" aria-hidden="true">
+          <span set:html={Icons.login}></span>
+        </div>
+        <h1 class="text-3xl lg:text-4xl font-black text-emerald-950 mb-3 tracking-tight">Welcome Back</h1>
+        <p class="text-emerald-800/80 font-medium">Please select your portal to continue securely.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+        {PORTALS.map(portal => (
+          <a href={portal.link} class="group bg-white rounded-3xl p-8 border border-emerald-100 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 relative overflow-hidden flex flex-col">
+            <div class={`absolute top-0 left-0 w-full h-1 opacity-0 group-hover:opacity-100 transition-opacity ${portal.topBarClass}`} aria-hidden="true"></div>
+            
+            <div class={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${portal.iconBgClass} ${portal.iconTextClass}`} aria-hidden="true">
+              <span set:html={portal.icon}></span>
+            </div>
+            
+            <h3 class="text-xl font-bold text-emerald-950 mb-3">{portal.title}</h3>
+            <p class="text-emerald-800/80 text-sm font-medium leading-relaxed mb-8 flex-1">
+              {portal.desc}
+            </p>
+            
+            <div class="flex items-center gap-2 text-sm font-bold text-emerald-900 group-hover:text-emerald-700 transition-colors">
+              Access Portal <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div class="text-center mt-12 animate-in fade-in duration-700 delay-300">
+        <p class="text-sm text-emerald-700/70 font-medium">
+          Having trouble logging in? <a href="/contact" class="text-emerald-700 font-bold hover:underline">Contact Support</a>
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</Base>

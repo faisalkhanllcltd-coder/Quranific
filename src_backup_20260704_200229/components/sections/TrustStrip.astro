@@ -1,0 +1,87 @@
+---
+// src/components/sections/TrustStrip.astro
+import { SITE } from '../../constants/site';
+
+const countries = [...SITE.trustCountries, ...SITE.trustCountries];
+---
+
+<div
+  class="w-full relative z-10 overflow-hidden bg-gradient-to-b from-transparent to-emerald-50/30 border-t border-emerald-900/5 py-4 md:py-5"
+  role="region"
+  aria-label="Families trust us from around the world"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+    
+    <div class="relative z-20 flex items-center shrink-0 pr-4 md:pr-8">
+      <div class="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-emerald-900/5 border border-emerald-900/10 backdrop-blur-sm shadow-[0_2px_8px_-2px_rgba(4,120,87,0.05)]">
+        <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+        <span class="text-[11px] md:text-xs font-black tracking-widest uppercase text-emerald-950/60 whitespace-nowrap">
+          Global Presence
+        </span>
+      </div>
+    </div>
+
+    <div 
+      class="flex-1 relative overflow-hidden flex items-center"
+      style="-webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);"
+    >
+      
+      <div class="flex flex-row flex-nowrap w-max shrink-0 animate-q-marquee hover:[animation-play-state:paused] will-change-transform">
+        
+        {[0, 1].map((pass) => (
+          <div 
+            class="flex flex-row flex-nowrap items-center justify-around w-max gap-10 md:gap-14 px-5 md:px-7 shrink-0 q-marquee-track"
+            aria-hidden={pass === 1 ? "true" : "false"}
+          >
+            {countries.map((c) => (
+              <span class="group/item flex flex-row items-center gap-2.5 text-[11px] md:text-xs font-bold text-emerald-950/40 transition-all duration-300 ease-out cursor-default whitespace-nowrap shrink-0">
+                <span class="text-sm md:text-base leading-none drop-shadow-sm grayscale opacity-50 group-hover/item:grayscale-0 group-hover/item:opacity-100 transition-all duration-300 scale-95 group-hover/item:scale-125 group-hover/item:-translate-y-0.5">
+                  {c.flag}
+                </span>
+                {c.name}
+              </span>
+            ))}
+          </div>
+        ))}
+
+      </div>
+    </div>
+
+  </div>
+
+  <ul class="sr-only" role="list" aria-label="Countries we serve">
+    {SITE.trustCountries.map((c) => (
+      <li>{c.name}</li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .animate-q-marquee {
+    /* CLAUDE FIX: Responsive animation speeds via CSS variables */
+    --scroll-duration: 25s;
+    animation: q-scroll var(--scroll-duration) linear infinite;
+  }
+
+  @media (min-width: 1024px) {
+    .animate-q-marquee { --scroll-duration: 45s; }
+  }
+
+  @keyframes q-scroll {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-q-marquee {
+      animation: none !important;
+      width: auto !important;
+      flex-wrap: wrap !important;
+    }
+    
+    /* CLAUDE FIX: Scoped the aria-hidden rule to prevent site-wide breakage */
+    .q-marquee-track[aria-hidden="true"] {
+      display: none !important;
+    }
+  }
+</style>

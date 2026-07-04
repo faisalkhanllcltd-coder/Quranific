@@ -1,0 +1,129 @@
+---
+// src/components/sections/FAQAccordion.astro
+---
+
+<section class="py-16 md:py-24 lg:py-32 bg-[#fefdf9]" id="faq">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-20 items-start">
+      
+      <div class="self-start lg:sticky lg:top-32">
+        <div class="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-widest rounded-full mb-6">
+          Your Questions
+        </div>
+        <h2 class="text-4xl lg:text-5xl font-black text-emerald-950 mb-5 tracking-tight leading-tight text-balance">
+          Still thinking <br class="hidden sm:block"/><span class="text-emerald-700 font-serif italic">about it?</span>
+        </h2>
+        <p class="text-lg text-emerald-900/70 font-medium mb-10 text-balance">
+          These are the real questions parents ask us before they book. We've answered every one honestly.
+        </p>
+
+        <div class="bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-emerald-900/5">
+          <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-700 mb-6 border border-emerald-100/50">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h3 class="font-bold text-xl text-emerald-950 mb-3">Our Full-Month Guarantee</h3>
+          <p class="text-[15px] text-emerald-900/80 font-medium leading-relaxed">
+            If after your first full paid month you're not completely satisfied — for any reason — we will refund you in full. No questions, no forms, no chasing. Just send one email.
+          </p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+          <summary aria-expanded="false" class="flex items-center justify-between cursor-pointer p-4 sm:p-6 font-semibold text-emerald-950 text-base sm:text-lg select-none" style="-webkit-tap-highlight-color: transparent;">
+            What if my child misses a class?
+            <span class="transition-transform duration-300 group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-100 shrink-0 ml-4" aria-hidden="true">
+              <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="16"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </summary>
+          <div class="text-emerald-900/80 text-sm sm:text-[15px] font-medium leading-relaxed px-4 sm:px-6 pb-4 sm:pb-6">
+            Every single missed class has a <strong>guaranteed make-up session</strong> — no exceptions, no expiry. Life happens: travel, illness, school events. You simply notify us and we schedule a replacement within the same week where possible. You never lose a session.
+          </div>
+        </details>
+
+        <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+          <summary aria-expanded="false" class="flex items-center justify-between cursor-pointer p-4 sm:p-6 font-semibold text-emerald-950 text-base sm:text-lg select-none" style="-webkit-tap-highlight-color: transparent;">
+            How do I know the teacher is genuinely qualified?
+            <span class="transition-transform duration-300 group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-100 shrink-0 ml-4" aria-hidden="true">
+              <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="16"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </summary>
+          <div class="text-emerald-900/80 text-sm sm:text-[15px] font-medium leading-relaxed px-4 sm:px-6 pb-4 sm:pb-6">
+            Every Quranific teacher must hold a verified <strong>ijazah</strong> — a chain of transmission connecting them to the Prophet (ﷺ) through unbroken teachers. Beyond that, they complete a 3-stage vetting process: a recorded recitation assessment, a teaching methodology interview, and a background check. You receive their full profile before the first session. If you ever want a different teacher, we switch immediately — no questions asked.
+          </div>
+        </details>
+
+        <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+          <summary aria-expanded="false" class="flex items-center justify-between cursor-pointer p-4 sm:p-6 font-semibold text-emerald-950 text-base sm:text-lg select-none" style="-webkit-tap-highlight-color: transparent;">
+            What if it doesn't work for us?
+            <span class="transition-transform duration-300 group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-100 shrink-0 ml-4" aria-hidden="true">
+              <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="16"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </summary>
+          <div class="text-emerald-900/80 text-sm sm:text-[15px] font-medium leading-relaxed px-4 sm:px-6 pb-4 sm:pb-6">
+            The first class is completely free — no credit card needed, no commitment. If you join after that and you're not satisfied within your first paid month, we <strong>refund every penny</strong>. One email is all it takes. We're not interested in holding onto money from families who aren't thrilled. We'd rather earn your trust than your subscription.
+          </div>
+        </details>
+
+        <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+          <summary aria-expanded="false" class="flex items-center justify-between cursor-pointer p-4 sm:p-6 font-semibold text-emerald-950 text-base sm:text-lg select-none" style="-webkit-tap-highlight-color: transparent;">
+            Is my child's session safe and private?
+            <span class="transition-transform duration-300 group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-100 shrink-0 ml-4" aria-hidden="true">
+              <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="16"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </summary>
+          <div class="text-emerald-900/80 text-sm sm:text-[15px] font-medium leading-relaxed px-4 sm:px-6 pb-4 sm:pb-6">
+            Every session is strictly <strong>1-on-1</strong>, conducted on a private, secure video link. Sessions are never recorded without explicit parental consent. You can join any session unannounced — your child's teacher will expect this and welcomes it. All teachers also carry safeguarding training.
+          </div>
+        </details>
+
+        <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+          <summary aria-expanded="false" class="flex items-center justify-between cursor-pointer p-4 sm:p-6 font-semibold text-emerald-950 text-base sm:text-lg select-none" style="-webkit-tap-highlight-color: transparent;">
+            My child is a complete beginner. Is that okay?
+            <span class="transition-transform duration-300 group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-100 shrink-0 ml-4" aria-hidden="true">
+              <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="16"><path d="M6 9l6 6-6"/></svg>
+            </span>
+          </summary>
+          <div class="text-emerald-900/80 text-sm sm:text-[15px] font-medium leading-relaxed px-4 sm:px-6 pb-4 sm:pb-6">
+            Beginners are our specialty. <strong>Over 60% of our students start from zero</strong> — no Arabic, no prior Quran knowledge. We assess your child's level in the first free class and build an individual learning plan from there. There's no "too late" and no "too early." We've taught children from age 4 and adults in their 60s.
+          </div>
+        </details>
+
+        <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+          <summary aria-expanded="false" class="flex items-center justify-between cursor-pointer p-4 sm:p-6 font-semibold text-emerald-950 text-base sm:text-lg select-none" style="-webkit-tap-highlight-color: transparent;">
+            How long until I notice a real difference?
+            <span class="transition-transform duration-300 group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-100 shrink-0 ml-4" aria-hidden="true">
+              <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="16"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
+          </summary>
+          <div class="text-emerald-900/80 text-sm sm:text-[15px] font-medium leading-relaxed px-4 sm:px-6 pb-4 sm:pb-6">
+            Most parents notice a shift in their child's attitude toward the Quran within the <strong>first two to three weeks</strong>. Progress in recitation depends on age, frequency of sessions, and prior exposure — but our teachers set clear, measurable milestones and share them with you weekly so you always know exactly where your child stands.
+          </div>
+        </details>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  // FAQAccordion — programmatic aria-expanded sync.
+  // The native `toggle` event fires AFTER <details>.open has been updated,
+  // making it the ground-truth hook for syncing ARIA state to screen readers.
+  function initFAQAccordion(): void {
+    document.querySelectorAll<HTMLDetailsElement>('details').forEach((details) => {
+      const summary = details.querySelector<HTMLElement>('summary');
+      if (!summary) return;
+
+      // Ensure initial state is always declared, regardless of SSR output.
+      summary.setAttribute('aria-expanded', String(details.open));
+
+      details.addEventListener('toggle', () => {
+        summary.setAttribute('aria-expanded', String(details.open));
+      });
+    });
+  }
+
+  // Re-run on every Astro SPA navigation to catch dynamically inserted FAQ sections.
+  document.addEventListener('astro:page-load', initFAQAccordion);
+</script>

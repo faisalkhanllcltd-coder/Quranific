@@ -27,7 +27,7 @@
   </div>
   
   <div class="flex items-start justify-between relative z-10 w-full">
-    {#each steps as step}
+    {#each steps as step (step.num)}
       <div 
         class="flex flex-col items-center gap-2 w-24" 
         aria-current={step.num === currentStep ? 'step' : undefined}

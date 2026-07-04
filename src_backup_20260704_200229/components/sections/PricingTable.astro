@@ -1,0 +1,183 @@
+---
+// src/components/sections/PricingTable.astro
+// Pure HTML/Tailwind with Zero-Hydration Vanilla JS Toggle
+---
+
+<section class="py-10 md:py-20 lg:py-32 bg-[#fefdf9] relative overflow-hidden selection:bg-emerald-200 selection:text-emerald-950" id="pricing">
+  
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    
+    <div class="text-center max-w-3xl mx-auto mb-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <span class="text-xs font-black tracking-widest uppercase text-emerald-800 block mb-3">Simple, Transparent Pricing</span>
+      <h2 class="font-serif text-4xl lg:text-5xl font-medium text-emerald-950 leading-[1.12] tracking-tight mb-6">
+        Invest in their <em class="italic text-emerald-700">Akhirah.</em>
+      </h2>
+      <p class="text-lg text-emerald-700/80 leading-relaxed font-medium mb-10">
+        All plans include 1-on-1 private sessions, weekly progress reports, and our 1-Month Fee-Back Guarantee. No hidden fees.
+      </p>
+
+      <div class="flex items-center justify-center gap-4">
+        <span class="text-sm font-bold text-emerald-950" id="label-monthly">Pay Monthly</span>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" id="pricing-toggle" class="sr-only peer" />
+          <div class="w-14 h-7 bg-emerald-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-[color,background-color,border-color,box-shadow,opacity,transform] peer-checked:bg-emerald-700 shadow-inner"></div>
+        </label>
+        <span class="text-sm font-bold text-emerald-600/60 transition-colors" id="label-quarterly">Pay Quarterly <span class="text-xs text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full ml-1 font-black">SAVE 10%</span></span>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+      
+      <div class="bg-white border border-emerald-100 rounded-[2rem] p-8 shadow-sm hover:shadow-xl hover:border-emerald-200 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
+        <h3 class="text-2xl font-bold text-emerald-950 mb-2">Foundation</h3>
+        <p class="text-sm text-emerald-700/80 font-medium mb-6">Perfect for young beginners starting their Qaida journey.</p>
+        
+        <div class="mb-6">
+          <span class="text-4xl font-black text-emerald-950 price-display" data-monthly="$49" data-quarterly="$44">
+            $49
+          </span>
+          <span class="text-sm font-bold text-emerald-600/60 billing-text" data-monthly="/month" data-quarterly="/mo, billed quarterly">
+            /month
+          </span>
+        </div>
+        
+        <a href="/funnel/signup?plan=foundation" class="block w-full text-center bg-emerald-50 text-emerald-800 font-bold py-3.5 rounded-xl hover:bg-emerald-100 transition-colors mb-8 border border-emerald-100">
+          Start Free Trial
+        </a>
+
+        <div class="text-xs font-bold tracking-widest uppercase text-emerald-800/50 mb-4">What's included</div>
+        <ul class="flex flex-col gap-3">
+          {[
+            '2 Classes per week',
+            '30 Minutes per class',
+            'Basic Qaida & Tajweed',
+            'Weekly Progress Reports',
+            'Guaranteed Make-up Classes'
+          ].map(feature => (
+            <li class="flex items-start gap-3 text-sm font-medium text-emerald-950">
+              <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="bg-emerald-950 border border-emerald-800 rounded-[2rem] p-8 shadow-2xl relative transform md:-translate-y-4">
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[11px] font-black tracking-widest uppercase px-4 py-1.5 rounded-full shadow-md">
+          Most Popular
+        </div>
+
+        <h3 class="text-2xl font-bold text-white mb-2">Standard</h3>
+        <p class="text-sm text-emerald-100/70 font-medium mb-6">The ideal pace for steady memorization and fluent reading.</p>
+        
+        <div class="mb-6">
+          <span class="text-4xl font-black text-white price-display" data-monthly="$69" data-quarterly="$62">
+            $69
+          </span>
+          <span class="text-sm font-bold text-emerald-100/50 billing-text" data-monthly="/month" data-quarterly="/mo, billed quarterly">
+            /month
+          </span>
+        </div>
+        
+        <a href="/funnel/signup?plan=standard" class="block w-full text-center bg-amber-500 text-white font-bold py-3.5 rounded-xl hover:bg-amber-400 transition-colors mb-8 shadow-lg">
+          Start Free Trial
+        </a>
+
+        <div class="text-xs font-bold tracking-widest uppercase text-emerald-100/50 mb-4">Everything in Foundation, plus:</div>
+        <ul class="flex flex-col gap-3">
+          {[
+            '3 Classes per week',
+            '30 Minutes per class',
+            'Quran Reading & Hifz tracking',
+            'Direct WhatsApp Support',
+            'Priority Tutor Matching'
+          ].map(feature => (
+            <li class="flex items-start gap-3 text-sm font-medium text-emerald-50">
+              <svg class="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="bg-white border border-emerald-100 rounded-[2rem] p-8 shadow-sm hover:shadow-xl hover:border-emerald-200 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
+        <h3 class="text-2xl font-bold text-emerald-950 mb-2">Intensive</h3>
+        <p class="text-sm text-emerald-700/80 font-medium mb-6">For serious Hifz students wanting rapid daily progress.</p>
+        
+        <div class="mb-6">
+          <span class="text-4xl font-black text-emerald-950 price-display" data-monthly="$115" data-quarterly="$103">
+            $115
+          </span>
+          <span class="text-sm font-bold text-emerald-600/60 billing-text" data-monthly="/month" data-quarterly="/mo, billed quarterly">
+            /month
+          </span>
+        </div>
+        
+        <a href="/funnel/signup?plan=intensive" class="block w-full text-center bg-emerald-50 text-emerald-800 font-bold py-3.5 rounded-xl hover:bg-emerald-100 transition-colors mb-8 border border-emerald-100">
+          Start Free Trial
+        </a>
+
+        <div class="text-xs font-bold tracking-widest uppercase text-emerald-800/50 mb-4">Everything in Standard, plus:</div>
+        <ul class="flex flex-col gap-3">
+          {[
+            '5 Classes per week',
+            '30 Minutes per class',
+            'Intensive Hifz Program',
+            'Advanced Tajweed Rules',
+            'Bi-weekly live assessments'
+          ].map(feature => (
+            <li class="flex items-start gap-3 text-sm font-medium text-emerald-950">
+              <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="mt-16 text-center animate-in fade-in duration-700 delay-300">
+      <p class="text-sm text-emerald-700/80 font-medium">
+        Need a custom plan for 3+ children? <a href="/contact" class="text-emerald-800 font-bold hover:underline decoration-emerald-300 underline-offset-4">Contact our support team</a> for family discounts.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  const toggle = document.getElementById('pricing-toggle') as HTMLInputElement;
+  const labelMonthly = document.getElementById('label-monthly');
+  const labelQuarterly = document.getElementById('label-quarterly');
+  const priceDisplays = document.querySelectorAll('.price-display');
+  const billingTexts = document.querySelectorAll('.billing-text');
+
+  if (toggle) {
+    toggle.addEventListener('change', (e) => {
+      const isQuarterly = (e.target as HTMLInputElement).checked;
+
+      // Update Label Colors
+      if (isQuarterly) {
+        labelMonthly?.classList.replace('text-emerald-950', 'text-emerald-600/60');
+        labelQuarterly?.classList.replace('text-emerald-600/60', 'text-emerald-950');
+      } else {
+        labelMonthly?.classList.replace('text-emerald-600/60', 'text-emerald-950');
+        labelQuarterly?.classList.replace('text-emerald-950', 'text-emerald-600/60');
+      }
+
+      // Update Prices instantly based on HTML data-attributes
+      priceDisplays.forEach(display => {
+        const el = display as HTMLElement;
+        el.textContent = isQuarterly ? el.dataset.quarterly || '' : el.dataset.monthly || '';
+      });
+
+      // Update Billing Text instantly
+      billingTexts.forEach(text => {
+        const el = text as HTMLElement;
+        el.textContent = isQuarterly ? el.dataset.quarterly || '' : el.dataset.monthly || '';
+      });
+    });
+  }
+</script>

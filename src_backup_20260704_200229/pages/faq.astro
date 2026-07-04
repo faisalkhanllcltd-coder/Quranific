@@ -1,0 +1,120 @@
+---
+// src/pages/faq.astro
+import Base from '../layouts/Base.astro';
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import FAQAccordion from '../components/sections/FAQAccordion.astro';
+
+// --- HIGH-CONVERTING FAQ DATA ---
+const FAQS = [
+  {
+    q: "Do I need any prior knowledge of Arabic to start?",
+    a: "Not at all! We have structured paths for absolute beginners. Our 'Basic Qaida' course starts with the alphabet and pronunciation. Our patient tutors specialize in guiding non-Arabic speakers from zero to fluent recitation."
+  },
+  {
+    q: "Can I request a female teacher for myself or my daughter?",
+    a: "Absolutely. We strictly respect your family's comfort and privacy. You can easily request a highly qualified female Hafiza/Qari for sisters and children during the registration process."
+  },
+  {
+    q: "How does the 1-month Fee-Back Guarantee work?",
+    a: "We are incredibly confident in our teachers. If you or your child are not completely satisfied with the progress within the first 30 days of paid classes, we will refund 100% of your tuition for that month—no questions asked."
+  },
+  {
+    q: "What software do I need for the live classes?",
+    a: "You only need a stable internet connection and a device with a screen (laptop, tablet, or smartphone). Our teachers conduct 1-on-1 sessions primarily via Zoom, Microsoft Teams, or Google Meet, depending on what is easiest for you."
+  },
+  {
+    q: "What happens if I miss a scheduled class?",
+    a: "Life happens! If you provide at least a few hours' notice, your teacher will happily reschedule your class to another day that week so you never lose the value of your tuition."
+  },
+  {
+    q: "Are the teachers actually certified?",
+    a: "Yes. Quranific is highly selective. Every teacher is a certified Hafiz or Qari, and many hold an <strong>Ijazah</strong> (an unbroken chain of transmission to the Prophet ﷺ). They also pass a rigorous 4-step pedagogical vetting process."
+  },
+  {
+    q: "Is there an age limit for students?",
+    a: "No! We teach students as young as 4 years old, all the way to seniors in their 70s. Our tutors adapt their teaching style, using engaging methods for kids and respectful, focused pacing for adults."
+  }
+];
+
+// --- 110% SEO: DYNAMIC GOOGLE FAQ SCHEMA ---
+// This automatically transforms your array into Google's required Rich Snippet format.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": FAQS.map(faq => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a.replace(/<[^>]*>?/gm, '') // Strips HTML tags just for the schema
+    }
+  }))
+};
+
+const Icons = {
+  support: `<svg class="w-8 h-8 text-emerald-950" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>`
+};
+---
+
+<Base title="Frequently Asked Questions | Quranific" description="Got questions about learning the Quran online? Find answers about our tutors, pricing, scheduling, and our 1-month money-back guarantee.">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+  
+  <Header />
+
+  <main class="min-h-screen bg-gradient-to-b from-cream-50 to-white selection:bg-emerald-200 selection:text-emerald-950 overflow-hidden pt-16 md:pt-32 pb-12 md:pb-24 lg:pt-40 lg:pb-32">
+    
+    <div class="absolute top-0 right-1/4 w-[800px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" aria-hidden="true"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+      
+      <div class="text-center mb-16 lg:mb-20 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-800 text-xs font-bold tracking-widest uppercase rounded-full mb-6 border border-emerald-100 shadow-sm">
+          Support Center
+        </span>
+        
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-emerald-950 mb-6 tracking-tighter leading-tight text-balance">
+          Got Questions?<br/>We've Got Answers.
+        </h1>
+        
+        <p class="text-lg text-emerald-800/80 font-medium max-w-xl mx-auto leading-relaxed text-balance">
+          Everything you need to know about starting your Quranic journey, our elite tutors, and how our platform works.
+        </p>
+      </div>
+
+      <Section height={800} class="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+        <FAQAccordion faqs={FAQS} />
+      </Section>
+
+      <Section height={300} class="max-w-3xl mx-auto mt-20 lg:mt-24 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
+        <div class="bg-gradient-to-br from-emerald-900 to-emerald-950 rounded-3xl p-8 lg:p-12 text-center shadow-xl border border-emerald-800 relative overflow-hidden flex flex-col items-center">
+          
+          <div class="w-16 h-16 bg-amber-400 rounded-full flex items-center justify-center mb-6 shadow-inner relative z-10" aria-hidden="true">
+            <span set:html={Icons.support}></span>
+          </div>
+          
+          <h2 class="text-2xl lg:text-3xl font-bold text-white mb-3 relative z-10">Still have a question?</h2>
+          <p class="text-emerald-100/80 mb-8 font-medium max-w-md relative z-10">
+            Our support team is available 24/7 to help you figure out the best learning path for your family.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 relative z-10 w-full sm:w-auto">
+            <Button href="/contact" variant="white" class="w-full sm:w-auto">
+              Contact Support
+            </Button>
+            <Button href="/funnel/signup" variant="ghost" class="w-full sm:w-auto text-white border-emerald-700 hover:bg-emerald-800">
+              Start Free Trial
+            </Button>
+          </div>
+          
+          <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" aria-hidden="true"></div>
+        </div>
+      </Section>
+
+    </div>
+  </main>
+
+  <Footer />
+</Base>

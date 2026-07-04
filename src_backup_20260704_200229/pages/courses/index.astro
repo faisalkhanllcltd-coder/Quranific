@@ -1,0 +1,980 @@
+---
+// src/pages/courses/index.astro
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Quranific Courses",
+  "description": "Explore our comprehensive online Quran courses for children and adults. From Foundation to Tajweed Mastery and Hifz.",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Quran Foundation", "url": "https://quranific.com/courses#foundation" },
+    { "@type": "ListItem", "position": 2, "name": "Tajweed Mastery", "url": "https://quranific.com/courses#tajweed" },
+    { "@type": "ListItem", "position": 3, "name": "Hifz Programme", "url": "https://quranific.com/courses#hifz" },
+    { "@type": "ListItem", "position": 4, "name": "Adult Tajweed Fix", "url": "https://quranific.com/courses#adult-tajweed" },
+    { "@type": "ListItem", "position": 5, "name": "Adult Hifz Journey", "url": "https://quranific.com/courses#adult-hifz" },
+    { "@type": "ListItem", "position": 6, "name": "Learning Differences Programme", "url": "https://quranific.com/courses#special-needs" }
+  ]
+};
+
+// Reusable SVGs
+const Check = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
+---
+
+<Base 
+  title="Courses — Quranific | Find the Perfect Quran Programme for Your Child" 
+  description="Not every child starts in the same place. Find the perfect 1-on-1 online Quran course for your child or yourself. Foundation, Tajweed, Hifz, and Special Needs."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+
+  <Header />
+
+  <main class="bg-[#fefdf9] selection:bg-[#d1fae5] selection:text-[#064e3b] font-sans">
+    
+    <section class="pt-16 md:pt-32 pb-10 md:pb-20 lg:pt-48 lg:pb-32 px-4 sm:px-6 bg-[#022c22] relative overflow-hidden content-visibility-auto">
+      <div class="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#f59e0b]/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center relative z-10">
+        
+        <div>
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 text-white/90 text-xs font-bold uppercase tracking-widest rounded-full mb-8 backdrop-blur-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b] animate-pulse"></span>
+            6 programmes · Ages 4 to adult
+          </div>
+          
+          <h1 class="text-5xl lg:text-[4rem] font-bold text-white leading-[1.05] tracking-tight mb-6">
+            Find the programme<br/>
+            that fits <em class="font-serif italic text-[#fbbf24] font-medium">your child exactly.</em>
+          </h1>
+          
+          <p class="text-lg text-emerald-100/70 font-medium leading-relaxed mb-10 max-w-xl">
+            Not every child starts in the same place. Not every family has the same goal. Every Quranific programme is built around one learner — yours — with a dedicated teacher and a path that moves at their pace.
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-center gap-4 mb-10">
+            <a href="#courses-grid" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 bg-[#f59e0b] text-white font-bold rounded-xl hover:bg-[#d97706] transition-[color,background-color,border-color,box-shadow,opacity,transform] shadow-lg shadow-amber-500/20">Browse All Courses ↓</a>
+            <a href="/funnel/signup" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 bg-transparent border-2 border-white/30 text-white hover:bg-white/10 font-bold rounded-xl transition-[color,background-color,border-color,box-shadow,opacity,transform]">Book Free Trial Class</a>
+          </div>
+
+          <div class="flex items-center gap-8 pt-6 border-t border-white/10">
+            <div>
+              <div class="font-serif text-3xl font-bold text-white mb-0.5">3,200<span class="text-xl text-[#fbbf24]">+</span></div>
+              <div class="text-[11px] font-bold text-emerald-100/50 uppercase tracking-widest">Families enrolled</div>
+            </div>
+            <div>
+              <div class="font-serif text-3xl font-bold text-white mb-0.5">48</div>
+              <div class="text-[11px] font-bold text-emerald-100/50 uppercase tracking-widest">Verified teachers</div>
+            </div>
+            <div>
+              <div class="font-serif text-3xl font-bold text-white mb-0.5">4.9<span class="text-xl text-[#fbbf24]">★</span></div>
+              <div class="text-[11px] font-bold text-emerald-100/50 uppercase tracking-widest">Average rating</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md shadow-2xl relative z-20">
+          <div class="text-[11px] font-bold uppercase tracking-widest text-emerald-100/50 mb-6">Not sure which course? Find it in 30 seconds.</div>
+          
+          <div class="space-y-6 mb-6">
+            <div>
+              <div class="text-sm font-bold text-white mb-3">Who is learning?</div>
+              <div class="flex flex-wrap gap-2" id="who-btns">
+                <button class="fb px-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm font-bold text-white/80 hover:bg-white/20 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Child (4–8)</button>
+                <button class="fb px-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm font-bold text-white/80 hover:bg-white/20 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Child (9–14)</button>
+                <button class="fb px-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm font-bold text-white/80 hover:bg-white/20 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Adult</button>
+                <button class="fb px-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm font-bold text-white/80 hover:bg-white/20 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Special needs</button>
+              </div>
+            </div>
+            
+            <div>
+              <div class="text-sm font-bold text-white mb-3">What is their current level?</div>
+              <div class="flex flex-wrap gap-2" id="level-btns">
+                <button class="fb px-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm font-bold text-white/80 hover:bg-white/20 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Complete beginner</button>
+                <button class="fb px-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm font-bold text-white/80 hover:bg-white/20 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Can read Arabic</button>
+                <button class="fb px-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm font-bold text-white/80 hover:bg-white/20 transition-[color,background-color,border-color,box-shadow,opacity,transform]">Ready for Hifz</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="finder-result" class="hidden bg-white/10 border border-white/20 rounded-2xl p-5 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div class="text-[10px] font-bold uppercase tracking-widest text-[#fbbf24] mb-2">Recommended for you</div>
+            <h3 class="text-lg font-bold text-white mb-1" id="fr-course">Foundation Programme</h3>
+            <p class="text-sm text-emerald-100/70 font-medium mb-4" id="fr-desc">Perfect for ages 4–8 starting from zero. Noorani Qaida, short Surahs, and gentle Tajweed foundations.</p>
+            <button class="w-full bg-[#f59e0b] text-white font-bold py-3 rounded-xl hover:bg-[#d97706] transition-colors" onclick="document.getElementById('courses-grid').scrollIntoView({behavior:'smooth'})">See this course →</button>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none">
+        <svg class="relative block w-full h-[60px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M0,0V73.8C28.7,35.4,196.5-35.4,396.5,22.6C596.5,80.6,712.5,138.6,900.5,100.6C1088.5,62.6,1200,0,1200,0Z" fill="#fefdf9"></path>
+        </svg>
+      </div>
+    </section>
+
+    <div class="bg-[#fefdf9] border-b border-emerald-100 relative z-20 content-visibility-auto">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-emerald-100">
+          <div class="p-6 text-center hover:bg-[#ecfdf5] transition-colors duration-300">
+            <div class="font-serif text-3xl font-bold text-[#047857] mb-1">6</div>
+            <div class="text-[12px] font-semibold text-[#065f46]/70 uppercase tracking-wide">Distinct programmes</div>
+          </div>
+          <div class="p-6 text-center hover:bg-[#ecfdf5] transition-colors duration-300">
+            <div class="font-serif text-3xl font-bold text-[#047857] mb-1">1-on-1</div>
+            <div class="text-[12px] font-semibold text-[#065f46]/70 uppercase tracking-wide">Every session, always</div>
+          </div>
+          <div class="p-6 text-center hover:bg-[#ecfdf5] transition-colors duration-300">
+            <div class="font-serif text-3xl font-bold text-[#047857] mb-1">30 min</div>
+            <div class="text-[12px] font-semibold text-[#065f46]/70 uppercase tracking-wide">Session length</div>
+          </div>
+          <div class="p-6 text-center hover:bg-[#ecfdf5] transition-colors duration-300">
+            <div class="font-serif text-3xl font-bold text-[#047857] mb-1">100%</div>
+            <div class="text-[12px] font-semibold text-[#065f46]/70 uppercase tracking-wide">Ijazah-certified teachers</div>
+          </div>
+          <div class="p-6 text-center hover:bg-[#ecfdf5] transition-colors duration-300">
+            <div class="font-serif text-3xl font-bold text-[#047857] mb-1">Free</div>
+            <div class="text-[12px] font-semibold text-[#065f46]/70 uppercase tracking-wide">First trial class</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="py-10 md:py-20 lg:py-28 bg-[#fefdf9] content-visibility-auto" id="courses-grid">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center mb-12">
+          <span class="text-xs font-black tracking-widest uppercase text-[#047857] block mb-3">All Programmes</span>
+          <h2 class="text-4xl lg:text-5xl font-bold text-[#022c22] mb-4 tracking-tight">Six paths. <em class="font-serif italic text-[#047857] font-medium">One destination.</em></h2>
+          <p class="text-lg text-[#064e3b]/80 font-medium max-w-2xl mx-auto">Every programme is 1-on-1, taught by a verified teacher, with weekly progress reports and a guaranteed make-up for every missed session.</p>
+        </div>
+
+        <div class="flex overflow-x-auto gap-2 p-1.5 bg-white border border-emerald-100 rounded-full max-w-fit mx-auto mb-12 no-scrollbar shadow-sm">
+          <button class="px-5 py-2.5 rounded-full text-sm font-bold transition-[color,background-color,border-color,box-shadow,opacity,transform] course-tab bg-[#047857] text-white shadow-md" data-filter="all">All Courses</button>
+          <button class="px-5 py-2.5 rounded-full text-sm font-bold text-[#064e3b]/60 hover:text-[#022c22] transition-[color,background-color,border-color,box-shadow,opacity,transform] course-tab whitespace-nowrap" data-filter="children">For Children</button>
+          <button class="px-5 py-2.5 rounded-full text-sm font-bold text-[#064e3b]/60 hover:text-[#022c22] transition-[color,background-color,border-color,box-shadow,opacity,transform] course-tab whitespace-nowrap" data-filter="adult">For Adults</button>
+          <button class="px-5 py-2.5 rounded-full text-sm font-bold text-[#064e3b]/60 hover:text-[#022c22] transition-[color,background-color,border-color,box-shadow,opacity,transform] course-tab whitespace-nowrap" data-filter="hifz">Hifz (Memorisation)</button>
+          <button class="px-5 py-2.5 rounded-full text-sm font-bold text-[#064e3b]/60 hover:text-[#022c22] transition-[color,background-color,border-color,box-shadow,opacity,transform] course-tab whitespace-nowrap" data-filter="special">Special Needs</button>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6 lg:gap-8" id="course-cards-container">
+
+          <div class="course-card bg-white border border-emerald-100 rounded-3xl overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 hover:border-[#a7f3d0] transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300" data-cat="children">
+            <div class="bg-gradient-to-br from-[#047857] to-[#10b981] p-8 text-white relative">
+              <div class="flex justify-between items-start mb-6 relative z-10">
+                <span class="bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Foundation</span>
+                <span class="bg-[#f59e0b] text-white text-[10px] font-bold px-3 py-1 rounded-full">Most enrolled</span>
+              </div>
+              <h3 class="font-serif text-3xl font-bold mb-1 relative z-10">Quran Foundation</h3>
+              <p class="text-[13px] text-emerald-50/80 font-medium relative z-10">From zero to fluent reading — the complete first step</p>
+              <div class="text-3xl text-emerald-900/10 font-bold absolute bottom-4 right-6" dir="rtl">بِسْمِ اللَّهِ</div>
+            </div>
+            <div class="p-8 flex-1 flex flex-col">
+              <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#ecfdf5] border border-[#d1fae5] text-[#047857] text-xs font-bold rounded-full mb-6">📍 Ages 4–8 · Complete beginners</div>
+              <div class="space-y-3 flex-1 mb-8">
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Arabic alphabet</strong> — all 29 letters</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Noorani Qaida</strong> — reading system</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Short Surahs</strong> — memorisation</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Basic Tajweed</strong> — pronunciation</div>
+              </div>
+              <div class="flex items-center justify-between py-4 border-y border-emerald-50 mb-6">
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>⏱</span> 30m</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>📅</span> 2-3x/wk</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>📆</span> 6-12 mo</div>
+              </div>
+              <div class="flex items-center justify-between">
+                <div><span class="text-[11px] text-[#064e3b]/50 font-bold block mb-0.5">From</span><span class="font-serif text-2xl font-bold text-[#022c22]">$39</span><span class="text-[11px] text-[#064e3b]/50">/mo</span></div>
+                <a href="/funnel/signup?course=Quran+Foundation" class="px-6 py-3 bg-[#047857] hover:bg-[#064e3b] text-white text-sm font-bold rounded-full transition-colors shadow-md">Enrol now →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="course-card bg-white border-2 border-[#f59e0b] shadow-xl rounded-3xl overflow-hidden flex flex-col hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 relative" data-cat="children">
+            <div class="absolute top-4 -right-8 bg-[#f59e0b] text-white text-[10px] font-bold py-1 px-10 rotate-45 z-20 shadow-sm tracking-wider uppercase">Popular</div>
+            <div class="bg-gradient-to-br from-[#4C1D95] to-[#7C3AED] p-8 text-white relative">
+              <div class="flex justify-between items-start mb-6 relative z-10">
+                <span class="bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Intermediate</span>
+              </div>
+              <h3 class="font-serif text-3xl font-bold mb-1 relative z-10">Tajweed Mastery</h3>
+              <p class="text-[13px] text-purple-100/80 font-medium relative z-10">Full rules, fluency, and the sound of a living tradition</p>
+              <div class="text-3xl text-purple-900/20 font-bold absolute bottom-4 right-6" dir="rtl">وَرَتِّلِ الْقُرْآنَ</div>
+            </div>
+            <div class="p-8 flex-1 flex flex-col">
+              <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#ecfdf5] border border-[#d1fae5] text-[#047857] text-xs font-bold rounded-full mb-6">📍 Ages 8–14 · Can read Arabic</div>
+              <div class="space-y-3 flex-1 mb-8">
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Full Tajweed rules</strong> — Makhaarij, Sifaat</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Juz Amma</strong> — full 30th Juz recitation</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Fluency building</strong> — longer passages</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Intro to Hifz</strong> — selected Surahs</div>
+              </div>
+              <div class="flex items-center justify-between py-4 border-y border-emerald-50 mb-6">
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>⏱</span> 30m</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>📅</span> 2-3x/wk</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>📆</span> 12-24 mo</div>
+              </div>
+              <div class="flex items-center justify-between">
+                <div><span class="text-[11px] text-[#064e3b]/50 font-bold block mb-0.5">From</span><span class="font-serif text-2xl font-bold text-[#022c22]">$39</span><span class="text-[11px] text-[#064e3b]/50">/mo</span></div>
+                <a href="/funnel/signup?course=Tajweed+Mastery" class="px-6 py-3 bg-[#f59e0b] hover:bg-[#d97706] text-white text-sm font-bold rounded-full transition-colors shadow-md">Enrol now →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="course-card bg-white border border-emerald-100 rounded-3xl overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 hover:border-[#a7f3d0] transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300" data-cat="hifz children">
+            <div class="bg-gradient-to-br from-[#92400E] to-[#f59e0b] p-8 text-white relative">
+              <div class="flex justify-between items-start mb-6 relative z-10">
+                <span class="bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Advanced</span>
+              </div>
+              <h3 class="font-serif text-3xl font-bold mb-1 relative z-10">Hifz Programme</h3>
+              <p class="text-[13px] text-amber-50/80 font-medium relative z-10">Full Quran memorisation with structured revision cycles</p>
+              <div class="text-3xl text-amber-900/20 font-bold absolute bottom-4 right-6" dir="rtl">إِنَّا نَحْنُ نَزَّلْنَا</div>
+            </div>
+            <div class="p-8 flex-1 flex flex-col">
+              <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#ecfdf5] border border-[#d1fae5] text-[#047857] text-xs font-bold rounded-full mb-6">📍 Any age · Strong Tajweed req.</div>
+              <div class="space-y-3 flex-1 mb-8">
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Full memorisation</strong> — systematic path</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Waqf & Ibtida</strong> — stopping/starting rules</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Spaced repetition</strong> — retention focus</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Ijazah specialist</strong> — matched specifically</div>
+              </div>
+              <div class="flex items-center justify-between py-4 border-y border-emerald-50 mb-6">
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>⏱</span> 45m</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>📅</span> 3-5x/wk</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>📆</span> Long-term</div>
+              </div>
+              <div class="flex items-center justify-between">
+                <div><span class="text-[11px] text-[#064e3b]/50 font-bold block mb-0.5">From</span><span class="font-serif text-2xl font-bold text-[#022c22]">$59</span><span class="text-[11px] text-[#064e3b]/50">/mo</span></div>
+                <a href="/funnel/signup?course=Hifz+Programme" class="px-6 py-3 bg-[#047857] hover:bg-[#064e3b] text-white text-sm font-bold rounded-full transition-colors shadow-md">Enrol now →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="course-card bg-white border border-emerald-100 rounded-3xl overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 hover:border-[#a7f3d0] transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300" data-cat="adult">
+            <div class="bg-gradient-to-br from-[#134E4A] to-[#0E7490] p-8 text-white relative">
+              <div class="flex justify-between items-start mb-6 relative z-10">
+                <span class="bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Adult · All levels</span>
+              </div>
+              <h3 class="font-serif text-3xl font-bold mb-1 relative z-10">Adult Tajweed Fix</h3>
+              <p class="text-[13px] text-cyan-50/80 font-medium relative z-10">Fix your recitation privately — no class, no embarrassment</p>
+              <div class="text-3xl text-cyan-900/30 font-bold absolute bottom-4 right-6" dir="rtl">أَقِيمُوا الصَّلَاةَ</div>
+            </div>
+            <div class="p-8 flex-1 flex flex-col">
+              <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#ecfdf5] border border-[#d1fae5] text-[#047857] text-xs font-bold rounded-full mb-6">📍 Adults 18+ · Any level</div>
+              <div class="space-y-3 flex-1 mb-8">
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Diagnostic assessment</strong> — find exact gaps</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Personalised correction</strong> — no generic exercises</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Salah focus</strong> — Surahs used in daily prayer</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">100% private</strong> — only teacher knows you</div>
+              </div>
+              <div class="flex items-center justify-between py-4 border-y border-emerald-50 mb-6">
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>⏱</span> 30-45m</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>📅</span> Flexible</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>🔒</span> Private</div>
+              </div>
+              <div class="flex items-center justify-between">
+                <div><span class="text-[11px] text-[#064e3b]/50 font-bold block mb-0.5">From</span><span class="font-serif text-2xl font-bold text-[#022c22]">$39</span><span class="text-[11px] text-[#064e3b]/50">/mo</span></div>
+                <a href="/funnel/signup?course=Adult+Tajweed+Fix" class="px-6 py-3 bg-[#047857] hover:bg-[#064e3b] text-white text-sm font-bold rounded-full transition-colors shadow-md">Enrol now →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="course-card bg-white border border-emerald-100 rounded-3xl overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 hover:border-[#a7f3d0] transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300" data-cat="adult hifz">
+            <div class="bg-gradient-to-br from-[#1E1B4B] to-[#3730A3] p-8 text-white relative">
+              <div class="flex justify-between items-start mb-6 relative z-10">
+                <span class="bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Adult · Advanced</span>
+              </div>
+              <h3 class="font-serif text-3xl font-bold mb-1 relative z-10">Adult Hifz Journey</h3>
+              <p class="text-[13px] text-indigo-100/80 font-medium relative z-10">Memorise the Quran — even with a full-time life</p>
+              <div class="text-3xl text-indigo-900/50 font-bold absolute bottom-4 right-6" dir="rtl">خَيْرُكُمْ مَنْ تَعَلَّمَ</div>
+            </div>
+            <div class="p-8 flex-1 flex flex-col">
+              <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#ecfdf5] border border-[#d1fae5] text-[#047857] text-xs font-bold rounded-full mb-6">📍 Adults · Flexible pace</div>
+              <div class="space-y-3 flex-1 mb-8">
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Realistic pace-setting</strong> — built around life</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Bite-size daily portions</strong> — sustainable</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Revision system</strong> — ensures retention</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Life-happens flexibility</strong> — make-up sessions</div>
+              </div>
+              <div class="flex items-center justify-between py-4 border-y border-emerald-50 mb-6">
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>⏱</span> 30m</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>📅</span> 2-3x/wk</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>📆</span> Long-term</div>
+              </div>
+              <div class="flex items-center justify-between">
+                <div><span class="text-[11px] text-[#064e3b]/50 font-bold block mb-0.5">From</span><span class="font-serif text-2xl font-bold text-[#022c22]">$49</span><span class="text-[11px] text-[#064e3b]/50">/mo</span></div>
+                <a href="/funnel/signup?course=Adult+Hifz" class="px-6 py-3 bg-[#047857] hover:bg-[#064e3b] text-white text-sm font-bold rounded-full transition-colors shadow-md">Enrol now →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="course-card bg-white border border-emerald-100 rounded-3xl overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 hover:border-[#a7f3d0] transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300" data-cat="special">
+            <div class="bg-gradient-to-br from-[#831843] to-[#DB2777] p-8 text-white relative">
+              <div class="flex justify-between items-start mb-6 relative z-10">
+                <span class="bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Specialist</span>
+                <span class="bg-white text-[#831843] text-[10px] font-bold px-3 py-1 rounded-full">💙 High impact</span>
+              </div>
+              <h3 class="font-serif text-3xl font-bold mb-1 relative z-10">Learning Differences</h3>
+              <p class="text-[13px] text-pink-100/80 font-medium relative z-10">Education that adapts to how your child actually learns</p>
+              <div class="text-3xl text-pink-900/30 font-bold absolute bottom-4 right-6" dir="rtl">رَبِّ يَسِّرْ</div>
+            </div>
+            <div class="p-8 flex-1 flex flex-col">
+              <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#ecfdf5] border border-[#d1fae5] text-[#047857] text-xs font-bold rounded-full mb-6">📍 Any age · SEN support</div>
+              <div class="space-y-3 flex-1 mb-8">
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">SEN-trained teacher</strong> — matched carefully</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">ADHD-adapted</strong> — shorter blocks, high focus</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Multi-sensory</strong> — visual/auditory cues</div>
+                <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><div class="w-5 h-5 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#047857] shrink-0 mt-0.5"><Fragment set:html={Check} /></div><strong class="text-[#022c22]">Anxiety-safe environment</strong> — no pressure</div>
+              </div>
+              <div class="flex items-center justify-between py-4 border-y border-emerald-50 mb-6">
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>⏱</span> 20-30m</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>📅</span> Flexible</div>
+                <div class="flex items-center gap-1.5 text-xs text-[#064e3b]/60 font-medium"><span>💙</span> No extra charge</div>
+              </div>
+              <div class="flex items-center justify-between">
+                <div><span class="text-[11px] text-[#064e3b]/50 font-bold block mb-0.5">From</span><span class="font-serif text-2xl font-bold text-[#022c22]">$39</span><span class="text-[11px] text-[#064e3b]/50">/mo</span></div>
+                <a href="/funnel/signup?course=Learning+Differences" class="px-6 py-3 bg-[#047857] hover:bg-[#064e3b] text-white text-sm font-bold rounded-full transition-colors shadow-md">Enrol now →</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 md:py-24 bg-white border-t border-emerald-50 content-visibility-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-[1.2fr_1fr] gap-16 lg:gap-24 items-start">
+          
+          <div>
+            <span class="text-xs font-black tracking-widest uppercase text-[#047857] block mb-3">Inside the Curriculum</span>
+            <h2 class="text-3xl lg:text-4xl font-bold text-[#022c22] mb-4 tracking-tight leading-tight">What Tajweed Mastery <br/><em class="font-serif italic text-[#047857] font-medium">actually covers — week by week.</em></h2>
+            <p class="text-[16px] text-[#065f46]/80 font-medium mb-10 leading-relaxed">This is our most enrolled programme. Here is exactly what your child will learn across the full course — with no surprises and no hidden sections.</p>
+
+            <div class="space-y-4">
+              <details class="group bg-[#fefdf9] border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+                <summary class="flex items-center justify-between cursor-pointer p-6">
+                  <div class="flex items-center gap-5">
+                    <div class="w-12 h-12 rounded-full bg-[#ecfdf5] border border-[#d1fae5] flex items-center justify-center text-xs font-bold text-[#047857] shrink-0 group-open:bg-[#047857] group-open:text-white group-open:border-[#047857] transition-colors">W1–4</div>
+                    <div>
+                      <h4 class="font-bold text-[#022c22] text-[15px]">Assessment & Foundations Review</h4>
+                      <p class="text-xs text-[#064e3b]/50 font-medium mt-0.5">Where does your child actually stand?</p>
+                    </div>
+                  </div>
+                  <span class="transition group-open:rotate-180 bg-[#ecfdf5] text-[#047857] p-2 rounded-full border border-[#a7f3d0]">
+                    <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"/></svg>
+                  </span>
+                </summary>
+                <div class="px-6 pb-6 pt-2 ml-[68px]">
+                  <div class="space-y-2.5">
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-[#047857] rounded-full shrink-0 mt-1.5"></span><strong class="text-[#022c22]">Diagnostic recitation assessment</strong> — teacher maps exact gaps</div>
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-[#047857] rounded-full shrink-0 mt-1.5"></span><strong class="text-[#022c22]">Arabic letter review</strong> — identifying confusion points</div>
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-[#047857] rounded-full shrink-0 mt-1.5"></span><strong class="text-[#022c22]">Introduction to Makhaarij</strong> (articulation points)</div>
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>First exposure to Noon Sakinah rules</div>
+                  </div>
+                </div>
+              </details>
+
+              <details class="group bg-[#fefdf9] border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+                <summary class="flex items-center justify-between cursor-pointer p-6">
+                  <div class="flex items-center gap-5">
+                    <div class="w-12 h-12 rounded-full bg-[#ecfdf5] border border-[#d1fae5] flex items-center justify-center text-xs font-bold text-[#047857] shrink-0 group-open:bg-[#047857] group-open:text-white group-open:border-[#047857] transition-colors">W5–12</div>
+                    <div>
+                      <h4 class="font-bold text-[#022c22] text-[15px]">Core Tajweed Rules Block</h4>
+                      <p class="text-xs text-[#064e3b]/50 font-medium mt-0.5">Idgham, Ikhfa, Iqlab, Ghunna — all mastered</p>
+                    </div>
+                  </div>
+                  <span class="transition group-open:rotate-180 bg-[#ecfdf5] text-[#047857] p-2 rounded-full border border-[#a7f3d0]">
+                    <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"/></svg>
+                  </span>
+                </summary>
+                <div class="px-6 pb-6 pt-2 ml-[68px]">
+                  <div class="space-y-2.5">
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>Noon Sakinah and Tanween — all 4 rules with practice</div>
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>Meem Sakinah — Idgham Shafawi, Ikhfa Shafawi, Izhaar</div>
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>Qalqalah — letters, degrees, application in recitation</div>
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>Mad (vowel extension) — types and measures</div>
+                  </div>
+                </div>
+              </details>
+
+              <details class="group bg-[#fefdf9] border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+                <summary class="flex items-center justify-between cursor-pointer p-6">
+                  <div class="flex items-center gap-5">
+                    <div class="w-12 h-12 rounded-full bg-[#ecfdf5] border border-[#d1fae5] flex items-center justify-center text-xs font-bold text-[#047857] shrink-0 group-open:bg-[#047857] group-open:text-white group-open:border-[#047857] transition-colors">W13–20</div>
+                    <div>
+                      <h4 class="font-bold text-[#022c22] text-[15px]">Juz Amma — Full Recitation</h4>
+                      <p class="text-xs text-[#064e3b]/50 font-medium mt-0.5">Every Surah recited correctly, start to finish</p>
+                    </div>
+                  </div>
+                  <span class="transition group-open:rotate-180 bg-[#ecfdf5] text-[#047857] p-2 rounded-full border border-[#a7f3d0]">
+                    <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"/></svg>
+                  </span>
+                </summary>
+                <div class="px-6 pb-6 pt-2 ml-[68px]">
+                  <div class="space-y-2.5">
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>Surahs An-Nas through Ad-Duha — with full Tajweed</div>
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>Surahs Al-Layl through An-Naba — rules applied</div>
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>Weekly recitation tests — teacher signs off each Surah</div>
+                  </div>
+                </div>
+              </details>
+              
+              <details class="group bg-[#fefdf9] border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+                <summary class="flex items-center justify-between cursor-pointer p-6">
+                  <div class="flex items-center gap-5">
+                    <div class="w-12 h-12 rounded-full bg-[#ecfdf5] border border-[#d1fae5] flex items-center justify-center text-xs font-bold text-[#047857] shrink-0 group-open:bg-[#047857] group-open:text-white group-open:border-[#047857] transition-colors">W21+</div>
+                    <div>
+                      <h4 class="font-bold text-[#022c22] text-[15px]">Fluency & Hifz Readiness</h4>
+                      <p class="text-xs text-[#064e3b]/50 font-medium mt-0.5">Reading continuously without hesitation</p>
+                    </div>
+                  </div>
+                  <span class="transition group-open:rotate-180 bg-[#ecfdf5] text-[#047857] p-2 rounded-full border border-[#a7f3d0]">
+                    <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"/></svg>
+                  </span>
+                </summary>
+                <div class="px-6 pb-6 pt-2 ml-[68px]">
+                  <div class="space-y-2.5">
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>Reading from the Mushaf without stopping</div>
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>Waqf and Ibtida — correct stopping and starting</div>
+                    <div class="flex items-start gap-3 text-[13px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-emerald-200 rounded-full shrink-0 mt-1.5"></span>Teacher assessment — is your child ready for Hifz?</div>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="lg:sticky lg:top-32">
+            <div class="bg-[#fefdf9] border border-emerald-100 rounded-[2rem] p-8 shadow-xl shadow-emerald-900/5 mb-6">
+              <div class="flex items-center justify-between mb-6">
+                <h4 class="font-bold text-[#022c22] text-[15px]">Typical student progress</h4>
+                <div class="inline-flex items-center px-3 py-1 bg-white border border-emerald-100 text-[#064e3b]/60 text-[10px] font-bold rounded-full">Month 3</div>
+              </div>
+
+              <div class="flex items-center gap-3 bg-white border border-emerald-50 rounded-xl p-3 mb-6 shadow-sm">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#9F67F5] flex items-center justify-center text-white font-bold text-sm">A</div>
+                <div>
+                  <div class="font-bold text-[#022c22] text-[13px]">Aisha · Age 11</div>
+                  <div class="text-[11px] font-medium text-[#064e3b]/60">Session 28 of ongoing programme</div>
+                </div>
+              </div>
+
+              <div class="space-y-4 mb-6">
+                <div>
+                  <div class="flex justify-between text-[11px] font-bold text-[#064e3b]/60 mb-1.5"><span>Tajweed rule accuracy</span><span class="text-[#047857]">88%</span></div>
+                  <div class="w-full h-1.5 bg-emerald-50 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-[#047857] to-[#10b981] rounded-full w-[88%] animate-[gw_1.5s_ease-out]"></div></div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-[11px] font-bold text-[#064e3b]/60 mb-1.5"><span>Juz Amma coverage</span><span class="text-[#f59e0b]">72%</span></div>
+                  <div class="w-full h-1.5 bg-emerald-50 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-[#f59e0b] to-[#fbbf24] rounded-full w-[72%] animate-[gw_1.5s_ease-out]"></div></div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-[11px] font-bold text-[#064e3b]/60 mb-1.5"><span>Fluency & flow</span><span class="text-[#7C3AED]">61%</span></div>
+                  <div class="w-full h-1.5 bg-emerald-50 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-[#7C3AED] to-[#9F67F5] rounded-full w-[61%] animate-[gw_1.5s_ease-out]"></div></div>
+                </div>
+              </div>
+
+              <div class="pt-5 border-t border-emerald-50 space-y-2">
+                <div class="flex items-center gap-2 text-[11px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-[#16A34A] rounded-full"></span><strong class="text-[#022c22]">Completed:</strong> Noon Sakinah all 4 rules ✓</div>
+                <div class="flex items-center gap-2 text-[11px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-[#f59e0b] rounded-full"></span><strong class="text-[#022c22]">In progress:</strong> Juz Amma Surahs 78–85</div>
+                <div class="flex items-center gap-2 text-[11px] font-medium text-[#065f46]/80"><span class="w-1.5 h-1.5 bg-[#7C3AED] rounded-full"></span><strong class="text-[#022c22]">Next:</strong> Mad rules introduction</div>
+              </div>
+            </div>
+
+            <div class="bg-[#047857] rounded-[2rem] p-6 text-center">
+              <h4 class="font-bold text-white text-lg mb-1">Tajweed Mastery</h4>
+              <p class="text-[12px] text-emerald-100/70 font-medium mb-4">First class completely free. No credit card.</p>
+              <div class="flex items-baseline justify-center gap-1 mb-4">
+                <span class="font-serif text-4xl font-bold text-white">$39</span>
+                <span class="text-[12px] text-emerald-100/50 font-medium">/mo</span>
+              </div>
+              <button class="w-full py-3.5 bg-[#f59e0b] hover:bg-[#d97706] text-white text-sm font-bold rounded-xl transition-colors shadow-md mb-3" onclick="window.location.href='/funnel/signup?course=Tajweed+Mastery'">Book Free Trial Class →</button>
+              <div class="text-[10px] text-emerald-100/50 font-medium">Full refund if unsatisfied in month 1 · Cancel anytime</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 md:py-24 bg-[#ecfdf5] content-visibility-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <span class="text-xs font-black tracking-widest uppercase text-[#047857] block mb-3">Programme Comparison</span>
+          <h2 class="text-3xl lg:text-4xl font-bold text-[#022c22] mb-4 tracking-tight">Not sure which one is right? <em class="font-serif italic text-[#047857] font-medium">Compare them all.</em></h2>
+          <p class="text-[15px] text-[#065f46]/80 font-medium max-w-2xl mx-auto">Every programme is 1-on-1. The differences are in age-fit, content focus, and session length.</p>
+        </div>
+
+        <div class="overflow-x-auto rounded-3xl border border-[#d1fae5] shadow-sm">
+          <table class="w-full bg-white text-left text-[13px] whitespace-nowrap">
+            <thead class="bg-[#fefdf9] border-b border-emerald-100 text-[#064e3b]/60 text-[11px] uppercase tracking-widest font-bold">
+              <tr>
+                <th class="p-6">Feature</th>
+                <th class="p-6">Foundation</th>
+                <th class="p-6 bg-[#047857] text-white">Tajweed Mastery ★</th>
+                <th class="p-6">Hifz</th>
+                <th class="p-6">Adult Tajweed</th>
+                <th class="p-6">Adult Hifz</th>
+                <th class="p-6">Special Needs</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-emerald-50 text-[#065f46] font-medium">
+              <tr class="hover:bg-[#fefdf9] transition-colors">
+                <td class="p-5 font-bold text-[#022c22]">Ideal age</td>
+                <td class="p-5">4–8</td>
+                <td class="p-5 bg-[#ecfdf5]/50 font-bold">8–14</td>
+                <td class="p-5">Any</td>
+                <td class="p-5">18+</td>
+                <td class="p-5">18+</td>
+                <td class="p-5">Any</td>
+              </tr>
+              <tr class="hover:bg-[#fefdf9] transition-colors">
+                <td class="p-5 font-bold text-[#022c22]">Session length</td>
+                <td class="p-5">30 min</td>
+                <td class="p-5 bg-[#ecfdf5]/50 font-bold">30 min</td>
+                <td class="p-5">45 min</td>
+                <td class="p-5">30–45 min</td>
+                <td class="p-5">30 min</td>
+                <td class="p-5">20–30 min</td>
+              </tr>
+              <tr class="hover:bg-[#fefdf9] transition-colors">
+                <td class="p-5 font-bold text-[#022c22]">Noorani Qaida</td>
+                <td class="p-5 text-[#047857] font-bold text-lg">✓</td>
+                <td class="p-5 bg-[#ecfdf5]/50 text-[#f59e0b] font-bold">Optional</td>
+                <td class="p-5 text-gray-300">—</td>
+                <td class="p-5 text-[#f59e0b] font-bold">If needed</td>
+                <td class="p-5 text-gray-300">—</td>
+                <td class="p-5 text-[#047857] font-bold text-lg">✓</td>
+              </tr>
+              <tr class="hover:bg-[#fefdf9] transition-colors">
+                <td class="p-5 font-bold text-[#022c22]">Full Tajweed rules</td>
+                <td class="p-5 text-gray-300">—</td>
+                <td class="p-5 bg-[#ecfdf5]/50 text-[#047857] font-bold text-lg">✓</td>
+                <td class="p-5 text-[#047857] font-bold text-lg">✓</td>
+                <td class="p-5 text-[#047857] font-bold text-lg">✓</td>
+                <td class="p-5 text-[#047857] font-bold text-lg">✓</td>
+                <td class="p-5 text-[#f59e0b] font-bold">Adapted</td>
+              </tr>
+              <tr class="hover:bg-[#fefdf9] transition-colors">
+                <td class="p-5 font-bold text-[#022c22]">Juz Amma covered</td>
+                <td class="p-5 text-[#f59e0b] font-bold">Partial</td>
+                <td class="p-5 bg-[#ecfdf5]/50 text-[#047857] font-bold">✓ Full</td>
+                <td class="p-5 text-[#047857] font-bold">✓ Full</td>
+                <td class="p-5 text-[#047857] font-bold text-lg">✓</td>
+                <td class="p-5 text-[#047857] font-bold text-lg">✓</td>
+                <td class="p-5 text-[#f59e0b] font-bold">Adapted</td>
+              </tr>
+              <tr class="hover:bg-[#fefdf9] transition-colors">
+                <td class="p-5 font-bold text-[#022c22]">Memorisation (Hifz)</td>
+                <td class="p-5 text-gray-300">—</td>
+                <td class="p-5 bg-[#ecfdf5]/50 text-[#f59e0b] font-bold">Short Surahs</td>
+                <td class="p-5 text-[#047857] font-bold">✓ Full</td>
+                <td class="p-5 text-gray-300">—</td>
+                <td class="p-5 text-[#047857] font-bold">✓ Full</td>
+                <td class="p-5 text-gray-300">—</td>
+              </tr>
+              <tr class="hover:bg-[#fefdf9] transition-colors">
+                <td class="p-5 font-bold text-[#022c22]">SEN-trained teacher</td>
+                <td class="p-5 text-gray-300">—</td>
+                <td class="p-5 bg-[#ecfdf5]/50 text-gray-300">—</td>
+                <td class="p-5 text-gray-300">—</td>
+                <td class="p-5 text-gray-300">—</td>
+                <td class="p-5 text-gray-300">—</td>
+                <td class="p-5 text-[#047857] font-bold">✓ Always</td>
+              </tr>
+              <tr class="hover:bg-[#fefdf9] transition-colors border-t border-emerald-100">
+                <td class="p-5 font-bold text-[#022c22]">Starting price</td>
+                <td class="p-5 font-bold">$39/mo</td>
+                <td class="p-5 bg-[#ecfdf5]/50 font-bold">$39/mo</td>
+                <td class="p-5 font-bold">$59/mo</td>
+                <td class="p-5 font-bold">$39/mo</td>
+                <td class="p-5 font-bold">$49/mo</td>
+                <td class="p-5 font-bold">$39/mo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 md:py-24 bg-white content-visibility-auto" id="teachers">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <span class="text-xs font-black tracking-widest uppercase text-[#047857] block mb-3">Your Teachers</span>
+          <h2 class="text-3xl lg:text-4xl font-bold text-[#022c22] mb-4 tracking-tight">Every teacher holds <br/><em class="font-serif italic text-[#047857] font-medium">a chain back to the Prophet ﷺ</em></h2>
+          <p class="text-[15px] text-[#065f46]/80 font-medium max-w-2xl mx-auto">We do not hire tutors. We select carriers of a living tradition — then ensure they can deliver it with patience and love.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+          
+          <div class="bg-[#fefdf9] border border-emerald-100 rounded-3xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
+            <div class="bg-gradient-to-br from-[#047857] to-[#10b981] p-6 flex items-end gap-4 text-white">
+              <div class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center font-serif text-2xl font-bold shrink-0">ف</div>
+              <div>
+                <div class="flex items-center gap-1.5 mb-1"><span class="text-[#fbbf24] text-[11px] tracking-widest">★★★★★</span><span class="text-[10px] font-bold">4.9</span><span class="text-[10px] text-emerald-50/60">(186)</span></div>
+                <h3 class="font-bold text-[15px] mb-0.5">Ustadha Fatima K.</h3>
+                <p class="text-[11px] text-emerald-50/80 font-medium">Hafiza · Ijazah in Hafs 'an 'Asim</p>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="px-2.5 py-1 bg-white border border-emerald-100 text-[#064e3b]/70 text-[10px] font-bold rounded-full">Ages 4–12</span>
+                <span class="px-2.5 py-1 bg-white border border-emerald-100 text-[#064e3b]/70 text-[10px] font-bold rounded-full">Foundation expert</span>
+              </div>
+              <div class="text-[10px] font-bold uppercase tracking-widest text-[#064e3b]/40 mb-3">Teaches</div>
+              <div class="space-y-2 mb-6">
+                <div class="flex items-center gap-2 text-[12px] font-medium text-[#065f46]/80"><span class="w-1 h-1 bg-[#047857] rounded-full"></span>Quran Foundation</div>
+                <div class="flex items-center gap-2 text-[12px] font-medium text-[#065f46]/80"><span class="w-1 h-1 bg-[#047857] rounded-full"></span>Tajweed Mastery (younger)</div>
+              </div>
+              <p class="font-serif italic text-[#064e3b]/70 text-[13px] leading-relaxed pt-4 border-t border-emerald-50">"Every child is a beginner exactly once. I want that first experience to feel completely safe."</p>
+            </div>
+          </div>
+
+          <div class="bg-[#fefdf9] border border-emerald-100 rounded-3xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
+            <div class="bg-gradient-to-br from-[#4C1D95] to-[#7C3AED] p-6 flex items-end gap-4 text-white">
+              <div class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center font-serif text-2xl font-bold shrink-0">م</div>
+              <div>
+                <div class="flex items-center gap-1.5 mb-1"><span class="text-[#fbbf24] text-[11px] tracking-widest">★★★★★</span><span class="text-[10px] font-bold">5.0</span><span class="text-[10px] text-purple-50/60">(241)</span></div>
+                <h3 class="font-bold text-[15px] mb-0.5">Ustadh Muhammad A.</h3>
+                <p class="text-[11px] text-purple-50/80 font-medium">Hafiz · Ijazah in Multiple Qira'at</p>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="px-2.5 py-1 bg-white border border-emerald-100 text-[#064e3b]/70 text-[10px] font-bold rounded-full">Ages 10+</span>
+                <span class="px-2.5 py-1 bg-white border border-emerald-100 text-[#064e3b]/70 text-[10px] font-bold rounded-full">Tajweed master</span>
+              </div>
+              <div class="text-[10px] font-bold uppercase tracking-widest text-[#064e3b]/40 mb-3">Teaches</div>
+              <div class="space-y-2 mb-6">
+                <div class="flex items-center gap-2 text-[12px] font-medium text-[#065f46]/80"><span class="w-1 h-1 bg-[#047857] rounded-full"></span>Tajweed Mastery (older)</div>
+                <div class="flex items-center gap-2 text-[12px] font-medium text-[#065f46]/80"><span class="w-1 h-1 bg-[#047857] rounded-full"></span>Hifz Programme</div>
+              </div>
+              <p class="font-serif italic text-[#064e3b]/70 text-[13px] leading-relaxed pt-4 border-t border-emerald-50">"Tajweed is not a set of rules — it is the sound of the Prophet's ﷺ recitation preserved."</p>
+            </div>
+          </div>
+
+          <div class="bg-[#fefdf9] border border-emerald-100 rounded-3xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-[color,background-color,border-color,box-shadow,opacity,transform]">
+            <div class="bg-gradient-to-br from-[#d97706] to-[#f59e0b] p-6 flex items-end gap-4 text-white">
+              <div class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center font-serif text-2xl font-bold shrink-0">ز</div>
+              <div>
+                <div class="flex items-center gap-1.5 mb-1"><span class="text-[#fbbf24] text-[11px] tracking-widest">★★★★★</span><span class="text-[10px] font-bold">4.9</span><span class="text-[10px] text-amber-50/60">(153)</span></div>
+                <h3 class="font-bold text-[15px] mb-0.5">Ustadha Zainab R.</h3>
+                <p class="text-[11px] text-amber-50/80 font-medium">Hafiza · Psychology background</p>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="px-2.5 py-1 bg-white border border-emerald-100 text-[#064e3b]/70 text-[10px] font-bold rounded-full">SEN specialist</span>
+                <span class="px-2.5 py-1 bg-white border border-emerald-100 text-[#064e3b]/70 text-[10px] font-bold rounded-full">ADHD-adapted</span>
+              </div>
+              <div class="text-[10px] font-bold uppercase tracking-widest text-[#064e3b]/40 mb-3">Teaches</div>
+              <div class="space-y-2 mb-6">
+                <div class="flex items-center gap-2 text-[12px] font-medium text-[#065f46]/80"><span class="w-1 h-1 bg-[#047857] rounded-full"></span>Learning Differences</div>
+                <div class="flex items-center gap-2 text-[12px] font-medium text-[#065f46]/80"><span class="w-1 h-1 bg-[#047857] rounded-full"></span>Adult Tajweed Fix</div>
+              </div>
+              <p class="font-serif italic text-[#064e3b]/70 text-[13px] leading-relaxed pt-4 border-t border-emerald-50">"No child is difficult. Every child just needs a teacher who understands how they actually learn best."</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bg-[#ecfdf5] border border-[#d1fae5] rounded-3xl p-8 lg:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+          <div>
+            <h3 class="font-bold text-[#022c22] text-[17px] mb-1.5">All 48 teachers are personally vetted through a 4-stage process</h3>
+            <p class="text-[13px] font-medium text-[#065f46]/70">Ijazah verification · Recitation assessment · Live teaching interview · Safeguarding check</p>
+          </div>
+          <a href="/about#teachers" class="px-6 py-3 bg-[#047857] text-white text-sm font-bold rounded-xl hover:bg-[#064e3b] transition-colors whitespace-nowrap shadow-md">Meet all teachers →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 md:py-24 lg:py-32 bg-[#022c22] relative overflow-hidden content-visibility-auto">
+      <div class="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px] pointer-events-none"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">Real families. <em class="font-serif italic text-[#fbbf24] font-medium">Real results.</em></h2>
+          <p class="text-lg text-emerald-100/70 font-medium max-w-2xl mx-auto">These are unedited reviews from parents whose children are enrolled across our six programmes.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-16">
+          
+          <div class="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col hover:bg-white/10 transition-colors">
+            <div class="text-[#fbbf24] tracking-widest text-lg mb-6">★★★★★</div>
+            <p class="font-serif text-[19px] italic text-white/95 leading-relaxed mb-8 flex-1">"My daughter cried before every Quran class at the mosque. After eight weeks on the Foundation programme she asks me to start her session early. I did not believe that was possible."</p>
+            <div class="flex items-center gap-4 pt-6 border-t border-white/10">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#9F67F5] text-white flex items-center justify-center font-bold text-lg shrink-0">SA</div>
+              <div>
+                <div class="font-bold text-white text-sm">Sarah A. · UK</div>
+                <div class="text-xs text-emerald-100/60 font-medium mb-1">Foundation · Daughter, age 8</div>
+                <div class="inline-flex px-2 py-0.5 bg-[#f59e0b]/20 border border-[#fde68a]/30 text-[#fde68a] text-[10px] font-bold rounded-full">Now recites Al-Fatiha independently</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-[#f59e0b]/10 border border-[#f59e0b]/30 rounded-3xl p-8 flex flex-col hover:bg-[#f59e0b]/20 transition-colors transform lg:-translate-y-4 shadow-xl">
+            <div class="text-[#fbbf24] tracking-widest text-lg mb-6">★★★★★</div>
+            <p class="font-serif text-[19px] italic text-white/95 leading-relaxed mb-8 flex-1">"My son completed the full Tajweed Mastery course in 14 months. I can hear the difference in his Salah every single day. The progress reports kept me involved without adding any burden."</p>
+            <div class="flex items-center gap-4 pt-6 border-t border-white/10">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#047857] to-[#10b981] text-white flex items-center justify-center font-bold text-lg shrink-0">KH</div>
+              <div>
+                <div class="font-bold text-white text-sm">Khalid H. · USA</div>
+                <div class="text-xs text-emerald-100/60 font-medium mb-1">Tajweed Mastery · Son, age 12</div>
+                <div class="inline-flex px-2 py-0.5 bg-[#f59e0b]/20 border border-[#fde68a]/30 text-[#fde68a] text-[10px] font-bold rounded-full">Full Juz Amma completed ✓</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col hover:bg-white/10 transition-colors">
+            <div class="text-[#fbbf24] tracking-widest text-lg mb-6">★★★★★</div>
+            <p class="font-serif text-[19px] italic text-white/95 leading-relaxed mb-8 flex-1">"I am 34 and embarrassed about my Tajweed my entire adult life. The Adult Tajweed Fix is the first class where I have never felt judged. That privacy made all the difference."</p>
+            <div class="flex items-center gap-4 pt-6 border-t border-white/10">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#0891B2] to-[#06B6D4] text-white flex items-center justify-center font-bold text-lg shrink-0">NM</div>
+              <div>
+                <div class="font-bold text-white text-sm">Nadia M. · UAE</div>
+                <div class="text-xs text-emerald-100/60 font-medium mb-1">Adult Tajweed Fix · Self-enrolled</div>
+                <div class="inline-flex px-2 py-0.5 bg-[#f59e0b]/20 border border-[#fde68a]/30 text-[#fde68a] text-[10px] font-bold rounded-full">Salah recitation confidence restored</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-3xl overflow-hidden">
+          <div class="bg-white/5 p-8 text-center backdrop-blur-sm">
+            <div class="font-serif text-4xl lg:text-5xl font-bold text-white mb-2">3,200<span class="text-2xl text-[#fbbf24]">+</span></div>
+            <div class="text-xs font-semibold text-emerald-100/60 uppercase tracking-widest">Families enrolled</div>
+          </div>
+          <div class="bg-white/5 p-8 text-center backdrop-blur-sm">
+            <div class="font-serif text-4xl lg:text-5xl font-bold text-white mb-2">94<span class="text-2xl text-[#fbbf24]">%</span></div>
+            <div class="text-xs font-semibold text-emerald-100/60 uppercase tracking-widest">Retention (mo 1)</div>
+          </div>
+          <div class="bg-white/5 p-8 text-center backdrop-blur-sm">
+            <div class="font-serif text-4xl lg:text-5xl font-bold text-white mb-2">4.9<span class="text-2xl text-[#fbbf24]">★</span></div>
+            <div class="text-xs font-semibold text-emerald-100/60 uppercase tracking-widest">Average rating</div>
+          </div>
+          <div class="bg-white/5 p-8 text-center backdrop-blur-sm">
+            <div class="font-serif text-4xl lg:text-5xl font-bold text-white mb-2">22</div>
+            <div class="text-xs font-semibold text-emerald-100/60 uppercase tracking-widest">Countries served</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="py-12 md:py-24 bg-[#fefdf9] content-visibility-auto" id="faq">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-20 items-start">
+          
+          <div class="lg:sticky lg:top-32">
+            <span class="text-xs font-black tracking-widest uppercase text-[#047857] block mb-3">Course Questions</span>
+            <h2 class="text-4xl font-bold text-[#022c22] mb-6 tracking-tight leading-tight">
+              Everything you need <br/><em class="font-serif italic text-[#047857] font-medium">to decide with confidence.</em>
+            </h2>
+            <p class="text-lg text-[#064e3b]/80 font-medium mb-10">
+              These are the real questions parents ask us before enrolling. We have answered them honestly.
+            </p>
+
+            <div class="bg-white border border-emerald-100 rounded-3xl p-8 shadow-sm">
+              <div class="text-4xl mb-4">🛡️</div>
+              <h3 class="font-bold text-xl text-[#022c22] mb-3">Our Full-Month Guarantee</h3>
+              <p class="text-[15px] text-[#065f46] font-medium leading-relaxed">
+                If after your first full paid month across any programme you are not completely satisfied, we refund every penny. No questions, no forms, no chasing. One email is all it takes.
+              </p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex items-center justify-between cursor-pointer p-6 font-semibold text-[#022c22] text-[17px]">
+                How do I know which programme is right for my child?
+                <span class="transition group-open:rotate-180 bg-[#ecfdf5] text-[#047857] p-2 rounded-full border border-[#a7f3d0]">
+                  <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+              </summary>
+              <div class="text-[#065f46] text-[15px] font-medium leading-relaxed px-6 pb-6">
+                Use the course finder tool at the top of this page. If you are still unsure, <strong class="text-[#022c22]">the free trial class solves this entirely</strong>: the teacher conducts a diagnostic assessment in the first session and tells you exactly where your child stands and which programme fits best. You are not committed to anything until after that first session.
+              </div>
+            </details>
+            
+            <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex items-center justify-between cursor-pointer p-6 font-semibold text-[#022c22] text-[17px]">
+                Can my child switch courses if the level is wrong?
+                <span class="transition group-open:rotate-180 bg-[#ecfdf5] text-[#047857] p-2 rounded-full border border-[#a7f3d0]">
+                  <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+              </summary>
+              <div class="text-[#065f46] text-[15px] font-medium leading-relaxed px-6 pb-6">
+                Yes — always. If after the first few sessions it becomes clear your child should be in a different programme, <strong class="text-[#022c22]">we switch them at no extra cost</strong> and with no interruption to their schedule. The teacher will recommend this to you themselves if they see a better fit. We have no financial incentive to keep your child in the wrong course.
+              </div>
+            </details>
+
+            <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex items-center justify-between cursor-pointer p-6 font-semibold text-[#022c22] text-[17px]">
+                My child has ADHD. Which course works for them?
+                <span class="transition group-open:rotate-180 bg-[#ecfdf5] text-[#047857] p-2 rounded-full border border-[#a7f3d0]">
+                  <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+              </summary>
+              <div class="text-[#065f46] text-[15px] font-medium leading-relaxed px-6 pb-6">
+                The <strong class="text-[#022c22]">Learning Differences Programme</strong> is specifically designed for children with ADHD, dyslexia, autism spectrum, and anxiety. Sessions are shorter (20–25 minutes), structured differently, and taught by a teacher with specific SEN training. Simply note your child's needs in the signup form and we match them appropriately — <strong class="text-[#022c22]">at no extra charge</strong>.
+              </div>
+            </details>
+
+            <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex items-center justify-between cursor-pointer p-6 font-semibold text-[#022c22] text-[17px]">
+                How long until I see real progress?
+                <span class="transition group-open:rotate-180 bg-[#ecfdf5] text-[#047857] p-2 rounded-full border border-[#a7f3d0]">
+                  <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+              </summary>
+              <div class="text-[#065f46] text-[15px] font-medium leading-relaxed px-6 pb-6">
+                Most parents notice a shift in their child's confidence and attitude toward the Quran <strong class="text-[#022c22]">within two to three weeks</strong>. Measurable progress in recitation — being able to read verses that they could not before — typically appears within the first month. We track this transparently in every weekly progress report.
+              </div>
+            </details>
+
+            <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex items-center justify-between cursor-pointer p-6 font-semibold text-[#022c22] text-[17px]">
+                Is the adult programme really private?
+                <span class="transition group-open:rotate-180 bg-[#ecfdf5] text-[#047857] p-2 rounded-full border border-[#a7f3d0]">
+                  <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+              </summary>
+              <div class="text-[#065f46] text-[15px] font-medium leading-relaxed px-6 pb-6">
+                Yes. In the Adult Tajweed Fix and Adult Hifz programmes, your teacher only knows your first name. <strong class="text-[#022c22]">Sessions are strictly 1-on-1</strong>, never recorded without your explicit consent, and never referenced in any group setting. Your progress reports go only to you.
+              </div>
+            </details>
+
+            <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex items-center justify-between cursor-pointer p-6 font-semibold text-[#022c22] text-[17px]">
+                What if my child is not ready for Hifz yet?
+                <span class="transition group-open:rotate-180 bg-[#ecfdf5] text-[#047857] p-2 rounded-full border border-[#a7f3d0]">
+                  <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+              </summary>
+              <div class="text-[#065f46] text-[15px] font-medium leading-relaxed px-6 pb-6">
+                The Hifz Programme requires a solid Tajweed foundation — if your child starts Hifz without it, they will memorise incorrectly and it is very difficult to fix later. <strong class="text-[#022c22]">We will tell you honestly</strong> if your child is not yet ready, and recommend they complete Tajweed Mastery first. Your teacher will tell you precisely when the transition is right.
+              </div>
+            </details>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 md:py-24 lg:py-32 bg-white text-center relative overflow-hidden content-visibility-auto">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#ecfdf5] rounded-full blur-[150px] opacity-50 pointer-events-none"></div>
+      
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-[#ecfdf5] border border-[#d1fae5] text-[#047857] text-xs font-bold uppercase tracking-widest rounded-full mb-8 shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b] animate-pulse"></span>
+          No credit card · No commitment
+        </div>
+        
+        <h2 class="text-5xl lg:text-6xl font-bold text-[#022c22] mb-6 tracking-tight leading-tight">
+          Your child's first class<br/>
+          <em class="font-serif italic text-[#047857] font-medium">is completely free.</em>
+        </h2>
+        
+        <p class="text-lg lg:text-xl text-[#064e3b]/80 font-medium mb-10 leading-relaxed max-w-2xl mx-auto">
+          Pick any programme. Book a free trial session. Meet the teacher. See the progress report. Then decide — with no pressure and no obligation.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+          <a href="/funnel/signup" class="w-full sm:w-auto inline-flex justify-center items-center px-10 py-5 bg-[#047857] text-white hover:bg-[#064e3b] font-bold rounded-xl transition-[color,background-color,border-color,box-shadow,opacity,transform] shadow-xl shadow-emerald-900/10 text-lg">
+            Book Free Trial Class →
+          </a>
+          <a href="https://wa.me/923112112122" target="_blank" rel="noopener" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-10 py-5 bg-transparent border-2 border-emerald-100 text-[#047857] hover:bg-[#ecfdf5] font-bold rounded-xl transition-[color,background-color,border-color,box-shadow,opacity,transform] text-lg">
+            Have a question?
+          </a>
+        </div>
+        <p class="text-sm font-semibold text-[#064e3b]/50">First class free · Full refund in month 1 · Cancel anytime</p>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Attach event listeners
+      document.querySelectorAll('#who-btns button').forEach(btn => {
+        const val = btn.textContent.toLowerCase().includes('young') || btn.textContent.includes('4–8') ? 'child-young' : (btn.textContent.includes('9–14') ? 'child-older' : (btn.textContent.includes('Adult') ? 'adult' : 'special'));
+        btn.addEventListener('click', function() { selectFinder('who', this, val); });
+      });
+      document.querySelectorAll('#level-btns button').forEach(btn => {
+        const val = btn.textContent.includes('beginner') ? 'zero' : (btn.textContent.includes('read') ? 'reads' : 'hifz');
+        btn.addEventListener('click', function() { selectFinder('level', this, val); });
+      });
+      document.querySelectorAll('.course-tab').forEach(btn => btn.addEventListener('click', function() { filterCourses(this.getAttribute('data-filter'), this); }));
+
+    // --- 1. COURSE FINDER LOGIC ---
+    const finderState = { who: null, level: null };
+    const courseMap = {
+      'child-young-zero': 'Quran Foundation — perfect for ages 4–8 starting from zero.',
+      'child-young-reads': 'Tajweed Mastery — build on reading skills with full Tajweed rules.',
+      'child-young-hifz': 'Hifz Programme — structured memorisation for children ready to begin.',
+      'child-older-zero': 'Quran Foundation — no age is too late to start from the beginning.',
+      'child-older-reads': 'Tajweed Mastery — our most enrolled programme, perfect for ages 9–14.',
+      'child-older-hifz': 'Hifz Programme — systematic full Quran memorisation with revision cycles.',
+      'adult-zero': 'Adult Tajweed Fix — 100% private, diagnostic-first, built around your actual gaps.',
+      'adult-reads': 'Adult Tajweed Fix — correct your recitation in private, at your pace.',
+      'adult-hifz': 'Adult Hifz Journey — memorise the Quran around a real adult schedule.',
+      'special-zero': 'Learning Differences Programme — SEN-trained teacher, adapted from day one.',
+      'special-reads': 'Learning Differences Programme — adapted Tajweed teaching for your child.',
+      'special-hifz': "Learning Differences Programme — structured Hifz adapted for your child's needs."
+    };
+
+    function selectFinder(type, el, val) {
+      // Update active button state
+      const containerId = type === 'who' ? 'who-btns' : 'level-btns';
+      const container = document.getElementById(containerId);
+      
+      container.querySelectorAll('button').forEach(b => {
+        b.classList.remove('bg-white', 'text-[#022c22]', 'border-white');
+        b.classList.add('bg-white/10', 'text-white/80', 'border-white/20');
+      });
+      
+      el.classList.remove('bg-white/10', 'text-white/80', 'border-white/20');
+      el.classList.add('bg-white', 'text-[#022c22]', 'border-white');
+      
+      finderState[type] = val;
+      
+      // If both selected, show result
+      if (finderState.who && finderState.level) {
+        const key = finderState.who + '-' + finderState.level;
+        const rec = courseMap[key] || 'Quran Foundation — the best starting point when unsure.';
+        const parts = rec.split(' — ');
+        
+        document.getElementById('fr-course').textContent = parts[0];
+        document.getElementById('fr-desc').textContent = parts[1] || '';
+        document.getElementById('finder-result').classList.remove('hidden');
+      }
+    };
+
+    // --- 2. COURSE TAB FILTERING ---
+    function filterCourses(category, btn) {
+      // Update Tab Styles
+      document.querySelectorAll('.course-tab').forEach(t => {
+        t.classList.remove('bg-[#047857]', 'text-white', 'shadow-md');
+        t.classList.add('text-[#064e3b]/60');
+      });
+      btn.classList.remove('text-[#064e3b]/60');
+      btn.classList.add('bg-[#047857]', 'text-white', 'shadow-md');
+
+      // Filter Cards
+      const cards = document.querySelectorAll('.course-card');
+      cards.forEach(card => {
+        const cats = card.getAttribute('data-cat') || '';
+        if (category === 'all' || cats.includes(category)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    };
+      });
+  </script>
+</Base>

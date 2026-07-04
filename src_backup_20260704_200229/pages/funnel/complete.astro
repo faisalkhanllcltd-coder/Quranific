@@ -1,0 +1,31 @@
+---
+// src/pages/funnel/complete.astro
+import Funnel from '../../layouts/Funnel.astro';
+import CompleteForm from '../../components/funnel/CompleteForm.svelte';
+import StepIndicator from '../../components/funnel/StepIndicator.svelte';
+---
+<Funnel title="Complete Profile - Step 2 | Quranific">
+  <div class="w-full flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+
+    <!-- D-1 FIX: StepIndicator has no interactive behaviour on mount — changed
+         from client:load to client:idle to reduce the initial JS hydration budget.
+         CompleteForm stays client:load because session validation runs on mount. -->
+    <div class="w-full mb-4">
+      <StepIndicator currentStep={2} client:idle />
+    </div>
+
+    <div class="text-center mb-6">
+      <h1 class="text-2xl lg:text-3xl font-black text-emerald-950 tracking-tight mb-1">
+        Customize Your Plan
+      </h1>
+      <p class="text-sm lg:text-base text-emerald-700/80 font-medium">
+        Step 2: Tell us how you want to learn
+      </p>
+    </div>
+
+    <div class="w-full">
+      <CompleteForm client:load />
+    </div>
+
+  </div>
+</Funnel>

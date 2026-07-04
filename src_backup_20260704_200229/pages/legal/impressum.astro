@@ -1,0 +1,146 @@
+---
+// src/pages/legal/impressum.astro
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+import { SITE } from '../../constants/site'; // FIX: Wired to canonical data
+
+const lastUpdated = "March 25, 2026";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Legal Notice (Impressum) - Quranific",
+  "description": "Corporate information, legal jurisdiction, and contact details for Quranific LTD in compliance with UK and EU digital services laws.",
+  "dateModified": "2026-03-25"
+};
+---
+
+<Base title="Legal Notice (Impressum) | Quranific" description="Official corporate information, registration details, and liability disclaimers for Quranific LTD.">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+  
+  <Header />
+
+  <main class="bg-[#fefdf9] min-h-screen selection:bg-[#d1fae5] selection:text-[#064e3b] font-sans pb-32">
+    
+    <div class="pt-16 md:pt-32 pb-12 lg:pt-40 lg:pb-16 px-4 sm:px-6 border-b border-emerald-100 bg-white">
+      <div class="max-w-5xl mx-auto">
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-[#d1fae5] text-[#047857] text-xs font-bold uppercase tracking-widest rounded-full mb-6">
+          Corporate Information
+        </span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-[#022c22] tracking-tight mb-6">
+          Legal Notice (Impressum)
+        </h1>
+        <p class="text-lg text-emerald-700/80 font-medium max-w-3xl">
+          Information provided in accordance with global Digital Services Laws and corporate transparency standards. <br/>
+          <span class="text-sm mt-2 block opacity-70">Last Updated: {lastUpdated}</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-16 space-y-20">
+      
+      <section>
+        <h2 class="text-3xl md:text-4xl font-black text-[#022c22] mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight">
+          Company Information
+        </h2>
+        <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">Registered Entity</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">{SITE.name} LTD</p>
+          </li>
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">Registered Address</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">
+              {SITE.address || "London, United Kingdom"}
+            </p>
+          </li>
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">Representation</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">Represented by: The Board of Directors, {SITE.name} LTD</p>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-3xl md:text-4xl font-black text-[#022c22] mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight">
+          Commercial Registration
+        </h2>
+        <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">Registry Details</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">Registered in: Companies House, United Kingdom</p>
+          </li>
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">Registration Number</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">Pending Corporate Registration</p>
+          </li>
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">VAT / Tax ID</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">Pending Registration</p>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-3xl md:text-4xl font-black text-[#022c22] mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight">
+          Dispute Resolution
+        </h2>
+        <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">Online Dispute Resolution (ODR)</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">The European Commission provides a platform for Online Dispute Resolution, which can be found at <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" class="text-[#047857] hover:text-[#022c22] underline">https://ec.europa.eu/consumers/odr</a>. Our official contact email is provided below.</p>
+          </li>
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">Consumer Arbitration</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">We are committed to resolving disagreements directly and fairly with our students. We are not obligated to, nor do we participate in, dispute settlement proceedings before a consumer arbitration board.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-3xl md:text-4xl font-black text-[#022c22] mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight">
+          Liability & Intellectual Property
+        </h2>
+        <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">Liability for Content</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">As a service provider, we are responsible for our own content on these pages in accordance with general laws. We are not obligated to monitor transmitted or stored third-party information or investigate circumstances indicating illegal activity.</p>
+          </li>
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">Liability for Links</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">Our website may contain links to external third-party websites. We have no influence on the content of these external sites and cannot assume liability for them. The respective provider or operator of the linked pages is always responsible for their content.</p>
+          </li>
+          <li class="pl-4">
+            <strong class="block text-xl text-[#047857] mb-2">Copyright</strong>
+            <p class="text-[#064e3b]/80 font-medium leading-relaxed">The content, course materials, branding, and works created by Quranific on this platform are subject to copyright law. Duplication, processing, distribution, and any kind of exploitation outside the limits of copyright require our explicit written consent.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="mt-16 pt-16 border-t border-emerald-100">
+        <h2 class="text-3xl font-black text-[#022c22] mb-6 tracking-tight">Official Contact</h2>
+        
+        <div class="bg-emerald-50 border border-emerald-100 p-8 rounded-2xl">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-4">
+              <span class="w-10 h-10 rounded-full bg-[#047857] text-white flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              </span>
+              <a href={`mailto:${SITE.email}`} class="font-bold text-xl text-[#022c22] hover:text-[#047857] transition-colors">{SITE.email}</a>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="w-10 h-10 rounded-full bg-[#047857] text-white flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></svg>
+              </span>
+              <a href={`https://wa.me/${SITE.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener" class="font-bold text-xl text-[#022c22] hover:text-[#047857] transition-colors">{SITE.phone || SITE.whatsappNumber}</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer />
+</Base>

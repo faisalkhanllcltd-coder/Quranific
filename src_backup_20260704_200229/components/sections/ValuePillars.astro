@@ -1,0 +1,22 @@
+---
+// src/components/sections/ValuePillars.astro
+// Pure HTML/Tailwind. Zero Hydration Cost.
+---
+
+<div class="grid md:grid-cols-3 gap-6 sm:gap-8">
+  {[
+    /* CRITICAL FIX: Swapped to double quotes to prevent apostrophe parsing errors */
+    { icon: "🧠", title: "Pedagogical Empathy", desc: "Every lesson is designed around how children actually learn — not how they used to be taught. Short sessions, high engagement, zero punishment." },
+    { icon: "🛡️", title: "Zero Financial Risk", desc: "Your first class is completely free. If you join and you're not satisfied in your first month, we refund every penny — no forms, no friction, no questions." },
+    { icon: "🔒", title: "Safe & Transparent", desc: "Every teacher holds an ijazah and is background-checked. Sessions are private and secure. You can sit in on any class, any time — without notice." }
+  ].map((pillar) => (
+    /* EDGE UI FIX: Added scale-[1.02] hover state and group rotation for the icon */
+    <div class="group bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-[1.02] hover:border-emerald-200 hover:shadow-2xl hover:shadow-emerald-900/10 flex flex-col">
+      <div class="w-14 h-14 bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm border border-emerald-100/50 group-hover:rotate-3 group-hover:scale-110 transition-transform duration-500 ease-out">
+        <span class="drop-shadow-sm">{pillar.icon}</span>
+      </div>
+      <h3 class="font-bold text-xl text-emerald-950 mb-3 group-hover:text-emerald-700 transition-colors">{pillar.title}</h3>
+      <p class="text-sm text-emerald-900/70 leading-relaxed font-medium flex-1">{pillar.desc}</p>
+    </div>
+  ))}
+</div>

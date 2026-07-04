@@ -52,7 +52,14 @@ export async function sendWelcomeEmail(email: string, name: string) {
   }
 }
 
-export async function sendAdminNotification(step1Data: any, step2Data: any) {
+// Typed wrappers for the step-data objects passed from API routes
+interface Step1Data { n: string; e: string; w: string; c: string; s?: string; }
+interface Step2Data {
+  course: string; level: string; schedule: string;
+  days: string; gender: string; teacherGender: string;
+}
+
+export async function sendAdminNotification(step1Data: Step1Data, step2Data: Step2Data) {
   const resend = getResend();
   if (!resend) return { success: true, mock: true };
 

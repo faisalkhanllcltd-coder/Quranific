@@ -43,7 +43,7 @@ const SECURITY_HEADERS: Record<string, string> = {
 
 export const onRequest = defineMiddleware(async (context, next) => {
   // Astro v6 Native: Cloudflare's 'cf' object is attached directly to the Request
-  const cf = (context.request as any).cf;
+  const cf = (context.request as Request & { cf?: Record<string, unknown> }).cf;
 
   context.locals.isSlowConnection = cf?.httpProtocol === 'HTTP/1.1' || cf?.asOrganization === 'Cellular';
   context.locals.userCountry = (cf?.country as string) || 'Unknown';

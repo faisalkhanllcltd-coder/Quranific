@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Loader2, AlertCircle, ChevronDown } from 'lucide-svelte';
+  import { Loader2, AlertCircle } from 'lucide-svelte';
   import { onMount } from 'svelte';
   // ARCHITECTURE FIX: Routing to the unified data engine
   import { COURSE_LIST } from '../../constants/courses';
@@ -7,15 +7,24 @@
   let loading = $state(false);
   let errorMsg = $state('');
 
+  // Segmented-control reactive state (replaces <select> bindings)
+  let selectedCourse    = $state('');
+  let selectedGender    = $state('');
+  let selectedTeacher   = $state('Male Teacher');
+  let selectedLevel     = $state('');
+  let selectedDays      = $state('');
+  let selectedSchedule  = $state('');
+
+  // Hidden inputs are synced via $derived — no native <select> needed
+  const genderOptions   = ['Male', 'Female'];
+  const teacherOptions  = ['Male Teacher', 'Female Teacher', 'No Preference'];
+  const levelOptions    = ['Beginner', 'Intermediate', 'Advanced'];
+  const daysOptions     = ['2 Days', '3 Days', '4 Days', '5 Days'];
+  const scheduleOptions = ['Morning', 'Afternoon', 'Evening', 'Night'];
+
   onMount(() => {
     // B-4 FIX: Session is now an HttpOnly cookie — it cannot be read from JS.
-    // We verify its existence implicitly: if the server rejects the request with
-    // 401 "Session not found", the error is shown to the user and they are
-    // redirected. We do NOT attempt to read the cookie from document.cookie.
-    //
-    // Instead, we do a lightweight pre-flight: attempt a HEAD request to
-    // /api/complete. A 401 means the cookie is absent/expired — redirect to step 1.
-    // This preserves the redirect-on-no-session behaviour from the old approach.
+    // We do a lightweight pre-flight HEAD to detect a 401 and redirect.
     if (typeof window !== 'undefined') {
       fetch('/api/complete', { method: 'HEAD' })
         .then(res => {
@@ -24,8 +33,7 @@
           }
         })
         .catch(() => {
-          // Network error — allow the user to attempt the submit anyway;
-          // the POST handler will catch the 401 gracefully.
+          // Network error — allow the user to attempt the submit anyway.
         });
     }
   });
@@ -38,16 +46,19 @@
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
 
-    // B-4 FIX: sessionToken is removed from completeSchema and not submitted.
-    // The 'q_session' HttpOnly cookie is sent automatically by the browser with
-    // this same-origin fetch — no client-side token handling needed at all.
+    // Inject the segmented-control values into the FormData
+    formData.set('course',        selectedCourse);
+    formData.set('gender',        selectedGender);
+    formData.set('teacherGender', selectedTeacher);
+    formData.set('level',         selectedLevel);
+    formData.set('days',          selectedDays);
+    formData.set('schedule',      selectedSchedule);
 
     try {
       const response = await fetch('/api/complete', { method: 'POST', body: formData });
       const result = await response.json();
 
       if (!response.ok) {
-        // Handle 401 (expired/missing session) with a clear redirect
         if (response.status === 401) {
           window.location.assign('/funnel/signup');
           return;
@@ -55,7 +66,6 @@
         throw new Error(result.error || 'Failed to complete registration');
       }
 
-      // On success the server clears the q_session cookie via Set-Cookie: Max-Age=0
       window.location.assign('/funnel/success');
 
     } catch (err: unknown) {
@@ -64,6 +74,17 @@
         : 'A network error occurred. Please try again.';
       loading = false;
     }
+  }
+
+  // Pill classes — shared style tokens
+  const pill = {
+    base: 'px-3 py-1.5 text-sm rounded-lg border font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600',
+    off:  'bg-transparent border-gray-200 text-gray-600 hover:bg-gray-50',
+    on:   'bg-emerald-50 border-emerald-600 text-emerald-800 ring-1 ring-emerald-600',
+  };
+
+  function pillClass(selected: string, value: string): string {
+    return `${pill.base} ${selected === value ? pill.on : pill.off}`;
   }
 </script>
 
@@ -75,110 +96,123 @@
     </div>
   {/if}
 
+  <!-- Course select -->
   <div class="space-y-2">
-    <label for="course" class="block text-sm font-semibold text-emerald-950">Select Course *</label>
-    <div class="relative">
-      <select
-        id="course" name="course"
-        required disabled={loading}
-        class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 cursor-pointer text-base appearance-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 pr-12"
-      >
-        <option value="" disabled selected>Choose a course...</option>
-        {#each COURSE_LIST as course}
-          <option value={course.title}>{course.title}</option>
+    <label class="block text-sm font-semibold text-emerald-950">Select Course *</label>
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Select course">
+      {#each COURSE_LIST as course (course.title)}
+        <button
+          type="button"
+          disabled={loading}
+          class={pillClass(selectedCourse, course.title)}
+          aria-pressed={selectedCourse === course.title}
+          onclick={() => selectedCourse = course.title}
+        >
+          {course.title}
+        </button>
+      {/each}
+    </div>
+    <input type="hidden" name="course" value={selectedCourse} />
+  </div>
+
+  <!-- Student Gender & Teacher Preference -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="space-y-2">
+      <label class="block text-sm font-semibold text-emerald-950">Student Gender *</label>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Student gender">
+        {#each genderOptions as opt (opt)}
+          <button
+            type="button"
+            disabled={loading}
+            class={pillClass(selectedGender, opt)}
+            aria-pressed={selectedGender === opt}
+            onclick={() => selectedGender = opt}
+          >
+            {opt}
+          </button>
         {/each}
-      </select>
-      <ChevronDown class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-700 pointer-events-none" />
-    </div>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="space-y-2">
-      <label for="gender" class="block text-sm font-semibold text-emerald-950">Student Gender *</label>
-      <div class="relative">
-        <select
-          id="gender" name="gender"
-          required disabled={loading}
-          class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 cursor-pointer text-base appearance-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 pr-12"
-        >
-          <option value="" disabled selected>Select...</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
-        <ChevronDown class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-700 pointer-events-none" />
       </div>
+      <input type="hidden" name="gender" value={selectedGender} />
     </div>
 
     <div class="space-y-2">
-      <label for="teacherGender" class="block text-sm font-semibold text-emerald-950">Teacher Preference *</label>
-      <div class="relative">
-        <select
-          id="teacherGender" name="teacherGender"
-          required disabled={loading}
-          class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 cursor-pointer text-base appearance-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 pr-12"
-        >
-          <option value="" disabled selected>Select...</option>
-          <option value="Male Teacher">Male Teacher</option>
-          <option value="Female Teacher">Female Teacher</option>
-          <option value="No Preference">No Preference</option>
-        </select>
-        <ChevronDown class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-700 pointer-events-none" />
+      <label class="block text-sm font-semibold text-emerald-950">Teacher Preference *</label>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Teacher preference">
+        {#each teacherOptions as opt (opt)}
+          <button
+            type="button"
+            disabled={loading}
+            class={pillClass(selectedTeacher, opt)}
+            aria-pressed={selectedTeacher === opt}
+            onclick={() => selectedTeacher = opt}
+          >
+            {opt}
+          </button>
+        {/each}
       </div>
+      <input type="hidden" name="teacherGender" value={selectedTeacher} />
+      <!-- PHASE 2: Helper text — context for non-Muslim or new-to-Islam parents -->
+      <p class="text-xs text-gray-500 mt-1">
+        We match your child with a teacher of your preferred gender when available.
+      </p>
     </div>
   </div>
 
+  <!-- Current Level -->
   <div class="space-y-2">
-    <label for="level" class="block text-sm font-semibold text-emerald-950">Current Level *</label>
-    <div class="relative">
-      <select
-        id="level" name="level"
-        required disabled={loading}
-        class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 cursor-pointer text-base appearance-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 pr-12"
-      >
-        <option value="" disabled selected>Select level...</option>
-        <option value="Beginner">Beginner</option>
-        <option value="Intermediate">Intermediate</option>
-        <option value="Advanced">Advanced</option>
-      </select>
-      <ChevronDown class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-700 pointer-events-none" />
+    <label class="block text-sm font-semibold text-emerald-950">Current Level *</label>
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Current level">
+      {#each levelOptions as opt (opt)}
+        <button
+          type="button"
+          disabled={loading}
+          class={pillClass(selectedLevel, opt)}
+          aria-pressed={selectedLevel === opt}
+          onclick={() => selectedLevel = opt}
+        >
+          {opt}
+        </button>
+      {/each}
     </div>
+    <input type="hidden" name="level" value={selectedLevel} />
   </div>
 
+  <!-- Days per week & Preferred Time -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="space-y-2">
-      <label for="days" class="block text-sm font-semibold text-emerald-950">Days per week *</label>
-      <div class="relative">
-        <select
-          id="days" name="days"
-          required disabled={loading}
-          class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 cursor-pointer text-base appearance-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 pr-12"
-        >
-          <option value="" disabled selected>Select...</option>
-          <option value="2 Days">2 Days</option>
-          <option value="3 Days">3 Days</option>
-          <option value="4 Days">4 Days</option>
-          <option value="5 Days">5 Days</option>
-        </select>
-        <ChevronDown class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-700 pointer-events-none" />
+      <label class="block text-sm font-semibold text-emerald-950">Days per week *</label>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Days per week">
+        {#each daysOptions as opt (opt)}
+          <button
+            type="button"
+            disabled={loading}
+            class={pillClass(selectedDays, opt)}
+            aria-pressed={selectedDays === opt}
+            onclick={() => selectedDays = opt}
+          >
+            {opt}
+          </button>
+        {/each}
       </div>
+      <input type="hidden" name="days" value={selectedDays} />
     </div>
 
     <div class="space-y-2">
-      <label for="schedule" class="block text-sm font-semibold text-emerald-950">Preferred Time *</label>
-      <div class="relative">
-        <select
-          id="schedule" name="schedule"
-          required disabled={loading}
-          class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 cursor-pointer text-base appearance-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 pr-12"
-        >
-          <option value="" disabled selected>Select...</option>
-          <option value="Morning">Morning</option>
-          <option value="Afternoon">Afternoon</option>
-          <option value="Evening">Evening</option>
-          <option value="Night">Night</option>
-        </select>
-        <ChevronDown class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-700 pointer-events-none" />
+      <label class="block text-sm font-semibold text-emerald-950">Preferred Time *</label>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Preferred time">
+        {#each scheduleOptions as opt (opt)}
+          <button
+            type="button"
+            disabled={loading}
+            class={pillClass(selectedSchedule, opt)}
+            aria-pressed={selectedSchedule === opt}
+            onclick={() => selectedSchedule = opt}
+          >
+            {opt}
+          </button>
+        {/each}
       </div>
+      <input type="hidden" name="schedule" value={selectedSchedule} />
     </div>
   </div>
 

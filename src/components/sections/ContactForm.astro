@@ -106,13 +106,14 @@ import { ENV } from '../../lib/env';
         
         form.reset();
 
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Form submission failed:', error);
+        const errMsg = error instanceof Error ? error.message : '';
         btn.disabled = false;
         btnSpinner.classList.add('hidden');
         btnText.classList.remove('opacity-0');
         
-        messageBox.textContent = error.message || "We encountered a network error. Please try again.";
+        messageBox.textContent = errMsg || "We encountered a network error. Please try again.";
         messageBox.className = 'rounded-xl p-4 mb-6 text-sm font-medium bg-red-50 text-red-600 border border-red-200 block';
       }
     });

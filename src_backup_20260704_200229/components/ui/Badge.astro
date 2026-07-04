@@ -1,0 +1,36 @@
+---
+// src/components/ui/Badge.astro
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'span'> {
+  variant?: 'emerald' | 'amber' | 'white';
+  dot?: boolean;
+}
+
+const { variant = 'emerald', class: className, dot = false, ...rest } = Astro.props;
+
+const variants = {
+  emerald: "bg-emerald-50 text-emerald-700 border-emerald-100",
+  amber: "bg-amber-50 text-amber-700 border-amber-200/60",
+  white: "bg-white text-emerald-950 border-emerald-100 shadow-sm"
+};
+---
+<span 
+  class:list={[
+    "inline-flex items-center gap-1.5 px-3 py-1 text-[10px] sm:text-xs font-black tracking-widest uppercase rounded-full border",
+    variants[variant],
+    className
+  ]}
+  {...rest}
+>
+  {dot && (
+    <span 
+      class:list={[
+        "w-1.5 h-1.5 rounded-full animate-pulse",
+        variant === 'amber' ? 'bg-amber-500' : 'bg-emerald-500'
+      ]}
+      aria-hidden="true"
+    ></span>
+  )}
+  <slot />
+</span>

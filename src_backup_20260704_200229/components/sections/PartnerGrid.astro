@@ -1,0 +1,25 @@
+---
+// src/components/sections/PartnerGrid.astro
+// B2B Affiliates & Schools Grid.
+---
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+  {[
+    { title: "Islamic Schools", desc: "Integrate our verified teachers into your curriculum to handle 1-on-1 reading assessments.", icon: "🏫" },
+    { title: "Local Mosques", desc: "Outsource your waitlisted Maktab students to our premium online platform seamlessly.", icon: "🕌" },
+    { title: "Community Centers", desc: "Offer high-quality Quranic education without the overhead of hiring full-time local staff.", icon: "🤝" }
+  ].map(partner => (
+    /* EDGE UI FIX: Added interactive hover scaling and refined shadows */
+    <div class="group bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 flex flex-col items-start gap-5 hover:shadow-2xl hover:shadow-emerald-900/10 hover:border-emerald-200 transition-all duration-500 hover:scale-[1.02]">
+      
+      <div class="w-14 h-14 bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-2xl flex items-center justify-center text-3xl shrink-0 border border-emerald-100/50 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 ease-out">
+        <span class="drop-shadow-sm">{partner.icon}</span>
+      </div>
+      
+      <div>
+        <h3 class="text-xl font-bold text-emerald-950 mb-2.5 group-hover:text-emerald-700 transition-colors">{partner.title}</h3>
+        <p class="text-sm text-emerald-900/70 font-medium leading-relaxed">{partner.desc}</p>
+      </div>
+    </div>
+  ))}
+</div>

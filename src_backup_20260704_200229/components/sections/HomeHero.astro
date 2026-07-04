@@ -1,0 +1,107 @@
+---
+// src/components/sections/HomeHero.astro
+// Pure HTML/CSS. Zero JavaScript overhead.
+import { Image } from 'astro:assets';
+import { SITE } from '../../constants/site';
+---
+<section class="relative bg-[#fefdf9] overflow-hidden selection:bg-emerald-200 selection:text-emerald-950 pt-8 pb-16 md:pt-12 md:pb-24 lg:pt-12 lg:pb-32">
+  
+  <div class="absolute inset-0 bg-[radial-gradient(#d1fae5_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
+  <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-emerald-200/40 to-amber-200/40 blur-[100px] rounded-full pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 items-start lg:items-center">
+      
+      <div class="lg:col-span-7 pt-4 lg:pt-0 order-1 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+        
+        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-emerald-100 shadow-sm mb-6">
+          <svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <span class="text-xs font-bold text-emerald-950 tracking-wide">Trusted by {SITE.stats[0].number}{SITE.stats[0].symbol} {SITE.stats[0].label}</span>
+        </div>
+        
+        <h1 class="text-[36px] sm:text-[40px] md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5 leading-[1.15] text-emerald-950 text-balance max-w-3xl">
+          Learn the Quran with 
+          <span class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-amber-500 bg-clip-text text-transparent">Expert Teachers</span>
+        </h1>
+        
+        <p class="text-lg sm:text-xl text-emerald-800/80 mb-8 md:mb-10 leading-relaxed max-w-2xl font-medium text-balance">
+          Join our global community of learners and deepen your understanding of Islam through personalized, 1-on-1 online classes.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-3 mb-12 lg:mb-16">
+          <a href="/funnel/signup" class="w-full sm:w-auto inline-flex justify-center items-center px-7 py-4 text-base font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-xl shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/20 hover:-translate-y-0.5 transition-all duration-300 active:scale-95">
+            Start Free Trial
+          </a>
+          <a href="#how-it-works" class="w-full sm:w-auto inline-flex justify-center items-center px-7 py-4 text-base font-bold text-emerald-950 bg-white border-2 border-emerald-200/80 hover:border-emerald-300 hover:bg-emerald-50/50 rounded-xl transition-all duration-300">
+            How It Works
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 opacity-90 border-t border-emerald-100 pt-8">
+          <div class="flex flex-col">
+            <span class="text-xl md:text-2xl font-black text-emerald-950 leading-none mb-1.5">24/7</span>
+            <span class="text-[11px] sm:text-xs font-bold text-emerald-800/70 uppercase tracking-widest">Flexible Timing</span>
+          </div>
+          
+          <div class="flex flex-col">
+            <span class="text-xl md:text-2xl font-black text-emerald-950 leading-none mb-1.5">1-on-1</span>
+            <span class="text-[11px] sm:text-xs font-bold text-emerald-800/70 uppercase tracking-widest">Private Classes</span>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="text-xl md:text-2xl font-black text-emerald-950 leading-none mb-1.5">100%</span>
+            <span class="text-[11px] sm:text-xs font-bold text-emerald-800/70 uppercase tracking-widest">Certified Tutors</span>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="text-xl md:text-2xl font-black text-emerald-950 leading-none mb-1.5">All</span>
+            <span class="text-[11px] sm:text-xs font-bold text-emerald-800/70 uppercase tracking-widest">Ages Welcome</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex lg:col-span-5 relative h-[280px] sm:h-[400px] lg:h-[500px] items-center justify-center order-2 mt-8 lg:mt-0">
+        
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#047857]/15 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="absolute top-[30%] right-[10%] w-3/4 h-3/4 bg-[#fbbf24]/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <div class="relative z-10 w-[90%] lg:w-[95%] mx-auto aspect-square flex items-center justify-center">
+          <Image 
+            src="/images/quranific-hero.webp" 
+            alt="Quranific Live Interactive Platform" 
+            width={600}
+            height={600}
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            class="w-full h-auto max-h-full object-contain animate-hero-float drop-shadow-2xl"
+          />
+        </div>
+
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes hero-float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-16px); }
+  }
+  
+  .animate-hero-float {
+    animation: hero-float 7s ease-in-out infinite;
+    will-change: transform, filter;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-hero-float {
+      animation: none !important;
+      transform: translateY(0) !important;
+    }
+  }
+</style>

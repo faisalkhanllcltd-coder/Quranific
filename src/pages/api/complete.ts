@@ -46,7 +46,7 @@ type KVNamespace = {
 
 function getKV(context: Parameters<APIRoute>[0]): KVNamespace | null {
   // The binding name must match the [[kv_namespaces]] binding in wrangler.toml
-  const kv = ((context.locals as any).runtime?.env as Record<string, unknown> | undefined)?.['SESSION'];
+  const kv = ((context.locals as { runtime?: { env?: Record<string, unknown> } }).runtime?.env)?.['SESSION'];
   return (kv && typeof (kv as KVNamespace).get === 'function')
     ? kv as KVNamespace
     : null;
@@ -147,8 +147,9 @@ export const POST: APIRoute = async (context) => {
       }
     };
 
-    if ((context.locals as any).runtime?.ctx?.waitUntil) {
-      (context.locals as any).runtime.ctx.waitUntil(sendEmailsTask());
+    const localsRuntime = (context.locals as { runtime?: { ctx?: { waitUntil: (p: Promise<unknown>) => void } } }).runtime;
+    if (localsRuntime?.ctx?.waitUntil) {
+      localsRuntime.ctx.waitUntil(sendEmailsTask());
     } else {
       sendEmailsTask().catch(console.error);
     }

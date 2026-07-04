@@ -1,0 +1,17 @@
+﻿---
+// src/components/ui/Section.astro
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'section'> {
+  height?: number;
+}
+
+const { class: className, height = 600, ...rest } = Astro.props;
+---
+<section
+  class:list={["cv-section", className]}
+  style={`contain-intrinsic-size: 0 ${height}px;`}
+  {...rest}
+>
+  <slot />
+</section>

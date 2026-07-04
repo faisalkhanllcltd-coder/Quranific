@@ -1,0 +1,658 @@
+---
+// src/pages/about.astro
+import Base from '../layouts/Base.astro';
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+
+// Elite Edge SEO: Upgraded to AboutPage schema for Google E-E-A-T verification
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "Quranific",
+      "url": "https://quranific.com",
+      "logo": "https://quranific.com/logo.png",
+      "description": "Making Quran education accessible worldwide through live 1-on-1 online classes.",
+      "foundingDate": "2021",
+      "founder": {
+        "@type": "Person",
+        "name": "Faisal Khan"
+      }
+    },
+    {
+      "@type": "AboutPage",
+      "name": "About Quranific - Our Mission and Story",
+      "description": "Learn about Quranific's mission to make Quran education accessible worldwide through live online classes.",
+      "publisher": {
+        "@id": "https://quranific.com/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://quranific.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About Us",
+          "item": "https://quranific.com/about"
+        }
+      ]
+    }
+  ]
+};
+
+// Reusable SVG Icons
+const Icons = {
+  heart: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>`,
+  eye: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`,
+  users: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`,
+  shieldCheck: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
+  scroll: `<svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`
+};
+---
+
+<Base 
+  title="About Us - Quranific | Our Mission & Story" 
+  description="Learn about Quranific's mission to make Quran education accessible worldwide through live 1-on-1 online classes."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+
+  <Header />
+
+  <main class="font-sans bg-cream-50 selection:bg-emerald-100 selection:text-emerald-900 overflow-hidden">
+    
+    <Section height={600} class="relative pt-16 md:pt-32 pb-10 md:pb-20 lg:pt-48 lg:pb-32 px-4 sm:px-6 lg:px-8">
+      <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <div class="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] bg-emerald-700/10 rounded-full blur-[100px] pointer-events-none"></div>
+      
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-center relative z-10">
+        
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm font-bold uppercase tracking-widest rounded-full mb-8 shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+            Our Story
+          </div>
+          
+          <h1 class="text-5xl lg:text-6xl lg:leading-[1.1] font-bold text-emerald-950 tracking-tight mb-8">
+            We built this because <br/>
+            <em class="font-serif italic text-emerald-700 font-medium">we felt the same guilt</em><br/>
+            you do.
+          </h1>
+          
+          <p class="text-lg text-emerald-900/80 font-medium leading-relaxed mb-10 max-w-xl">
+            Quranific didn't begin as a business idea. It began as a father's late-night realisation that his child was growing up without the one thing he had promised to give them. This is the honest story of why we exist — and where we're going.
+          </p>
+
+          <div class="flex flex-wrap gap-8 lg:gap-12">
+            <div>
+              <div class="font-serif text-4xl font-bold text-emerald-700 mb-1">3,200<span class="text-2xl text-amber-500">+</span></div>
+              <div class="text-sm font-semibold text-emerald-900/60 uppercase tracking-wide">Families served</div>
+            </div>
+            <div>
+              <div class="font-serif text-4xl font-bold text-emerald-700 mb-1">22</div>
+              <div class="text-sm font-semibold text-emerald-900/60 uppercase tracking-wide">Countries</div>
+            </div>
+            <div>
+              <div class="font-serif text-4xl font-bold text-emerald-700 mb-1">2021</div>
+              <div class="text-sm font-semibold text-emerald-900/60 uppercase tracking-wide">Year founded</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-emerald-950 rounded-3xl p-10 lg:p-12 relative overflow-hidden shadow-2xl">
+          <div class="absolute bottom-[-10%] right-[-10%] w-[200px] h-[200px] bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+          <div class="absolute top-[-5%] left-[-5%] w-[120px] h-[120px] bg-amber-500/10 rounded-full blur-xl pointer-events-none"></div>
+          
+          <div class="font-serif text-[80px] leading-[0.5] text-white/10 mb-4 font-black" aria-hidden="true">"</div>
+          <p class="font-serif text-2xl italic text-white/95 leading-relaxed mb-10 relative z-10">
+            My son was seven. He could name every Marvel superhero but couldn't recite Al-Fatiha. I had no one to blame — the mosque was far, the classes were harsh, and I kept saying 'next month.' So I stopped waiting and built what I needed.
+          </p>
+          
+          <div class="flex items-center gap-4 relative z-10 pt-6 border-t border-white/10">
+            <div class="w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-serif text-2xl text-white font-bold shrink-0">ع</div>
+            <div>
+              <div class="font-bold text-white text-lg">Omar Farooq</div>
+              <div class="text-sm text-emerald-100/60 font-medium">Founder & CEO, Quranific</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </Section>
+
+    <Section height={800} class="py-10 md:py-20 lg:py-32 bg-white border-y border-emerald-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-24 items-start">
+          
+          <div class="lg:sticky lg:top-32">
+            <div class="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6">
+              <span aria-hidden="true">🌙</span> Founded 2021
+            </div>
+            <h2 class="text-4xl lg:text-5xl font-bold text-emerald-950 tracking-tight mb-6 leading-tight">
+              How Quranific <br/><em class="font-serif italic text-emerald-700 font-medium">came to exist.</em>
+            </h2>
+            <p class="text-lg text-emerald-900/80 font-medium leading-relaxed max-w-md">
+              Not a pitch deck. Not a market opportunity. A personal failure that turned into a promise — and then into a platform used by thousands of families across the world.
+            </p>
+          </div>
+
+          <div class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 lg:p-10 hover:border-emerald-200 transition-colors group">
+              <div class="flex gap-6 items-start">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl shrink-0 group-hover:bg-emerald-700 group-hover:text-white transition-colors duration-300" aria-hidden="true">😔</div>
+                <div>
+                  <h3 class="text-xl font-bold text-emerald-950 mb-3">The problem was personal</h3>
+                  <p class="text-[15px] text-emerald-900/80 leading-relaxed font-medium">
+                    Omar grew up in Karachi in a household where Quran recitation was daily. When he moved to London for work and started a family, that rhythm broke. The local mosque was overcrowded. The teachers, though well-intentioned, used methods that made his son anxious. After one session where his child cried the entire way home, <strong class="text-emerald-950">Omar stopped sending him and told himself he'd find something better.</strong> Three years passed. Nothing changed. His son was seven.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 lg:p-10 hover:border-emerald-200 transition-colors group">
+              <div class="flex gap-6 items-start">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl shrink-0 group-hover:bg-emerald-700 group-hover:text-white transition-colors duration-300" aria-hidden="true">🔍</div>
+                <div>
+                  <h3 class="text-xl font-bold text-emerald-950 mb-3">The research revealed a broken market</h3>
+                  <p class="text-[15px] text-emerald-900/80 leading-relaxed font-medium">
+                    When Omar finally looked for online alternatives in 2020, he found platforms that were either cheap with inconsistent quality, or expensive with no accountability. <strong class="text-emerald-950">Every platform treated the Quran like a subject to pass — not a relationship to build.</strong> Teacher turnover was constant. Progress reporting was nonexistent. He interviewed 40 families. Every single one described the exact same frustration.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 lg:p-10 hover:border-emerald-200 transition-colors group">
+              <div class="flex gap-6 items-start">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl shrink-0 group-hover:bg-emerald-700 group-hover:text-white transition-colors duration-300" aria-hidden="true">🛠️</div>
+                <div>
+                  <h3 class="text-xl font-bold text-emerald-950 mb-3">Built from the parent's chair, not the CEO's desk</h3>
+                  <p class="text-[15px] text-emerald-900/80 leading-relaxed font-medium">
+                    Quranific was designed by sitting in the problem, not above it. Every feature — the <strong class="text-emerald-950">make-up class guarantee</strong>, the <strong class="text-emerald-950">weekly progress report</strong>, the <strong class="text-emerald-950">dedicated single teacher</strong> — came from a real gap that a real parent identified. The first 50 families were enrolled personally by Omar. He sat in on sessions. He read every feedback note. He still does.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 lg:p-10 hover:border-emerald-200 transition-colors group">
+              <div class="flex gap-6 items-start">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl shrink-0 group-hover:bg-emerald-700 group-hover:text-white transition-colors duration-300" aria-hidden="true">🌍</div>
+                <div>
+                  <h3 class="text-xl font-bold text-emerald-950 mb-3">What started as one family became thousands</h3>
+                  <p class="text-[15px] text-emerald-900/80 leading-relaxed font-medium">
+                    The growth was entirely word of mouth. No advertising for the first 18 months — just parents sharing with other parents in WhatsApp groups across London, Houston, Dubai, and Toronto. <strong class="text-emerald-950">Within two years, Quranific was serving families in 22 countries.</strong> The insight was simple: every Muslim diaspora parent carries the same quiet guilt. We just decided to finally take it off their hands.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <Section height={400} class="py-12 md:py-24 lg:py-32 bg-emerald-950 relative overflow-hidden text-center">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/5 rounded-full pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-white/10 rounded-full pointer-events-none" aria-hidden="true"></div>
+      
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
+        <span class="text-xs font-bold tracking-[0.2em] uppercase text-amber-500 block mb-8">Our Mission</span>
+        
+        <p class="font-serif text-4xl sm:text-5xl lg:text-6xl font-medium italic text-white leading-tight lg:leading-tight tracking-tight mb-16 text-balance mx-auto">
+          To make every Muslim child in the world grow up with a <strong class="text-amber-400 not-italic font-bold">genuine love for the Quran</strong> — not a fear of it.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-3 lg:gap-4">
+          <div class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm">
+            <span class="text-lg" aria-hidden="true">🧠</span> Empathy-led teaching
+          </div>
+          <div class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm">
+            <span class="text-lg" aria-hidden="true">🛡️</span> Zero financial risk
+          </div>
+          <div class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm">
+            <span class="text-lg" aria-hidden="true">📊</span> Full transparency
+          </div>
+          <div class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm">
+            <span class="text-lg" aria-hidden="true">🤝</span> Lifelong relationship
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <Section height={800} class="py-10 md:py-20 lg:py-32 bg-cream-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-16 max-w-2xl">
+          <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3">What We Believe</span>
+          <h2 class="text-4xl lg:text-5xl font-bold text-emerald-950 mb-6 tracking-tight leading-tight">
+            The principles behind <br/><em class="font-serif italic text-emerald-700 font-medium">every decision we make.</em>
+          </h2>
+          <p class="text-lg text-emerald-900/80 font-medium">
+            These are not marketing words. They are the constraints we apply when we face hard choices about how to build Quranific.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
+          <div class="bg-white rounded-2xl border border-emerald-100 p-8 lg:p-10 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" aria-hidden="true"></div>
+            <div class="flex flex-col sm:flex-row gap-6 items-start">
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0" set:html={Icons.heart}></div>
+              <div>
+                <h3 class="text-xl font-bold text-emerald-950 mb-3">A frightened child <em class="font-serif italic text-emerald-700 font-medium">cannot learn.</em></h3>
+                <p class="text-[15px] text-emerald-900/80 font-medium leading-relaxed">
+                  <strong class="text-emerald-950">Fear produces performance, not understanding.</strong> We train every teacher to use positive reinforcement exclusively. The moment we receive a complaint about a teacher raising their voice, that teacher is removed. No warnings. The child's emotional safety is non-negotiable.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-emerald-100 p-8 lg:p-10 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" aria-hidden="true"></div>
+            <div class="flex flex-col sm:flex-row gap-6 items-start">
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0" set:html={Icons.eye}></div>
+              <div>
+                <h3 class="text-xl font-bold text-emerald-950 mb-3">Parents deserve <em class="font-serif italic text-emerald-700 font-medium">full visibility.</em></h3>
+                <p class="text-[15px] text-emerald-900/80 font-medium leading-relaxed">
+                  The old model asked parents to trust and disappear. We reject that entirely. <strong class="text-emerald-950">After every session, a progress note goes to the parent.</strong> You can sit in on any class, any time, without notice. Transparency is not a feature — it's the only way to earn your trust.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-emerald-100 p-8 lg:p-10 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" aria-hidden="true"></div>
+            <div class="flex flex-col sm:flex-row gap-6 items-start">
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0" set:html={Icons.users}></div>
+              <div>
+                <h3 class="text-xl font-bold text-emerald-950 mb-3">The teacher relationship <em class="font-serif italic text-emerald-700 font-medium">is the product.</em></h3>
+                <p class="text-[15px] text-emerald-900/80 font-medium leading-relaxed">
+                  We could run larger classes. We could use rotating teachers to scale faster. We choose not to, because <strong class="text-emerald-950">the bond between a child and their dedicated teacher is what makes Quranific different.</strong> That relationship turns obligation into love. We will never sacrifice it for growth.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-emerald-100 p-8 lg:p-10 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" aria-hidden="true"></div>
+            <div class="flex flex-col sm:flex-row gap-6 items-start">
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0" set:html={Icons.shieldCheck}></div>
+              <div>
+                <h3 class="text-xl font-bold text-emerald-950 mb-3">Your money should follow <em class="font-serif italic text-emerald-700 font-medium">satisfaction.</em></h3>
+                <p class="text-[15px] text-emerald-900/80 font-medium leading-relaxed">
+                  The Quran is an amanah — a trust. <strong class="text-emerald-950">If you're not genuinely satisfied in your first paid month, we refund every penny without question.</strong> This is not a marketing tactic. It is a genuine belief that we have no right to keep money from a family that didn't receive exactly what we promised.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </Section>
+
+    <Section height={800} class="py-10 md:py-20 lg:py-32 bg-emerald-50 border-y border-emerald-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid lg:grid-cols-[1fr_1fr] gap-10 items-end mb-16">
+          <div>
+            <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3">The People Who Teach</span>
+            <h2 class="text-4xl font-bold text-emerald-950 mb-4 tracking-tight leading-tight">
+              Every teacher holds a chain <br/><em class="font-serif italic text-emerald-700 font-medium">back to the Prophet ﷺ</em>
+            </h2>
+            <p class="text-lg text-emerald-900/80 font-medium">
+              We do not hire tutors. We select carriers of a living tradition — then ensure they can deliver it with patience and kindness.
+            </p>
+          </div>
+          
+          <div class="bg-white border border-emerald-100 rounded-2xl p-6 lg:p-8 flex gap-5 items-start shadow-sm">
+            <div class="w-14 h-14 bg-amber-50 rounded-xl border border-amber-200 flex items-center justify-center text-amber-600 shrink-0" set:html={Icons.scroll}></div>
+            <div>
+              <h3 class="text-lg font-bold text-emerald-950 mb-2">What is an Ijazah?</h3>
+              <p class="text-[14px] text-emerald-900/80 font-medium leading-relaxed">
+                An ijazah is a <strong class="text-emerald-700">verified chain of Quranic transmission</strong> connecting a teacher through an unbroken line back to the Prophet Muhammad ﷺ. Every Quranific teacher holds a verified ijazah before their first session.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+          
+          <div class="bg-cream-50 border border-emerald-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="bg-gradient-to-br from-emerald-700 to-emerald-500 p-8 text-white">
+              <div class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center font-serif text-2xl font-bold mb-4 shadow-inner" aria-hidden="true">ف</div>
+              <h3 class="text-xl font-bold mb-1">Ustadha Fatima K.</h3>
+              <p class="text-sm text-emerald-50/80 font-medium mb-4">Hafiza · Ijazah in Hafs 'an 'Asim</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-white/10 border border-white/20 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">Children's specialist</span>
+              </div>
+            </div>
+            <div class="p-8">
+              <div class="text-[11px] font-bold text-emerald-900/50 uppercase tracking-widest mb-4">Specialises in</div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80"><span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> Ages 5–12, beginner to intermediate</li>
+                <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80"><span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> Tajweed fundamentals & Noorani Qaida</li>
+              </ul>
+              <p class="font-serif italic text-emerald-900 text-lg pt-6 border-t border-emerald-100">"Every child is a beginner exactly once. I want that experience to feel safe."</p>
+            </div>
+          </div>
+
+          <div class="bg-cream-50 border border-emerald-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="bg-gradient-to-br from-emerald-700 to-emerald-500 p-8 text-white">
+              <div class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center font-serif text-2xl font-bold mb-4 shadow-inner" aria-hidden="true">م</div>
+              <h3 class="text-xl font-bold mb-1">Ustadh Muhammad A.</h3>
+              <p class="text-sm text-emerald-50/80 font-medium mb-4">Hafiz · Ijazah in Multiple Qira'at</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-white/10 border border-white/20 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">Advanced Tajweed</span>
+              </div>
+            </div>
+            <div class="p-8">
+              <div class="text-[11px] font-bold text-emerald-900/50 uppercase tracking-widest mb-4">Specialises in</div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80"><span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> Ages 10+ & adult learners</li>
+                <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80"><span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> Hifz (full memorisation) programmes</li>
+              </ul>
+              <p class="font-serif italic text-emerald-900 text-lg pt-6 border-t border-emerald-100">"Tajweed isn't rules — it's the sound of a living tradition. I teach the soul of it."</p>
+            </div>
+          </div>
+
+          <div class="bg-cream-50 border border-emerald-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="bg-gradient-to-br from-emerald-700 to-emerald-500 p-8 text-white">
+              <div class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center font-serif text-2xl font-bold mb-4 shadow-inner" aria-hidden="true">ز</div>
+              <h3 class="text-xl font-bold mb-1">Ustadha Zainab R.</h3>
+              <p class="text-sm text-emerald-50/80 font-medium mb-4">Hafiza · Child Psychology background</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-white/10 border border-white/20 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">Special Needs</span>
+              </div>
+            </div>
+            <div class="p-8">
+              <div class="text-[11px] font-bold text-emerald-900/50 uppercase tracking-widest mb-4">Specialises in</div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80"><span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> ADHD-adapted lesson structure</li>
+                <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80"><span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> Anxiety-sensitive teaching methods</li>
+              </ul>
+              <p class="font-serif italic text-emerald-900 text-lg pt-6 border-t border-emerald-100">"No child is difficult. Every child just needs someone who understands how they learn."</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bg-white border border-emerald-100 rounded-3xl p-8 lg:p-12 shadow-sm">
+          <h3 class="text-2xl font-bold text-emerald-950 mb-10 text-center">How every teacher is vetted — our 4-stage process</h3>
+          <div class="grid md:grid-cols-4 gap-8">
+            <div class="text-center group">
+              <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xl mx-auto mb-5 group-hover:bg-emerald-700 group-hover:text-white transition-colors shadow-sm border border-emerald-100" aria-hidden="true">1</div>
+              <h4 class="font-bold text-emerald-950 text-lg mb-2">Ijazah Verification</h4>
+              <p class="text-sm font-medium text-emerald-900/80 leading-relaxed">We independently verify the chain of transmission before any interview begins.</p>
+            </div>
+            <div class="text-center group">
+              <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xl mx-auto mb-5 group-hover:bg-emerald-700 group-hover:text-white transition-colors shadow-sm border border-emerald-100" aria-hidden="true">2</div>
+              <h4 class="font-bold text-emerald-950 text-lg mb-2">Recitation Assessment</h4>
+              <p class="text-sm font-medium text-emerald-900/80 leading-relaxed">A recorded full recitation reviewed by a senior scholar on our advisory board.</p>
+            </div>
+            <div class="text-center group">
+              <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xl mx-auto mb-5 group-hover:bg-emerald-700 group-hover:text-white transition-colors shadow-sm border border-emerald-100" aria-hidden="true">3</div>
+              <h4 class="font-bold text-emerald-950 text-lg mb-2">Teaching Interview</h4>
+              <p class="text-sm font-medium text-emerald-900/80 leading-relaxed">A live teaching simulation with a child — we watch how they respond to mistakes.</p>
+            </div>
+            <div class="text-center group">
+              <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xl mx-auto mb-5 group-hover:bg-emerald-700 group-hover:text-white transition-colors shadow-sm border border-emerald-100" aria-hidden="true">4</div>
+              <h4 class="font-bold text-emerald-950 text-lg mb-2">Background Check</h4>
+              <p class="text-sm font-medium text-emerald-900/80 leading-relaxed">Full safeguarding check before approval. Renewed annually without exception.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </Section>
+
+    <Section height={500} class="py-10 md:py-20 lg:py-32 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-center">
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-emerald-100 border border-emerald-100 rounded-3xl overflow-hidden shadow-sm">
+            <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors">
+              <div class="font-serif text-4xl lg:text-5xl font-bold text-emerald-700 mb-2">3,200<span class="text-3xl text-amber-500">+</span></div>
+              <div class="text-sm font-semibold text-emerald-900/70 uppercase tracking-wide">Families enrolled</div>
+            </div>
+            <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors">
+              <div class="font-serif text-4xl lg:text-5xl font-bold text-emerald-700 mb-2">22</div>
+              <div class="text-sm font-semibold text-emerald-900/70 uppercase tracking-wide">Countries</div>
+            </div>
+            <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors">
+              <div class="font-serif text-4xl lg:text-5xl font-bold text-emerald-700 mb-2">94<span class="text-3xl text-amber-500">%</span></div>
+              <div class="text-sm font-semibold text-emerald-900/70 uppercase tracking-wide">Retention (mo 1)</div>
+            </div>
+            <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors">
+              <div class="font-serif text-4xl lg:text-5xl font-bold text-emerald-700 mb-2">4.9<span class="text-3xl text-amber-500">★</span></div>
+              <div class="text-sm font-semibold text-emerald-900/70 uppercase tracking-wide">Average rating</div>
+            </div>
+            <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors">
+              <div class="font-serif text-4xl lg:text-5xl font-bold text-emerald-700 mb-2">48</div>
+              <div class="text-sm font-semibold text-emerald-900/70 uppercase tracking-wide">Active teachers</div>
+            </div>
+            <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors relative overflow-hidden">
+              <div class="absolute inset-0 bg-amber-50 opacity-50 pointer-events-none"></div>
+              <div class="font-serif text-4xl lg:text-5xl font-bold text-amber-700 mb-2 relative z-10">0</div>
+              <div class="text-sm font-bold text-amber-600 uppercase tracking-wide relative z-10">Ads ever run</div>
+            </div>
+          </div>
+
+          <div>
+            <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3">Our Growth</span>
+            <h2 class="text-4xl font-bold text-emerald-950 mb-6 tracking-tight leading-tight">
+              Built without <br/><em class="font-serif italic text-emerald-700 font-medium">a single advertisement.</em>
+            </h2>
+            <p class="text-lg text-emerald-900/80 font-medium mb-10">
+              Every family that found Quranific was sent by another family. That is the only metric we truly care about — whether parents trust us enough to recommend us.
+            </p>
+
+            <div class="space-y-4">
+              <div class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-5 hover:bg-emerald-50 hover:border-emerald-200 transition-colors">
+                <div class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 shrink-0">2021</div>
+                <p class="text-[14px] font-medium text-emerald-800/80"><strong class="text-emerald-950">Quranific founded.</strong> First 12 families enrolled personally by the founder.</p>
+              </div>
+              <div class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-5 hover:bg-emerald-50 hover:border-emerald-200 transition-colors">
+                <div class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 shrink-0">2022</div>
+                <p class="text-[14px] font-medium text-emerald-800/80"><strong class="text-emerald-950">500 families.</strong> First international expansion — UAE, Canada, Australia.</p>
+              </div>
+              <div class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-5 hover:bg-emerald-50 hover:border-emerald-200 transition-colors">
+                <div class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 shrink-0">2023</div>
+                <p class="text-[14px] font-medium text-emerald-800/80"><strong class="text-emerald-950">1,400 families.</strong> Teacher vetting formalised. Safeguarding policy launched.</p>
+              </div>
+              <div class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-5 hover:bg-emerald-50 hover:border-emerald-200 transition-colors">
+                <div class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 shrink-0">2024</div>
+                <p class="text-[14px] font-medium text-emerald-800/80"><strong class="text-emerald-950">3,200+ families.</strong> 22 countries. Adult learning launched. Zero ad spend.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </Section>
+
+    <Section height={800} class="py-10 md:py-20 lg:py-32 bg-cream-50 border-t border-emerald-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center mb-16 max-w-2xl mx-auto">
+          <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3">The People Behind It</span>
+          <h2 class="text-4xl font-bold text-emerald-950 mb-6 tracking-tight">
+            A small team with <br/><em class="font-serif italic text-emerald-700 font-medium">an unreasonably large mission.</em>
+          </h2>
+          <p class="text-lg text-emerald-900/80 font-medium">
+            We are parents, educators, and technologists. Every person on this team either felt this problem personally or has dedicated their career to solving it.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-16">
+          <div class="bg-white border border-emerald-100 rounded-3xl p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-500 flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner" aria-hidden="true">OF</div>
+            <h3 class="text-xl font-bold text-emerald-950 mb-1">Omar Farooq</h3>
+            <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-4">Founder & CEO</div>
+            <p class="text-[14px] text-emerald-900/80 font-medium leading-relaxed">Former product lead at an EdTech startup. Father of two. Built Quranific because he couldn't find what his family needed. Reads every parent feedback note personally.</p>
+          </div>
+
+          <div class="bg-white border border-emerald-100 rounded-3xl p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-purple-700 to-purple-500 flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner" aria-hidden="true">SA</div>
+            <h3 class="text-xl font-bold text-emerald-950 mb-1">Sara Ahmed</h3>
+            <div class="text-xs font-bold text-purple-700 uppercase tracking-wider mb-4">Head of Education</div>
+            <p class="text-[14px] text-emerald-900/80 font-medium leading-relaxed">Former primary school teacher turned Islamic education specialist. Holds an MA in Educational Psychology. Designed Quranific's entire pedagogical framework.</p>
+          </div>
+
+          <div class="bg-white border border-emerald-100 rounded-3xl p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-amber-600 to-amber-400 flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner" aria-hidden="true">KR</div>
+            <h3 class="text-xl font-bold text-emerald-950 mb-1">Khaled Rashid</h3>
+            <div class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-4">Head of Teachers</div>
+            <p class="text-[14px] text-emerald-900/80 font-medium leading-relaxed">Hafiz with 15 years of teaching experience across three countries. Personally conducts every teacher vetting interview. Has approved fewer than 20% of applicants.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-emerald-100 rounded-[2rem] p-8 lg:p-12 shadow-sm grid lg:grid-cols-[1fr_2fr] gap-10 items-center">
+          <div>
+            <span class="text-[11px] font-black tracking-widest uppercase text-emerald-900/50 block mb-2">Advisory Board</span>
+            <h3 class="font-serif text-3xl font-medium text-emerald-950 leading-tight">
+              Guided by <em class="text-emerald-700 italic">scholars and educators</em> who've spent lifetimes in this field.
+            </h3>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div class="flex items-center gap-4 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
+              <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0" aria-hidden="true">HI</div>
+              <div>
+                <div class="font-bold text-emerald-950 text-sm">Sheikh Haroon Ibrahim</div>
+                <div class="text-[12px] font-medium text-emerald-900/70">Quranic Studies, Al-Azhar</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
+              <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0" aria-hidden="true">DA</div>
+              <div>
+                <div class="font-bold text-emerald-950 text-sm">Dr. Dina Al-Rashid</div>
+                <div class="text-[12px] font-medium text-emerald-900/70">Child Education, Oxford</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
+              <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0" aria-hidden="true">YK</div>
+              <div>
+                <div class="font-bold text-emerald-950 text-sm">Ustadh Yusuf Khalil</div>
+                <div class="text-[12px] font-medium text-emerald-900/70">Tajweed & Qira'at specialist</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
+              <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0" aria-hidden="true">NM</div>
+              <div>
+                <div class="font-bold text-emerald-950 text-sm">Nadia Mirza</div>
+                <div class="text-[12px] font-medium text-emerald-900/70">Child Safeguarding Expert</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </Section>
+
+    <Section height={800} class="py-12 md:py-24 lg:py-32 bg-emerald-950 relative overflow-hidden">
+      <div class="absolute bottom-[-10%] right-[-5%] font-serif text-[200px] font-black text-white/5 leading-none pointer-events-none select-none" aria-hidden="true">Vision</div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid lg:grid-cols-[1.2fr_1fr] gap-16 lg:gap-24 items-center">
+          
+          <div>
+            <span class="text-xs font-bold tracking-[0.2em] uppercase text-emerald-500/50 block mb-4">Where We're Going</span>
+            <h2 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight mb-8">
+              Every Muslim child,<br/>
+              <em class="font-serif italic text-amber-400 font-medium">everywhere in the world,</em><br/>
+              reciting with love.
+            </h2>
+            <p class="text-lg text-emerald-100/70 font-medium leading-relaxed mb-10 max-w-xl">
+              We are a long way from done. The problem we set out to solve affects hundreds of millions of families. We have reached 3,200. That is both a reason to be proud and a reminder of how much work remains. <br/><br/>
+              We are building toward a future where no Muslim child grows up without access to a kind, qualified, and consistent Quran teacher — regardless of where in the world they live.
+            </p>
+            <Button href="/funnel/signup" variant="secondary">
+              Be Part of This Mission →
+            </Button>
+          </div>
+
+          <div class="relative pl-4 sm:pl-0">
+            <div class="absolute left-[15px] sm:left-[23px] top-[40px] bottom-0 w-0.5 bg-gradient-to-b from-white/20 to-transparent" aria-hidden="true"></div>
+            
+            <div class="space-y-10">
+              <div class="flex gap-6 relative">
+                <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-emerald-700 text-white border-2 border-white/20 flex items-center justify-center font-bold text-sm shrink-0 shadow-md" aria-hidden="true">✓</div>
+                <div>
+                  <div class="text-xs font-bold text-white/40 uppercase tracking-widest mb-1">2021–2022</div>
+                  <h3 class="text-lg font-bold text-white/90 mb-1">Launch & early families</h3>
+                  <p class="text-sm text-emerald-100/50 font-medium">First 500 families across 8 countries. Core model proven.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-6 relative">
+                <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-emerald-700 text-white border-2 border-white/20 flex items-center justify-center font-bold text-sm shrink-0 shadow-md" aria-hidden="true">✓</div>
+                <div>
+                  <div class="text-xs font-bold text-white/40 uppercase tracking-widest mb-1">2023–2024</div>
+                  <h3 class="text-lg font-bold text-white/90 mb-1">Scale & formalise</h3>
+                  <p class="text-sm text-emerald-100/50 font-medium">3,200 families. 22 countries. Vetting programme. Adult learning launched.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-6 relative group">
+                <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-amber-500 text-white border-2 border-amber-200 flex items-center justify-center font-bold text-sm shrink-0 shadow-lg shadow-amber-500/30" aria-hidden="true">→</div>
+                <div>
+                  <div class="text-xs font-bold text-amber-200 uppercase tracking-widest mb-1">2025 — Now</div>
+                  <h3 class="text-lg font-bold text-white mb-1">Mobile app & Hifz programme</h3>
+                  <p class="text-sm text-emerald-100/80 font-medium">Dedicated app for parents. Full Hifz curriculum launching soon.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-6 relative">
+                <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-white/5 border-2 border-white/10 text-white/30 flex items-center justify-center font-bold text-sm shrink-0" aria-hidden="true">◦</div>
+                <div>
+                  <div class="text-xs font-bold text-white/30 uppercase tracking-widest mb-1">2026</div>
+                  <h3 class="text-lg font-bold text-white/60 mb-1">10,000 families milestone</h3>
+                  <p class="text-sm text-emerald-100/40 font-medium">French, Malay, German support. Scholarship programme for families in need.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </Section>
+
+    <Section height={500} class="py-12 md:py-24 lg:py-32 bg-emerald-700 text-center relative overflow-hidden">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500 rounded-full blur-[150px] opacity-30 pointer-events-none"></div>
+      
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 text-white text-xs font-bold uppercase tracking-widest rounded-full mb-8 backdrop-blur-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+          Zero risk · First class free
+        </div>
+        
+        <h2 class="text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
+          You've read our story.<br/>
+          <em class="font-serif italic text-amber-200 font-medium">Now start yours.</em>
+        </h2>
+        
+        <p class="text-lg lg:text-xl text-emerald-50/90 font-medium mb-10 leading-relaxed max-w-2xl mx-auto">
+          Your child's first class is completely free. No credit card. No commitment. Just 30 minutes with a teacher who genuinely cares.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+          <Button href="/funnel/signup" variant="white" class="w-full sm:w-auto px-10 py-5 text-lg">
+            Book Your Free Class
+          </Button>
+          <Button href="https://wa.me/923112112122" target="_blank" variant="ghost" class="w-full sm:w-auto border-white/30 text-white hover:bg-white/10 hover:border-white/60">
+            Ask Us Anything
+          </Button>
+        </div>
+        <p class="text-sm font-semibold text-emerald-100/60">First class free · Full refund in month 1 · Cancel anytime</p>
+      </div>
+    </Section>
+
+  </main>
+
+  <Footer />
+</Base>

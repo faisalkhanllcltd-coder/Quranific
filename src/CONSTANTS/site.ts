@@ -51,7 +51,9 @@ export const SITE = {
   },
 
   stats: [
-    { number: '3,200', symbol: '+', label: 'Families enrolled' },
+    // OWNER ACTION REQUIRED: "3,200+" replaced with qualitative claim per audit.
+    // The remaining stats (22 countries, 94%, 4.9★) are also unverified — see report.
+    { number: 'Trusted by families', symbol: '', label: 'across the UK, US, and UAE' },
     { number: '22', symbol: '', label: 'Countries served' },
     { number: '94', symbol: '%', label: 'Retention after month 1' },
     { number: '4.9', symbol: '★', label: 'Average rating' }

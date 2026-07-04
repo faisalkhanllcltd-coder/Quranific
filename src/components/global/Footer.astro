@@ -221,10 +221,11 @@ const socialLinks = [
         message.textContent = "Welcome to the family! Check your inbox.";
         message.className = 'mt-2 text-[13px] font-medium text-emerald-400 block';
 
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Newsletter error:', error);
+        const errMsg = error instanceof Error ? error.message : '';
         
-        if (error.message === 'DUPLICATE_EMAIL') {
+        if (errMsg === 'DUPLICATE_EMAIL') {
           btn.innerText = 'Joined ✓';
           message.textContent = "You're already subscribed! Check your inbox.";
           message.className = 'mt-2 text-[13px] font-medium text-amber-400 block';
@@ -232,7 +233,7 @@ const socialLinks = [
           btn.innerText = originalBtnText;
           btn.disabled = false;
           input.disabled = false;
-          message.textContent = error.message || "Network error. Please try again.";
+          message.textContent = errMsg || "Network error. Please try again.";
           message.className = 'mt-2 text-[13px] font-medium text-red-400 block';
         }
       }

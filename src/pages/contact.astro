@@ -62,9 +62,8 @@ const Icons = {
       <div class="max-w-7xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-start relative z-10">
 
         <div>
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-green-50 border border-green-200 text-green-600 text-xs font-bold uppercase tracking-widest rounded-full mb-6 shadow-sm">
-            <span class="w-2 h-2 rounded-full bg-green-600 animate-pulse" aria-hidden="true"></span>
-            Team online now · Avg. reply in 12 mins
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold uppercase tracking-widest rounded-full mb-6 shadow-sm">
+            WhatsApp replies typically within 3–10 minutes; form/email submissions get a response within 1 hour.
           </div>
 
           <h1 class="text-4xl lg:text-[3.5rem] font-bold text-emerald-950 leading-[1.1] tracking-tight mb-6">
@@ -559,8 +558,8 @@ const Icons = {
 
       // --- 1. WHATSAPP MOCKUP ANIMATION ---
       const waTyping = document.getElementById('wa-typing');
-      if (waTyping && !(waTyping as any).dataset.bound) {
-        (waTyping as any).dataset.bound = 'true';
+      if (waTyping && !(waTyping as HTMLElement).dataset.bound) {
+        (waTyping as HTMLElement).dataset.bound = 'true';
         setTimeout(() => {
           const replyMsg = document.getElementById('wa-reply');
           if (waTyping && replyMsg) {
@@ -574,7 +573,7 @@ const Icons = {
       }
 
       // --- 2. SMART FORM TOPIC SWITCHER ---
-      const topicCopy: Record<string, any> = {
+      const topicCopy: Record<string, string> = {
         enrol:    { title: 'Enrol a child or book a free trial',        sub: 'Fill in the details below and we will get back to you within 24 hours with everything you need to get started.', msg: 'What would you like to know about enrolling or booking a free trial?' },
         existing: { title: 'Message for existing parents',              sub: 'If you are already enrolled, we can help with your schedule, teacher, progress, or billing.',                         msg: 'What can we help you with today?' },
         adult:    { title: 'Adult learning enquiry',                    sub: 'Our adult programmes are 100% private and built around your schedule. Tell us more.',                                 msg: 'Tell us about your learning goals or current level.' },
@@ -584,8 +583,8 @@ const Icons = {
 
       // E-3 FIX: Topic buttons with aria-pressed management
       document.querySelectorAll<HTMLButtonElement>('.topic-btn').forEach(btn => {
-        if ((btn as any).dataset.bound) return;
-        (btn as any).dataset.bound = 'true';
+        if ((btn as HTMLElement).dataset.bound) return;
+        (btn as HTMLElement).dataset.bound = 'true';
 
         btn.addEventListener('click', function(this: HTMLButtonElement) {
           // Reset all buttons
@@ -633,8 +632,8 @@ const Icons = {
       // --- 3. URGENCY TOGGLE (E-2 FIX) ---
       // Now a <button role="checkbox"> — aria-checked is toggled for screen readers
       const urgencyToggle = document.getElementById('urgency-toggle') as HTMLButtonElement | null;
-      if (urgencyToggle && !(urgencyToggle as any).dataset.bound) {
-        (urgencyToggle as any).dataset.bound = 'true';
+      if (urgencyToggle && !(urgencyToggle as HTMLElement).dataset.bound) {
+        (urgencyToggle as HTMLElement).dataset.bound = 'true';
 
         urgencyToggle.addEventListener('click', () => {
           const isNowUrgent = urgencyToggle.getAttribute('aria-checked') !== 'true';
@@ -665,8 +664,8 @@ const Icons = {
       // Form now has action="/api/contact". The handler reads the Turnstile token
       // and sends the full payload as JSON — matching the updated contact API contract.
       const smartForm = document.getElementById('smart-form') as HTMLFormElement | null;
-      if (smartForm && !(smartForm as any).dataset.bound) {
-        (smartForm as any).dataset.bound = 'true';
+      if (smartForm && !(smartForm as HTMLElement).dataset.bound) {
+        (smartForm as HTMLElement).dataset.bound = 'true';
 
         smartForm.addEventListener('submit', async (e) => {
           e.preventDefault();
@@ -723,7 +722,7 @@ const Icons = {
 
             if (!response.ok) {
               const errData = await response.json().catch((): { error?: string } => ({}));
-              throw new Error((errData as any).error || 'Submission failed');
+              throw new Error((errData as { error?: string }).error || 'Submission failed');
             }
 
             // F-1 FIX: Generate a real client-side reference ID using crypto.randomUUID()

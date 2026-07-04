@@ -1,22 +1,22 @@
-﻿// src/pages/rss.xml.ts
+// src/pages/rss.xml.ts
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import { SITE } from '../constants/site';
 
 export const GET: APIRoute = async () => {
   // SEO FIX (L-03): Dynamically fetches blog posts instead of returning a dead stub.
   // Fails gracefully if the collection is empty.
-  let posts: any[] = [];
+  let posts: CollectionEntry<'blog'>[] = [];
   try {
     posts = await getCollection('blog');
-  } catch (e) {
+  } catch (_e) {
     // Collection might not exist yet, safe to ignore
   }
 
   const items = posts.map(post => `
     <item>
       <title><![CDATA[${post.data.title}]]></title>
-      <link>${SITE.url}/blog/${post.slug}</link>
+      <link>${SITE.url}/blog/${post.id}</link>
       <description><![CDATA[${post.data.description}]]></description>
       <pubDate>${new Date(post.data.pubDate || new Date()).toUTCString()}</pubDate>
     </item>
