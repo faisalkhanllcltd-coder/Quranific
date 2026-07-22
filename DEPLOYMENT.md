@@ -66,7 +66,7 @@ npx wrangler pages deploy dist
 ```
 
 ## 5. Security & Compliance Checklist
-- [ ] Ensure Turnstile keys are properly split (Public in `site.ts`, Private in secrets).
+- [ ] Ensure `PUBLIC_TURNSTILE_SITE_KEY` is set as an environment variable in Cloudflare (not hardcoded). `TURNSTILE_SECRET_KEY` stays in secrets.
 - [ ] Verify `JWT_SECRET` is strong and unique to the environment.
 - [ ] Check that the `SESSION` KV binding is active so the dead-letter queue works.
 - [ ] Confirm `SITE.phone` and `SITE.address` are populated in `site.ts` before running live ads.

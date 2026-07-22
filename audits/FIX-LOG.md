@@ -1,19 +1,19 @@
 # FIX LOG
-Statuses based on `git diff pre-agent-audit-backup...HEAD` evidence only.
-PARTIAL = diff exists but finding not fully resolved. NOT DONE = no diff evidence.
+Evidence basis: `git diff pre-agent-audit-backup...HEAD`. Updated after each commit on `audit/full-site-2026-07-15`.
+FIXED = diff evidence confirmed. PARTIAL = diff exists but incomplete. INCOMPLETE = claimed, no per-field evidence. NOT DONE = no diff. OPEN = requires owner/visual input.
 
-| Finding ID | Status       | Fixed By | Evidence File(s) | Notes |
-| ---------- | ------------ | -------- | ---------------- | ----- |
-| UI-01      | INCOMPLETE   | Session  | `global.css` — zero diff; no container substitutions confirmed | `global.css` was not in diff at all |
-| UI-02      | PARTIAL      | Session  | `about.astro`, `contact.astro`, `legal/*.astro` | `teachers.astro`, `careers.astro`, `testimonials.astro` — zero diff |
-| UI-03      | NOT DONE     | —        | None | `Header.astro` CTA still raw `<a>` tag; `index.astro` zero diff |
-| UI-04      | PARTIAL      | Session  | `legal/*.astro`, `about.astro`, `contact.astro` | `teachers.astro`, `careers.astro`, `testimonials.astro` — zero diff |
-| UI-05      | PARTIAL      | Session  | `about.astro`, `contact.astro`, legal pages | `teachers.astro` zero diff; `text-[11px]` still in `how-it-works.astro` |
-| UX-01      | NOT DONE     | —        | None | `MAIN_NAVIGATION` / `MOBILE_NAVIGATION` arrays unchanged |
-| UX-02      | NOT DONE     | —        | None | `index.astro` zero diff |
-| UX-03      | INCOMPLETE   | Session  | `ContactForm.astro` (type fixes only) | Per-field `aria-invalid` not added |
-| UX-04      | NOT DONE     | —        | None | Header promo bar padding unchanged in diff |
-| CON-01     | NOT DONE     | —        | None | `index.astro` zero diff |
-| CON-02     | PARTIAL      | Session  | `src/CONSTANTS/site.ts`, `courses/index.astro`, `about.astro` | Only `3,200` replaced; 22/94%/4.9★ still unverified |
-| OTH-01     | PARTIAL      | Session  | `CompleteForm.svelte`, `Footer.astro` (widget uses env var) | `site.ts` key still holds placeholder string |
-| OTH-02     | OPEN         | —        | None | Requires visual contrast check; never claimed |
+| Finding ID | Status | Fixed In | Evidence File(s) | Remaining Gap |
+| ---------- | ------ | -------- | ---------------- | ------------- |
+| UI-01      | INCOMPLETE | — | `global.css` zero diff; `Base.astro` changed but not for containers | Per-page `quranific-container` substitution not confirmed |
+| UI-02      | PARTIAL | Batch 1–4 | `about.astro`, `contact.astro`, `legal/*.astro`, `how-it-works.astro`, `tuition-fee.astro` | `teachers.astro`, `careers.astro`, `testimonials.astro` — zero diff until this batch |
+| UI-03      | NOT DONE | — | None | `Header.astro` CTA still raw `<a>` tag; `index.astro` deferred |
+| UI-04      | PARTIAL | Batch 1–4 | `legal/*.astro`, `about.astro`, `contact.astro` | `teachers.astro`, `careers.astro`, `testimonials.astro` — zero diff until this batch |
+| UI-05      | PARTIAL | Batch 1–4 | `about.astro`, `contact.astro`, legal pages | `teachers.astro` line 283 `text-[10px]`; `careers.astro` many instances; `how-it-works.astro` line 244 `text-[11px]` — until this batch |
+| UX-01      | NOT DONE | — | None | `MAIN_NAVIGATION` / `MOBILE_NAVIGATION` arrays unchanged — fixing this batch |
+| UX-02      | NOT DONE | — | None | `index.astro` deferred per task |
+| UX-03      | INCOMPLETE | Batch 5 | `ContactForm.astro` type cleanup only | Per-field `aria-invalid` not added — fixing this batch |
+| UX-04      | NOT DONE | — | None | Promo bar close button tap target — fixing this batch |
+| CON-01     | NOT DONE | — | None | `index.astro` deferred per task |
+| CON-02     | PARTIAL | Batch 1–4 | `src/CONSTANTS/site.ts`, `courses/index.astro`, `about.astro` | 22 countries, 94%, 4.9★ remain — handling this batch |
+| OTH-01     | PARTIAL | Batch 6 | `CompleteForm.svelte`, `Footer.astro` use env var | `site.ts` key still live — cannot remove; `signup.astro:34` references `SITE.turnstileSiteKey` |
+| OTH-02     | OPEN | — | None | Needs WCAG contrast calc — doing this batch |
