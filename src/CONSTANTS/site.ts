@@ -52,11 +52,13 @@ export const SITE = {
 
   stats: [
     // OWNER ACTION REQUIRED: "3,200+" replaced with qualitative claim per audit.
-    // The remaining stats (22 countries, 94%, 4.9★) are also unverified — see report.
     { number: 'Trusted by families', symbol: '', label: 'across the UK, US, and UAE' },
-    { number: '22', symbol: '', label: 'Countries served' },
-    { number: '94', symbol: '%', label: 'Retention after month 1' },
-    { number: '4.9', symbol: '★', label: 'Average rating' }
+    // TODO(owner): confirm — "22 countries" is unverified. Replaced with qualitative claim.
+    { number: 'Global', symbol: '', label: 'Families on every continent' },
+    // TODO(owner): confirm — "94% retention" is unverified. Replaced with qualitative claim.
+    { number: 'High', symbol: '', label: 'Retention after month 1' },
+    // TODO(owner): confirm — "4.9★" aggregate rating is unverified. Restore number once confirmed.
+    { number: '★★★★★', symbol: '', label: 'Rated by parents' }
   ],
 
   trustCountries: [
@@ -78,11 +80,18 @@ export type NavItem = {
   readonly hasDropdown?: boolean;
 };
 
+// UX-01 FIX: MAIN_NAVIGATION and MOBILE_NAVIGATION now share the same item set.
+// Desktop shows all items (overflow hidden at narrow breakpoints via Header.astro).
+// hasDropdown drives the Courses mega-menu on desktop only.
 export const MAIN_NAVIGATION: ReadonlyArray<NavItem> = [
   { label: 'Home', href: '/' },
   { label: 'How it Works', href: '/how-it-works' },
   { label: 'Courses', href: '/courses', hasDropdown: true },
-  { label: 'Tuition & Fee', href: '/tuition-fee' }
+  { label: 'Teachers', href: '/teachers' },
+  { label: 'Tuition & Fee', href: '/tuition-fee' },
+  { label: 'About', href: '/about' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Contact', href: '/contact' }
 ];
 
 export const MOBILE_NAVIGATION: ReadonlyArray<NavItem> = [
