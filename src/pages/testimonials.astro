@@ -67,11 +67,8 @@ const jsonLd = {
   "@type": "Organization",
   "name": "Quranific",
   "url": "https://quranific.com",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "reviewCount": "542"
-  },
+  // TODO(owner): confirm aggregate rating and review count before adding back to JSON-LD
+  // "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "542" },
   "review": TESTIMONIALS.map(t => ({
     "@type": "Review",
     "author": {
@@ -112,19 +109,21 @@ const jsonLd = {
         </h1>
         
         <p class="text-lg lg:text-xl text-emerald-700/80 font-medium max-w-2xl mx-auto leading-relaxed text-balance mb-12">
-          Discover how families across 100+ countries are building lifelong, meaningful connections with the Holy Quran through our dedicated tutors.
+          Discover how families on every continent are building meaningful, lifelong connections with the Holy Quran through our dedicated tutors.
         </p>
 
         <div class="flex flex-wrap justify-center gap-8 lg:gap-16">
+          <!-- TODO(owner): confirm 4.9/5 aggregate rating before restoring numeric value -->
           <div class="text-center">
-            <div class="text-4xl font-black text-emerald-800 mb-1">4.9/5</div>
-            <div class="flex text-amber-400 justify-center mb-1 text-sm" aria-hidden="true">★★★★★</div>
-            <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider">Average Rating</div>
+            <div class="text-4xl font-black text-emerald-800 mb-1">★★★★★</div>
+            <div class="flex text-amber-400 justify-center mb-1 text-sm" aria-hidden="true"></div>
+            <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider">Rated by parents</div>
           </div>
           <div class="w-px h-16 bg-emerald-100 hidden sm:block" aria-hidden="true"></div>
+          <!-- TODO(owner): confirm "50k+ Active Students" before restoring numeric value -->
           <div class="text-center flex flex-col justify-center">
-            <div class="text-4xl font-black text-emerald-800 mb-1">50k+</div>
-            <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider mt-2">Active Students</div>
+            <div class="text-4xl font-black text-emerald-800 mb-1">Growing</div>
+            <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider mt-2">Global student community</div>
           </div>
         </div>
       </div>
