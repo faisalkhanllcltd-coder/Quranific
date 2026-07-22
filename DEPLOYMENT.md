@@ -7,7 +7,7 @@ This document outlines the standard operating procedure (SOP) for deploying the 
 You must have the following credentials available:
 - **Resend API Key** (`RESEND_API_KEY`): For transactional emails.
 - **Cloudflare Turnstile Keys**:
-  - `TURNSTILE_SITE_KEY` (Public, added to `src/constants/site.ts`)
+  - `TURNSTILE_SITE_KEY` — set as `PUBLIC_TURNSTILE_SITE_KEY` in your `.dev.vars` / Cloudflare environment variables. The widget components reference `import.meta.env.PUBLIC_TURNSTILE_SITE_KEY` directly — do NOT add it to `src/constants/site.ts`.
   - `TURNSTILE_SECRET_KEY` (Private, added to secrets)
 - **JWT Secret** (`JWT_SECRET`): A long, random string (min 32 chars) for signing session cookies.
 - **Admin Email** (`ADMIN_EMAIL`): Where form submissions are sent.
