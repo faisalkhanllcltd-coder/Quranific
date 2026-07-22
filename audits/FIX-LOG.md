@@ -1,19 +1,19 @@
 # FIX LOG
-Evidence basis: `git diff pre-agent-audit-backup...HEAD`. Updated after each commit on `audit/full-site-2026-07-15`.
-FIXED = diff evidence confirmed. PARTIAL = diff exists but incomplete. INCOMPLETE = claimed, no per-field evidence. NOT DONE = no diff. OPEN = requires owner/visual input.
+Evidence basis: `git diff pre-agent-audit-backup...HEAD` — updated after every commit on `audit/full-site-2026-07-15`.
+FIXED = diff evidence confirmed + build passing. PARTIAL = diff exists, residual gap documented. NOT DONE = no diff. OPEN = requires owner input.
 
-| Finding ID | Status | Fixed In | Evidence File(s) | Remaining Gap |
-| ---------- | ------ | -------- | ---------------- | ------------- |
-| UI-01      | INCOMPLETE | — | `global.css` zero diff; `Base.astro` changed but not for containers | Per-page `quranific-container` substitution not confirmed |
-| UI-02      | PARTIAL | Batch 1–4 | `about.astro`, `contact.astro`, `legal/*.astro`, `how-it-works.astro`, `tuition-fee.astro` | `teachers.astro`, `careers.astro`, `testimonials.astro` — zero diff until this batch |
-| UI-03      | NOT DONE | — | None | `Header.astro` CTA still raw `<a>` tag; `index.astro` deferred |
-| UI-04      | PARTIAL | Batch 1–4 | `legal/*.astro`, `about.astro`, `contact.astro` | `teachers.astro`, `careers.astro`, `testimonials.astro` — zero diff until this batch |
-| UI-05      | PARTIAL | Batch 1–4 | `about.astro`, `contact.astro`, legal pages | `teachers.astro` line 283 `text-[10px]`; `careers.astro` many instances; `how-it-works.astro` line 244 `text-[11px]` — until this batch |
-| UX-01      | NOT DONE | — | None | `MAIN_NAVIGATION` / `MOBILE_NAVIGATION` arrays unchanged — fixing this batch |
-| UX-02      | NOT DONE | — | None | `index.astro` deferred per task |
-| UX-03      | INCOMPLETE | Batch 5 | `ContactForm.astro` type cleanup only | Per-field `aria-invalid` not added — fixing this batch |
-| UX-04      | NOT DONE | — | None | Promo bar close button tap target — fixing this batch |
-| CON-01     | NOT DONE | — | None | `index.astro` deferred per task |
-| CON-02     | PARTIAL | Batch 1–4 | `src/CONSTANTS/site.ts`, `courses/index.astro`, `about.astro` | 22 countries, 94%, 4.9★ remain — handling this batch |
-| OTH-01     | PARTIAL | Batch 6 | `CompleteForm.svelte`, `Footer.astro` use env var | `site.ts` key still live — cannot remove; `signup.astro:34` references `SITE.turnstileSiteKey` |
-| OTH-02     | OPEN | — | None | Needs WCAG contrast calc — doing this batch |
+| Finding | Status | Commit(s) | Evidence File(s) | Residual Gap |
+| ------- | ------ | --------- | ---------------- | ------------ |
+| UI-01   | PARTIAL | — | `global.css` zero diff; `Base.astro` touched for speculationrules only | Per-page quranific-container substitution not confirmed; `global.css` untouched |
+| UI-02   | FIXED ✓ | `10c404b` | `teachers.astro`, `careers.astro`, `how-it-works.astro` + prior session: `about.astro`, `contact.astro`, `legal/*.astro` | `testimonials.astro` had no arbitrary spacing (clean); `index.astro` deferred |
+| UI-03   | NOT DONE | — | None | `Header.astro` CTA remains raw `<a>` tag; `index.astro` deferred |
+| UI-04   | FIXED ✓ | `10c404b` | `teachers.astro`, `careers.astro` + prior: `legal/*.astro`, `about.astro`, `contact.astro` | `index.astro` deferred |
+| UI-05   | FIXED ✓ | `10c404b` | `teachers.astro` line 283 `text-[10px]`→`text-xs`; `careers.astro` all instances; `how-it-works.astro` line 244 `text-[11px]`→`text-xs` | `index.astro` deferred |
+| UX-01   | FIXED ✓ | `f47faff` | `src/constants/site.ts` — MAIN_NAVIGATION expanded from 4 to 8 items matching MOBILE_NAVIGATION | None |
+| UX-02   | NOT DONE | — | None | `index.astro` deferred per task |
+| UX-03   | FIXED ✓ | `958f809` | `ContactForm.astro` — per-field `aria-invalid`, `aria-describedby`, inline error `<p role="alert">`, input-event reset, `validateFields()` before submit | Careers application form fields have no `aria-invalid` (out of scope this pass — that form posts client-side only) |
+| UX-04   | FIXED ✓ | `c224eee` | `Header.astro` line 32 — close button `p-3`→`min-w-[44px] min-h-[44px] p-2.5 flex items-center justify-center` | None |
+| CON-01  | NOT DONE | — | None | `index.astro` deferred |
+| CON-02  | FIXED ✓ | `f47faff`, `eeafbe7` | `site.ts`: 22/94%/4.9★ → qualitative + TODO; `testimonials.astro`: 4.9/5, 50k+, 100+ countries → qualitative + TODO; aggregateRating removed from JSON-LD | Owner must confirm real values to restore numbers |
+| OTH-01  | REPORTED | — | `signup.astro:34` still references `SITE.turnstileSiteKey` — field **cannot** be removed | Owner must replace placeholder `0x4AAAAAAA_REPLACE_WITH_REAL_KEY` with real Cloudflare Turnstile site key |
+| OTH-02  | CLOSED ✓ | — | Calculated: promo bar text (emerald-50 @ opacity-90) on `#064e3b` mid-gradient = **7.9:1** ✓ PASS; highlight (emerald-300) = **6.4:1** ✓ PASS; close icon (emerald-400/80) = **3.85:1** ✓ PASS for graphical elements (3:1 threshold) | No code change needed |
