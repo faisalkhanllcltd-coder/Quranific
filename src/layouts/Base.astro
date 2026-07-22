@@ -136,9 +136,7 @@ const baseSchema = {
     <slot name="head" />
 
     {!isSlow && (
-      <!-- eslint-disable-next-line astro/no-unused-css-selector -->
-      <script type="speculationrules" is:inline>
-      {
+      <script type="speculationrules" is:inline set:html={`{
         "prerender": [
           {
             "eagerness": "moderate",
@@ -146,8 +144,7 @@ const baseSchema = {
             "urls": ["/funnel/signup", "/courses", "/tuition-fee"]
           }
         ]
-      }
-      </script>
+      }`} />
     )}
 
     <ClientRouter />

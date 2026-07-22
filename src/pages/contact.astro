@@ -573,7 +573,7 @@ const Icons = {
       }
 
       // --- 2. SMART FORM TOPIC SWITCHER ---
-      const topicCopy: Record<string, string> = {
+      const topicCopy: Record<string, { title: string; sub: string; msg: string }> = {
         enrol:    { title: 'Enrol a child or book a free trial',        sub: 'Fill in the details below and we will get back to you within 24 hours with everything you need to get started.', msg: 'What would you like to know about enrolling or booking a free trial?' },
         existing: { title: 'Message for existing parents',              sub: 'If you are already enrolled, we can help with your schedule, teacher, progress, or billing.',                         msg: 'What can we help you with today?' },
         adult:    { title: 'Adult learning enquiry',                    sub: 'Our adult programmes are 100% private and built around your schedule. Tell us more.',                                 msg: 'Tell us about your learning goals or current level.' },

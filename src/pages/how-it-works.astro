@@ -795,8 +795,9 @@ const Check = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
     document.addEventListener('astro:page-load', () => {
       document.querySelectorAll('.slot-btn').forEach(btn => {
         // Prevent double binding during client-side navigation
-        if ((btn as any).dataset.bound) return;
-        (btn as any).dataset.bound = 'true';
+      const htmlBtn = btn as HTMLElement;
+      if (htmlBtn.dataset.bound) return;
+      htmlBtn.dataset.bound = 'true';
 
         btn.addEventListener('click', (e) => {
           document.querySelectorAll('.slot-btn').forEach(b => {

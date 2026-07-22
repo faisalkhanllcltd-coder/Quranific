@@ -80,7 +80,7 @@ export const POST: APIRoute = async (context) => {
                         })
                     });
                     if (!res.ok) {
-                        console.error('Resend API rejected the email dispatch');
+                        throw new Error('Resend API rejected the email dispatch');
                     }
                 } else {
                     // Local Mock Mode
@@ -92,6 +92,17 @@ export const POST: APIRoute = async (context) => {
                 }
             } catch (error) {
                 console.error('Contact API Email Dispatch Error:', error);
+                const kv = ((context.locals as { runtime?: { env?: Record<string, unknown> } }).runtime?.env)?.['SESSION'] as { put: (key: string, value: string, opts?: Record<string, unknown>) => Promise<void> } | undefined;
+                if (kv) {
+                    const deadLetterKey = `FAILED_CONTACT:${Date.now()}`;
+                    const deadLetterPayload = JSON.stringify({
+                        failedAt: new Date().toISOString(),
+                        payload: parsed.data,
+                        reason: String(error)
+                    });
+                    kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 })
+                      .catch(e => console.error('[Dead-Letter KV Write Failed]:', e));
+                }
             }
         };
 

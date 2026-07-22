@@ -46,6 +46,13 @@
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
 
+    const turnstileToken = formData.get('cf-turnstile-response');
+    if (!turnstileToken) {
+      errorMsg = 'Please complete the security check';
+      loading = false;
+      return;
+    }
+
     // Inject the segmented-control values into the FormData
     formData.set('course',        selectedCourse);
     formData.set('gender',        selectedGender);
@@ -95,6 +102,8 @@
       {errorMsg}
     </div>
   {/if}
+
+  <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>
 
   <!-- Course select -->
   <div class="space-y-2">

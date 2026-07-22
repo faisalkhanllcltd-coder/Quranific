@@ -110,6 +110,7 @@ const socialLinks = [
               Join
             </button>
           </div>
+          <div class="cf-turnstile mt-4" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>
           <div id="newsletter-message" class="mt-2 text-[13px] font-medium hidden"></div>
         </form>
 
@@ -176,8 +177,8 @@ const socialLinks = [
     const input = document.getElementById('footer-email') as HTMLInputElement;
     const message = document.getElementById('newsletter-message');
 
-    if (!form || !btn || !input || !message || (form as any).dataset.bound) return;
-    (form as any).dataset.bound = 'true';
+    if (!form || !btn || !input || !message || form.dataset.bound) return;
+    form.dataset.bound = 'true';
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -192,6 +193,10 @@ const socialLinks = [
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
+        if (!data['cf-turnstile-response']) {
+          throw new Error('Please complete the security check');
+        }
+
         const response = await fetch(form.action, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -202,12 +207,12 @@ const socialLinks = [
 
         if (!response.ok) {
             if (response.status === 400) {
-              const errorText = ((result as any).error || '').toLowerCase();
+              const errorText = ((result as { error?: string }).error || '').toLowerCase();
               if (errorText.includes('duplicate') || errorText.includes('already') || errorText.includes('exists')) {
                 throw new Error('DUPLICATE_EMAIL');
               }
             }
-            throw new Error((result as any).error || 'Subscription failed');
+            throw new Error((result as { error?: string }).error || 'Subscription failed');
         }
 
         // Success UI Transformation

@@ -9,7 +9,7 @@ export const GET: APIRoute = async () => {
   let posts: CollectionEntry<'blog'>[] = [];
   try {
     posts = await getCollection('blog');
-  } catch (_e) {
+  } catch {
     // Collection might not exist yet, safe to ignore
   }
 

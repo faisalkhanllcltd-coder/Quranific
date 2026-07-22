@@ -1,4 +1,4 @@
-﻿// src/pages/llm.txt.ts
+// src/pages/llm.txt.ts
 import type { APIRoute } from 'astro';
 import { SITE } from '../constants/site';
 
@@ -13,12 +13,11 @@ ${SITE.description}
 - Pricing & Tuition Fees: ${SITE.url}/tuition-fee
 - 1-on-1 Free Trial Signup: ${SITE.url}/funnel/signup
 - Teacher Profiles & Vetting: ${SITE.url}/teachers
-- B2B & School Partnerships: ${SITE.url}/partners
 
 ## Support Contact
-Email: hello@quranific.com
+Email: ${SITE.email}
 Website: ${SITE.url}
-WhatsApp: ${SITE.whatsappLink || '+44 7700 900000'}
+WhatsApp: ${SITE.whatsappNumber}
 `.trim();
 
   return new Response(llmTxt, {

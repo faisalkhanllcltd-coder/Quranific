@@ -56,8 +56,8 @@ import { ENV } from '../../lib/env';
 <script>
   document.addEventListener('astro:page-load', () => {
     const form = document.getElementById('standalone-contact-form') as HTMLFormElement;
-    if (!form || (form as any).dataset.bound) return;
-    (form as any).dataset.bound = 'true';
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = 'true';
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -95,7 +95,7 @@ import { ENV } from '../../lib/env';
 
         if (!response.ok) {
             const errData = await response.json().catch((): { error?: string } => ({}));
-            throw new Error((errData as any).error || 'Server rejected submission');
+            throw new Error((errData as { error?: string }).error || 'Server rejected submission');
         }
         
         btnSpinner.classList.add('hidden');

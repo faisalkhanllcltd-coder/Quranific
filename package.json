@@ -38,7 +38,6 @@
     "eslint-plugin-svelte": "^3.17.0",
     "globals": "^17.4.0",
     "husky": "^9.1.7",
-    "lightningcss": "^1.24.0",
     "lint-staged": "^16.4.0",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",

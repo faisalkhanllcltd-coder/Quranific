@@ -33,6 +33,9 @@ export default defineConfig({
     plugins: [tailwindcss()],
     build: {
       target: 'esnext'
+    },
+    optimizeDeps: {
+      exclude: ['astro:middleware']
     }
   },
   prefetch: {

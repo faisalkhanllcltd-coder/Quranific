@@ -16,6 +16,9 @@ const SECURITY_HEADERS: Record<string, string> = {
   // Disable sensitive browser features not required by this application
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
 
+  // HTTP Strict Transport Security
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+
   // Content Security Policy
   // - default-src 'self'             : Block everything not explicitly allowed
   // - script-src 'self' + Turnstile + Partytown + inline (required for Astro island hydration)

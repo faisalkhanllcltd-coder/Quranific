@@ -48,7 +48,7 @@ export async function sendWelcomeEmail(email: string, name: string) {
     return { success: true };
   } catch (error) {
     console.error('Welcome Email failed:', error);
-    return { success: false, error };
+    throw error;
   }
 }
 
@@ -108,6 +108,6 @@ export async function sendAdminNotification(step1Data: Step1Data, step2Data: Ste
     return { success: true };
   } catch (error) {
     console.error('Admin Email failed:', error);
-    return { success: false, error };
+    throw error;
   }
 }

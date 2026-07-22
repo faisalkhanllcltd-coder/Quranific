@@ -7,6 +7,28 @@ import { jwtVerify } from 'jose';
 
 export const prerender = false;
 
+// ─── Cloudflare Turnstile Verification ──────────────────────────────────────
+async function verifyTurnstile(token: string, remoteip?: string): Promise<boolean> {
+  try {
+    const body = new URLSearchParams({
+      secret:   ENV.TURNSTILE_SECRET_KEY,
+      response: token,
+    });
+    if (remoteip) body.set('remoteip', remoteip);
+
+    const res = await fetch(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      { method: 'POST', body }
+    );
+    if (!res.ok) return false;
+    const data = await res.json() as { success: boolean };
+    return data.success === true;
+  } catch {
+    return false;
+  }
+}
+
+
 // ─── HEAD: Pre-flight session check ─────────────────────────────────────────
 // CompleteForm.svelte calls HEAD /api/complete on mount to check if the
 // HttpOnly cookie session exists before rendering the form.
@@ -56,6 +78,22 @@ export const POST: APIRoute = async (context) => {
   try {
     const data = await context.request.formData();
     const formData = Object.fromEntries(data);
+
+    const turnstileToken = formData['cf-turnstile-response'] as string | undefined;
+    if (!turnstileToken) {
+      return new Response(
+        JSON.stringify({ error: 'Security check missing. Please refresh and try again.' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? undefined;
+    const isHuman = await verifyTurnstile(turnstileToken, cfConnectingIp);
+    if (!isHuman) {
+      return new Response(
+        JSON.stringify({ error: 'Security check failed. Please refresh and try again.' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
     const parsed = completeSchema.safeParse(formData);
     if (!parsed.success) {

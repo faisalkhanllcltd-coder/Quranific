@@ -731,7 +731,7 @@ const Icons = {
       if (addBtn && !addBtn.dataset.bound) {
         addBtn.dataset.bound = 'true';
         
-        addBtn.addEventListener('click', function addSibling(_e) {
+        addBtn.addEventListener('click', function addSibling() {
           const row2 = document.getElementById('child2-row');
           
           if (row2 && row2.classList.contains('hidden')) {
