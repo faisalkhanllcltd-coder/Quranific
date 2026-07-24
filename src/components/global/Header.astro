@@ -2,7 +2,6 @@
 // src/components/global/Header.astro
 import MobileMenu from './MobileMenu.astro';
 import Button from '../ui/Button.astro';
-import { courses } from '../../constants/courses';
 import { SITE, MAIN_NAVIGATION } from '../../constants/site';
 ---
 
@@ -59,70 +58,14 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
     </a>
 
     <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-8 h-full">
-      {MAIN_NAVIGATION.map((item) =>
-        item.hasDropdown ? (
-          <div class="group relative h-full flex items-center" data-dropdown>
-            <a
-              href={item.href}
-              id="courses-menu-trigger"
-              aria-haspopup="true"
-              aria-expanded="false"
-              aria-controls="courses-dropdown"
-              class="flex items-center gap-1.5 py-4 text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded relative"
-            >
-              {item.label}
-              <svg
-                class="w-4 h-4 text-emerald-600/70 group-hover:rotate-180 transition-transform duration-300"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </a>
-            
-            <div
-              id="courses-dropdown"
-              role="region"
-              aria-label="Course categories"
-              class="absolute top-full left-1/2 -translate-x-1/2 w-[650px] bg-white rounded-2xl shadow-xl border border-emerald-100 opacity-0 invisible translate-y-2 transition-all duration-200 ease-out overflow-hidden"
-            >
-              <div class="p-6 grid grid-cols-2 gap-4">
-                {courses.map((course) => (
-                  <a
-                    href={`/courses/${course.slug}`}
-                    class="flex items-start gap-4 p-3 rounded-xl hover:bg-emerald-50 transition-colors group/item focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
-                  >
-                    <div class="text-2xl pt-1 group-hover/item:scale-110 transition-transform" aria-hidden="true">
-                      {course.icon}
-                    </div>
-                    <div>
-                      <div class="text-sm font-bold text-emerald-950 mb-0.5">{course.shortTitle}</div>
-                      <div class="text-xs text-emerald-700/80 leading-snug">{course.shortDesc}</div>
-                    </div>
-                  </a>
-                ))}
-              </div>
-              <div class="bg-emerald-50 p-4 text-center border-t border-emerald-100">
-                <a
-                  href="/courses"
-                  class="text-sm font-bold text-emerald-700 hover:text-emerald-900 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded"
-                >
-                  View All Course Tracks →
-                </a>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <a
-            href={item.href}
-            class="text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded relative flex items-center h-full"
-          >
-            {item.label}
-          </a>
-        )
-      )}
+      {MAIN_NAVIGATION.map((item) => (
+        <a
+          href={item.href}
+          class="text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded relative flex items-center h-full"
+        >
+          {item.label}
+        </a>
+      ))}
     </nav>
 
     <div class="hidden md:flex items-center gap-6">
@@ -209,54 +152,10 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
   }
 
   // ---------------------------------------------------------------------------
-  // DROPDOWN ACCESSIBILITY LOGIC
-  // ---------------------------------------------------------------------------
-  function initDropdownAria(): void {
-    let hoverTimeout: ReturnType<typeof setTimeout>; 
-
-    document.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((container) => {
-      const trigger = container.querySelector<HTMLElement>('[aria-haspopup]');
-      const menu = container.querySelector<HTMLElement>('[role="region"]');
-      
-      if (!trigger || !menu) return;
-
-      function openMenu() {
-        menu!.classList.remove('opacity-0', 'invisible', 'translate-y-2');
-        menu!.classList.add('opacity-100', 'visible', 'translate-y-0');
-        trigger!.setAttribute('aria-expanded', 'true');
-      }
-
-      function closeMenu() {
-        menu!.classList.add('opacity-0', 'invisible', 'translate-y-2');
-        menu!.classList.remove('opacity-100', 'visible', 'translate-y-0');
-        trigger!.setAttribute('aria-expanded', 'false');
-      }
-
-      container.addEventListener('mouseenter', () => {
-        clearTimeout(hoverTimeout);
-        hoverTimeout = setTimeout(openMenu, 120);
-      });
-
-      container.addEventListener('mouseleave', () => {
-        clearTimeout(hoverTimeout);
-        closeMenu();
-      });
-
-      container.addEventListener('focusin', openMenu);
-      container.addEventListener('focusout', (e: FocusEvent) => {
-        if (!container.contains(e.relatedTarget as Node | null)) {
-          closeMenu();
-        }
-      });
-    });
-  }
-
-  // ---------------------------------------------------------------------------
   // INITIALIZATION
   // ---------------------------------------------------------------------------
   document.addEventListener('astro:page-load', () => {
     initPromoBar();
     initHeaderScroll();
-    initDropdownAria();
   });
 </script>
