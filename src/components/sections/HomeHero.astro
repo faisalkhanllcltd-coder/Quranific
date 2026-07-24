@@ -3,8 +3,25 @@
 // Pure HTML/CSS. Zero JavaScript overhead.
 import { Image } from 'astro:assets';
 import { SITE } from '../../constants/site';
+
+interface Props {
+  badgeText?: string;
+  title?: string;
+  highlightWord?: string;
+  subtitle?: string;
+  primaryCtaLink?: string;
+  // primaryCtaText intentionally not used — CTA copy locked to "Book Your Free Class"
+}
+
+const {
+  title = "Learn the Quran with",
+  highlightWord = "Expert Teachers",
+  subtitle = "Join our global community of learners and deepen your understanding of Islam through personalized, 1-on-1 online classes.",
+  primaryCtaLink = "/funnel/signup",
+} = Astro.props;
 ---
 <section class="relative bg-[#fefdf9] overflow-hidden selection:bg-emerald-200 selection:text-emerald-950 pt-8 pb-16 md:pt-12 md:pb-24 lg:pt-12 lg:pb-32">
+
   
   <div class="absolute inset-0 bg-[radial-gradient(#d1fae5_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
   <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-emerald-200/40 to-amber-200/40 blur-[100px] rounded-full pointer-events-none"></div>
@@ -22,16 +39,16 @@ import { SITE } from '../../constants/site';
         </div>
         
         <h1 class="text-[36px] sm:text-[40px] md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5 leading-[1.15] text-emerald-950 text-balance max-w-3xl">
-          Learn the Quran with 
-          <span class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-amber-500 bg-clip-text text-transparent">Expert Teachers</span>
+          {title}
+          <span class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-amber-500 bg-clip-text text-transparent">{highlightWord}</span>
         </h1>
         
         <p class="text-lg sm:text-xl text-emerald-800/80 mb-8 md:mb-10 leading-relaxed max-w-2xl font-medium text-balance">
-          Join our global community of learners and deepen your understanding of Islam through personalized, 1-on-1 online classes.
+          {subtitle}
         </p>
         
         <div class="flex flex-col sm:flex-row gap-3 mb-12 lg:mb-16">
-          <a href="/funnel/signup" class="w-full sm:w-auto inline-flex justify-center items-center px-7 py-4 text-base font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-xl shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/20 hover:-translate-y-0.5 transition-all duration-300 active:scale-95">
+          <a href={primaryCtaLink} class="w-full sm:w-auto inline-flex justify-center items-center px-7 py-4 text-base font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-xl shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/20 hover:-translate-y-0.5 transition-all duration-300 active:scale-95">
             Book Your Free Class
           </a>
           <a href="#how-it-works" class="w-full sm:w-auto inline-flex justify-center items-center px-7 py-4 text-base font-bold text-emerald-950 bg-white border-2 border-emerald-200/80 hover:border-emerald-300 hover:bg-emerald-50/50 rounded-xl transition-all duration-300">
