@@ -47,7 +47,9 @@ export const SITE = {
     instagram: 'https://www.instagram.com/quranific_com',
     pinterest: 'https://pinterest.com/quranific',
     tiktok: 'https://www.tiktok.com/@quranific.com',
-    x: 'https://x.com/quranific_'
+    x: 'https://x.com/quranific_',
+    // TODO(owner): confirm real YouTube channel URL before publishing
+    youtube: 'https://www.youtube.com/@quranific'
   },
 
   stats: [
@@ -80,33 +82,45 @@ export type NavItem = {
   readonly hasDropdown?: boolean;
 };
 
-// Nav simplified to 3 core items per owner request (2026-07-25).
-// Removed: How it Works, Teachers, About, FAQ, Contact — pages still exist, reachable via footer/inline links.
+// Nav: Home, Courses, Tuition & Fee, FAQ — per owner request (2026-07-25).
 export const MAIN_NAVIGATION: ReadonlyArray<NavItem> = [
   { label: 'Home', href: '/' },
   { label: 'Courses', href: '/courses' },
-  { label: 'Tuition & Fee', href: '/tuition-fee' }
+  { label: 'Tuition & Fee', href: '/tuition-fee' },
+  { label: 'FAQ', href: '/faq' }
 ];
 
 export const MOBILE_NAVIGATION: ReadonlyArray<NavItem> = [
   { label: 'Home', href: '/' },
   { label: 'Courses', href: '/courses' },
-  { label: 'Tuition & Fee', href: '/tuition-fee' }
+  { label: 'Tuition & Fee', href: '/tuition-fee' },
+  { label: 'FAQ', href: '/faq' }
 ];
 
 export const FOOTER_NAVIGATION = {
-  explore: [
-    { label: 'How it Works', href: '/how-it-works' },
-    { label: 'Programs & Courses', href: '/courses' },
+  academy: [
+    { label: 'About Us', href: '/about' },
+    { label: 'Careers', href: '/careers' },
+    { label: 'Partners', href: '/partners' },
+    { label: 'Contact', href: '/contact' }
+  ],
+  learn: [
+    { label: 'Courses', href: '/courses' },
+    { label: 'How It Works', href: '/how-it-works' },
     { label: 'Expert Teachers', href: '/teachers' },
-    { label: 'Pricing & Fees', href: '/tuition-fee' },
-    { label: 'Student Portals', href: '/portals' }
+    { label: 'Tuition & Fee', href: '/tuition-fee' },
+    { label: 'Blog', href: '/blog' }
+  ],
+  trust: [
+    { label: 'Testimonials', href: '/testimonials' },
+    { label: 'Student Portals', href: '/portals' },
+    { label: 'Safeguarding', href: '/safeguarding' }
   ],
   legal: [
     { label: 'Privacy Policy', href: '/legal/privacy' },
     { label: 'Terms of Service', href: '/legal/terms' },
     { label: 'Refund Policy', href: '/legal/refund' },
-    { label: 'XML Sitemap', href: '/sitemap-index.xml' },
-    { label: 'AI/LLM Context', href: '/llms.txt' }
+    { label: 'Cookie Policy', href: '/legal/cookies' },
+    { label: 'Impressum', href: '/legal/impressum' }
   ]
 } as const;

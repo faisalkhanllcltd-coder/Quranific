@@ -1,4 +1,4 @@
-﻿@import 'tailwindcss';
+@import 'tailwindcss';
 @import './fonts.css';
 @import './cv.css';
 
@@ -15,6 +15,7 @@
   --color-emerald-800: #065f46;
   --color-emerald-900: #064e3b;
   --color-emerald-950: #022c22;
+  --color-emerald-ink: #021f18;
 
   --color-gold-50: #fffbeb;
   --color-gold-100: #fef3c7;

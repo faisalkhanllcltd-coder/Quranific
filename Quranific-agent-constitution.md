@@ -20,6 +20,9 @@ Before saying "done": run the real build, lint, typecheck. Run the test suite if
 > **2a. Replace, never append-alongside.**
 > When editing an existing element (tag, block, table, config entry), the edit MUST replace it — never insert new content alongside old content performing the same role. Every edit to an existing element must show a removal in the diff, not only an addition. If unsure whether an edit tool performed a true replace, re-open the file after saving and confirm only one version of each element exists before proceeding. This applies equally to HTML inputs, markdown tables, nav arrays, and JSON-LD objects.
 
+> **2b. Never run build, lint, commit, or push unless the current prompt explicitly requests it for that specific pass.**
+> A prompt's silence on build/commit/push means DO NOT run them — this is the default, not an exception. Violating this wastes the owner's tokens and is treated as seriously as a false success claim.
+
 **3. Output economy.**
 Chat replies are not the deliverable — the code is. Default reply: 3-8 lines — what changed, why, what you verified. No audit essays, no restating the checklist, no self-praise. Non-blocking findings go into the code as a `// TODO[SEVERITY]:` comment, not into chat. Surface in chat only what blocks the task, what needs a fact you don't have, or what could break production. Full structured audits only when explicitly requested — table format, evidence only, zero filler.
 

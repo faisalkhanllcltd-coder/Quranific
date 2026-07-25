@@ -1,11 +1,10 @@
 ---
 // src/components/global/Footer.astro
-// Global Footer Component — 100% HTML/CSS, Edge Cacheable, Zero JS.
+// Global Footer — static HTML/CSS, edge-cacheable, minimal JS (newsletter only).
 import { SITE, FOOTER_NAVIGATION } from '../../constants/site';
 
 const currentYear = new Date().getFullYear();
 
-// Social icons: converted to strings to prevent Astro JSX compilation errors
 const socialLinks = [
   {
     label: 'Facebook',
@@ -22,110 +21,55 @@ const socialLinks = [
     href: SITE.social.tiktok,
     svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 12a4 4 0 1 0 4 4v-12a5 5 0 0 0 5 5"/>',
   },
+  {
+    // TODO(owner): confirm real YouTube channel URL before publishing
+    label: 'YouTube',
+    href: SITE.social.youtube,
+    svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 8a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-12a4 4 0 0 1-4-4v-8z"/><path d="M10 9l5 3l-5 3z"/>',
+  },
 ] as const;
+
+const linkClass = "text-emerald-300/55 hover:text-white transition-colors duration-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm";
+const headingClass = "text-emerald-500 font-semibold tracking-[0.2em] uppercase text-[11px] mb-5";
 ---
 
-<footer class="bg-[#021f18] pt-20 pb-10 border-t border-emerald-950">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
+<footer class="relative bg-emerald-ink pt-20 pb-10 overflow-hidden">
+  <!-- hairline accent + soft glow, desktop only (mobile GPU cost avoided) -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 max-w-md w-full h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" aria-hidden="true"></div>
+  <div class="hidden md:block absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-72 bg-emerald-500/[0.07] blur-3xl rounded-full" aria-hidden="true"></div>
 
-      <div class="flex flex-col">
-        <a href="/" class="inline-flex items-center gap-3 mb-6 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-lg p-1 -ml-1">
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="grid grid-cols-2 md:grid-cols-6 gap-x-8 gap-y-12">
+
+      <!-- Brand column — real anchor, not a floating tagline -->
+      <div class="col-span-2 flex flex-col gap-6">
+        <a href="/" class="inline-flex items-center gap-2.5 w-fit focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-lg">
           <img
-            src="/images/logo.png"
-            alt="Quranific Logo"
-            width="48"
-            height="48"
+            src="/images/quranific-logo-green.svg"
+            alt="Quranific — Home"
+            width="160"
+            height="40"
             loading="lazy"
             decoding="async"
-            class="w-12 h-12 group-hover:scale-105 transition-transform duration-300"
+            class="h-9 w-auto object-contain"
           />
-          <span class="text-2xl font-black font-serif text-white tracking-tight">Quranific</span>
         </a>
-        <p class="text-emerald-100/70 font-medium leading-relaxed text-[15px] pr-4">
-          Empowering the global Ummah to master the Quran with certified scholars from Al-Azhar, 24/7.
+        <p class="text-emerald-200/50 text-sm leading-relaxed max-w-xs">
+          1-on-1 online Quran classes with certified tutors, for families worldwide.
         </p>
-      </div>
-
-      <div class="flex flex-col mt-2 lg:mt-0">
-        <h3 class="text-white font-bold mb-6 tracking-wide uppercase text-sm">Explore</h3>
-        <ul class="space-y-4">
-          {FOOTER_NAVIGATION.explore.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class="text-emerald-200/80 hover:text-white transition-colors font-medium text-[15px] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="flex flex-col mt-2 lg:mt-0">
-        <h3 class="text-white font-bold mb-6 tracking-wide uppercase text-sm">Legal</h3>
-        <ul class="space-y-4">
-          {FOOTER_NAVIGATION.legal.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class="text-emerald-200/80 hover:text-white transition-colors font-medium text-[15px] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="flex flex-col mt-2 lg:mt-0">
-        <h3 class="text-white font-bold mb-6 tracking-wide uppercase text-sm">Stay Updated</h3>
-        <p class="text-emerald-200/70 text-[15px] leading-relaxed mb-6">
-          Subscribe to our newsletter for the latest Quranic insights and offers.
-        </p>
-        <form
-          id="newsletter-form"
-          action="/api/newsletter"
-          method="POST"
-          class="flex flex-col mb-10 relative"
-          aria-label="Newsletter signup"
-        >
-          <div class="flex w-full">
-            <label for="footer-email" class="sr-only">Email address</label>
-            <input
-              id="footer-email"
-              type="email"
-              name="email"
-              placeholder="Email address"
-              required
-              autocomplete="email"
-              class="w-full bg-emerald-950/50 border border-emerald-800/80 text-white placeholder-emerald-500/50 rounded-l-xl px-4 py-3 text-[15px] focus:outline-none focus:border-amber-500 focus:bg-emerald-950 transition-colors shadow-inner disabled:opacity-50"
-            />
-            <button
-              id="newsletter-submit-btn"
-              type="submit"
-              class="bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-5 py-3 rounded-r-xl text-[15px] shadow-sm transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white min-h-[44px] whitespace-nowrap disabled:opacity-80 disabled:cursor-not-allowed"
-            >
-              Join
-            </button>
-          </div>
-          <div class="cf-turnstile mt-4" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>
-          <div id="newsletter-message" class="mt-2 text-[13px] font-medium hidden"></div>
-        </form>
-
-        <div class="flex gap-4">
+        <div class="flex gap-2">
           {socialLinks.map((social) => (
             <a
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={social.label}
-              class="w-11 h-11 rounded-full bg-emerald-900 border border-emerald-800/50 flex flex-shrink-0 items-center justify-center text-emerald-400 hover:bg-emerald-800 hover:text-white hover:border-emerald-700 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+              class="w-9 h-9 rounded-lg border border-emerald-800/60 flex items-center justify-center text-emerald-400/70 hover:text-white hover:border-emerald-600 hover:bg-emerald-900/50 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-5 h-5"
+                class="w-4 h-4"
                 viewBox="0 0 24 24"
                 stroke-width="2"
                 stroke="currentColor"
@@ -139,34 +83,94 @@ const socialLinks = [
           ))}
         </div>
       </div>
+
+      <div>
+        <h3 class={headingClass}>Academy</h3>
+        <ul class="space-y-3.5">
+          {FOOTER_NAVIGATION.academy.map((link) => (
+            <li><a href={link.href} class={linkClass}>{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class={headingClass}>Learn</h3>
+        <ul class="space-y-3.5">
+          {FOOTER_NAVIGATION.learn.map((link) => (
+            <li><a href={link.href} class={linkClass}>{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class={headingClass}>Trust</h3>
+        <ul class="space-y-3.5">
+          {FOOTER_NAVIGATION.trust.map((link) => (
+            <li><a href={link.href} class={linkClass}>{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class={headingClass}>Legal</h3>
+        <ul class="space-y-3.5">
+          {FOOTER_NAVIGATION.legal.map((link) => (
+            <li><a href={link.href} class={linkClass}>{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
     </div>
 
-    <div class="pt-8 border-t border-emerald-900/40 flex flex-col md:flex-row items-center justify-between gap-4">
-      <p class="text-emerald-100/50 text-[13px] font-medium text-center md:text-left">
-        &copy; {currentYear} {SITE.name}. All rights reserved.
-      </p>
-      <div class="flex items-center gap-2 text-emerald-100/40 text-[13px] font-medium">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-4 h-4"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
+    <!-- Newsletter — real card treatment, not a flat inline row -->
+    <div class="mt-16 pt-10 border-t border-emerald-900/50">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 bg-emerald-950/40 border border-emerald-900/60 rounded-2xl px-6 py-6 md:px-8 md:py-7">
+        <div>
+          <h3 class="text-white font-semibold text-base mb-1">Stay updated</h3>
+          <p class="text-emerald-200/50 text-sm">Quranic insights and offers, straight to your inbox.</p>
+        </div>
+        <form
+          id="newsletter-form"
+          action="/api/newsletter"
+          method="POST"
+          class="flex flex-col w-full md:w-auto md:min-w-96"
+          aria-label="Newsletter signup"
         >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-          <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-          <path d="M12 2l0 4"></path>
-          <path d="M12 18l0 4"></path>
-          <path d="M2 12l4 0"></path>
-          <path d="M18 12l4 0"></path>
-        </svg>
-        Architected for Edge Performance
+          <div class="flex w-full">
+            <label for="footer-email" class="sr-only">Email address</label>
+            <input
+              id="footer-email"
+              type="email"
+              name="email"
+              placeholder="Email address"
+              required
+              autocomplete="email"
+              class="w-full bg-emerald-ink border border-emerald-800/70 text-white placeholder-emerald-500/40 rounded-l-lg px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition-colors disabled:opacity-50"
+            />
+            <button
+              id="newsletter-submit-btn"
+              type="submit"
+              class="bg-amber-500 hover:bg-amber-400 text-emerald-950 font-semibold px-5 py-3 rounded-r-lg text-sm transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white min-h-[44px] whitespace-nowrap disabled:opacity-80 disabled:cursor-not-allowed"
+            >
+              Join
+            </button>
+          </div>
+          <div class="cf-turnstile mt-3" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>
+          <div id="newsletter-message" class="mt-2 text-xs font-medium hidden"></div>
+        </form>
       </div>
     </div>
+
+    <!-- Copyright bar — does real work instead of sitting empty -->
+    <div class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-emerald-300/35">
+      <p>&copy; {currentYear} {SITE.name}. All rights reserved.</p>
+      <div class="flex items-center gap-5">
+        <a href="/legal/privacy" class="hover:text-emerald-100 transition-colors">Privacy</a>
+        <a href="/legal/terms" class="hover:text-emerald-100 transition-colors">Terms</a>
+        <a href="/legal/cookies" class="hover:text-emerald-100 transition-colors">Cookies</a>
+      </div>
+    </div>
+
   </div>
 </footer>
 
@@ -187,7 +191,7 @@ const socialLinks = [
       btn.innerText = 'Wait...';
       btn.disabled = true;
       input.disabled = true;
-      message.className = 'mt-2 text-[13px] font-medium hidden';
+      message.className = 'mt-2 text-xs font-medium hidden';
 
       try {
         const formData = new FormData(form);
@@ -215,31 +219,30 @@ const socialLinks = [
             throw new Error((result as { error?: string }).error || 'Subscription failed');
         }
 
-        // Success UI Transformation
         btn.innerText = 'Joined ✓';
         btn.classList.replace('bg-amber-500', 'bg-emerald-600');
         btn.classList.replace('hover:bg-amber-400', 'hover:bg-emerald-500');
-        btn.classList.replace('text-amber-950', 'text-white');
+        btn.classList.replace('text-emerald-950', 'text-white');
         input.value = '';
         input.placeholder = 'JazakAllah Khair!';
-        
+
         message.textContent = "Welcome to the family! Check your inbox.";
-        message.className = 'mt-2 text-[13px] font-medium text-emerald-400 block';
+        message.className = 'mt-2 text-xs font-medium text-emerald-400 block';
 
       } catch (error: unknown) {
         console.error('Newsletter error:', error);
         const errMsg = error instanceof Error ? error.message : '';
-        
+
         if (errMsg === 'DUPLICATE_EMAIL') {
           btn.innerText = 'Joined ✓';
           message.textContent = "You're already subscribed! Check your inbox.";
-          message.className = 'mt-2 text-[13px] font-medium text-amber-400 block';
+          message.className = 'mt-2 text-xs font-medium text-amber-400 block';
         } else {
           btn.innerText = originalBtnText;
           btn.disabled = false;
           input.disabled = false;
           message.textContent = errMsg || "Network error. Please try again.";
-          message.className = 'mt-2 text-[13px] font-medium text-red-400 block';
+          message.className = 'mt-2 text-xs font-medium text-red-400 block';
         }
       }
     });
