@@ -80,29 +80,18 @@ export type NavItem = {
   readonly hasDropdown?: boolean;
 };
 
-// UX-01 FIX: MAIN_NAVIGATION and MOBILE_NAVIGATION now share the same item set.
-// Desktop shows all items (overflow hidden at narrow breakpoints via Header.astro).
-// hasDropdown drives the Courses mega-menu on desktop only.
+// Nav simplified to 3 core items per owner request (2026-07-25).
+// Removed: How it Works, Teachers, About, FAQ, Contact — pages still exist, reachable via footer/inline links.
 export const MAIN_NAVIGATION: ReadonlyArray<NavItem> = [
   { label: 'Home', href: '/' },
-  { label: 'How it Works', href: '/how-it-works' },
-  { label: 'Courses', href: '/courses', hasDropdown: true },
-  { label: 'Teachers', href: '/teachers' },
-  { label: 'Tuition & Fee', href: '/tuition-fee' },
-  { label: 'About', href: '/about' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Contact', href: '/contact' }
+  { label: 'Courses', href: '/courses' },
+  { label: 'Tuition & Fee', href: '/tuition-fee' }
 ];
 
 export const MOBILE_NAVIGATION: ReadonlyArray<NavItem> = [
   { label: 'Home', href: '/' },
-  { label: 'How it Works', href: '/how-it-works' },
   { label: 'Courses', href: '/courses' },
-  { label: 'Teachers', href: '/teachers' },
-  { label: 'Tuition Fee', href: '/tuition-fee' },
-  { label: 'About Us', href: '/about' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Contact', href: '/contact' }
+  { label: 'Tuition & Fee', href: '/tuition-fee' }
 ];
 
 export const FOOTER_NAVIGATION = {
