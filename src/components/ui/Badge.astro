@@ -4,10 +4,9 @@ import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<'span'> {
   variant?: 'emerald' | 'amber' | 'white';
-  dot?: boolean;
 }
 
-const { variant = 'emerald', class: className, dot = false, ...rest } = Astro.props;
+const { variant = 'emerald', class: className, ...rest } = Astro.props;
 
 const variants = {
   emerald: "bg-emerald-50 text-emerald-700 border-emerald-100",
@@ -23,14 +22,5 @@ const variants = {
   ]}
   {...rest}
 >
-  {dot && (
-    <span 
-      class:list={[
-        "w-1.5 h-1.5 rounded-full animate-pulse",
-        variant === 'amber' ? 'bg-amber-500' : 'bg-emerald-500'
-      ]}
-      aria-hidden="true"
-    ></span>
-  )}
   <slot />
 </span>

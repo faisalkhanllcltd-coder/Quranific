@@ -24,7 +24,7 @@ export const TESTIMONIALS_DATA: Testimonial[] = [
     initials: 'KH',
     name: 'Khalid H.',
     locationAndRole: 'Houston, USA · Two sons, ages 9 & 12',
-    content: "As a father working long hours, the guilt was real. Quranific didn't just teach my sons tajweed — they gave me back the peace of knowing I didn't drop the ball on their deen.",
+    content: "As a father working long hours, the guilt was real. Quranific didn't just teach my sons tajweed. They gave me back the peace of knowing I didn't drop the ball on their deen.",
     enrollmentTime: '8 months',
     theme: 'dark'
   },

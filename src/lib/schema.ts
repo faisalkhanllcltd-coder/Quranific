@@ -12,7 +12,7 @@ export const signupSchema = z.object({
   honeypot: z.string().max(0, 'Bot detected').optional(),
   // B-2 FIX: Changed from .optional() to .min(1, ...) so the Turnstile token is
   // always required. register.ts rejects any submission where this field is absent.
-  turnstileToken: z.string().min(1, 'Bot check required — please complete the security check.'),
+  turnstileToken: z.string().min(1, 'Bot check required: please complete the security check.'),
 });
 
 export const completeSchema = z.object({
