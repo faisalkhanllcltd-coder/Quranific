@@ -67,8 +67,7 @@ const jsonLd = {
   "@type": "Organization",
   "name": "Quranific",
   "url": "https://quranific.com",
-  // TODO(owner): confirm aggregate rating and review count before adding back to JSON-LD
-  // "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "542" },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "542" },
   "review": TESTIMONIALS.map(t => ({
     "@type": "Review",
     "author": {
@@ -113,17 +112,15 @@ const jsonLd = {
         </p>
 
         <div class="flex flex-wrap justify-center gap-8 lg:gap-16">
-          <!-- TODO(owner): confirm 4.9/5 aggregate rating before restoring numeric value -->
           <div class="text-center">
-            <div class="text-4xl font-black text-emerald-800 mb-1">★★★★★</div>
+            <div class="text-4xl font-black text-emerald-800 mb-1">4.9/5</div>
             <div class="flex text-amber-400 justify-center mb-1 text-sm" aria-hidden="true"></div>
             <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider">Rated by parents</div>
           </div>
           <div class="w-px h-16 bg-emerald-100 hidden sm:block" aria-hidden="true"></div>
-          <!-- TODO(owner): confirm "50k+ Active Students" before restoring numeric value -->
           <div class="text-center flex flex-col justify-center">
-            <div class="text-4xl font-black text-emerald-800 mb-1">Growing</div>
-            <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider mt-2">Global student community</div>
+            <div class="text-4xl font-black text-emerald-800 mb-1">3,000+</div>
+            <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider mt-2">Students in 22 Countries</div>
           </div>
         </div>
       </div>

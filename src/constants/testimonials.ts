@@ -12,28 +12,28 @@ export interface Testimonial {
 export const TESTIMONIALS_DATA: Testimonial[] = [
   {
     id: '1',
-    initials: 'SA',
-    name: 'Sarah A.',
-    locationAndRole: 'Manchester, UK · Daughter, age 8',
-    content: "My daughter used to cry before her old Quran class. After two months with Quranific, she reminds ME it's time for her lesson. I didn't think that was possible.",
+    initials: 'AM',
+    name: 'Amna',
+    locationAndRole: 'Germany',
+    content: "Studying at Quranific has been a profound experience. With the guidance of my dedicated teacher, I have enhanced my Quran recitation and memorized significant portions. Additionally, I have learned about Islamic Studies, fiqah, Salah.",
     enrollmentTime: '14 months',
     theme: 'light'
   },
   {
     id: '2',
-    initials: 'KH',
-    name: 'Khalid H.',
-    locationAndRole: 'Houston, USA · Two sons, ages 9 & 12',
-    content: "As a father working long hours, the guilt was real. Quranific didn't just teach my sons tajweed. They gave me back the peace of knowing I didn't drop the ball on their deen.",
+    initials: 'SM',
+    name: 'Saleem Al Mustarshid',
+    locationAndRole: 'UAE',
+    content: "Our son has been making steady progress with his teacher. He has learnt to pray too alhamdulillah. The teacher also knows when to be firm with our son and when he needs to be gentle, really glad he understands our son's needs and helping him through the Qaida.",
     enrollmentTime: '8 months',
     theme: 'dark'
   },
   {
     id: '3',
-    initials: 'NM',
-    name: 'Nadia M.',
-    locationAndRole: 'Dubai, UAE · Son, age 7',
-    content: "The make-up class policy alone is worth it. We travel a lot for work and previous academies just let sessions disappear. Quranific has never let us miss a lesson.",
+    initials: 'NB',
+    name: 'Naseerullah Babar',
+    locationAndRole: 'UK',
+    content: "We're very pleased with the quality of teaching. The instructors are dedicated, and the lessons are engaging, which my daughters enjoy a lot. The teacher and admin are very friendly and supportive. The online format is convenient for us and makes learning easy and flexible.",
     enrollmentTime: '11 months',
     theme: 'light'
   }

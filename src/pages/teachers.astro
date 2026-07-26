@@ -26,27 +26,21 @@ const Icons = {
 const VETTING_PROCESS = [
   {
     step: '01',
-    title: 'Credential Verification',
-    desc: 'Every applicant must provide proof of Hafiz status and Ijazah certification. We verify their educational background and identity.',
+    title: 'Verified Credentials',
+    desc: 'Every teacher must hold a verified Ijazah and a Master\'s degree in Arabic or Islamic Studies.',
     icon: Icons.vet1
   },
   {
     step: '02',
-    title: 'Live Tajweed Audit',
-    desc: 'Candidates undergo a rigorous live recitation test with our senior academic panel to ensure flawless Makharij (pronunciation) and Tajweed rules.',
+    title: 'Recitation & Teaching Assessment',
+    desc: 'A live teaching simulation with a senior scholar to assess Tajweed, pedagogy, and patience.',
     icon: Icons.vet2
   },
   {
     step: '03',
-    title: 'Pedagogy Evaluation',
-    desc: 'Knowing the Quran is not enough. Teachers are tested on their ability to explain complex concepts simply, especially to children and non-Arabic speakers.',
+    title: 'Internal Training Program',
+    desc: 'All teachers must successfully pass a rigorous internal training program before teaching students.',
     icon: Icons.vet3
-  },
-  {
-    step: '04',
-    title: 'Continuous Quality Assurance',
-    desc: 'Once hired, tutors are subject to random class audits, monthly training workshops, and strict parent-feedback reviews to maintain their status.',
-    icon: Icons.vet4
   }
 ];
 
@@ -66,7 +60,7 @@ const TEACHERS = [
   {
     name: 'Ustad Bilal A.',
     gender: 'Male',
-    title: 'Hafiz & Qari (Al-Azhar Alumnus)',
+    title: 'Hafiz & Qari (Master\'s Degree)',
     experience: '12+ Years',
     rating: '4.9',
     students: '300+',
@@ -159,7 +153,7 @@ const jsonLd = {
           </div>
           <div class="w-px h-12 bg-emerald-200 hidden sm:block" aria-hidden="true"></div>
           <div class="flex flex-col items-center">
-            <span class="text-3xl font-black text-emerald-800">4-Step</span>
+            <span class="text-3xl font-black text-emerald-800">Rigorous</span>
             <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Vetting Process</span>
           </div>
         </div>
@@ -187,7 +181,7 @@ const jsonLd = {
         <div class="text-center mb-16 max-w-3xl mx-auto">
           <h2 class="text-3xl lg:text-5xl font-black text-white mb-6 tracking-tight">How We Select Our Teachers</h2>
           <p class="text-lg text-emerald-100/80 font-medium">
-            We reject over 90% of applicants. Only those who pass our exhaustive, multi-layered evaluation are allowed to teach our students.
+            Only those who pass our exhaustive evaluation and internal training are allowed to teach our students.
           </p>
         </div>
 
@@ -215,6 +209,7 @@ const jsonLd = {
         <div>
           <span class="text-emerald-700 font-bold tracking-widest uppercase text-sm mb-2 block">Safe & Comfortable</span>
           <h2 class="text-3xl lg:text-4xl font-black text-emerald-950 mb-6 tracking-tight">Dedicated Male & Female Instructors</h2>
+
           <p class="text-lg text-emerald-900/80 leading-relaxed font-medium mb-8">
             We understand the importance of modesty and comfort in Islamic education. You have the absolute freedom to request specifically male or female tutors.
           </p>

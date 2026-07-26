@@ -14,14 +14,13 @@ export const SITE = {
   // B-2 FIX: Turnstile site key exposed at build time for the funnel widget.
   // This is the PUBLIC site key (safe to embed in HTML). The SECRET key stays
   // in environment variables and is never committed to the repository.
-  // TODO: Replace this placeholder with your real Cloudflare Turnstile site key.
-  turnstileSiteKey: '0x4AAAAAAA_REPLACE_WITH_REAL_KEY',
+  turnstileSiteKey: '0x4AAAAAAD-QWQWhupcuvhbK',
 
   // G-5 FIX: phone and address added so pages that access SITE.phone / SITE.address
   // resolve to a real value instead of undefined. Fill in real details before go-live.
   // If no phone number exists, remove SITE.phone references from contact.astro and impressum.astro.
-  phone: '',    // TODO: e.g. '+44 20 XXXX XXXX'
-  address: '',  // TODO: e.g. 'London, United Kingdom'
+  phone: '+92 3112112122',
+  address: 'Karachi, Pakistan',
 
   // MARKETING ENGINE: Global Announcement Bar
   announcement: {
@@ -45,22 +44,18 @@ export const SITE = {
   social: {
     facebook: 'https://www.facebook.com/quranific',
     instagram: 'https://www.instagram.com/quranific_com',
+    youtube: 'https://www.youtube.com/@Quranific',
     pinterest: 'https://pinterest.com/quranific',
     tiktok: 'https://www.tiktok.com/@quranific.com',
     x: 'https://x.com/quranific_',
-    // TODO(owner): confirm real YouTube channel URL before publishing
-    youtube: 'https://www.youtube.com/@quranific'
+    whatsapp: 'https://wa.me/message/FF4LDK3JR2GPN1'
   },
 
   stats: [
-    // OWNER ACTION REQUIRED: "3,200+" replaced with qualitative claim per audit.
-    { number: 'Trusted by families', symbol: '', label: 'across the UK, US, and UAE' },
-    // TODO(owner): confirm — "22 countries" is unverified. Replaced with qualitative claim.
-    { number: 'Global', symbol: '', label: 'Families on every continent' },
-    // TODO(owner): confirm — "94% retention" is unverified. Replaced with qualitative claim.
-    { number: 'High', symbol: '', label: 'Retention after month 1' },
-    // TODO(owner): confirm — "4.9★" aggregate rating is unverified. Restore number once confirmed.
-    { number: '★★★★★', symbol: '', label: 'Rated by parents' }
+    { number: '22', symbol: '', label: 'Countries' },
+    { number: '3,000+', symbol: '', label: 'Students' },
+    { number: '94%', symbol: '', label: 'Retention' },
+    { number: '4.9', symbol: '', label: 'Rating' }
   ],
 
   trustCountries: [
