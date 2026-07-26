@@ -9,6 +9,10 @@ directory = "dist"
 [placement]
 mode = "smart"
 
+# Edge runtime fetch cache
+[cache]
+enabled = true
+
 [vars]
 ENVIRONMENT = "production"
 
