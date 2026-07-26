@@ -32,3 +32,11 @@ invocation_logs = true
 enabled = false
 persist = true
 head_sampling_rate = 1
+
+[[routes]]
+pattern = "quranific.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.quranific.com"
+custom_domain = true
