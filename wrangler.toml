@@ -1,7 +1,9 @@
 name = "quranific"
-pages_build_output_dir = "dist"
 compatibility_date = "2026-03-25"
 compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "dist"
 
 # Mandate 1 & 8: Dynamic global edge execution routing
 [placement]
