@@ -10,48 +10,74 @@ export const prerender = false;
 async function verifyTurnstile(token: string, remoteip?: string): Promise<boolean> {
   try {
     const body = new URLSearchParams({
-      secret:   ENV.TURNSTILE_SECRET_KEY,
+      secret: ENV.TURNSTILE_SECRET_KEY,
       response: token,
     });
     if (remoteip) body.set('remoteip', remoteip);
 
-    const res = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      { method: 'POST', body }
-    );
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body,
+    });
     if (!res.ok) return false;
-    const data = await res.json() as { success: boolean };
+    const data = (await res.json()) as { success: boolean };
     return data.success === true;
   } catch {
     return false;
   }
 }
 
+// ─── KV Helper ──────────────────────────────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getKV(context: Parameters<APIRoute>[0]): any {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const locals = context.locals as any;
+  return locals.cfContext?.env?.SESSION || locals.runtime?.env?.SESSION || null;
+}
+
 export const POST: APIRoute = async (context) => {
   try {
+    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? 'unknown';
+    const kv = getKV(context);
+
+    // 1. Distributed IP Rate Limiting via KV (Mandate 3 & 4)
+    if (kv && cfConnectingIp !== 'unknown') {
+      const rateLimitKey = `RL:REGISTER:${cfConnectingIp}`;
+      const isRateLimited = await kv.get(rateLimitKey);
+      if (isRateLimited) {
+        return new Response(
+          JSON.stringify({ error: 'Too many registration attempts. Please wait a minute.' }),
+          { status: 429, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+      // Lock the IP for 60 seconds
+      await kv
+        .put(rateLimitKey, '1', { expirationTtl: 60 })
+        .catch((e: unknown) => console.error('[KV RL Failed]:', e));
+    }
+
     const data = await context.request.formData();
     const formData = Object.fromEntries(data);
 
     const parsed = signupSchema.safeParse(formData);
     if (!parsed.success) {
-      return new Response(
-        JSON.stringify({ error: parsed.error.errors[0].message }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ error: parsed.error.errors[0].message }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const validData = parsed.data;
 
     // Bot trap - silent success for bots (honeypot field)
     if (validData.honeypot) {
-      return new Response(
-        JSON.stringify({ success: true }),
-        { status: 200, headers: { 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     // Server-side Turnstile verification
-    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? undefined;
     const isHuman = await verifyTurnstile(validData.turnstileToken, cfConnectingIp);
     if (!isHuman) {
       return new Response(
@@ -78,26 +104,22 @@ export const POST: APIRoute = async (context) => {
       .sign(secret);
 
     // Deliver the JWT as an HttpOnly cookie — never exposed to JavaScript
-    return new Response(
-      JSON.stringify({ success: true }),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          // HttpOnly prevents XSS from reading the token.
-          // Secure ensures it is only sent over HTTPS.
-          // SameSite=Strict prevents CSRF.
-          // Path=/funnel scopes it to the funnel pages only.
-          'Set-Cookie': `q_session=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=900; Path=/funnel`,
-        },
-      }
-    );
-
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        // HttpOnly prevents XSS from reading the token.
+        // Secure ensures it is only sent over HTTPS.
+        // SameSite=Strict prevents CSRF.
+        // Path=/funnel scopes it to the funnel pages only.
+        'Set-Cookie': `q_session=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=900; Path=/funnel`,
+      },
+    });
   } catch (error) {
     console.error('[API Register Error]:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal Server Error' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 };

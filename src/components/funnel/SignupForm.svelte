@@ -6,11 +6,36 @@
   let errorMsg = $state('');
   let trafficSource = $state('organic');
 
+  // URL params passed from fee calculator or course finder (enrollType, sessions, billing, age, level)
+  // Also capture ad attribution params (gclid, utm_source, utm_campaign, utm_medium, utm_content)
+  // These are injected as hidden inputs on submit — no matching visible form fields exist yet.
+  // TODO(owner): if you want pre-selection of course type on this page, add a visible selector field.
+  let ctxParams = $state<Record<string, string>>({});
+
   // Capture the Meta/Google Ad tracking parameter on mount
   onMount(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       trafficSource = params.get('source') || 'organic';
+      // Capture all context and attribution params for passthrough
+      const ctxKeys = [
+        'enrollType',
+        'sessions',
+        'billing',
+        'age',
+        'level',
+        'gclid',
+        'utm_source',
+        'utm_campaign',
+        'utm_medium',
+        'utm_content',
+      ];
+      const captured: Record<string, string> = {};
+      ctxKeys.forEach((k) => {
+        const v = params.get(k);
+        if (v) captured[k] = v;
+      });
+      ctxParams = captured;
     }
   });
 
@@ -25,10 +50,15 @@
     // Inject traffic source
     formData.set('source', trafficSource);
 
+    // Inject all captured context params (enrollType, sessions, billing, age, level, gclid, utm_*)
+    Object.entries(ctxParams).forEach(([k, v]) => formData.set(k, v));
+
     // B-2 FIX: Read the Turnstile token from the widget (rendered in signup.astro).
     // The widget appends a hidden input named 'cf-turnstile-response' to the DOM.
     // We map it to the field name the schema and server expect: 'turnstileToken'.
-    const turnstileInput = document.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]');
+    const turnstileInput = document.querySelector<HTMLInputElement>(
+      '[name="cf-turnstile-response"]'
+    );
     const turnstileToken = turnstileInput?.value ?? '';
 
     if (!turnstileToken) {
@@ -50,11 +80,8 @@
       // The browser will automatically send the 'q_session' cookie with the next
       // request to /funnel/complete (same origin, Path=/funnel, SameSite=Strict).
       window.location.assign('/funnel/complete');
-
     } catch (err: unknown) {
-      errorMsg = err instanceof Error
-        ? err.message
-        : 'A network error occurred. Please try again.';
+      errorMsg = err instanceof Error ? err.message : 'A network error occurred. Please try again.';
       loading = false;
     }
   }
@@ -62,10 +89,24 @@
 
 <form onsubmit={handleSubmit} class="space-y-6 w-full relative z-10">
   <!-- Honeypot — hidden from humans, filled by bots -->
-  <input type="text" id="honeypot" name="honeypot" class="hidden" tabindex="-1" autocomplete="off" />
+  <input
+    type="text"
+    id="honeypot"
+    name="honeypot"
+    class="hidden"
+    tabindex="-1"
+    autocomplete="off"
+  />
+
+  <!-- Hidden inputs for URL context params (calculator selections + ad attribution) -->
+  {#each Object.entries(ctxParams) as [k, v] (k)}
+    <input type="hidden" name={k} value={v} />
+  {/each}
 
   {#if errorMsg}
-    <div class="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl text-sm flex items-center gap-3 animate-in fade-in zoom-in duration-300">
+    <div
+      class="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl text-sm flex items-center gap-3 animate-in fade-in zoom-in duration-300"
+    >
       <AlertCircle class="w-5 h-5 shrink-0" />
       {errorMsg}
     </div>
@@ -74,8 +115,12 @@
   <div class="space-y-2">
     <label for="name" class="block text-sm font-semibold text-emerald-950">Full Name</label>
     <input
-      type="text" id="name" name="name"
-      autocomplete="name" required disabled={loading}
+      type="text"
+      id="name"
+      name="name"
+      autocomplete="name"
+      required
+      disabled={loading}
       class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-base disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 placeholder:text-emerald-900/30"
       placeholder="e.g. Abdullah Khan"
     />
@@ -84,8 +129,12 @@
   <div class="space-y-2">
     <label for="email" class="block text-sm font-semibold text-emerald-950">Email Address</label>
     <input
-      type="email" id="email" name="email"
-      autocomplete="email" required disabled={loading}
+      type="email"
+      id="email"
+      name="email"
+      autocomplete="email"
+      required
+      disabled={loading}
       class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-base disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 placeholder:text-emerald-900/30"
       placeholder="you@example.com"
     />
@@ -95,18 +144,28 @@
     <div class="space-y-2">
       <label for="whatsapp" class="block text-sm font-semibold text-emerald-950">WhatsApp</label>
       <input
-        type="tel" id="whatsapp" name="whatsapp"
-        autocomplete="tel" required disabled={loading}
+        type="tel"
+        id="whatsapp"
+        name="whatsapp"
+        autocomplete="tel"
+        required
+        disabled={loading}
         class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-base disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 placeholder:text-emerald-900/30"
         placeholder="+1234..."
       />
-      <p class="text-xs text-gray-500 mt-1">We'll message you here to confirm your child's trial time.</p>
+      <p class="text-xs text-gray-500 mt-1">
+        We'll message you here to confirm your child's trial time.
+      </p>
     </div>
     <div class="space-y-2">
       <label for="country" class="block text-sm font-semibold text-emerald-950">Country</label>
       <input
-        type="text" id="country" name="country"
-        autocomplete="country-name" required disabled={loading}
+        type="text"
+        id="country"
+        name="country"
+        autocomplete="country-name"
+        required
+        disabled={loading}
         class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-base disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 placeholder:text-emerald-900/30"
         placeholder="e.g. United Kingdom"
       />

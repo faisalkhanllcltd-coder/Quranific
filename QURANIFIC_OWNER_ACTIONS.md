@@ -47,3 +47,4 @@ This document tracks every unverified fact, missing credential, policy approval,
 - [x] Confirm grace period: 5 days (in `refund.astro`)
 - [x] Confirm make-up notice rule: 5 hours (in `refund.astro`)
 - [x] Provision and verify the 'SESSION' KV binding namespace in the Cloudflare Dashboard to enable the Dead-Letter Queue and idempotency functions.
+- [ ] PENDING — set up conversion tracking (GA4 + Google Ads conversion tag, or Google Tag Manager) in Base.astro before running any Google Ads campaigns. Currently zero analytics exist in the codebase — gclid/utm\_\* params are captured in hidden form fields (funnel/signup) but nothing fires a conversion event on submission yet. Ads spend without this means no bidding optimization data reaches Google.
