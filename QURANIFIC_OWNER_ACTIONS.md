@@ -48,3 +48,5 @@ This document tracks every unverified fact, missing credential, policy approval,
 - [x] Confirm make-up notice rule: 5 hours (in `refund.astro`)
 - [x] Provision and verify the 'SESSION' KV binding namespace in the Cloudflare Dashboard to enable the Dead-Letter Queue and idempotency functions.
 - [ ] PENDING — set up conversion tracking (GA4 + Google Ads conversion tag, or Google Tag Manager) in Base.astro before running any Google Ads campaigns. Currently zero analytics exist in the codebase — gclid/utm\_\* params are captured in hidden form fields (funnel/signup) but nothing fires a conversion event on submission yet. Ads spend without this means no bidding optimization data reaches Google.
+- [ ] PENDING — SGD/CAD/AUD rates in src/constants/pricing.ts are hardcoded as of 2026-07-27 (SGD 1.29, CAD 1.41, AUD 1.43) and will drift from live market rates over time — refresh periodically. AED/SAR are pegged to USD and do not need refreshing.
+- [x] GBP/EUR/AED pricing confirmed by owner — exact values, not rate-derived.

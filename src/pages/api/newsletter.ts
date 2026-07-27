@@ -1,4 +1,5 @@
 // src/pages/api/newsletter.ts
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { ENV } from '../../lib/env';
 import { z } from 'zod';
@@ -100,8 +101,7 @@ export const POST: APIRoute = async (context) => {
         }
       } catch (error) {
         console.error('Newsletter API Email Dispatch Error:', error);
-        const kv = (context.locals as { runtime?: { env?: Record<string, unknown> } }).runtime
-          ?.env?.['SESSION'] as
+        const kv = (env as Record<string, unknown>).SESSION as
           | { put: (key: string, value: string, opts?: Record<string, unknown>) => Promise<void> }
           | undefined;
         if (kv) {

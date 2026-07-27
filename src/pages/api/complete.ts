@@ -1,4 +1,5 @@
 // src/pages/api/complete.ts
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { completeSchema } from '../../lib/schema';
 import { ENV } from '../../lib/env';
@@ -62,10 +63,9 @@ type KVNamespace = {
   put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
 };
 
-function getKV(context: Parameters<APIRoute>[0]): KVNamespace | null {
+function getKV(): KVNamespace | null {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const locals = context.locals as any;
-  const kv = locals.cfContext?.env?.SESSION || locals.runtime?.env?.SESSION;
+  const kv = (env as any).SESSION;
   return kv && typeof kv.get === 'function' ? (kv as KVNamespace) : null;
 }
 
@@ -126,7 +126,7 @@ export const POST: APIRoute = async (context) => {
     }
 
     // 3. Idempotency Check via Cloudflare KV
-    const kv = getKV(context);
+    const kv = getKV();
     if (kv && jti) {
       const existing = await kv.get(`IDEMPOTENCY:${jti}`);
       if (existing) {

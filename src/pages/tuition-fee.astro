@@ -107,86 +107,159 @@ const Icons = {
         class="bg-white rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 p-6 sm:p-8 transform lg:rotate-1 hover:rotate-0 transition-transform duration-500 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150 w-full"
       >
         <h3 class="text-xl font-bold text-emerald-950 mb-1">Calculate your monthly fee</h3>
-        <p class="text-sm text-emerald-800/70 font-medium mb-8">
+        <p class="text-sm text-emerald-800/70 font-medium mb-6">
           See your exact cost in 30 seconds. No surprises.
         </p>
 
-        <div class="space-y-6">
+        <!-- Who is enrolling — lightweight toggle, lead data only, does not affect price -->
+        <div
+          class="flex items-center gap-3 mb-6 p-3 bg-emerald-50 rounded-xl border border-emerald-100"
+        >
+          <span class="text-xs font-bold text-emerald-800/60 uppercase tracking-wider shrink-0"
+            >For:</span
+          >
+          <div class="flex gap-2" id="calc-who-btns">
+            <button
+              class="calc-who px-3 py-1.5 bg-white border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+              data-val="child"
+              data-label="Child">Child</button
+            >
+            <button
+              class="calc-who px-3 py-1.5 bg-white border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+              data-val="adult"
+              data-label="Adult">Adult</button
+            >
+          </div>
+          <span class="text-xs font-medium text-emerald-700 ml-auto" id="calc-who-val"></span>
+        </div>
+
+        <div class="space-y-5">
+          <!-- Duration -->
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="text-sm font-bold text-emerald-900/60 uppercase tracking-wider"
-                >Who is enrolling?</span
+                >Session length</span
               >
-              <span class="text-sm font-bold text-emerald-700" id="calc-who-val">–</span>
+              <span class="text-sm font-bold text-emerald-700" id="calc-dur-val">–</span>
             </div>
-            <div class="flex flex-wrap gap-2" id="calc-who-btns">
+            <div class="flex gap-2" id="calc-dur-btns">
               <button
-                class="calc-btn px-4 py-2 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-                data-val="child"
-                data-label="Child">Child</button
+                class="calc-btn flex-1 px-4 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="dur"
+                data-val="30"
+                data-label="30 min">30 min</button
               >
               <button
-                class="calc-btn px-4 py-2 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-                data-val="adult"
-                data-label="Adult">Adult</button
+                class="calc-btn flex-1 px-4 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="dur"
+                data-val="40"
+                data-label="40 min">40 min</button
               >
             </div>
           </div>
 
+          <!-- Sessions per week -->
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="text-sm font-bold text-emerald-900/60 uppercase tracking-wider"
-                >Sessions per week</span
+                >Sessions / week</span
               >
-              <span class="text-sm font-bold text-emerald-700" id="calc-freq-val">–</span>
+              <span class="text-sm font-bold text-emerald-700" id="calc-sess-val">–</span>
             </div>
-            <div class="flex flex-wrap gap-2" id="calc-freq-btns">
+            <div class="flex gap-2" id="calc-sess-btns">
               <button
-                class="calc-btn px-4 py-2 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="sess"
                 data-val="2"
-                data-label="2× / week">2× / week</button
+                data-label="2×">2×</button
               >
               <button
-                class="calc-btn px-4 py-2 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="sess"
                 data-val="3"
-                data-label="3× / week">3× / week</button
+                data-label="3×">3×</button
               >
               <button
-                class="calc-btn px-4 py-2 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="sess"
+                data-val="4"
+                data-label="4×">4×</button
+              >
+              <button
+                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="sess"
                 data-val="5"
-                data-label="5× / week">5× / week</button
+                data-label="5×">5×</button
               >
             </div>
           </div>
 
+          <!-- Currency -->
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-sm font-bold text-emerald-900/60 uppercase tracking-wider"
+                >Currency</span
+              >
+            </div>
+            <select
+              id="calc-currency-select"
+              class="w-full px-4 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition-colors appearance-none cursor-pointer"
+            >
+              <option value="USD">USA (USD $)</option>
+              <option value="GBP">UK (GBP £)</option>
+              <option value="EUR">Europe (EUR €)</option>
+              <option value="AED">UAE (AED د.إ)</option>
+              <option value="SGD">Singapore (SGD S$)</option>
+              <option value="CAD">Canada (CAD C$)</option>
+              <option value="AUD">Australia (AUD A$)</option>
+              <option value="SAR">Saudi Arabia (SAR ﷼)</option>
+            </select>
+          </div>
+
+          <!-- Billing cycle -->
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="text-sm font-bold text-emerald-900/60 uppercase tracking-wider"
                 >Billing cycle</span
               >
-              <span class="text-sm font-bold text-emerald-700" id="calc-cycle-val">–</span>
+              <span class="text-sm font-bold text-emerald-700" id="calc-billing-val">–</span>
             </div>
-            <div class="flex flex-wrap gap-2" id="calc-cycle-btns">
+            <div class="flex gap-2" id="calc-billing-btns">
               <button
-                class="calc-btn px-4 py-2 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="billing"
                 data-val="monthly"
-                data-label="Monthly">Monthly</button
+                data-label="Monthly"
+                data-discount="0">Monthly</button
               >
               <button
-                class="calc-btn px-4 py-2 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors flex items-center gap-2"
-                data-val="annual"
-                data-label="Annual"
+                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors flex items-center justify-center gap-1"
+                data-group="billing"
+                data-val="sixMonth"
+                data-label="6 Months"
+                data-discount="0.05"
+                >6 Mo <span
+                  class="bg-amber-50 text-amber-600 text-[9px] px-1 py-0.5 rounded border border-amber-200"
+                  >−5%</span
+                ></button
               >
-                Annual <span
-                  class="bg-amber-50 text-amber-600 text-[10px] px-1.5 py-0.5 rounded border border-amber-200"
-                  >-15%</span
-                >
-              </button>
+              <button
+                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors flex items-center justify-center gap-1"
+                data-group="billing"
+                data-val="annual"
+                data-label="12 Months"
+                data-discount="0.15"
+                >12 Mo <span
+                  class="bg-amber-50 text-amber-600 text-[9px] px-1 py-0.5 rounded border border-amber-200"
+                  >−15%</span
+                ></button
+              >
             </div>
           </div>
 
-          <div class="h-px bg-emerald-100 my-6" aria-hidden="true"></div>
+          <div class="h-px bg-emerald-100" aria-hidden="true"></div>
 
+          <!-- Result box -->
           <div
             class="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 transition-colors duration-300"
             id="calc-result-box"
@@ -196,7 +269,7 @@ const Icons = {
             </div>
           </div>
 
-          <Button href="/funnel/signup" variant="primary" class="w-full mt-6"
+          <Button href="/funnel/signup" variant="primary" class="w-full mt-2" id="calc-cta-btn"
             >Book Your Free Class →</Button
           >
         </div>
@@ -285,284 +358,330 @@ const Icons = {
             >Tuition Plans</span
           >
           <h2 class="text-4xl lg:text-5xl font-bold text-emerald-950 mb-4 tracking-tight">
-            Choose your plan.<br />
-            <em class="font-serif italic text-emerald-700 font-medium">Change it any time.</em>
+            Every plan.<br />
+            <em class="font-serif italic text-emerald-700 font-medium">Your currency.</em>
           </h2>
           <p class="text-lg text-emerald-900/80 font-medium max-w-2xl mx-auto">
-            All plans include the same quality: same ijazah-certified teachers, same weekly reports,
-            same guarantee. The only difference is session frequency.
+            Same quality at every frequency — ijazah-certified teacher, weekly reports, make-up
+            guarantee. Pick the pace that fits your child. Change it any time.
           </p>
         </div>
 
-        <div class="flex items-center justify-center gap-4 mb-16">
-          <span class="text-sm font-bold text-emerald-900/60 transition-colors" id="lbl-monthly"
-            >Monthly</span
+        <!-- Plan controls: Duration + Currency -->
+        <div class="flex flex-wrap items-center justify-center gap-4 mb-10">
+          <!-- Duration toggle -->
+          <div
+            class="flex items-center gap-2 bg-white border border-emerald-100 rounded-xl px-4 py-2 shadow-sm"
           >
-          <button
-            class="relative w-14 h-8 rounded-full bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-700"
-            id="billing-toggle"
-            aria-pressed="true"
+            <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
+              >Length:</span
+            >
+            <div class="flex gap-2" id="plan-dur-btns">
+              <button
+                class="plan-btn px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="plan-dur"
+                data-val="30">30 min</button
+              >
+              <button
+                class="plan-btn px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="plan-dur"
+                data-val="40">40 min</button
+              >
+            </div>
+          </div>
+          <!-- Currency select -->
+          <div
+            class="flex items-center gap-2 bg-white border border-emerald-100 rounded-xl px-4 py-2 shadow-sm"
           >
-            <span
-              class="absolute top-1 left-1 bg-white w-6 h-6 rounded-full transition-transform transform translate-x-6 shadow-sm"
-              id="billing-thumb"></span>
-          </button>
-          <span class="text-sm font-bold text-emerald-950 transition-colors" id="lbl-annual"
-            >Annual</span
-          >
-          <span
-            class="bg-amber-50 text-amber-600 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-amber-200 shadow-sm"
-            >Save 15%</span
-          >
+            <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
+              >Currency:</span
+            >
+            <select
+              id="plan-currency-select"
+              class="bg-transparent text-sm font-bold text-emerald-900/80 focus:outline-none cursor-pointer pr-2"
+            >
+              <option value="USD">USD $</option>
+              <option value="GBP">GBP £</option>
+              <option value="EUR">EUR €</option>
+              <option value="AED">AED د.إ</option>
+              <option value="SGD">SGD S$</option>
+              <option value="CAD">CAD C$</option>
+              <option value="AUD">AUD A$</option>
+              <option value="SAR">SAR ﷼</option>
+            </select>
+          </div>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-6 lg:gap-8 mb-8 max-w-6xl mx-auto">
+        <!-- 4-tier price cards grid -->
+        <div
+          class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8 max-w-6xl mx-auto"
+          id="plan-cards"
+        >
+          <!-- 2× / week -->
           <div
-            class="bg-white rounded-3xl border border-emerald-100 flex flex-col hover:shadow-xl transition-all duration-300"
+            class="bg-white rounded-2xl border border-emerald-100 flex flex-col hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
           >
-            <div class="p-8 border-b border-emerald-50">
-              <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/50 mb-4">
+            <div class="p-6 border-b border-emerald-50">
+              <div class="text-[10px] font-bold tracking-widest uppercase text-emerald-900/40 mb-3">
                 Starter
               </div>
-              <h3 class="font-serif text-3xl font-bold text-emerald-950 mb-2">Light</h3>
-              <p class="text-sm text-emerald-800/70 font-medium leading-relaxed mb-6 h-14">
-                Perfect for children just beginning or families testing the experience.
+              <h3 class="font-serif text-2xl font-bold text-emerald-950 mb-1">Light</h3>
+              <p class="text-xs text-emerald-800/60 font-medium leading-relaxed mb-5">
+                2 sessions/week — ideal for beginners building a regular habit.
               </p>
-              <div class="flex items-baseline gap-1 mb-1">
-                <span class="text-2xl font-bold text-emerald-950">$</span>
-                <span class="font-serif text-6xl font-bold text-emerald-950" id="price-light"
-                  >33</span
+              <div class="flex items-baseline gap-0.5 mb-0.5">
+                <span class="text-lg font-bold text-emerald-900/70" id="plan-sym-2"></span>
+                <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-2"
+                  >—</span
                 >
               </div>
-              <div class="text-sm font-medium text-emerald-800/70 mb-1" id="per-light">
-                per month, billed annually
-              </div>
-              <div class="text-xs font-medium text-emerald-900/40 line-through h-4" id="orig-light">
-                $39/mo when billed monthly
+              <div class="text-xs font-medium text-emerald-800/60" id="plan-per-2">
+                select options above
               </div>
               <div
-                class="mt-6 inline-flex items-center px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold rounded-full"
+                class="mt-4 inline-flex items-center px-2.5 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full"
               >
                 8 sessions / month
               </div>
             </div>
-            <div class="p-8 flex-1 flex flex-col">
-              <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/50 mb-6">
-                What's included
-              </div>
-              <div class="space-y-4 flex-1">
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+            <div class="p-6 flex-1 flex flex-col">
+              <div class="space-y-3 flex-1 text-sm">
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >8 private 1-on-1 sessions/mo</span>
                 </div>
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Same dedicated teacher</span>
                 </div>
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Weekly progress report</span>
                 </div>
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Make-up class guarantee</span>
                 </div>
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Sit-in access anytime</span>
                 </div>
-                <div class="flex items-start gap-3 opacity-40">
-                  <div
-                    class="w-5 h-5 shrink-0 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-bold"
-                    aria-hidden="true"
-                  >
-                    -
-                  </div><span class="text-sm font-medium text-emerald-950"
-                    >Monthly progress summary</span>
-                </div>
-                <div class="flex items-start gap-3 opacity-40">
-                  <div
-                    class="w-5 h-5 shrink-0 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-bold"
-                    aria-hidden="true"
-                  >
-                    -
-                  </div><span class="text-sm font-medium text-emerald-950"
-                    >Priority teacher matching</span>
-                </div>
               </div>
-              <Button href="/funnel/signup" variant="ghost" class="w-full mt-8"
+              <Button href="/funnel/signup" variant="ghost" class="w-full mt-6 text-sm"
                 >Start free trial →</Button
               >
             </div>
           </div>
 
+          <!-- 3× / week -->
           <div
-            class="bg-white rounded-3xl border border-emerald-200 shadow-2xl flex flex-col relative transform lg:-translate-y-4 ring-2 ring-emerald-700/20 overflow-hidden"
+            class="bg-white rounded-2xl border border-emerald-200 shadow-xl flex flex-col relative overflow-hidden ring-2 ring-emerald-700/15 hover:-translate-y-0.5 transition-all duration-300"
           >
             <div
-              class="absolute inset-0 bg-gradient-to-b from-emerald-50/50 to-white pointer-events-none"
-              aria-hidden="true"
-            >
-            </div>
-            <div
-              class="absolute top-0 left-0 right-0 bg-gradient-to-r from-emerald-700 to-emerald-500 text-center text-[11px] font-bold tracking-widest uppercase text-white py-1.5 rounded-t-[22px] shadow-sm flex items-center justify-center gap-1"
+              class="absolute top-0 left-0 right-0 bg-gradient-to-r from-emerald-700 to-emerald-500 text-center text-[10px] font-bold tracking-widest uppercase text-white py-1.5 rounded-t-[20px] flex items-center justify-center gap-1"
             >
               <span set:html={Icons.sparkle} /> Most Popular
             </div>
-
-            <div class="p-8 border-b border-emerald-100 mt-4 relative z-10">
-              <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/50 mb-4">
+            <div class="p-6 border-b border-emerald-100 mt-4">
+              <div class="text-[10px] font-bold tracking-widest uppercase text-emerald-900/40 mb-3">
                 Growth
               </div>
-              <h3 class="font-serif text-3xl font-bold text-emerald-950 mb-2">Standard</h3>
-              <p class="text-sm text-emerald-800/70 font-medium leading-relaxed mb-6 h-14">
-                Three sessions per week is the sweet spot for consistent, meaningful progress.
+              <h3 class="font-serif text-2xl font-bold text-emerald-950 mb-1">Standard</h3>
+              <p class="text-xs text-emerald-800/60 font-medium leading-relaxed mb-5">
+                3 sessions/week — the sweet spot for consistent, meaningful progress.
               </p>
-              <div class="flex items-baseline gap-1 mb-1">
-                <span class="text-2xl font-bold text-emerald-950">$</span>
-                <span class="font-serif text-6xl font-bold text-emerald-950" id="price-standard"
-                  >50</span
+              <div class="flex items-baseline gap-0.5 mb-0.5">
+                <span class="text-lg font-bold text-emerald-900/70" id="plan-sym-3"></span>
+                <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-3"
+                  >—</span
                 >
               </div>
-              <div class="text-sm font-medium text-emerald-800/70 mb-1" id="per-standard">
-                per month, billed annually
+              <div class="text-xs font-medium text-emerald-800/60" id="plan-per-3">
+                select options above
               </div>
               <div
-                class="text-xs font-medium text-emerald-900/40 line-through h-4"
-                id="orig-standard"
-              >
-                $59/mo when billed monthly
-              </div>
-              <div
-                class="mt-6 inline-flex items-center px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold rounded-full shadow-sm"
+                class="mt-4 inline-flex items-center px-2.5 py-1 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold rounded-full shadow-sm"
               >
                 12 sessions / month
               </div>
             </div>
-            <div class="p-8 flex-1 flex flex-col bg-emerald-50/30 rounded-b-[22px] relative z-10">
-              <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/50 mb-6">
-                What's included
-              </div>
-              <div class="space-y-4 flex-1">
-                <div class="flex items-start gap-3 text-emerald-700">
-                  <span set:html={Icons.check} /><span class="text-sm font-bold text-emerald-950"
+            <div class="p-6 flex-1 flex flex-col">
+              <div class="space-y-3 flex-1 text-sm">
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
                     >12 private 1-on-1 sessions/mo</span>
                 </div>
-                <div class="flex items-start gap-3 text-emerald-700">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Same dedicated teacher</span>
                 </div>
-                <div class="flex items-start gap-3 text-emerald-700">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Weekly progress report</span>
                 </div>
-                <div class="flex items-start gap-3 text-emerald-700">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Make-up class guarantee</span>
                 </div>
-                <div class="flex items-start gap-3 text-emerald-700">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Sit-in access anytime</span>
                 </div>
-                <div class="flex items-start gap-3 text-emerald-700">
-                  <span set:html={Icons.check} /><span class="text-sm font-bold text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
                     >Monthly progress summary</span>
                 </div>
-                <div class="flex items-start gap-3 text-emerald-700">
-                  <span set:html={Icons.check} /><span class="text-sm font-bold text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
                     >Priority teacher matching</span>
                 </div>
               </div>
               <Button
                 href="/funnel/signup"
                 variant="primary"
-                class="w-full mt-8 shadow-xl shadow-emerald-700/20">Start free trial →</Button
+                class="w-full mt-6 text-sm shadow-xl shadow-emerald-700/20"
+                >Start free trial →</Button
               >
             </div>
           </div>
 
+          <!-- 4× / week -->
           <div
-            class="bg-white rounded-3xl border border-emerald-100 flex flex-col hover:shadow-xl transition-all duration-300"
+            class="bg-white rounded-2xl border border-emerald-100 flex flex-col hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
           >
-            <div class="p-8 border-b border-emerald-50">
-              <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/50 mb-4">
-                Intensive
+            <div class="p-6 border-b border-emerald-50">
+              <div class="text-[10px] font-bold tracking-widest uppercase text-emerald-900/40 mb-3">
+                Accelerate
               </div>
-              <h3 class="font-serif text-3xl font-bold text-emerald-950 mb-2">Hifz-Ready</h3>
-              <p class="text-sm text-emerald-800/70 font-medium leading-relaxed mb-6 h-14">
-                For children pursuing Hifz or accelerating through Tajweed. Five sessions weekly.
+              <h3 class="font-serif text-2xl font-bold text-emerald-950 mb-1">Plus</h3>
+              <p class="text-xs text-emerald-800/60 font-medium leading-relaxed mb-5">
+                4 sessions/week — faster Tajweed or Hifz progress without daily commitment.
               </p>
-              <div class="flex items-baseline gap-1 mb-1">
-                <span class="text-2xl font-bold text-emerald-950">$</span>
-                <span class="font-serif text-6xl font-bold text-emerald-950" id="price-intensive"
-                  >76</span
+              <div class="flex items-baseline gap-0.5 mb-0.5">
+                <span class="text-lg font-bold text-emerald-900/70" id="plan-sym-4"></span>
+                <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-4"
+                  >—</span
                 >
               </div>
-              <div class="text-sm font-medium text-emerald-800/70 mb-1" id="per-intensive">
-                per month, billed annually
+              <div class="text-xs font-medium text-emerald-800/60" id="plan-per-4">
+                select options above
               </div>
               <div
-                class="text-xs font-medium text-emerald-900/40 line-through h-4"
-                id="orig-intensive"
+                class="mt-4 inline-flex items-center px-2.5 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full"
               >
-                $89/mo when billed monthly
+                16 sessions / month
+              </div>
+            </div>
+            <div class="p-6 flex-1 flex flex-col">
+              <div class="space-y-3 flex-1 text-sm">
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
+                    >16 private 1-on-1 sessions/mo</span>
+                </div>
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
+                    >Same dedicated teacher</span>
+                </div>
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
+                    >Weekly progress report</span>
+                </div>
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
+                    >Make-up class guarantee</span>
+                </div>
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
+                    >Sit-in access anytime</span>
+                </div>
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
+                    >Monthly progress summary</span>
+                </div>
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
+                    >Priority teacher matching</span>
+                </div>
+              </div>
+              <Button href="/funnel/signup" variant="ghost" class="w-full mt-6 text-sm"
+                >Start free trial →</Button
+              >
+            </div>
+          </div>
+
+          <!-- 5× / week -->
+          <div
+            class="bg-white rounded-2xl border border-emerald-100 flex flex-col hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+          >
+            <div class="p-6 border-b border-emerald-50">
+              <div class="text-[10px] font-bold tracking-widest uppercase text-amber-600/70 mb-3">
+                Intensive
+              </div>
+              <h3 class="font-serif text-2xl font-bold text-emerald-950 mb-1">Hifz-Ready</h3>
+              <p class="text-xs text-emerald-800/60 font-medium leading-relaxed mb-5">
+                5 sessions/week — full Hifz or deep Tajweed. Five days of dedicated learning.
+              </p>
+              <div class="flex items-baseline gap-0.5 mb-0.5">
+                <span class="text-lg font-bold text-emerald-900/70" id="plan-sym-5"></span>
+                <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-5"
+                  >—</span
+                >
+              </div>
+              <div class="text-xs font-medium text-emerald-800/60" id="plan-per-5">
+                select options above
               </div>
               <div
-                class="mt-6 inline-flex items-center px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold rounded-full"
+                class="mt-4 inline-flex items-center px-2.5 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full"
               >
                 20 sessions / month
               </div>
             </div>
-            <div class="p-8 flex-1 flex flex-col">
-              <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/50 mb-6">
-                What's included
-              </div>
-              <div class="space-y-4 flex-1">
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+            <div class="p-6 flex-1 flex flex-col">
+              <div class="space-y-3 flex-1 text-sm">
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >20 private 1-on-1 sessions/mo</span>
                 </div>
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Same dedicated teacher</span>
                 </div>
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Weekly progress report</span>
                 </div>
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Make-up class guarantee</span>
                 </div>
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
                     >Sit-in access anytime</span>
                 </div>
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
-                    ><strong>Monthly</strong> progress summary</span>
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
+                    >Monthly progress summary</span>
                 </div>
-                <div class="flex items-start gap-3">
-                  <span set:html={Icons.check} /><span class="text-sm font-medium text-emerald-950"
-                    ><strong>Priority</strong> teacher matching</span>
+                <div class="flex items-start gap-2.5">
+                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
+                    >Priority teacher matching</span>
                 </div>
-                <div class="flex items-start gap-3 text-amber-500">
-                  <span set:html={Icons.check} /><span class="text-sm font-bold text-emerald-950"
+                <div class="flex items-start gap-2.5 text-amber-500">
+                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
                     >WhatsApp parent support</span>
                 </div>
               </div>
-              <Button href="/funnel/signup" variant="ghost" class="w-full mt-8"
+              <Button href="/funnel/signup" variant="ghost" class="w-full mt-6 text-sm"
                 >Start free trial →</Button
               >
             </div>
           </div>
         </div>
 
-        <p
-          class="text-center text-sm font-medium text-emerald-900/50 italic mb-20 max-w-2xl mx-auto"
-        >
-          All plans billed monthly or annually. Prices shown are per-student. Sibling discounts
-          apply automatically from the second child.
+        <p class="text-center text-sm font-medium text-emerald-900/50 italic max-w-2xl mx-auto">
+          Prices shown are per-student, billed monthly. Sibling discounts apply automatically from
+          the second child.
+          <br class="hidden sm:block" />All plans can be changed or cancelled any time — no lock-in.
         </p>
       </div>
     </Section>
@@ -777,13 +896,15 @@ const Icons = {
                   class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5"
                   aria-hidden="true"></span><span
                   >Available for families in financial hardship, assessed with dignity and
-                  discretion</span>
+                  discretion</span
+                >
               </div>
               <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
                 <span
                   class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5"
                   aria-hidden="true"></span><span
-                  >Up to <strong class="text-white">50% fee reduction</strong> on any plan</span>
+                  >Up to <strong class="text-white">50% fee reduction</strong> on any plan</span
+                >
               </div>
               <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
                 <span
@@ -794,13 +915,15 @@ const Icons = {
                 <span
                   class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5"
                   aria-hidden="true"></span><span
-                  >Renewed automatically. No annual reapplication needed.</span>
+                  >Renewed automatically. No annual reapplication needed.</span
+                >
               </div>
               <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
                 <span
                   class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5"
                   aria-hidden="true"></span><span
-                  >100% confidential. Your teacher will never know.</span>
+                  >100% confidential. Your teacher will never know.</span
+                >
               </div>
             </div>
 
@@ -1066,109 +1189,279 @@ const Icons = {
 
   <script is:inline>
     document.addEventListener('astro:page-load', () => {
-      // --- 1. MAIN FEE CALCULATOR ---
-      const calcState = { who: null, freq: null, cycle: null };
-
-      // CRITICAL: Pure JS object. No TS type annotations.
-      const basePrices = {
-        child: { '2': 39, '3': 59, '5': 89 },
-        adult: { '2': 39, '3': 59, '5': 89 },
+      // --- 1. MAIN FEE CALCULATOR (rebuilt 2026-07-27) ---
+      // Pricing data sourced from src/constants/pricing.ts — inlined at build time
+      // PRICING[currency][duration_min][sessions_per_week] = monthly base price (USD-derived)
+      const PRICING_DATA = {
+        USD: {
+          '30': { '2': 40, '3': 50, '4': 55, '5': 60 },
+          '40': { '2': 56, '3': 66, '4': 73, '5': 80 },
+        },
+        GBP: {
+          '30': { '2': 30, '3': 38, '4': 42, '5': 46 },
+          '40': { '2': 40, '3': 50, '4': 56, '5': 61 },
+        },
+        EUR: {
+          '30': { '2': 36, '3': 46, '4': 50, '5': 55 },
+          '40': { '2': 48, '3': 61, '4': 66, '5': 73 },
+        },
+        AED: {
+          '30': { '2': 145, '3': 180, '4': 205, '5': 220 },
+          '40': { '2': 193, '3': 240, '4': 273, '5': 293 },
+        },
+        SGD: {
+          '30': { '2': 52, '3': 65, '4': 71, '5': 77 },
+          '40': { '2': 72, '3': 85, '4': 94, '5': 103 },
+        },
+        CAD: {
+          '30': { '2': 56, '3': 71, '4': 78, '5': 85 },
+          '40': { '2': 79, '3': 93, '4': 103, '5': 113 },
+        },
+        AUD: {
+          '30': { '2': 57, '3': 72, '4': 79, '5': 86 },
+          '40': { '2': 80, '3': 94, '4': 104, '5': 114 },
+        },
+        SAR: {
+          '30': { '2': 150, '3': 188, '4': 206, '5': 225 },
+          '40': { '2': 210, '3': 248, '4': 274, '5': 300 },
+        },
       };
+      const CURRENCY_SYMBOLS = {
+        USD: '$',
+        GBP: '£',
+        EUR: '€',
+        AED: 'د.إ',
+        SGD: 'S$',
+        CAD: 'C$',
+        AUD: 'A$',
+        SAR: '﷼',
+      };
+      const BILLING_DISCOUNTS = { monthly: 0, sixMonth: 0.05, annual: 0.15 };
 
-      document.querySelectorAll('.calc-btn').forEach((btn) => {
-        if (btn.dataset.bound) return;
-        btn.dataset.bound = 'true';
+      const calcState = { who: null, dur: null, sess: null, currency: 'USD', billing: null };
 
-        btn.addEventListener('click', function () {
-          const parent = this.parentElement;
-          if (!parent) return;
-
-          const type = parent.id.replace('calc-', '').replace('-btns', '');
-          const val = this.getAttribute('data-val');
-          const label = this.getAttribute('data-label');
-
-          // Update active class — remove hover:text-emerald-700 from selected, restore on deselected
-          parent.querySelectorAll('.calc-btn').forEach((b) => {
-            b.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700');
-            b.classList.add(
-              'bg-cream-50',
-              'text-emerald-900/70',
-              'border-emerald-200',
-              'hover:text-emerald-700'
-            );
-          });
-          this.classList.remove(
+      // Helper: apply selected/deselected class toggling — hover:text-emerald-700 stripped from selected
+      function selectCalcBtn(group, clickedBtn) {
+        const container = clickedBtn.parentElement;
+        container.querySelectorAll('.calc-btn').forEach((b) => {
+          if (b.dataset.group !== group) return;
+          b.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700');
+          b.classList.add(
             'bg-cream-50',
             'text-emerald-900/70',
             'border-emerald-200',
             'hover:text-emerald-700'
           );
-          this.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
+        });
+        clickedBtn.classList.remove(
+          'bg-cream-50',
+          'text-emerald-900/70',
+          'border-emerald-200',
+          'hover:text-emerald-700'
+        );
+        clickedBtn.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
+      }
 
-          // Update state & label using pure JS
-          calcState[type] = val;
-          const valElem = document.getElementById(`calc-${type}-val`);
-          if (valElem) valElem.textContent = label;
+      // Helper: apply selected/deselected for the lightweight Who toggle (calc-who class)
+      function selectWhoBtn(clickedBtn) {
+        document.querySelectorAll('.calc-who').forEach((b) => {
+          b.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700');
+          b.classList.add(
+            'bg-white',
+            'text-emerald-900/70',
+            'border-emerald-200',
+            'hover:text-emerald-700'
+          );
+        });
+        clickedBtn.classList.remove(
+          'bg-white',
+          'text-emerald-900/70',
+          'border-emerald-200',
+          'hover:text-emerald-700'
+        );
+        clickedBtn.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
+      }
 
-          // Run calculation and update CTA URL if all selected
-          if (calcState.who && calcState.freq && calcState.cycle) {
-            updateCalcResult();
-            updateCalcCta();
-          }
+      // Bind Who toggle
+      document.querySelectorAll('.calc-who').forEach((btn) => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', function () {
+          selectWhoBtn(this);
+          calcState.who = this.dataset.val;
+          const whoVal = document.getElementById('calc-who-val');
+          if (whoVal) whoVal.textContent = this.dataset.label;
+          // who doesn't affect price — no recalc needed
         });
       });
 
+      // Bind all .calc-btn buttons (dur, sess, billing)
+      document.querySelectorAll('.calc-btn').forEach((btn) => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', function () {
+          const group = this.dataset.group;
+          if (!group) return; // safety guard for any non-grouped calc-btn
+          selectCalcBtn(group, this);
+          calcState[group] = this.dataset.val;
+          // Update label display
+          const labelMap = {
+            dur: 'calc-dur-val',
+            sess: 'calc-sess-val',
+            billing: 'calc-billing-val',
+          };
+          const valElem = document.getElementById(labelMap[group]);
+          if (valElem) valElem.textContent = this.dataset.label;
+          updateCalcResult();
+          updateCalcCta();
+        });
+      });
+
+      // Bind currency select
+      const currencySelect = document.getElementById('calc-currency-select');
+      if (currencySelect && !currencySelect.dataset.bound) {
+        currencySelect.dataset.bound = 'true';
+        currencySelect.addEventListener('change', function () {
+          calcState.currency = this.value;
+          updateCalcResult();
+          updateCalcCta();
+        });
+      }
+
+      function updateCalcResult() {
+        if (!calcState.dur || !calcState.sess || !calcState.billing) return;
+        const cur = calcState.currency || 'USD';
+        const base = PRICING_DATA[cur]?.[calcState.dur]?.[calcState.sess] ?? 0;
+        const discount = BILLING_DISCOUNTS[calcState.billing] ?? 0;
+        const price = Math.round(base * (1 - discount));
+        const sym = CURRENCY_SYMBOLS[cur] ?? cur;
+        const sessPerMonth = parseInt(calcState.sess) * 4;
+        const perSesh = sessPerMonth > 0 ? (price / sessPerMonth).toFixed(2) : '—';
+        const billingLabel =
+          calcState.billing === 'annual'
+            ? '12-month'
+            : calcState.billing === 'sixMonth'
+              ? '6-month'
+              : 'monthly';
+        const totalLine =
+          calcState.billing === 'annual'
+            ? `<div class="flex justify-between items-center mb-4"><span class="text-sm text-emerald-800/80 font-medium">Total billed</span><span class="text-sm font-bold text-emerald-950">${sym}${price * 12}</span></div>`
+            : calcState.billing === 'sixMonth'
+              ? `<div class="flex justify-between items-center mb-4"><span class="text-sm text-emerald-800/80 font-medium">Total billed</span><span class="text-sm font-bold text-emerald-950">${sym}${price * 6}</span></div>`
+              : '';
+        const savingAmt =
+          discount > 0
+            ? Math.round(base * discount * (calcState.billing === 'annual' ? 12 : 6))
+            : 0;
+        const html = `
+          <div class="flex justify-between items-center mb-2"><span class="text-sm text-emerald-800/80 font-medium">Sessions / month</span><span class="text-sm font-bold text-emerald-950">${sessPerMonth} sessions</span></div>
+          <div class="flex justify-between items-center mb-4"><span class="text-sm text-emerald-800/80 font-medium">Per session</span><span class="text-sm font-bold text-emerald-950">${sym}${perSesh}</span></div>
+          ${totalLine}
+          <div class="pt-4 border-t border-emerald-100 flex justify-between items-center">
+            <span class="text-[15px] font-bold text-emerald-950">Monthly fee</span>
+            <div class="text-right">
+              <div class="font-serif text-3xl font-bold text-emerald-700 leading-none mb-1">${sym}${price}<span class="text-sm font-medium text-emerald-800/60">/mo</span></div>
+              ${savingAmt > 0 ? `<div class="text-[10px] font-bold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full inline-block">You save ${sym}${savingAmt} on ${billingLabel} plan</div>` : ''}
+            </div>
+          </div>
+        `;
+        const box = document.getElementById('calc-result-box');
+        if (box) {
+          box.innerHTML = html;
+          box.classList.remove('bg-emerald-50', 'border-emerald-100');
+          box.classList.add('bg-white', 'border-emerald-200', 'shadow-sm');
+        }
+        // Store final price on state for URL param passthrough
+        calcState._price = price;
+        calcState._sym = sym;
+      }
+
       function updateCalcCta() {
-        // Merge calculator selections into the CTA URL, preserving existing ad params (gclid, utm_*)
+        // Merge calculator selections into the CTA URL — preserve all existing ad params (gclid, utm_*)
         const base = new URL('/funnel/signup', window.location.origin);
         const existing = new URLSearchParams(window.location.search);
         existing.forEach((v, k) => base.searchParams.set(k, v));
-        base.searchParams.set('enrollType', calcState.who);
-        base.searchParams.set('sessions', calcState.freq);
-        base.searchParams.set('billing', calcState.cycle);
-        // Update all CTA buttons that link to /funnel/signup on this page
+        if (calcState.who) base.searchParams.set('enrollType', calcState.who);
+        if (calcState.dur) base.searchParams.set('duration', calcState.dur);
+        if (calcState.sess) base.searchParams.set('sessions', calcState.sess);
+        if (calcState.currency) base.searchParams.set('currency', calcState.currency);
+        if (calcState.billing) base.searchParams.set('billing', calcState.billing);
+        if (calcState._price) base.searchParams.set('price', calcState._price);
         document.querySelectorAll('a[href*="/funnel/signup"]').forEach((a) => {
           a.href = base.toString();
         });
       }
 
-      function updateCalcResult() {
-        if (!calcState.who || !calcState.freq) return;
+      // --- 2. PRICING GRID (plans section — uses same PRICING_DATA as calculator) ---
+      const planState = { dur: '30', currency: 'USD' };
 
-        // Pure JS property access
-        const whoPrices = basePrices[calcState.who];
-        const base = whoPrices ? whoPrices[calcState.freq] || 39 : 39;
-
-        const monthly = base;
-        const annual = Math.round(base * 0.85); // 15% discount
-        const isAnnual = calcState.cycle === 'annual';
-        const price = isAnnual ? annual : monthly;
-        const saving = isAnnual ? Math.round((monthly - annual) * 12) : 0;
-        const sessions = parseInt(calcState.freq) * 4;
-        const perSesh = (price / sessions).toFixed(2);
-
-        const html = `
-          <div class="flex justify-between items-center mb-2"><span class="text-sm text-emerald-800/80 font-medium">Sessions per month</span><span class="text-sm font-bold text-emerald-950">${sessions} sessions</span></div>
-          <div class="flex justify-between items-center mb-4"><span class="text-sm text-emerald-800/80 font-medium">Per session</span><span class="text-sm font-bold text-emerald-950">$${perSesh}</span></div>
-          ${isAnnual ? `<div class="flex justify-between items-center mb-4"><span class="text-sm text-emerald-800/80 font-medium">Annual total</span><span class="text-sm font-bold text-emerald-950">$${annual * 12}</span></div>` : ''}
-          <div class="pt-4 border-t border-emerald-100 flex justify-between items-center">
-            <span class="text-[15px] font-bold text-emerald-950">Monthly fee</span>
-            <div class="text-right">
-              <div class="font-serif text-3xl font-bold text-emerald-700 leading-none mb-1">$${price}<span class="text-sm font-medium text-emerald-800/60">/mo</span></div>
-              ${saving > 0 ? `<div class="text-[10px] font-bold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full inline-block">You save $${saving}/yr</div>` : ''}
-            </div>
-          </div>
-        `;
-
-        const calcResultBox = document.getElementById('calc-result-box');
-        if (calcResultBox) {
-          calcResultBox.innerHTML = html;
-          calcResultBox.classList.remove('bg-emerald-50', 'border-emerald-100');
-          calcResultBox.classList.add('bg-white', 'border-emerald-200', 'shadow-sm');
-        }
+      // Same hover-safe pattern as selectCalcBtn — strips hover:text-emerald-700 from selected
+      function selectPlanBtn(group, clickedBtn) {
+        const container = clickedBtn.parentElement;
+        container.querySelectorAll('.plan-btn').forEach((b) => {
+          if (b.dataset.group !== group) return;
+          b.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700');
+          b.classList.add(
+            'bg-emerald-50',
+            'text-emerald-900/70',
+            'border-emerald-200',
+            'hover:text-emerald-700'
+          );
+        });
+        clickedBtn.classList.remove(
+          'bg-emerald-50',
+          'text-emerald-900/70',
+          'border-emerald-200',
+          'hover:text-emerald-700'
+        );
+        clickedBtn.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
       }
 
-      // --- 2. BILLING TOGGLE ---
+      function updatePlanGrid() {
+        const cur = planState.currency || 'USD';
+        const dur = planState.dur || '30';
+        const sym = CURRENCY_SYMBOLS[cur] ?? cur;
+        ['2', '3', '4', '5'].forEach((sess) => {
+          const price = PRICING_DATA[cur]?.[dur]?.[sess] ?? '—';
+          const symEl = document.getElementById(`plan-sym-${sess}`);
+          const priceEl = document.getElementById(`plan-price-${sess}`);
+          const perEl = document.getElementById(`plan-per-${sess}`);
+          if (symEl) symEl.textContent = sym;
+          if (priceEl) priceEl.textContent = price;
+          if (perEl) perEl.textContent = `per month · ${parseInt(sess) * 4} sessions`;
+        });
+      }
+
+      // Bind plan duration buttons
+      document.querySelectorAll('.plan-btn').forEach((btn) => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', function () {
+          const group = this.dataset.group;
+          if (!group) return;
+          selectPlanBtn(group, this);
+          planState.dur = this.dataset.val;
+          updatePlanGrid();
+        });
+      });
+
+      // Bind plan currency select
+      const planCurrencySelect = document.getElementById('plan-currency-select');
+      if (planCurrencySelect && !planCurrencySelect.dataset.bound) {
+        planCurrencySelect.dataset.bound = 'true';
+        planCurrencySelect.addEventListener('change', function () {
+          planState.currency = this.value;
+          updatePlanGrid();
+        });
+      }
+
+      // Default selection on load: 30min, USD — click the 30min button to set selected state
+      const planDurDefault = document.querySelector('#plan-dur-btns .plan-btn[data-val="30"]');
+      if (planDurDefault) selectPlanBtn('plan-dur', planDurDefault);
+      updatePlanGrid();
+
+      // --- 3. BILLING TOGGLE (plans section — preserved unchanged) ---
+
       let isAnnualPricing = true;
       const planPrices = {
         light: { m: 39, a: 33 },
@@ -1227,7 +1520,7 @@ const Icons = {
         });
       }
 
-      // --- 3. SIBLING CALCULATOR ---
+      // --- 3. SIBLING CALCULATOR (preserved unchanged) ---
       const addBtn = document.getElementById('sib-add-btn');
       if (addBtn && !addBtn.dataset.bound) {
         addBtn.dataset.bound = 'true';

@@ -50,9 +50,8 @@ const {
 // Mathematically pure canonical routing
 const siteBase = (Astro.site?.href ?? SITE.url).replace(/\/$/, '');
 const rawCanonical = canonical ?? new URL(Astro.url.pathname, siteBase).href;
-const canonicalURL = rawCanonical.replace(siteBase, '').length > 1 
-  ? rawCanonical.replace(/\/$/, '') 
-  : rawCanonical;
+const canonicalURL =
+  rawCanonical.replace(siteBase, '').length > 1 ? rawCanonical.replace(/\/$/, '') : rawCanonical;
 const socialImageURL = image.startsWith('http') ? image : new URL(image, siteBase).href;
 
 // Read edge-detected connection speed from Cloudflare via Astro Locals safely
@@ -60,32 +59,33 @@ const isSlow: boolean = Astro.locals?.isSlowConnection ?? false;
 
 // Global Base Entity Schema
 const baseSchema = {
-  "@context": "https://schema.org",
-  "@graph": [
+  '@context': 'https://schema.org',
+  '@graph': [
     {
-      "@type": "WebSite",
-      "@id": `${SITE.url}/#website`,
-      "url": SITE.url,
-      "name": SITE.name,
-      "description": SITE.description,
-      "publisher": {
-        "@id": `${SITE.url}/#organization`
-      }
+      '@type': 'WebSite',
+      '@id': `${SITE.url}/#website`,
+      url: SITE.url,
+      name: SITE.name,
+      description: SITE.description,
+      publisher: {
+        '@id': `${SITE.url}/#organization`,
+      },
     },
     {
-      "@type": "Organization",
-      "@id": `${SITE.url}/#organization`,
-      "name": SITE.name,
-      "url": SITE.url,
-      "logo": {
-        "@type": "ImageObject",
-        "url": `${SITE.url}/images/logo.png`
+      '@type': 'Organization',
+      '@id': `${SITE.url}/#organization`,
+      name: SITE.name,
+      url: SITE.url,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE.url}/images/logo.png`,
       },
-      "sameAs": Object.values(SITE.social)
-    }
-  ]
+      sameAs: Object.values(SITE.social),
+    },
+  ],
 };
 ---
+
 <!doctype html>
 <html lang={lang} dir={dir} class="scroll-smooth">
   <head>
@@ -93,8 +93,20 @@ const baseSchema = {
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
     <link rel="preload" as="font" type="font/woff2" href={interVarUrl} crossorigin="anonymous" />
-    <link rel="preload" as="font" type="font/woff2" href={merriweather700Url} crossorigin="anonymous" />
-    <link rel="preload" as="font" type="font/woff2" href={merriweather400Url} crossorigin="anonymous" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href={merriweather700Url}
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href={merriweather400Url}
+      crossorigin="anonymous"
+    />
 
     <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
 
@@ -135,8 +147,28 @@ const baseSchema = {
 
     <slot name="head" />
 
-    {!isSlow && (
-      <script type="speculationrules" is:inline set:html={`{
+    <!-- Google Analytics (GA4) - Offloaded to Web Worker via Partytown -->
+    <script
+      type="text/partytown"
+      src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+      is:inline></script>
+    <script type="text/partytown" is:inline>
+      window.dataLayer = window.dataLayer || [];
+      // eslint-disable-next-line prefer-rest-params
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
+    {
+      !isSlow && (
+        <script
+          type="speculationrules"
+          is:inline
+          set:html={`{
         "prerender": [
           {
             "eagerness": "moderate",
@@ -144,8 +176,10 @@ const baseSchema = {
             "urls": ["/funnel/signup", "/courses", "/tuition-fee"]
           }
         ]
-      }`} />
-    )}
+      }`}
+        />
+      )
+    }
 
     <ClientRouter />
   </head>
@@ -153,8 +187,18 @@ const baseSchema = {
     class="bg-[#fefdf9] font-sans text-emerald-950 antialiased selection:bg-emerald-200 selection:text-emerald-950 flex flex-col min-h-screen overflow-x-clip"
     style="padding-bottom: env(safe-area-inset-bottom);"
   >
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-emerald-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-br-lg">Skip to main content</a>
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-emerald-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-br-lg"
+      >Skip to main content</a
+    >
     <slot />
-    {isSlow && <div class="hidden" aria-hidden="true" data-connection="slow">Low-data mode active</div>}
+    {
+      isSlow && (
+        <div class="hidden" aria-hidden="true" data-connection="slow">
+          Low-data mode active
+        </div>
+      )
+    }
   </body>
 </html>

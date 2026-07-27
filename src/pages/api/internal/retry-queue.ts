@@ -1,4 +1,5 @@
 // src/pages/api/internal/retry-queue.ts
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { ENV } from '../../../lib/env';
 import { sendAdminNotification, sendWelcomeEmail } from '../../../lib/email';
@@ -12,11 +13,6 @@ type KVNamespace = {
   delete(key: string): Promise<void>;
 };
 
-type AppLocals = {
-  cfContext?: { env?: { SESSION?: KVNamespace } };
-  runtime?: { env?: { SESSION?: KVNamespace } };
-};
-
 export const POST: APIRoute = async (context) => {
   try {
     const authHeader = context.request.headers.get('Authorization');
@@ -26,8 +22,7 @@ export const POST: APIRoute = async (context) => {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
-    const locals = context.locals as AppLocals;
-    const kv = locals.cfContext?.env?.SESSION || locals.runtime?.env?.SESSION;
+    const kv = (env as Record<string, unknown>).SESSION as KVNamespace | undefined;
 
     if (!kv) {
       return new Response(JSON.stringify({ error: 'KV Binding Missing' }), { status: 500 });

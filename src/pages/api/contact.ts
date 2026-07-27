@@ -1,4 +1,5 @@
 // src/pages/api/contact.ts
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { ENV } from '../../lib/env';
 import { z } from 'zod';
@@ -37,16 +38,15 @@ async function verifyTurnstile(token: string, remoteip?: string): Promise<boolea
 
 // ─── KV Helper ──────────────────────────────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getKV(context: Parameters<APIRoute>[0]): any {
+function getKV(): any {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const locals = context.locals as any;
-  return locals.cfContext?.env?.SESSION || locals.runtime?.env?.SESSION || null;
+  return (env as any).SESSION || null;
 }
 
 export const POST: APIRoute = async (context) => {
   try {
     const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? 'unknown';
-    const kv = getKV(context);
+    const kv = getKV();
 
     // 1. Distributed IP Rate Limiting via KV (Mandate 3 & 4)
     if (kv && cfConnectingIp !== 'unknown') {
