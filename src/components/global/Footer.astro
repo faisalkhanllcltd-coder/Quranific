@@ -236,12 +236,12 @@ const headingClass = 'text-emerald-500 font-semibold tracking-[0.2em] uppercase 
       const originalBtnText = btn.innerText;
       btn.innerText = 'Wait...';
       btn.disabled = true;
-      input.disabled = true;
       message.className = 'mt-2 text-xs font-medium hidden';
 
       try {
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
+        input.disabled = true;
 
         if (!data['cf-turnstile-response']) {
           throw new Error('Please complete the security check');

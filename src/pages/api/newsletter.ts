@@ -133,7 +133,7 @@ export const POST: APIRoute = async (context) => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              from: 'Quranific Updates <hello@quranific.com>',
+              from: 'System <onboarding@quranific.com>',
               to: adminEmail,
               subject: `New Newsletter Subscriber!`,
               text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,
