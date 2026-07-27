@@ -1,7 +1,6 @@
 // src/pages/api/newsletter.ts
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
-import { ENV } from '../../lib/env';
 import { z } from 'zod';
 
 const newsletterSchema = z.object({
@@ -11,22 +10,32 @@ const newsletterSchema = z.object({
 export const prerender = false;
 
 // ─── Cloudflare Turnstile Verification ──────────────────────────────────────
-async function verifyTurnstile(token: string, remoteip?: string): Promise<boolean> {
+async function verifyTurnstile(token: string, secret: string, remoteip?: string): Promise<boolean> {
   try {
     const body = new URLSearchParams({
-      secret: ENV.TURNSTILE_SECRET_KEY,
+      secret: secret,
       response: token,
     });
-    if (remoteip) body.set('remoteip', remoteip);
+    if (remoteip && remoteip !== 'unknown') {
+      body.set('remoteip', remoteip);
+    }
 
     const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
-      body,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: body.toString(),
     });
-    if (!res.ok) return false;
-    const data = (await res.json()) as { success: boolean };
-    return data.success === true;
-  } catch {
+
+    const data = (await res.json()) as { success: boolean; 'error-codes'?: string[] };
+    if (!data.success) {
+      console.error('[Turnstile Edge Rejection] Error codes:', data['error-codes']);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('[Turnstile Fetch Exception]:', error);
     return false;
   }
 }
@@ -46,8 +55,23 @@ export const POST: APIRoute = async (context) => {
         }
       );
     }
-    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? undefined;
-    const isHuman = await verifyTurnstile(turnstileToken, cfConnectingIp);
+
+    const runtimeEnv = env as Record<string, unknown>;
+    const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
+      runtimeEnv.TURNSTILE_SECRET_KEY) as string;
+    const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
+
+    if (!turnstileSecret) {
+      console.error('[Configuration Error]: Missing Turnstile Secret');
+      return new Response(JSON.stringify({ error: 'Internal Configuration Error' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? 'unknown';
+    const isHuman = await verifyTurnstile(turnstileToken, turnstileSecret, cfConnectingIp);
     if (!isHuman) {
       return new Response(
         JSON.stringify({ error: 'Security check failed. Please refresh and try again.' }),
@@ -74,29 +98,30 @@ export const POST: APIRoute = async (context) => {
     // 2. Dispatch the Email via Resend in the background
     const sendEmailTask = async () => {
       try {
-        if (ENV.RESEND_API_KEY.startsWith('re_') && ENV.RESEND_API_KEY !== 're_123456789') {
+        if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
           const res = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {
-              Authorization: `Bearer ${ENV.RESEND_API_KEY}`,
+              Authorization: `Bearer ${resendApiKey}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               from: 'Quranific Updates <hello@quranific.com>',
-              to: ENV.ADMIN_EMAIL,
+              to: adminEmail,
               subject: `New Newsletter Subscriber!`,
               text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,
             }),
           });
 
           if (!res.ok) {
-            throw new Error('Resend API rejected the subscription dispatch');
+            const errorText = await res.text();
+            throw new Error(`Resend API error: ${res.status} ${errorText}`);
           }
         } else {
           // Local Mock Mode
           console.log('\n====== 📬 MOCK NEWSLETTER SUB ======');
           console.log(`New Subscriber: ${email}`);
-          console.log(`Notification sent to: ${ENV.ADMIN_EMAIL}`);
+          console.log(`Notification sent to: ${adminEmail}`);
           console.log('====================================\n');
         }
       } catch (error) {

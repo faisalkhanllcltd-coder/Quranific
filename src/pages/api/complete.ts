@@ -2,29 +2,38 @@
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { completeSchema } from '../../lib/schema';
-import { ENV } from '../../lib/env';
 import { sendAdminNotification, sendWelcomeEmail } from '../../lib/email';
 import { jwtVerify } from 'jose';
 
 export const prerender = false;
 
 // ─── Cloudflare Turnstile Verification ──────────────────────────────────────
-async function verifyTurnstile(token: string, remoteip?: string): Promise<boolean> {
+async function verifyTurnstile(token: string, secret: string, remoteip?: string): Promise<boolean> {
   try {
     const body = new URLSearchParams({
-      secret: ENV.TURNSTILE_SECRET_KEY,
+      secret: secret,
       response: token,
     });
-    if (remoteip) body.set('remoteip', remoteip);
+    if (remoteip && remoteip !== 'unknown') {
+      body.set('remoteip', remoteip);
+    }
 
     const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
-      body,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: body.toString(),
     });
-    if (!res.ok) return false;
-    const data = (await res.json()) as { success: boolean };
-    return data.success === true;
-  } catch {
+
+    const data = (await res.json()) as { success: boolean; 'error-codes'?: string[] };
+    if (!data.success) {
+      console.error('[Turnstile Edge Rejection] Error codes:', data['error-codes']);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('[Turnstile Fetch Exception]:', error);
     return false;
   }
 }
@@ -39,7 +48,15 @@ export const HEAD: APIRoute = async (context) => {
   }
 
   try {
-    const secret = new TextEncoder().encode(ENV.JWT_SECRET);
+    const runtimeEnv = env as Record<string, unknown>;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string;
+
+    if (!jwtSecret) {
+      console.error('[Configuration Error]: Missing JWT_SECRET');
+      return new Response(null, { status: 500 });
+    }
+
+    const secret = new TextEncoder().encode(jwtSecret);
     await jwtVerify(token, secret);
     return new Response(null, { status: 200 });
   } catch {
@@ -64,9 +81,8 @@ type KVNamespace = {
 };
 
 function getKV(): KVNamespace | null {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const kv = (env as any).SESSION;
-  return kv && typeof kv.get === 'function' ? (kv as KVNamespace) : null;
+  const kv = (env as Record<string, unknown>).SESSION;
+  return kv && typeof (kv as KVNamespace).get === 'function' ? (kv as KVNamespace) : null;
 }
 
 export const POST: APIRoute = async (context) => {
@@ -81,8 +97,24 @@ export const POST: APIRoute = async (context) => {
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
-    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? undefined;
-    const isHuman = await verifyTurnstile(turnstileToken, cfConnectingIp);
+
+    const runtimeEnv = env as Record<string, unknown>;
+    const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
+      runtimeEnv.TURNSTILE_SECRET_KEY) as string;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string;
+    const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
+
+    if (!turnstileSecret || !jwtSecret) {
+      console.error('[Configuration Error]: Missing Secrets in Edge Env');
+      return new Response(JSON.stringify({ error: 'Internal Configuration Error' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? 'unknown';
+    const isHuman = await verifyTurnstile(turnstileToken, turnstileSecret, cfConnectingIp);
     if (!isHuman) {
       return new Response(
         JSON.stringify({ error: 'Security check failed. Please refresh and try again.' }),
@@ -114,7 +146,7 @@ export const POST: APIRoute = async (context) => {
     let jti: string | undefined;
 
     try {
-      const secret = new TextEncoder().encode(ENV.JWT_SECRET);
+      const secret = new TextEncoder().encode(jwtSecret);
       const { payload } = await jwtVerify(token, secret);
       step1Data = payload as typeof step1Data;
       jti = payload.jti as string | undefined;
@@ -142,8 +174,8 @@ export const POST: APIRoute = async (context) => {
     const sendEmailsTask = async () => {
       try {
         const emailResults = await Promise.allSettled([
-          sendAdminNotification(step1Data, parsed.data),
-          sendWelcomeEmail(step1Data.e, step1Data.n),
+          sendAdminNotification(step1Data, parsed.data, resendApiKey, adminEmail),
+          sendWelcomeEmail(step1Data.e, step1Data.n, resendApiKey),
         ]);
 
         emailResults.forEach((result, index) => {

@@ -1,7 +1,6 @@
 // src/pages/api/internal/retry-queue.ts
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
-import { ENV } from '../../../lib/env';
 import { sendAdminNotification, sendWelcomeEmail } from '../../../lib/email';
 
 export const prerender = false;
@@ -16,13 +15,17 @@ type KVNamespace = {
 export const POST: APIRoute = async (context) => {
   try {
     const authHeader = context.request.headers.get('Authorization');
+    const runtimeEnv = env as Record<string, unknown>;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string;
+    const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
 
     // Validate the pre-shared key
-    if (authHeader !== `Bearer ${ENV.JWT_SECRET}`) {
+    if (authHeader !== `Bearer ${jwtSecret}`) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
-    const kv = (env as Record<string, unknown>).SESSION as KVNamespace | undefined;
+    const kv = runtimeEnv.SESSION as KVNamespace | undefined;
 
     if (!kv) {
       return new Response(JSON.stringify({ error: 'KV Binding Missing' }), { status: 500 });
@@ -38,9 +41,9 @@ export const POST: APIRoute = async (context) => {
         const data = JSON.parse(dataStr);
         try {
           if (data.taskIndex === 0) {
-            await sendAdminNotification(data.step1, data.step2);
+            await sendAdminNotification(data.step1, data.step2, resendApiKey, adminEmail);
           } else if (data.taskIndex === 1) {
-            await sendWelcomeEmail(data.step1.e, data.step1.n);
+            await sendWelcomeEmail(data.step1.e, data.step1.n, resendApiKey);
           }
           await kv.delete(key.name);
           recoveredCount++;
@@ -58,16 +61,16 @@ export const POST: APIRoute = async (context) => {
         const data = JSON.parse(dataStr);
         const { firstName, lastName, email, message } = data.payload;
         try {
-          if (ENV.RESEND_API_KEY.startsWith('re_') && ENV.RESEND_API_KEY !== 're_123456789') {
+          if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
             const res = await fetch('https://api.resend.com/emails', {
               method: 'POST',
               headers: {
-                Authorization: `Bearer ${ENV.RESEND_API_KEY}`,
+                Authorization: `Bearer ${resendApiKey}`,
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
                 from: 'Quranific Support <support@quranific.com>',
-                to: ENV.ADMIN_EMAIL,
+                to: adminEmail,
                 reply_to: email,
                 subject: `New Contact Inquiry from ${firstName} ${lastName}`,
                 text: `Name: ${firstName} ${lastName}\nEmail: ${email}\n\nMessage:\n${message}`,

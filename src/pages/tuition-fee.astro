@@ -358,25 +358,25 @@ const Icons = {
             >Tuition Plans</span
           >
           <h2 class="text-4xl lg:text-5xl font-bold text-emerald-950 mb-4 tracking-tight">
-            Every plan.<br />
-            <em class="font-serif italic text-emerald-700 font-medium">Your currency.</em>
+            One product.<br />
+            <em class="font-serif italic text-emerald-700 font-medium">Pick your pace.</em>
           </h2>
           <p class="text-lg text-emerald-900/80 font-medium max-w-2xl mx-auto">
-            Same quality at every frequency — ijazah-certified teacher, weekly reports, make-up
-            guarantee. Pick the pace that fits your child. Change it any time.
+            Same teacher, same quality, same guarantee at every frequency. Choose how many sessions
+            fit your child&rsquo;s week &mdash; change it any time.
           </p>
         </div>
 
-        <!-- Plan controls: Duration + Currency -->
-        <div class="flex flex-wrap items-center justify-center gap-4 mb-10">
+        <!-- Controls: Duration + Billing + Currency -->
+        <div class="flex flex-wrap items-center justify-center gap-3 mb-10">
           <!-- Duration toggle -->
           <div
-            class="flex items-center gap-2 bg-white border border-emerald-100 rounded-xl px-4 py-2 shadow-sm"
+            class="flex items-center gap-2 bg-white border border-emerald-100 rounded-xl px-4 py-2.5 shadow-sm"
           >
             <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
               >Length:</span
             >
-            <div class="flex gap-2" id="plan-dur-btns">
+            <div class="flex gap-1.5" id="plan-dur-btns">
               <button
                 class="plan-btn px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
                 data-group="plan-dur"
@@ -389,9 +389,39 @@ const Icons = {
               >
             </div>
           </div>
+
+          <!-- Billing toggle (unique: see savings across ALL frequencies at once) -->
+          <div
+            class="flex items-center gap-2 bg-white border border-emerald-100 rounded-xl px-4 py-2.5 shadow-sm"
+          >
+            <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
+              >Billing:</span
+            >
+            <div class="flex gap-1.5" id="plan-billing-btns">
+              <button
+                class="plan-btn px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="plan-billing"
+                data-val="monthly"
+                data-discount="0">Monthly</button
+              >
+              <button
+                class="plan-btn px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="plan-billing"
+                data-val="sixMonth"
+                data-discount="0.05">6 months <span class="text-green-600">-5%</span></button
+              >
+              <button
+                class="plan-btn px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
+                data-group="plan-billing"
+                data-val="annual"
+                data-discount="0.15">12 months <span class="text-green-600">-15%</span></button
+              >
+            </div>
+          </div>
+
           <!-- Currency select -->
           <div
-            class="flex items-center gap-2 bg-white border border-emerald-100 rounded-xl px-4 py-2 shadow-sm"
+            class="flex items-center gap-2 bg-white border border-emerald-100 rounded-xl px-4 py-2.5 shadow-sm"
           >
             <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
               >Currency:</span
@@ -401,288 +431,161 @@ const Icons = {
               class="bg-transparent text-sm font-bold text-emerald-900/80 focus:outline-none cursor-pointer pr-2"
             >
               <option value="USD">USD $</option>
-              <option value="GBP">GBP £</option>
-              <option value="EUR">EUR €</option>
-              <option value="AED">AED د.إ</option>
+              <option value="GBP">GBP &pound;</option>
+              <option value="EUR">EUR &euro;</option>
+              <option value="AED">AED &#x62f;.&#x625;</option>
               <option value="SGD">SGD S$</option>
               <option value="CAD">CAD C$</option>
               <option value="AUD">AUD A$</option>
-              <option value="SAR">SAR ﷼</option>
+              <option value="SAR">SAR &#xfdfc;</option>
             </select>
           </div>
         </div>
 
-        <!-- 4-tier price cards grid -->
-        <div
-          class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8 max-w-6xl mx-auto"
-          id="plan-cards"
-        >
-          <!-- 2× / week -->
-          <div
-            class="bg-white rounded-2xl border border-emerald-100 flex flex-col hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-          >
-            <div class="p-6 border-b border-emerald-50">
-              <div class="text-[10px] font-bold tracking-widest uppercase text-emerald-900/40 mb-3">
-                Starter
-              </div>
-              <h3 class="font-serif text-2xl font-bold text-emerald-950 mb-1">Light</h3>
-              <p class="text-xs text-emerald-800/60 font-medium leading-relaxed mb-5">
-                2 sessions/week — ideal for beginners building a regular habit.
-              </p>
-              <div class="flex items-baseline gap-0.5 mb-0.5">
-                <span class="text-lg font-bold text-emerald-900/70" id="plan-sym-2"></span>
-                <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-2"
-                  >—</span
-                >
-              </div>
-              <div class="text-xs font-medium text-emerald-800/60" id="plan-per-2">
-                select options above
-              </div>
-              <div
-                class="mt-4 inline-flex items-center px-2.5 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full"
-              >
-                8 sessions / month
-              </div>
-            </div>
-            <div class="p-6 flex-1 flex flex-col">
-              <div class="space-y-3 flex-1 text-sm">
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >8 private 1-on-1 sessions/mo</span>
+        <!-- Unique value: billing toggle reveals annual/6-mo savings across ALL 4 frequencies simultaneously.
+             The hero calculator only shows savings for ONE selected frequency at a time.
+             This table lets parents compare total savings at different paces side by side. -->
+        <div class="max-w-5xl mx-auto mb-8">
+          <div class="bg-white rounded-2xl border border-emerald-100 shadow-md overflow-hidden">
+            <!-- 4-column frequency grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-4">
+              <!-- 2x / week -->
+              <div class="border-b sm:border-b-0 sm:border-r border-emerald-100 p-6">
+                <div class="text-xs font-black tracking-widest uppercase text-emerald-900/40 mb-1">
+                  2&times; / week
                 </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Same dedicated teacher</span>
+                <div class="text-[11px] font-medium text-emerald-900/40 mb-5">
+                  8 sessions / month
                 </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Weekly progress report</span>
+                <div class="flex items-baseline gap-0.5 mb-1">
+                  <span class="text-base font-bold text-emerald-900/60" id="plan-sym-2"></span>
+                  <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-2"
+                    >&mdash;</span
+                  >
+                  <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
                 </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Make-up class guarantee</span>
+                <div class="text-[11px] font-medium text-emerald-800/50 mb-2" id="plan-per-2">
+                  select options above
                 </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Sit-in access anytime</span>
-                </div>
+                <div class="text-[10px] font-bold text-green-600 hidden" id="plan-save-2"></div>
               </div>
-              <Button href="/funnel/signup" variant="ghost" class="w-full mt-6 text-sm"
-                >Start free trial →</Button
-              >
-            </div>
-          </div>
 
-          <!-- 3× / week -->
-          <div
-            class="bg-white rounded-2xl border border-emerald-200 shadow-xl flex flex-col relative overflow-hidden ring-2 ring-emerald-700/15 hover:-translate-y-0.5 transition-all duration-300"
-          >
+              <!-- 3x / week -->
+              <div class="border-b sm:border-b-0 sm:border-r border-emerald-100 p-6">
+                <div class="text-xs font-black tracking-widest uppercase text-emerald-900/40 mb-1">
+                  3&times; / week
+                </div>
+                <div class="text-[11px] font-medium text-emerald-900/40 mb-5">
+                  12 sessions / month
+                </div>
+                <div class="flex items-baseline gap-0.5 mb-1">
+                  <span class="text-base font-bold text-emerald-900/60" id="plan-sym-3"></span>
+                  <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-3"
+                    >&mdash;</span
+                  >
+                  <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+                </div>
+                <div class="text-[11px] font-medium text-emerald-800/50 mb-2" id="plan-per-3">
+                  select options above
+                </div>
+                <div class="text-[10px] font-bold text-green-600 hidden" id="plan-save-3"></div>
+              </div>
+
+              <!-- 4x / week -->
+              <div class="border-b sm:border-b-0 sm:border-r border-emerald-100 p-6">
+                <div class="text-xs font-black tracking-widest uppercase text-emerald-900/40 mb-1">
+                  4&times; / week
+                </div>
+                <div class="text-[11px] font-medium text-emerald-900/40 mb-5">
+                  16 sessions / month
+                </div>
+                <div class="flex items-baseline gap-0.5 mb-1">
+                  <span class="text-base font-bold text-emerald-900/60" id="plan-sym-4"></span>
+                  <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-4"
+                    >&mdash;</span
+                  >
+                  <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+                </div>
+                <div class="text-[11px] font-medium text-emerald-800/50 mb-2" id="plan-per-4">
+                  select options above
+                </div>
+                <div class="text-[10px] font-bold text-green-600 hidden" id="plan-save-4"></div>
+              </div>
+
+              <!-- 5x / week — amber accent + social proof label (most families choose) -->
+              <div class="relative p-6">
+                <!-- Thin amber top bar -->
+                <div class="absolute top-0 left-0 right-0 h-[3px] bg-amber-400" aria-hidden="true">
+                </div>
+                <!-- Social proof label -->
+                <div
+                  class="text-[9px] font-black tracking-widest uppercase text-amber-600 mb-1 pt-1"
+                >
+                  Most families choose this
+                </div>
+                <div class="text-xs font-black tracking-widest uppercase text-emerald-900/40 mb-1">
+                  5&times; / week
+                </div>
+                <div class="text-[11px] font-medium text-emerald-900/40 mb-5">
+                  20 sessions / month
+                </div>
+                <div class="flex items-baseline gap-0.5 mb-1">
+                  <span class="text-base font-bold text-emerald-900/60" id="plan-sym-5"></span>
+                  <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-5"
+                    >&mdash;</span
+                  >
+                  <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+                </div>
+                <div class="text-[11px] font-medium text-emerald-800/50 mb-2" id="plan-per-5">
+                  select options above
+                </div>
+                <div class="text-[10px] font-bold text-green-600 hidden" id="plan-save-5"></div>
+              </div>
+            </div>
+
+            <!-- Shared features row (Weekly progress report removed per owner instruction) -->
+            <div class="border-t border-emerald-100 bg-emerald-50/40 px-6 py-5">
+              <div class="text-[10px] font-bold tracking-widest uppercase text-emerald-900/40 mb-3">
+                Included at every frequency
+              </div>
+              <div class="flex flex-wrap gap-x-6 gap-y-2">
+                <div class="flex items-center gap-2 text-xs font-medium text-emerald-900/70">
+                  <span set:html={Icons.check} />
+                  Same dedicated teacher
+                </div>
+                <div class="flex items-center gap-2 text-xs font-medium text-emerald-900/70">
+                  <span set:html={Icons.check} />
+                  Make-up class guarantee
+                </div>
+                <div class="flex items-center gap-2 text-xs font-medium text-emerald-900/70">
+                  <span set:html={Icons.check} />
+                  Sit-in access anytime
+                </div>
+                <div class="flex items-center gap-2 text-xs font-medium text-emerald-900/70">
+                  <span set:html={Icons.check} />
+                  Monthly progress summary
+                </div>
+                <div class="flex items-center gap-2 text-xs font-medium text-emerald-900/70">
+                  <span set:html={Icons.check} />
+                  Full-month guarantee
+                </div>
+              </div>
+            </div>
+
+            <!-- CTA row -->
             <div
-              class="absolute top-0 left-0 right-0 bg-gradient-to-r from-emerald-700 to-emerald-500 text-center text-[10px] font-bold tracking-widest uppercase text-white py-1.5 rounded-t-[20px] flex items-center justify-center gap-1"
+              class="border-t border-emerald-100 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4"
             >
-              <span set:html={Icons.sparkle} /> Most Popular
-            </div>
-            <div class="p-6 border-b border-emerald-100 mt-4">
-              <div class="text-[10px] font-bold tracking-widest uppercase text-emerald-900/40 mb-3">
-                Growth
-              </div>
-              <h3 class="font-serif text-2xl font-bold text-emerald-950 mb-1">Standard</h3>
-              <p class="text-xs text-emerald-800/60 font-medium leading-relaxed mb-5">
-                3 sessions/week — the sweet spot for consistent, meaningful progress.
+              <p class="text-sm font-medium text-emerald-900/50">
+                Prices shown monthly. Sibling discounts applied automatically. No lock-in &mdash;
+                change frequency any time.
               </p>
-              <div class="flex items-baseline gap-0.5 mb-0.5">
-                <span class="text-lg font-bold text-emerald-900/70" id="plan-sym-3"></span>
-                <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-3"
-                  >—</span
-                >
-              </div>
-              <div class="text-xs font-medium text-emerald-800/60" id="plan-per-3">
-                select options above
-              </div>
-              <div
-                class="mt-4 inline-flex items-center px-2.5 py-1 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold rounded-full shadow-sm"
-              >
-                12 sessions / month
-              </div>
-            </div>
-            <div class="p-6 flex-1 flex flex-col">
-              <div class="space-y-3 flex-1 text-sm">
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
-                    >12 private 1-on-1 sessions/mo</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Same dedicated teacher</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Weekly progress report</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Make-up class guarantee</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Sit-in access anytime</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
-                    >Monthly progress summary</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
-                    >Priority teacher matching</span>
-                </div>
-              </div>
-              <Button
-                href="/funnel/signup"
-                variant="primary"
-                class="w-full mt-6 text-sm shadow-xl shadow-emerald-700/20"
-                >Start free trial →</Button
-              >
-            </div>
-          </div>
-
-          <!-- 4× / week -->
-          <div
-            class="bg-white rounded-2xl border border-emerald-100 flex flex-col hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-          >
-            <div class="p-6 border-b border-emerald-50">
-              <div class="text-[10px] font-bold tracking-widest uppercase text-emerald-900/40 mb-3">
-                Accelerate
-              </div>
-              <h3 class="font-serif text-2xl font-bold text-emerald-950 mb-1">Plus</h3>
-              <p class="text-xs text-emerald-800/60 font-medium leading-relaxed mb-5">
-                4 sessions/week — faster Tajweed or Hifz progress without daily commitment.
-              </p>
-              <div class="flex items-baseline gap-0.5 mb-0.5">
-                <span class="text-lg font-bold text-emerald-900/70" id="plan-sym-4"></span>
-                <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-4"
-                  >—</span
-                >
-              </div>
-              <div class="text-xs font-medium text-emerald-800/60" id="plan-per-4">
-                select options above
-              </div>
-              <div
-                class="mt-4 inline-flex items-center px-2.5 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full"
-              >
-                16 sessions / month
-              </div>
-            </div>
-            <div class="p-6 flex-1 flex flex-col">
-              <div class="space-y-3 flex-1 text-sm">
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >16 private 1-on-1 sessions/mo</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Same dedicated teacher</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Weekly progress report</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Make-up class guarantee</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Sit-in access anytime</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
-                    >Monthly progress summary</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
-                    >Priority teacher matching</span>
-                </div>
-              </div>
-              <Button href="/funnel/signup" variant="ghost" class="w-full mt-6 text-sm"
-                >Start free trial →</Button
-              >
-            </div>
-          </div>
-
-          <!-- 5× / week -->
-          <div
-            class="bg-white rounded-2xl border border-emerald-100 flex flex-col hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-          >
-            <div class="p-6 border-b border-emerald-50">
-              <div class="text-[10px] font-bold tracking-widest uppercase text-amber-600/70 mb-3">
-                Intensive
-              </div>
-              <h3 class="font-serif text-2xl font-bold text-emerald-950 mb-1">Hifz-Ready</h3>
-              <p class="text-xs text-emerald-800/60 font-medium leading-relaxed mb-5">
-                5 sessions/week — full Hifz or deep Tajweed. Five days of dedicated learning.
-              </p>
-              <div class="flex items-baseline gap-0.5 mb-0.5">
-                <span class="text-lg font-bold text-emerald-900/70" id="plan-sym-5"></span>
-                <span class="font-serif text-4xl font-bold text-emerald-950" id="plan-price-5"
-                  >—</span
-                >
-              </div>
-              <div class="text-xs font-medium text-emerald-800/60" id="plan-per-5">
-                select options above
-              </div>
-              <div
-                class="mt-4 inline-flex items-center px-2.5 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full"
-              >
-                20 sessions / month
-              </div>
-            </div>
-            <div class="p-6 flex-1 flex flex-col">
-              <div class="space-y-3 flex-1 text-sm">
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >20 private 1-on-1 sessions/mo</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Same dedicated teacher</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Weekly progress report</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Make-up class guarantee</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-medium text-emerald-950"
-                    >Sit-in access anytime</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
-                    >Monthly progress summary</span>
-                </div>
-                <div class="flex items-start gap-2.5">
-                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
-                    >Priority teacher matching</span>
-                </div>
-                <div class="flex items-start gap-2.5 text-amber-500">
-                  <span set:html={Icons.check} /><span class="font-bold text-emerald-950"
-                    >WhatsApp parent support</span>
-                </div>
-              </div>
-              <Button href="/funnel/signup" variant="ghost" class="w-full mt-6 text-sm"
-                >Start free trial →</Button
+              <Button href="/funnel/signup" variant="primary" class="shrink-0"
+                >Start free trial &rarr;</Button
               >
             </div>
           </div>
         </div>
-
-        <p class="text-center text-sm font-medium text-emerald-900/50 italic max-w-2xl mx-auto">
-          Prices shown are per-student, billed monthly. Sibling discounts apply automatically from
-          the second child.
-          <br class="hidden sm:block" />All plans can be changed or cancelled any time — no lock-in.
-        </p>
       </div>
     </Section>
 
@@ -1392,10 +1295,12 @@ const Icons = {
         });
       }
 
-      // --- 2. PRICING GRID (plans section — uses same PRICING_DATA as calculator) ---
-      const planState = { dur: '30', currency: 'USD' };
+      // --- 2. PRICING GRID (plans section — reads same PRICING_DATA as calculator, no new numbers) ---
+      // UNIQUE vs hero calculator: this table shows discounted price + annual/6mo savings
+      // across ALL 4 frequencies simultaneously. Hero calc shows one frequency at a time.
+      const planState = { dur: '30', currency: 'USD', billing: 'monthly', discount: 0 };
 
-      // Same hover-safe pattern as selectCalcBtn — strips hover:text-emerald-700 from selected
+      // Hover-safe: strips hover:text-emerald-700 from selected button, restores on deselect
       function selectPlanBtn(group, clickedBtn) {
         const container = clickedBtn.parentElement;
         container.querySelectorAll('.plan-btn').forEach((b) => {
@@ -1420,27 +1325,69 @@ const Icons = {
       function updatePlanGrid() {
         const cur = planState.currency || 'USD';
         const dur = planState.dur || '30';
+        const discount = planState.discount || 0;
+        const billing = planState.billing || 'monthly';
         const sym = CURRENCY_SYMBOLS[cur] ?? cur;
+        // Months covered by the billing period (for total-saving calculation)
+        const billingMonths = billing === 'annual' ? 12 : billing === 'sixMonth' ? 6 : 1;
+
         ['2', '3', '4', '5'].forEach((sess) => {
-          const price = PRICING_DATA[cur]?.[dur]?.[sess] ?? '—';
+          const base = PRICING_DATA[cur]?.[dur]?.[sess];
           const symEl = document.getElementById(`plan-sym-${sess}`);
           const priceEl = document.getElementById(`plan-price-${sess}`);
           const perEl = document.getElementById(`plan-per-${sess}`);
+          const saveEl = document.getElementById(`plan-save-${sess}`);
+
+          if (base == null) {
+            if (symEl) symEl.textContent = '';
+            if (priceEl) priceEl.textContent = '\u2014';
+            if (perEl) perEl.textContent = 'select options above';
+            if (saveEl) saveEl.classList.add('hidden');
+            return;
+          }
+
+          const discounted = Math.round(base * (1 - discount));
+          const sessPerMonth = parseInt(sess) * 4;
+          const perClass = (discounted / sessPerMonth).toFixed(2);
+
           if (symEl) symEl.textContent = sym;
-          if (priceEl) priceEl.textContent = price;
-          if (perEl) perEl.textContent = `per month · ${parseInt(sess) * 4} sessions`;
+          if (priceEl) priceEl.textContent = discounted;
+
+          // Per-class rate line
+          if (perEl) perEl.textContent = `\u2248 ${sym}${perClass} / class`;
+
+          // Savings badge — unique feature: visible simultaneously across all 4 frequencies
+          if (saveEl) {
+            if (discount > 0) {
+              const saving = Math.round(base * discount * billingMonths);
+              saveEl.textContent = `Save ${sym}${saving} over ${billingMonths} mo`;
+              saveEl.classList.remove('hidden');
+            } else {
+              saveEl.classList.add('hidden');
+            }
+          }
         });
       }
 
       // Bind plan duration buttons
-      document.querySelectorAll('.plan-btn').forEach((btn) => {
+      document.querySelectorAll('.plan-btn[data-group="plan-dur"]').forEach((btn) => {
         if (btn.dataset.bound) return;
         btn.dataset.bound = 'true';
         btn.addEventListener('click', function () {
-          const group = this.dataset.group;
-          if (!group) return;
-          selectPlanBtn(group, this);
+          selectPlanBtn('plan-dur', this);
           planState.dur = this.dataset.val;
+          updatePlanGrid();
+        });
+      });
+
+      // Bind plan billing buttons
+      document.querySelectorAll('.plan-btn[data-group="plan-billing"]').forEach((btn) => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', function () {
+          selectPlanBtn('plan-billing', this);
+          planState.billing = this.dataset.val;
+          planState.discount = parseFloat(this.dataset.discount || '0');
           updatePlanGrid();
         });
       });
@@ -1455,70 +1402,14 @@ const Icons = {
         });
       }
 
-      // Default selection on load: 30min, USD — click the 30min button to set selected state
+      // Default: 30 min, Monthly, USD — set selected state on load
       const planDurDefault = document.querySelector('#plan-dur-btns .plan-btn[data-val="30"]');
+      const planBillingDefault = document.querySelector(
+        '#plan-billing-btns .plan-btn[data-val="monthly"]'
+      );
       if (planDurDefault) selectPlanBtn('plan-dur', planDurDefault);
+      if (planBillingDefault) selectPlanBtn('plan-billing', planBillingDefault);
       updatePlanGrid();
-
-      // --- 3. BILLING TOGGLE (plans section — preserved unchanged) ---
-
-      let isAnnualPricing = true;
-      const planPrices = {
-        light: { m: 39, a: 33 },
-        standard: { m: 59, a: 50 },
-        intensive: { m: 89, a: 76 },
-      };
-
-      const billingToggle = document.getElementById('billing-toggle');
-      if (billingToggle && !billingToggle.dataset.bound) {
-        billingToggle.dataset.bound = 'true';
-
-        billingToggle.addEventListener('click', () => {
-          isAnnualPricing = !isAnnualPricing;
-
-          const thumb = document.getElementById('billing-thumb');
-          const lblAnnual = document.getElementById('lbl-annual');
-          const lblMonthly = document.getElementById('lbl-monthly');
-
-          if (isAnnualPricing && thumb && lblAnnual && lblMonthly) {
-            billingToggle.classList.replace('bg-emerald-100', 'bg-emerald-700');
-            thumb.classList.replace('translate-x-1', 'translate-x-6');
-            lblAnnual.classList.replace('text-emerald-900/60', 'text-emerald-950');
-            lblMonthly.classList.replace('text-emerald-950', 'text-emerald-900/60');
-          } else if (thumb && lblAnnual && lblMonthly) {
-            billingToggle.classList.replace('bg-emerald-700', 'bg-emerald-100');
-            thumb.classList.replace('translate-x-6', 'translate-x-1');
-            lblMonthly.classList.replace('text-emerald-900/60', 'text-emerald-950');
-            lblAnnual.classList.replace('text-emerald-950', 'text-emerald-900/60');
-          }
-
-          const p = isAnnualPricing ? 'a' : 'm';
-          const suf = isAnnualPricing ? 'per month, billed annually' : 'per month, billed monthly';
-          const orig = {
-            light: isAnnualPricing ? '$39/mo when billed monthly' : '',
-            standard: isAnnualPricing ? '$59/mo when billed monthly' : '',
-            intensive: isAnnualPricing ? '$89/mo when billed monthly' : '',
-          };
-
-          ['light', 'standard', 'intensive'].forEach((id) => {
-            const priceEl = document.getElementById(`price-${id}`);
-            if (priceEl) priceEl.textContent = planPrices[id][p].toString();
-
-            const perEl = document.getElementById(`per-${id}`);
-            if (perEl) perEl.textContent = suf;
-
-            const origEl = document.getElementById(`orig-${id}`);
-            if (origEl) {
-              if (orig[id]) {
-                origEl.textContent = orig[id];
-                origEl.classList.remove('invisible');
-              } else {
-                origEl.classList.add('invisible');
-              }
-            }
-          });
-        });
-      }
 
       // --- 3. SIBLING CALCULATOR (preserved unchanged) ---
       const addBtn = document.getElementById('sib-add-btn');

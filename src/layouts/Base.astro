@@ -154,8 +154,9 @@ const baseSchema = {
       is:inline></script>
     <script type="text/partytown" is:inline>
       window.dataLayer = window.dataLayer || [];
-      // eslint-disable-next-line prefer-rest-params
+
       function gtag() {
+        // eslint-disable-next-line prefer-rest-params
         dataLayer.push(arguments);
       }
       gtag('js', new Date());

@@ -1,7 +1,6 @@
 // src/pages/api/contact.ts
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
-import { ENV } from '../../lib/env';
 import { z } from 'zod';
 
 const contactSchema = z.object({
@@ -16,22 +15,32 @@ const contactSchema = z.object({
 export const prerender = false;
 
 // ─── Cloudflare Turnstile Verification ──────────────────────────────────────
-async function verifyTurnstile(token: string, remoteip?: string): Promise<boolean> {
+async function verifyTurnstile(token: string, secret: string, remoteip?: string): Promise<boolean> {
   try {
     const body = new URLSearchParams({
-      secret: ENV.TURNSTILE_SECRET_KEY,
+      secret: secret,
       response: token,
     });
-    if (remoteip) body.set('remoteip', remoteip);
+    if (remoteip && remoteip !== 'unknown') {
+      body.set('remoteip', remoteip);
+    }
 
     const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
-      body,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: body.toString(),
     });
-    if (!res.ok) return false;
-    const data = (await res.json()) as { success: boolean };
-    return data.success === true;
-  } catch {
+
+    const data = (await res.json()) as { success: boolean; 'error-codes'?: string[] };
+    if (!data.success) {
+      console.error('[Turnstile Edge Rejection] Error codes:', data['error-codes']);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('[Turnstile Fetch Exception]:', error);
     return false;
   }
 }
@@ -39,8 +48,7 @@ async function verifyTurnstile(token: string, remoteip?: string): Promise<boolea
 // ─── KV Helper ──────────────────────────────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getKV(): any {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (env as any).SESSION || null;
+  return (env as Record<string, unknown>).SESSION || null;
 }
 
 export const POST: APIRoute = async (context) => {
@@ -78,8 +86,22 @@ export const POST: APIRoute = async (context) => {
     const { firstName, lastName, email, message } = parsed.data;
     const turnstileToken = parsed.data['cf-turnstile-response'];
 
+    const runtimeEnv = env as Record<string, unknown>;
+    const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
+      runtimeEnv.TURNSTILE_SECRET_KEY) as string;
+    const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
+
+    if (!turnstileSecret) {
+      console.error('[Configuration Error]: Missing Turnstile Secret');
+      return new Response(JSON.stringify({ error: 'Internal Configuration Error' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // 3. Server-side Turnstile verification — hard reject if it fails
-    const isHuman = await verifyTurnstile(turnstileToken, cfConnectingIp);
+    const isHuman = await verifyTurnstile(turnstileToken, turnstileSecret, cfConnectingIp);
     if (!isHuman) {
       return new Response(
         JSON.stringify({ error: 'Security check failed. Please refresh and try again.' }),
@@ -90,28 +112,29 @@ export const POST: APIRoute = async (context) => {
     // 4. Dispatch the Email via Resend in the background
     const sendEmailTask = async () => {
       try {
-        if (ENV.RESEND_API_KEY.startsWith('re_') && ENV.RESEND_API_KEY !== 're_123456789') {
+        if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
           const res = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {
-              Authorization: `Bearer ${ENV.RESEND_API_KEY}`,
+              Authorization: `Bearer ${resendApiKey}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               from: 'Quranific Support <support@quranific.com>',
-              to: ENV.ADMIN_EMAIL,
+              to: adminEmail,
               reply_to: email,
               subject: `New Contact Inquiry from ${firstName} ${lastName}`,
               text: `Name: ${firstName} ${lastName}\nEmail: ${email}\n\nMessage:\n${message}`,
             }),
           });
           if (!res.ok) {
-            throw new Error('Resend API rejected the email dispatch');
+            const errorText = await res.text();
+            throw new Error(`Resend API error: ${res.status} ${errorText}`);
           }
         } else {
           // Local Mock Mode
           console.log('\n====== 📨 MOCK EMAIL DISPATCH ======');
-          console.log(`To: ${ENV.ADMIN_EMAIL}`);
+          console.log(`To: ${adminEmail}`);
           console.log(`From: ${firstName} ${lastName} <${email}>`);
           console.log(`Message: \n${message}`);
           console.log('====================================\n');
