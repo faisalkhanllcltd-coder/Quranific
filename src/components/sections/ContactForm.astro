@@ -1,57 +1,144 @@
 ---
 // src/components/sections/ContactForm.astro
 // Standalone, edge-optimized contact form with built-in async submission states.
-import { ENV } from '../../lib/env';
 ---
-
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline></script>
 
 <div class="relative w-full max-w-2xl mx-auto">
   <div id="form-message" class="hidden rounded-xl p-4 mb-6 text-sm font-medium"></div>
 
-  <form id="standalone-contact-form" class="bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-emerald-900/5 flex flex-col gap-6 relative overflow-hidden" action="/api/contact" method="POST">
-    
-    <div id="form-success-overlay" class="absolute inset-0 bg-white/95 backdrop-blur-md z-20 hidden flex-col items-center justify-center text-center px-8 opacity-0 transition-opacity duration-500">
-      <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-2xl mb-4 shadow-sm" aria-hidden="true">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+  <form
+    id="standalone-contact-form"
+    class="bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-emerald-900/5 flex flex-col gap-6 relative overflow-hidden"
+    action="/api/contact"
+    method="POST"
+  >
+    <div
+      id="form-success-overlay"
+      class="absolute inset-0 bg-white/95 backdrop-blur-md z-20 hidden flex-col items-center justify-center text-center px-8 opacity-0 transition-opacity duration-500"
+    >
+      <div
+        class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-2xl mb-4 shadow-sm"
+        aria-hidden="true"
+      >
+        <svg
+          class="w-8 h-8"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          stroke-width="2.5"
+          ><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg
+        >
       </div>
       <h3 class="text-2xl font-bold text-emerald-950 mb-2">Message Sent</h3>
-      <p class="text-sm font-medium text-emerald-800/80">Alhamdulillah, we've received your message. Our team will email you within 24 hours.</p>
+      <p class="text-sm font-medium text-emerald-800/80">
+        Alhamdulillah, we've received your message. Our team will email you within 24 hours.
+      </p>
     </div>
 
     <div class="grid sm:grid-cols-2 gap-6">
       <div class="flex flex-col gap-2">
-        <label for="firstName" class="text-xs font-bold uppercase tracking-wider text-emerald-950/80">First Name <span class="text-amber-500">*</span></label>
-        <input type="text" id="firstName" name="firstName" autocomplete="given-name" required aria-invalid="false" aria-describedby="firstName-error" class="w-full bg-[#fefdf9] border border-emerald-100 rounded-xl px-4 py-3 text-base sm:text-sm font-medium text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400 transition-all duration-300 placeholder:text-emerald-900/30 aria-[invalid=true]:border-red-400 aria-[invalid=true]:ring-red-100" placeholder="Yusuf" />
-        <p id="firstName-error" class="hidden text-xs text-red-600 font-medium" role="alert">Please enter your first name.</p>
+        <label
+          for="firstName"
+          class="text-xs font-bold uppercase tracking-wider text-emerald-950/80"
+          >First Name <span class="text-amber-500">*</span></label
+        >
+        <input
+          type="text"
+          id="firstName"
+          name="firstName"
+          autocomplete="given-name"
+          required
+          aria-invalid="false"
+          aria-describedby="firstName-error"
+          class="w-full bg-[#fefdf9] border border-emerald-100 rounded-xl px-4 py-3 text-base sm:text-sm font-medium text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400 transition-all duration-300 placeholder:text-emerald-900/30 aria-[invalid=true]:border-red-400 aria-[invalid=true]:ring-red-100"
+          placeholder="Yusuf"
+        />
+        <p id="firstName-error" class="hidden text-xs text-red-600 font-medium" role="alert">
+          Please enter your first name.
+        </p>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="lastName" class="text-xs font-bold uppercase tracking-wider text-emerald-950/80">Last Name <span class="text-amber-500">*</span></label>
-        <input type="text" id="lastName" name="lastName" autocomplete="family-name" required aria-invalid="false" aria-describedby="lastName-error" class="w-full bg-[#fefdf9] border border-emerald-100 rounded-xl px-4 py-3 text-base sm:text-sm font-medium text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400 transition-all duration-300 placeholder:text-emerald-900/30 aria-[invalid=true]:border-red-400 aria-[invalid=true]:ring-red-100" placeholder="Ali" />
-        <p id="lastName-error" class="hidden text-xs text-red-600 font-medium" role="alert">Please enter your last name.</p>
+        <label for="lastName" class="text-xs font-bold uppercase tracking-wider text-emerald-950/80"
+          >Last Name <span class="text-amber-500">*</span></label
+        >
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          autocomplete="family-name"
+          required
+          aria-invalid="false"
+          aria-describedby="lastName-error"
+          class="w-full bg-[#fefdf9] border border-emerald-100 rounded-xl px-4 py-3 text-base sm:text-sm font-medium text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400 transition-all duration-300 placeholder:text-emerald-900/30 aria-[invalid=true]:border-red-400 aria-[invalid=true]:ring-red-100"
+          placeholder="Ali"
+        />
+        <p id="lastName-error" class="hidden text-xs text-red-600 font-medium" role="alert">
+          Please enter your last name.
+        </p>
       </div>
     </div>
-    
+
     <div class="flex flex-col gap-2">
-      <label for="email" class="text-xs font-bold uppercase tracking-wider text-emerald-950/80">Email Address <span class="text-amber-500">*</span></label>
-      <input type="email" id="email" name="email" autocomplete="email" required aria-invalid="false" aria-describedby="email-error" class="w-full bg-[#fefdf9] border border-emerald-100 rounded-xl px-4 py-3 text-base sm:text-sm font-medium text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400 transition-all duration-300 placeholder:text-emerald-900/30 aria-[invalid=true]:border-red-400 aria-[invalid=true]:ring-red-100" placeholder="you@example.com" />
-      <p id="email-error" class="hidden text-xs text-red-600 font-medium" role="alert">Please enter a valid email address.</p>
-    </div>
-    
-    <div class="flex flex-col gap-2">
-      <label for="message" class="text-xs font-bold uppercase tracking-wider text-emerald-950/80">How can we help? <span class="text-amber-500">*</span></label>
-      <textarea id="message" name="message" rows="4" required aria-invalid="false" aria-describedby="message-error" class="w-full bg-[#fefdf9] border border-emerald-100 rounded-xl px-4 py-3 text-base sm:text-sm font-medium text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400 transition-all duration-300 resize-y min-h-[120px] placeholder:text-emerald-900/30 aria-[invalid=true]:border-red-400 aria-[invalid=true]:ring-red-100" placeholder="Tell us what you need assistance with..."></textarea>
-      <p id="message-error" class="hidden text-xs text-red-600 font-medium" role="alert">Please enter your message.</p>
+      <label for="email" class="text-xs font-bold uppercase tracking-wider text-emerald-950/80"
+        >Email Address <span class="text-amber-500">*</span></label
+      >
+      <input
+        type="email"
+        id="email"
+        name="email"
+        autocomplete="email"
+        required
+        aria-invalid="false"
+        aria-describedby="email-error"
+        class="w-full bg-[#fefdf9] border border-emerald-100 rounded-xl px-4 py-3 text-base sm:text-sm font-medium text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400 transition-all duration-300 placeholder:text-emerald-900/30 aria-[invalid=true]:border-red-400 aria-[invalid=true]:ring-red-100"
+        placeholder="you@example.com"
+      />
+      <p id="email-error" class="hidden text-xs text-red-600 font-medium" role="alert">
+        Please enter a valid email address.
+      </p>
     </div>
 
-    <div class="cf-turnstile mt-4" data-sitekey={ENV.TURNSTILE_SITE_KEY}></div>
-    
-    <button type="submit" id="submit-btn" class="relative w-full bg-emerald-700 text-white font-bold py-3.5 rounded-xl hover:bg-emerald-800 transition-all duration-300 shadow-md mt-2 overflow-hidden flex items-center justify-center group disabled:opacity-70 disabled:cursor-not-allowed">
+    <div class="flex flex-col gap-2">
+      <label for="message" class="text-xs font-bold uppercase tracking-wider text-emerald-950/80"
+        >How can we help? <span class="text-amber-500">*</span></label
+      >
+      <textarea
+        id="message"
+        name="message"
+        rows="4"
+        required
+        aria-invalid="false"
+        aria-describedby="message-error"
+        class="w-full bg-[#fefdf9] border border-emerald-100 rounded-xl px-4 py-3 text-base sm:text-sm font-medium text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400 transition-all duration-300 resize-y min-h-[120px] placeholder:text-emerald-900/30 aria-[invalid=true]:border-red-400 aria-[invalid=true]:ring-red-100"
+        placeholder="Tell us what you need assistance with..."></textarea>
+      <p id="message-error" class="hidden text-xs text-red-600 font-medium" role="alert">
+        Please enter your message.
+      </p>
+    </div>
+
+    <div class="cf-turnstile mt-4" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>
+
+    <button
+      type="submit"
+      id="submit-btn"
+      class="relative w-full bg-emerald-700 text-white font-bold py-3.5 rounded-xl hover:bg-emerald-800 transition-all duration-300 shadow-md mt-2 overflow-hidden flex items-center justify-center group disabled:opacity-70 disabled:cursor-not-allowed"
+    >
       <span id="btn-text" class="transition-opacity duration-300">Send Message →</span>
-      
-      <svg id="btn-spinner" class="hidden absolute w-5 h-5 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+
+      <svg
+        id="btn-spinner"
+        class="hidden absolute w-5 h-5 text-white animate-spin"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
       </svg>
     </button>
   </form>
@@ -65,9 +152,13 @@ import { ENV } from '../../lib/env';
 
     const FIELDS = [
       { id: 'firstName', errId: 'firstName-error', validate: (v: string) => v.trim().length > 0 },
-      { id: 'lastName',  errId: 'lastName-error',  validate: (v: string) => v.trim().length > 0 },
-      { id: 'email',     errId: 'email-error',     validate: (v: string) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) },
-      { id: 'message',   errId: 'message-error',   validate: (v: string) => v.trim().length > 0 },
+      { id: 'lastName', errId: 'lastName-error', validate: (v: string) => v.trim().length > 0 },
+      {
+        id: 'email',
+        errId: 'email-error',
+        validate: (v: string) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v),
+      },
+      { id: 'message', errId: 'message-error', validate: (v: string) => v.trim().length > 0 },
     ];
 
     // Reset aria-invalid + hide error on user input
@@ -99,7 +190,7 @@ import { ENV } from '../../lib/env';
       e.preventDefault();
 
       if (!validateFields()) return; // per-field errors already shown
-      
+
       const btn = document.getElementById('submit-btn') as HTMLButtonElement;
       const btnText = document.getElementById('btn-text');
       const btnSpinner = document.getElementById('btn-spinner');
@@ -113,7 +204,8 @@ import { ENV } from '../../lib/env';
 
       if (!token) {
         messageBox.textContent = 'Please complete the security check.';
-        messageBox.className = 'rounded-xl p-4 mb-6 text-sm font-medium bg-red-50 text-red-600 border border-red-200 block';
+        messageBox.className =
+          'rounded-xl p-4 mb-6 text-sm font-medium bg-red-50 text-red-600 border border-red-200 block';
         return;
       }
 
@@ -128,32 +220,34 @@ import { ENV } from '../../lib/env';
         const response = await fetch(form.action, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
         });
 
         if (!response.ok) {
-            const errData = await response.json().catch((): { error?: string } => ({}));
-            throw new Error((errData as { error?: string }).error || 'Server rejected submission');
+          const errData = await response.json().catch((): { error?: string } => ({}));
+          throw new Error((errData as { error?: string }).error || 'Server rejected submission');
         }
-        
+
         btnSpinner.classList.add('hidden');
         btnText.classList.remove('opacity-0');
-        
+
         overlay.classList.remove('hidden');
         setTimeout(() => overlay.classList.remove('opacity-0'), 50);
-        
-        form.reset();
-        FIELDS.forEach(({ id }) => document.getElementById(id)?.setAttribute('aria-invalid', 'false'));
 
+        form.reset();
+        FIELDS.forEach(({ id }) =>
+          document.getElementById(id)?.setAttribute('aria-invalid', 'false')
+        );
       } catch (error: unknown) {
         console.error('Form submission failed:', error);
         const errMsg = error instanceof Error ? error.message : '';
         btn.disabled = false;
         btnSpinner.classList.add('hidden');
         btnText.classList.remove('opacity-0');
-        
-        messageBox.textContent = errMsg || "We encountered a network error. Please try again.";
-        messageBox.className = 'rounded-xl p-4 mb-6 text-sm font-medium bg-red-50 text-red-600 border border-red-200 block';
+
+        messageBox.textContent = errMsg || 'We encountered a network error. Please try again.';
+        messageBox.className =
+          'rounded-xl p-4 mb-6 text-sm font-medium bg-red-50 text-red-600 border border-red-200 block';
       }
     });
   });

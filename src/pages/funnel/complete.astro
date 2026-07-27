@@ -3,10 +3,16 @@
 import Funnel from '../../layouts/Funnel.astro';
 import CompleteForm from '../../components/funnel/CompleteForm.svelte';
 import StepIndicator from '../../components/funnel/StepIndicator.svelte';
----
-<Funnel title="Complete Profile - Step 2 | Quranific">
-  <div class="w-full flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-4 duration-700">
 
+if (!Astro.cookies.has('q_session')) {
+  return Astro.redirect('/funnel/signup');
+}
+---
+
+<Funnel title="Complete Profile - Step 2 | Quranific">
+  <div
+    class="w-full flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-4 duration-700"
+  >
     <!-- D-1 FIX: StepIndicator has no interactive behaviour on mount — changed
          from client:load to client:idle to reduce the initial JS hydration budget.
          CompleteForm stays client:load because session validation runs on mount. -->
@@ -26,6 +32,5 @@ import StepIndicator from '../../components/funnel/StepIndicator.svelte';
     <div class="w-full">
       <CompleteForm client:load />
     </div>
-
   </div>
 </Funnel>
