@@ -2,54 +2,68 @@
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { signupSchema } from '../../lib/schema';
-import { ENV } from '../../lib/env';
 import { SignJWT } from 'jose';
 
 export const prerender = false;
 
 // ─── Cloudflare Turnstile Verification ──────────────────────────────────────
-async function verifyTurnstile(token: string, remoteip?: string): Promise<boolean> {
+async function verifyTurnstile(token: string, secret: string, remoteip?: string): Promise<boolean> {
   try {
     const body = new URLSearchParams({
-      secret: ENV.TURNSTILE_SECRET_KEY,
+      secret: secret,
       response: token,
     });
-    if (remoteip) body.set('remoteip', remoteip);
+
+    if (remoteip && remoteip !== 'unknown') {
+      body.set('remoteip', remoteip);
+    }
 
     const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
-      body,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: body.toString(),
     });
-    if (!res.ok) return false;
-    const data = (await res.json()) as { success: boolean };
-    return data.success === true;
-  } catch {
+
+    const data = (await res.json()) as { success: boolean; 'error-codes'?: string[] };
+
+    if (!data.success) {
+      console.error('[Turnstile Edge Rejection] Error codes:', data['error-codes']);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('[Turnstile Fetch Exception]:', error);
     return false;
   }
 }
 
 // ─── KV Helper ──────────────────────────────────────────────────────────────
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getKV(): any {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (env as any).SESSION || null;
+function getKV() {
+  const runtimeEnv = env as Record<string, unknown>;
+  return runtimeEnv.SESSION;
 }
 
 export const POST: APIRoute = async (context) => {
   try {
     const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? 'unknown';
-    const kv = getKV();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const kv = getKV() as any;
 
-    // 1. Distributed IP Rate Limiting via KV (Mandate 3 & 4)
+    // 1. Distributed IP Rate Limiting via KV
     if (kv && cfConnectingIp !== 'unknown') {
       const rateLimitKey = `RL:REGISTER:${cfConnectingIp}`;
       const isRateLimited = await kv.get(rateLimitKey);
+
       if (isRateLimited) {
         return new Response(
           JSON.stringify({ error: 'Too many registration attempts. Please wait a minute.' }),
           { status: 429, headers: { 'Content-Type': 'application/json' } }
         );
       }
+
       // Lock the IP for 60 seconds
       await kv
         .put(rateLimitKey, '1', { expirationTtl: 60 })
@@ -77,8 +91,28 @@ export const POST: APIRoute = async (context) => {
       });
     }
 
+    // Extract edge variables dynamically
+    const runtimeEnv = env as Record<string, unknown>;
+    const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
+      runtimeEnv.TURNSTILE_SECRET_KEY) as string;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string;
+
+    if (!turnstileSecret || !jwtSecret) {
+      console.error(
+        '[Configuration Error]: Missing TURNSTILE_SECRET or JWT_SECRET in Cloudflare edge variables.'
+      );
+      return new Response(JSON.stringify({ error: 'Internal Configuration Error' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // Server-side Turnstile verification
-    const isHuman = await verifyTurnstile(validData.turnstileToken, cfConnectingIp);
+    const isHuman = await verifyTurnstile(
+      validData.turnstileToken,
+      turnstileSecret,
+      cfConnectingIp
+    );
     if (!isHuman) {
       return new Response(
         JSON.stringify({ error: 'Security check failed. Please refresh and try again.' }),
@@ -86,8 +120,8 @@ export const POST: APIRoute = async (context) => {
       );
     }
 
-    // Stateless Session Management via JWT (now includes jti for idempotency)
-    const secret = new TextEncoder().encode(ENV.JWT_SECRET);
+    // Stateless Session Management via JWT
+    const secretKey = new TextEncoder().encode(jwtSecret);
     const jti = crypto.randomUUID();
 
     const token = await new SignJWT({
@@ -101,17 +135,13 @@ export const POST: APIRoute = async (context) => {
       .setIssuedAt()
       .setJti(jti)
       .setExpirationTime('15m')
-      .sign(secret);
+      .sign(secretKey);
 
-    // Deliver the JWT as an HttpOnly cookie — never exposed to JavaScript
+    // Deliver the JWT as an HttpOnly cookie
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        // HttpOnly prevents XSS from reading the token.
-        // Secure ensures it is only sent over HTTPS.
-        // SameSite=Strict prevents CSRF.
-        // Path=/funnel scopes it to the funnel pages only.
         'Set-Cookie': `q_session=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=900; Path=/funnel`,
       },
     });
