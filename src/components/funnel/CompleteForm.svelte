@@ -8,18 +8,18 @@
   let errorMsg = $state('');
 
   // Segmented-control reactive state (replaces <select> bindings)
-  let selectedCourse    = $state('');
-  let selectedGender    = $state('');
-  let selectedTeacher   = $state('Male Teacher');
-  let selectedLevel     = $state('');
-  let selectedDays      = $state('');
-  let selectedSchedule  = $state('');
+  let selectedCourse = $state('');
+  let selectedGender = $state('');
+  let selectedTeacher = $state('Male Teacher');
+  let selectedLevel = $state('');
+  let selectedDays = $state('');
+  let selectedSchedule = $state('');
 
   // Hidden inputs are synced via $derived — no native <select> needed
-  const genderOptions   = ['Male', 'Female'];
-  const teacherOptions  = ['Male Teacher', 'Female Teacher', 'No Preference'];
-  const levelOptions    = ['Beginner', 'Intermediate', 'Advanced'];
-  const daysOptions     = ['2 Days', '3 Days', '4 Days', '5 Days'];
+  const genderOptions = ['Male', 'Female'];
+  const teacherOptions = ['Male Teacher', 'Female Teacher', 'No Preference'];
+  const levelOptions = ['Beginner', 'Intermediate', 'Advanced'];
+  const daysOptions = ['2 Days', '3 Days', '4 Days', '5 Days'];
   const scheduleOptions = ['Morning', 'Afternoon', 'Evening', 'Night'];
 
   onMount(() => {
@@ -27,7 +27,7 @@
     // We do a lightweight pre-flight HEAD to detect a 401 and redirect.
     if (typeof window !== 'undefined') {
       fetch('/api/complete', { method: 'HEAD' })
-        .then(res => {
+        .then((res) => {
           if (res.status === 401) {
             window.location.assign('/funnel/signup');
           }
@@ -46,20 +46,13 @@
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
 
-    const turnstileToken = formData.get('cf-turnstile-response');
-    if (!turnstileToken) {
-      errorMsg = 'Please complete the security check';
-      loading = false;
-      return;
-    }
-
     // Inject the segmented-control values into the FormData
-    formData.set('course',        selectedCourse);
-    formData.set('gender',        selectedGender);
+    formData.set('course', selectedCourse);
+    formData.set('gender', selectedGender);
     formData.set('teacherGender', selectedTeacher);
-    formData.set('level',         selectedLevel);
-    formData.set('days',          selectedDays);
-    formData.set('schedule',      selectedSchedule);
+    formData.set('level', selectedLevel);
+    formData.set('days', selectedDays);
+    formData.set('schedule', selectedSchedule);
 
     try {
       const response = await fetch('/api/complete', { method: 'POST', body: formData });
@@ -74,11 +67,8 @@
       }
 
       window.location.assign('/funnel/success');
-
     } catch (err: unknown) {
-      errorMsg = err instanceof Error
-        ? err.message
-        : 'A network error occurred. Please try again.';
+      errorMsg = err instanceof Error ? err.message : 'A network error occurred. Please try again.';
       loading = false;
     }
   }
@@ -86,8 +76,8 @@
   // Pill classes — shared style tokens
   const pill = {
     base: 'px-3 py-1.5 text-sm rounded-lg border font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600',
-    off:  'bg-transparent border-gray-200 text-gray-600 hover:bg-gray-50',
-    on:   'bg-emerald-50 border-emerald-600 text-emerald-800 ring-1 ring-emerald-600',
+    off: 'bg-transparent border-gray-200 text-gray-600 hover:bg-gray-50',
+    on: 'bg-emerald-50 border-emerald-600 text-emerald-800 ring-1 ring-emerald-600',
   };
 
   function pillClass(selected: string, value: string): string {
@@ -97,13 +87,13 @@
 
 <form onsubmit={handleSubmit} class="space-y-6 w-full relative z-10">
   {#if errorMsg}
-    <div class="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl text-sm flex items-center gap-3 animate-in fade-in zoom-in duration-300">
+    <div
+      class="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl text-sm flex items-center gap-3 animate-in fade-in zoom-in duration-300"
+    >
       <AlertCircle class="w-5 h-5 shrink-0" />
       {errorMsg}
     </div>
   {/if}
-
-  <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>
 
   <!-- Course select -->
   <div class="space-y-2">
@@ -115,7 +105,7 @@
           disabled={loading}
           class={pillClass(selectedCourse, course.title)}
           aria-pressed={selectedCourse === course.title}
-          onclick={() => selectedCourse = course.title}
+          onclick={() => (selectedCourse = course.title)}
         >
           {course.title}
         </button>
@@ -135,7 +125,7 @@
             disabled={loading}
             class={pillClass(selectedGender, opt)}
             aria-pressed={selectedGender === opt}
-            onclick={() => selectedGender = opt}
+            onclick={() => (selectedGender = opt)}
           >
             {opt}
           </button>
@@ -153,7 +143,7 @@
             disabled={loading}
             class={pillClass(selectedTeacher, opt)}
             aria-pressed={selectedTeacher === opt}
-            onclick={() => selectedTeacher = opt}
+            onclick={() => (selectedTeacher = opt)}
           >
             {opt}
           </button>
@@ -177,7 +167,7 @@
           disabled={loading}
           class={pillClass(selectedLevel, opt)}
           aria-pressed={selectedLevel === opt}
-          onclick={() => selectedLevel = opt}
+          onclick={() => (selectedLevel = opt)}
         >
           {opt}
         </button>
@@ -197,7 +187,7 @@
             disabled={loading}
             class={pillClass(selectedDays, opt)}
             aria-pressed={selectedDays === opt}
-            onclick={() => selectedDays = opt}
+            onclick={() => (selectedDays = opt)}
           >
             {opt}
           </button>
@@ -215,7 +205,7 @@
             disabled={loading}
             class={pillClass(selectedSchedule, opt)}
             aria-pressed={selectedSchedule === opt}
-            onclick={() => selectedSchedule = opt}
+            onclick={() => (selectedSchedule = opt)}
           >
             {opt}
           </button>

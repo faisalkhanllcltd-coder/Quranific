@@ -142,7 +142,7 @@ export const POST: APIRoute = async (context) => {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Set-Cookie': `q_session=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=900; Path=/funnel`,
+        'Set-Cookie': `q_session=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=900; Path=/`,
       },
     });
   } catch (error) {

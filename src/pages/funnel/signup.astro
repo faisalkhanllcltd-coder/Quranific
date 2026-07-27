@@ -3,11 +3,12 @@
 import Funnel from '../../layouts/Funnel.astro';
 import SignupForm from '../../components/funnel/SignupForm.svelte';
 import StepIndicator from '../../components/funnel/StepIndicator.svelte';
-import { SITE } from '../../constants/site';
 ---
-<Funnel title="Sign Up - Step 1 | Quranific">
-  <div class="w-full flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-4 duration-700">
 
+<Funnel title="Sign Up - Step 1 | Quranific">
+  <div
+    class="w-full flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-4 duration-700"
+  >
     <!-- D-1 FIX: StepIndicator is purely decorative — changed from client:load to
          client:idle so it does not block the initial JS hydration budget.
          SignupForm stays client:load because it must be interactive immediately. -->
@@ -31,12 +32,12 @@ import { SITE } from '../../constants/site';
            appended to the FormData inside SignupForm.svelte's handleSubmit. -->
       <div
         class="cf-turnstile mb-4"
-        data-sitekey={SITE.turnstileSiteKey}
+        data-sitekey="0x4AAAAAAD-QWQWhupcuvhbK"
         aria-label="Security check"
-      ></div>
+      >
+      </div>
       <!-- Turnstile JS loaded once at page level in Funnel.astro layout -->
       <SignupForm client:load />
     </div>
-
   </div>
 </Funnel>

@@ -35,25 +35,35 @@ const socialLinks = [
     label: 'X',
     href: SITE.social.x,
     svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/>',
-  }
+  },
 ] as const;
 
-const linkClass = "text-emerald-300/55 hover:text-white transition-colors duration-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm";
-const headingClass = "text-emerald-500 font-semibold tracking-[0.2em] uppercase text-[11px] mb-5";
+const linkClass =
+  'text-emerald-300/55 hover:text-white transition-colors duration-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm';
+const headingClass = 'text-emerald-500 font-semibold tracking-[0.2em] uppercase text-[11px] mb-5';
 ---
 
 <footer class="relative bg-emerald-ink pt-20 pb-10 overflow-hidden">
   <!-- hairline accent + soft glow, desktop only (mobile GPU cost avoided) -->
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 max-w-md w-full h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" aria-hidden="true"></div>
-  <div class="hidden md:block absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-72 bg-emerald-500/[0.07] blur-3xl rounded-full" aria-hidden="true"></div>
+  <div
+    class="absolute top-0 left-1/2 -translate-x-1/2 max-w-md w-full h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="hidden md:block absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-72 bg-emerald-500/[0.07] blur-3xl rounded-full"
+    aria-hidden="true"
+  >
+  </div>
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
     <div class="grid grid-cols-2 md:grid-cols-6 gap-x-8 gap-y-12">
-
       <!-- Brand column — real anchor, not a floating tagline -->
       <div class="col-span-2 flex flex-col gap-6">
-        <a href="/" class="inline-flex items-center gap-2.5 w-fit focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-lg">
+        <a
+          href="/"
+          class="inline-flex items-center gap-2.5 w-fit focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-lg"
+        >
           <img
             src="/images/quranific-logo-gold.svg"
             alt="Quranific — Home"
@@ -68,75 +78,104 @@ const headingClass = "text-emerald-500 font-semibold tracking-[0.2em] uppercase 
           One teacher, one child, one path to loving the Quran.
         </p>
         <div class="flex gap-2">
-          {socialLinks.map((social) => (
-            <a
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={social.label}
-              class="w-9 h-9 rounded-lg border border-emerald-800/60 flex items-center justify-center text-emerald-400/70 hover:text-white hover:border-emerald-600 hover:bg-emerald-900/50 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-                set:html={social.svg}
-              />
-            </a>
-          ))}
+          {
+            socialLinks.map((social) => (
+              <a
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.label}
+                class="w-9 h-9 rounded-lg border border-emerald-800/60 flex items-center justify-center text-emerald-400/70 hover:text-white hover:border-emerald-600 hover:bg-emerald-900/50 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  set:html={social.svg}
+                />
+              </a>
+            ))
+          }
         </div>
       </div>
 
       <div>
         <h3 class={headingClass}>Academy</h3>
         <ul class="space-y-3.5">
-          {FOOTER_NAVIGATION.academy.map((link) => (
-            <li><a href={link.href} class={linkClass}>{link.label}</a></li>
-          ))}
+          {
+            FOOTER_NAVIGATION.academy.map((link) => (
+              <li>
+                <a href={link.href} class={linkClass}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
 
       <div>
         <h3 class={headingClass}>Learn</h3>
         <ul class="space-y-3.5">
-          {FOOTER_NAVIGATION.learn.map((link) => (
-            <li><a href={link.href} class={linkClass}>{link.label}</a></li>
-          ))}
+          {
+            FOOTER_NAVIGATION.learn.map((link) => (
+              <li>
+                <a href={link.href} class={linkClass}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
 
       <div>
         <h3 class={headingClass}>Trust</h3>
         <ul class="space-y-3.5">
-          {FOOTER_NAVIGATION.trust.map((link) => (
-            <li><a href={link.href} class={linkClass}>{link.label}</a></li>
-          ))}
+          {
+            FOOTER_NAVIGATION.trust.map((link) => (
+              <li>
+                <a href={link.href} class={linkClass}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
 
       <div>
         <h3 class={headingClass}>Legal</h3>
         <ul class="space-y-3.5">
-          {FOOTER_NAVIGATION.legal.map((link) => (
-            <li><a href={link.href} class={linkClass}>{link.label}</a></li>
-          ))}
+          {
+            FOOTER_NAVIGATION.legal.map((link) => (
+              <li>
+                <a href={link.href} class={linkClass}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
-
     </div>
 
     <!-- Newsletter — real card treatment, not a flat inline row -->
     <div class="mt-16 pt-10 border-t border-emerald-900/50">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 bg-emerald-950/40 border border-emerald-900/60 rounded-2xl px-6 py-6 md:px-8 md:py-7">
+      <div
+        class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 bg-emerald-950/40 border border-emerald-900/60 rounded-2xl px-6 py-6 md:px-8 md:py-7"
+      >
         <div>
           <h3 class="text-white font-semibold text-base mb-1">Stay updated</h3>
-          <p class="text-emerald-200/50 text-sm">Quranic insights and offers, straight to your inbox.</p>
+          <p class="text-emerald-200/50 text-sm">
+            Quranic insights and offers, straight to your inbox.
+          </p>
         </div>
         <form
           id="newsletter-form"
@@ -164,7 +203,8 @@ const headingClass = "text-emerald-500 font-semibold tracking-[0.2em] uppercase 
               Join
             </button>
           </div>
-          <div class="cf-turnstile mt-3" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>
+          <div class="cf-turnstile mt-3" data-sitekey="0x4AAAAAAD-QWQWhupcuvhbK" data-theme="light">
+          </div>
           <div id="newsletter-message" class="mt-2 text-xs font-medium hidden"></div>
         </form>
       </div>
@@ -172,9 +212,11 @@ const headingClass = "text-emerald-500 font-semibold tracking-[0.2em] uppercase 
 
     <!-- Copyright bar — does real work instead of sitting empty -->
     <div class="mt-10 flex items-center justify-center sm:justify-start">
-      <p class="text-xs text-emerald-300/35 font-medium text-center sm:text-left">&copy; {currentYear} {SITE.name}. All rights reserved.</p>
+      <p class="text-xs text-emerald-300/35 font-medium text-center sm:text-left">
+        &copy; {currentYear}
+        {SITE.name}. All rights reserved.
+      </p>
     </div>
-
   </div>
 </footer>
 
@@ -208,19 +250,23 @@ const headingClass = "text-emerald-500 font-semibold tracking-[0.2em] uppercase 
         const response = await fetch(form.action, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
         });
 
         const result = await response.json().catch((): { error?: string } => ({}));
 
         if (!response.ok) {
-            if (response.status === 400) {
-              const errorText = ((result as { error?: string }).error || '').toLowerCase();
-              if (errorText.includes('duplicate') || errorText.includes('already') || errorText.includes('exists')) {
-                throw new Error('DUPLICATE_EMAIL');
-              }
+          if (response.status === 400) {
+            const errorText = ((result as { error?: string }).error || '').toLowerCase();
+            if (
+              errorText.includes('duplicate') ||
+              errorText.includes('already') ||
+              errorText.includes('exists')
+            ) {
+              throw new Error('DUPLICATE_EMAIL');
             }
-            throw new Error((result as { error?: string }).error || 'Subscription failed');
+          }
+          throw new Error((result as { error?: string }).error || 'Subscription failed');
         }
 
         btn.innerText = 'Joined ✓';
@@ -230,9 +276,8 @@ const headingClass = "text-emerald-500 font-semibold tracking-[0.2em] uppercase 
         input.value = '';
         input.placeholder = 'JazakAllah Khair!';
 
-        message.textContent = "Welcome to the family! Check your inbox.";
+        message.textContent = 'Welcome to the family! Check your inbox.';
         message.className = 'mt-2 text-xs font-medium text-emerald-400 block';
-
       } catch (error: unknown) {
         console.error('Newsletter error:', error);
         const errMsg = error instanceof Error ? error.message : '';
@@ -245,7 +290,7 @@ const headingClass = "text-emerald-500 font-semibold tracking-[0.2em] uppercase 
           btn.innerText = originalBtnText;
           btn.disabled = false;
           input.disabled = false;
-          message.textContent = errMsg || "Network error. Please try again.";
+          message.textContent = errMsg || 'Network error. Please try again.';
           message.className = 'mt-2 text-xs font-medium text-red-400 block';
         }
       }
