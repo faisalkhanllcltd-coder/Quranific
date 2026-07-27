@@ -72,15 +72,14 @@
       const response = await fetch('/api/register', { method: 'POST', body: formData });
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.error || 'Failed to register');
-
-      // B-4 FIX: The JWT is now delivered as an HttpOnly cookie by the server.
-      // We no longer receive a token in the JSON body, and we no longer store it
-      // in sessionStorage or append it to the URL.
-      // The browser will automatically send the 'q_session' cookie with the next
-      // request to /funnel/complete (same origin, Path=/funnel, SameSite=Strict).
-      window.location.assign('/funnel/complete');
+      if (response.ok || result.success) {
+        window.location.href = '/funnel/complete';
+        return;
+      } else {
+        throw new Error(result.error || 'Failed to register');
+      }
     } catch (err: unknown) {
+      console.error('[SignupForm error]:', err);
       errorMsg = err instanceof Error ? err.message : 'A network error occurred. Please try again.';
       loading = false;
     }
