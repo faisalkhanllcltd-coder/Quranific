@@ -93,7 +93,7 @@ export const POST: APIRoute = async (context) => {
     const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
       runtimeEnv.TURNSTILE_SECRET_KEY) as string;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
-    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
 
     if (!turnstileSecret) {
       console.error('[Configuration Error]: Missing Turnstile Secret');
@@ -114,49 +114,61 @@ export const POST: APIRoute = async (context) => {
 
     // 4. Dispatch the Email via Resend in the background
     const sendEmailTask = async () => {
-      try {
-        const finalAdminEmail = adminEmail || 'faisalkhan.llc.ltd@gmail.com';
-        if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
-          await Promise.all([
-            fetch('https://api.resend.com/emails', {
-              method: 'POST',
-              headers: {
-                Authorization: `Bearer ${resendApiKey}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                from: 'Quranific Support <support@quranific.com>',
-                to: finalAdminEmail,
-                reply_to: email,
-                subject: `New Contact Inquiry from ${firstName} ${lastName}`,
-                text: `Name: ${firstName} ${lastName}\nEmail: ${email}\n\nMessage:\n${message}`,
-              }),
-            }).then(async (res) => {
-              if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+      if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
+        try {
+          const res = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${resendApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              from: 'Quranific Support <support@quranific.com>',
+              to: adminEmail,
+              reply_to: email,
+              subject: `New Contact Inquiry from ${firstName} ${lastName}`,
+              text: `Name: ${firstName} ${lastName}\nEmail: ${email}\n\nMessage:\n${message}`,
             }),
-            sendContactAutoResponder(email, firstName, resendApiKey),
-          ]);
-        } else {
-          // Local Mock Mode
-          console.log('\n====== 📨 MOCK EMAIL DISPATCH ======');
-          console.log(`To: ${finalAdminEmail}`);
-          console.log(`From: ${firstName} ${lastName} <${email}>`);
-          console.log(`Message: \n${message}`);
-          console.log('====================================\n');
-        }
-      } catch (error) {
-        console.error('Contact API Email Dispatch Error:', error);
-        if (kv) {
-          const deadLetterKey = `FAILED_CONTACT:${Date.now()}`;
-          const deadLetterPayload = JSON.stringify({
-            failedAt: new Date().toISOString(),
-            payload: parsed.data,
-            reason: String(error),
           });
-          kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch((e: unknown) =>
-            console.error('[Dead-Letter KV Write Failed]:', e)
-          );
+          if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+        } catch (adminErr) {
+          console.error('[Contact Admin Notification Failed]:', adminErr);
+          if (kv) {
+            const deadLetterKey = `FAILED_CONTACT_ADMIN:${Date.now()}`;
+            const deadLetterPayload = JSON.stringify({
+              failedAt: new Date().toISOString(),
+              payload: parsed.data,
+              reason: String(adminErr),
+            });
+            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
+              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
+            );
+          }
         }
+
+        try {
+          await sendContactAutoResponder(email, firstName, resendApiKey);
+        } catch (userErr) {
+          console.error('[Contact User Auto-Responder Failed]:', userErr);
+          if (kv) {
+            const deadLetterKey = `FAILED_CONTACT_USER:${Date.now()}`;
+            const deadLetterPayload = JSON.stringify({
+              failedAt: new Date().toISOString(),
+              payload: parsed.data,
+              reason: String(userErr),
+            });
+            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
+              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
+            );
+          }
+        }
+      } else {
+        // Local Mock Mode
+        console.log('\n====== 📨 MOCK EMAIL DISPATCH ======');
+        console.log(`To: ${adminEmail}`);
+        console.log(`From: ${firstName} ${lastName} <${email}>`);
+        console.log(`Message: \n${message}`);
+        console.log('====================================\n');
       }
     };
 

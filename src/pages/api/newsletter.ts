@@ -42,8 +42,35 @@ async function verifyTurnstile(token: string, secret: string, remoteip?: string)
 }
 // CRITICAL: This cannot be a static file
 
+// ─── KV Helper ──────────────────────────────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getKV(): any {
+  return (env as Record<string, unknown>).SESSION || null;
+}
+
 export const POST: APIRoute = async (context) => {
   try {
+    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? 'unknown';
+    const kv = getKV();
+
+    // 1. Distributed IP Rate Limiting via KV
+    if (kv && cfConnectingIp !== 'unknown') {
+      const rateLimitKey = `RL:NEWSLETTER:${cfConnectingIp}`;
+      const attemptsStr = (await kv.get(rateLimitKey)) as string | null;
+      const attempts = attemptsStr ? parseInt(attemptsStr, 10) : 0;
+
+      if (attempts >= 4) {
+        return new Response(
+          JSON.stringify({ error: 'Too many requests. Please wait a minute before trying again.' }),
+          { status: 429, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+      // Lock the IP for 60 seconds
+      await kv
+        .put(rateLimitKey, (attempts + 1).toString(), { expirationTtl: 60 })
+        .catch((e: unknown) => console.error('[KV RL Failed]:', e));
+    }
+
     const data = (await context.request.json()) as Record<string, unknown>;
 
     const turnstileToken = data['cf-turnstile-response'] as string | undefined;
@@ -61,7 +88,7 @@ export const POST: APIRoute = async (context) => {
     const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
       runtimeEnv.TURNSTILE_SECRET_KEY) as string;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
-    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
 
     if (!turnstileSecret) {
       console.error('[Configuration Error]: Missing Turnstile Secret');
@@ -71,7 +98,6 @@ export const POST: APIRoute = async (context) => {
       });
     }
 
-    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? 'unknown';
     const isHuman = await verifyTurnstile(turnstileToken, turnstileSecret, cfConnectingIp);
     if (!isHuman) {
       return new Response(
@@ -98,50 +124,59 @@ export const POST: APIRoute = async (context) => {
 
     // 2. Dispatch the Email via Resend in the background
     const sendEmailTask = async () => {
-      try {
-        const finalAdminEmail = adminEmail || 'faisalkhan.llc.ltd@gmail.com';
-        if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
-          await Promise.all([
-            fetch('https://api.resend.com/emails', {
-              method: 'POST',
-              headers: {
-                Authorization: `Bearer ${resendApiKey}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                from: 'Quranific Updates <hello@quranific.com>',
-                to: finalAdminEmail,
-                subject: `New Newsletter Subscriber!`,
-                text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,
-              }),
-            }).then(async (res) => {
-              if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+      if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
+        try {
+          const res = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${resendApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              from: 'Quranific Updates <hello@quranific.com>',
+              to: adminEmail,
+              subject: `New Newsletter Subscriber!`,
+              text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,
             }),
-            sendNewsletterWelcome(email, resendApiKey),
-          ]);
-        } else {
-          // Local Mock Mode
-          console.log('\n====== 📬 MOCK NEWSLETTER SUB ======');
-          console.log(`New Subscriber: ${email}`);
-          console.log(`Notification sent to: ${finalAdminEmail}`);
-          console.log('====================================\n');
-        }
-      } catch (error) {
-        console.error('Newsletter API Email Dispatch Error:', error);
-        const kv = (env as Record<string, unknown>).SESSION as
-          | { put: (key: string, value: string, opts?: Record<string, unknown>) => Promise<void> }
-          | undefined;
-        if (kv) {
-          const deadLetterKey = `FAILED_NEWSLETTER:${Date.now()}`;
-          const deadLetterPayload = JSON.stringify({
-            failedAt: new Date().toISOString(),
-            email: email,
-            reason: String(error),
           });
-          kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch((e: unknown) =>
-            console.error('[Dead-Letter KV Write Failed]:', e)
-          );
+          if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+        } catch (adminErr) {
+          console.error('[Newsletter Admin Notification Failed]:', adminErr);
+          if (kv) {
+            const deadLetterKey = `FAILED_NEWSLETTER_ADMIN:${Date.now()}`;
+            const deadLetterPayload = JSON.stringify({
+              failedAt: new Date().toISOString(),
+              email: email,
+              reason: String(adminErr),
+            });
+            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
+              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
+            );
+          }
         }
+
+        try {
+          await sendNewsletterWelcome(email, resendApiKey);
+        } catch (userErr) {
+          console.error('[Newsletter User Welcome Failed]:', userErr);
+          if (kv) {
+            const deadLetterKey = `FAILED_NEWSLETTER_USER:${Date.now()}`;
+            const deadLetterPayload = JSON.stringify({
+              failedAt: new Date().toISOString(),
+              email: email,
+              reason: String(userErr),
+            });
+            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
+              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
+            );
+          }
+        }
+      } else {
+        // Local Mock Mode
+        console.log('\n====== 📬 MOCK NEWSLETTER SUB ======');
+        console.log(`New Subscriber: ${email}`);
+        console.log(`Notification sent to: ${adminEmail}`);
+        console.log('====================================\n');
       }
     };
 
