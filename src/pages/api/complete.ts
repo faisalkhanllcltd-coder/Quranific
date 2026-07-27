@@ -63,7 +63,7 @@ export const POST: APIRoute = async (context) => {
     const runtimeEnv = env as Record<string, unknown>;
     const jwtSecret = runtimeEnv.JWT_SECRET as string;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
-    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
 
     if (!jwtSecret) {
       console.error('[Configuration Error]: Missing Secrets in Edge Env');
@@ -124,30 +124,41 @@ export const POST: APIRoute = async (context) => {
     // 4. Process emails asynchronously using waitUntil
     const sendEmailsTask = async () => {
       try {
-        const emailResults = await Promise.allSettled([
-          sendFullAdminNotification(step1Data, parsed.data, resendApiKey, adminEmail),
-          sendWelcomeEmail(step1Data.e, step1Data.n, resendApiKey),
-        ]);
-
-        emailResults.forEach((result, index) => {
-          if (result.status === 'rejected') {
-            console.error(`[Email Task ${index} Failed]:`, result.reason);
-
-            if (kv) {
-              const deadLetterKey = `FAILED_LEAD:${Date.now()}`;
-              const deadLetterPayload = JSON.stringify({
-                failedAt: new Date().toISOString(),
-                taskIndex: index,
-                step1: step1Data,
-                step2: parsed.data,
-                reason: String(result.reason),
-              });
-              kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
-                (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
-              );
-            }
+        try {
+          await sendFullAdminNotification(step1Data, parsed.data, resendApiKey, adminEmail);
+        } catch (adminErr) {
+          console.error('[Step 2 Admin Notification Failed]:', adminErr);
+          if (kv) {
+            const deadLetterKey = `FAILED_LEAD_ADMIN:${Date.now()}`;
+            const deadLetterPayload = JSON.stringify({
+              failedAt: new Date().toISOString(),
+              step1: step1Data,
+              step2: parsed.data,
+              reason: String(adminErr),
+            });
+            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
+              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
+            );
           }
-        });
+        }
+
+        try {
+          await sendWelcomeEmail(step1Data.e, step1Data.n, resendApiKey);
+        } catch (welcomeErr) {
+          console.error('[Step 2 Welcome Email Failed]:', welcomeErr);
+          if (kv) {
+            const deadLetterKey = `FAILED_LEAD_WELCOME:${Date.now()}`;
+            const deadLetterPayload = JSON.stringify({
+              failedAt: new Date().toISOString(),
+              step1: step1Data,
+              step2: parsed.data,
+              reason: String(welcomeErr),
+            });
+            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
+              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
+            );
+          }
+        }
 
         // 5. Mark this jti as processed in KV
         if (kv && jti) {
