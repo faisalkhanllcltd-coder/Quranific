@@ -2,6 +2,7 @@
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
+import { sendNewsletterWelcome } from '../../lib/email';
 
 const newsletterSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -98,30 +99,31 @@ export const POST: APIRoute = async (context) => {
     // 2. Dispatch the Email via Resend in the background
     const sendEmailTask = async () => {
       try {
+        const finalAdminEmail = adminEmail || 'faisalkhan.llc.ltd@gmail.com';
         if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
-          const res = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${resendApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              from: 'Quranific Updates <hello@quranific.com>',
-              to: adminEmail,
-              subject: `New Newsletter Subscriber!`,
-              text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,
+          await Promise.all([
+            fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${resendApiKey}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                from: 'Quranific Updates <hello@quranific.com>',
+                to: finalAdminEmail,
+                subject: `New Newsletter Subscriber!`,
+                text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,
+              }),
+            }).then(async (res) => {
+              if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
             }),
-          });
-
-          if (!res.ok) {
-            const errorText = await res.text();
-            throw new Error(`Resend API error: ${res.status} ${errorText}`);
-          }
+            sendNewsletterWelcome(email, resendApiKey),
+          ]);
         } else {
           // Local Mock Mode
           console.log('\n====== 📬 MOCK NEWSLETTER SUB ======');
           console.log(`New Subscriber: ${email}`);
-          console.log(`Notification sent to: ${adminEmail}`);
+          console.log(`Notification sent to: ${finalAdminEmail}`);
           console.log('====================================\n');
         }
       } catch (error) {

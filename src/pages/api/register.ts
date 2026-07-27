@@ -3,6 +3,7 @@ import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { signupSchema } from '../../lib/schema';
 import { SignJWT } from 'jose';
+import { sendStep1AdminNotification } from '../../lib/email';
 
 export const prerender = false;
 
@@ -55,9 +56,10 @@ export const POST: APIRoute = async (context) => {
     // 1. Distributed IP Rate Limiting via KV
     if (kv && cfConnectingIp !== 'unknown') {
       const rateLimitKey = `RL:REGISTER:${cfConnectingIp}`;
-      const isRateLimited = await kv.get(rateLimitKey);
+      const attemptsStr = (await kv.get(rateLimitKey)) as string | null;
+      const attempts = attemptsStr ? parseInt(attemptsStr, 10) : 0;
 
-      if (isRateLimited) {
+      if (attempts >= 4) {
         return new Response(
           JSON.stringify({ error: 'Too many registration attempts. Please wait a minute.' }),
           { status: 429, headers: { 'Content-Type': 'application/json' } }
@@ -66,7 +68,7 @@ export const POST: APIRoute = async (context) => {
 
       // Lock the IP for 60 seconds
       await kv
-        .put(rateLimitKey, '1', { expirationTtl: 60 })
+        .put(rateLimitKey, (attempts + 1).toString(), { expirationTtl: 60 })
         .catch((e: unknown) => console.error('[KV RL Failed]:', e));
     }
 
@@ -96,6 +98,8 @@ export const POST: APIRoute = async (context) => {
     const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
       runtimeEnv.TURNSTILE_SECRET_KEY) as string;
     const jwtSecret = runtimeEnv.JWT_SECRET as string;
+    const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
 
     if (!turnstileSecret || !jwtSecret) {
       console.error(
@@ -136,6 +140,34 @@ export const POST: APIRoute = async (context) => {
       .setJti(jti)
       .setExpirationTime('15m')
       .sign(secretKey);
+
+    // Asynchronously fire Step 1 Admin Notification
+    const sendEmailTask = async () => {
+      try {
+        await sendStep1AdminNotification(
+          {
+            n: validData.name,
+            e: validData.email,
+            w: validData.whatsapp,
+            c: validData.country,
+            s: validData.source,
+          },
+          resendApiKey,
+          adminEmail
+        );
+      } catch (err) {
+        console.error('[Step 1 Admin Notification Failed]:', err);
+      }
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const locals = context.locals as any;
+    if (locals.cfContext?.waitUntil) {
+      locals.cfContext.waitUntil(sendEmailTask());
+    } else if (locals.runtime?.ctx?.waitUntil) {
+      locals.runtime.ctx.waitUntil(sendEmailTask());
+    } else {
+      sendEmailTask().catch(console.error);
+    }
 
     // Deliver the JWT as an HttpOnly cookie
     return new Response(JSON.stringify({ success: true }), {

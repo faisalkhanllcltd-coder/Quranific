@@ -1,7 +1,7 @@
 // src/pages/api/internal/retry-queue.ts
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
-import { sendAdminNotification, sendWelcomeEmail } from '../../../lib/email';
+import { sendFullAdminNotification, sendWelcomeEmail } from '../../../lib/email';
 
 export const prerender = false;
 
@@ -41,7 +41,7 @@ export const POST: APIRoute = async (context) => {
         const data = JSON.parse(dataStr);
         try {
           if (data.taskIndex === 0) {
-            await sendAdminNotification(data.step1, data.step2, resendApiKey, adminEmail);
+            await sendFullAdminNotification(data.step1, data.step2, resendApiKey, adminEmail);
           } else if (data.taskIndex === 1) {
             await sendWelcomeEmail(data.step1.e, data.step1.n, resendApiKey);
           }

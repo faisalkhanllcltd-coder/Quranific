@@ -2,7 +2,7 @@
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { completeSchema } from '../../lib/schema';
-import { sendAdminNotification, sendWelcomeEmail } from '../../lib/email';
+import { sendFullAdminNotification, sendWelcomeEmail } from '../../lib/email';
 import { jwtVerify } from 'jose';
 
 export const prerender = false;
@@ -125,7 +125,7 @@ export const POST: APIRoute = async (context) => {
     const sendEmailsTask = async () => {
       try {
         const emailResults = await Promise.allSettled([
-          sendAdminNotification(step1Data, parsed.data, resendApiKey, adminEmail),
+          sendFullAdminNotification(step1Data, parsed.data, resendApiKey, adminEmail),
           sendWelcomeEmail(step1Data.e, step1Data.n, resendApiKey),
         ]);
 

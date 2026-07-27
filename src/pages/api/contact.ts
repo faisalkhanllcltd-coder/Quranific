@@ -2,6 +2,7 @@
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
+import { sendContactAutoResponder } from '../../lib/email';
 
 const contactSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -59,8 +60,10 @@ export const POST: APIRoute = async (context) => {
     // 1. Distributed IP Rate Limiting via KV (Mandate 3 & 4)
     if (kv && cfConnectingIp !== 'unknown') {
       const rateLimitKey = `RL:CONTACT:${cfConnectingIp}`;
-      const isRateLimited = await kv.get(rateLimitKey);
-      if (isRateLimited) {
+      const attemptsStr = (await kv.get(rateLimitKey)) as string | null;
+      const attempts = attemptsStr ? parseInt(attemptsStr, 10) : 0;
+
+      if (attempts >= 4) {
         return new Response(
           JSON.stringify({ error: 'Too many requests. Please wait a minute before trying again.' }),
           { status: 429, headers: { 'Content-Type': 'application/json' } }
@@ -68,7 +71,7 @@ export const POST: APIRoute = async (context) => {
       }
       // Lock the IP for 60 seconds
       await kv
-        .put(rateLimitKey, '1', { expirationTtl: 60 })
+        .put(rateLimitKey, (attempts + 1).toString(), { expirationTtl: 60 })
         .catch((e: unknown) => console.error('[KV RL Failed]:', e));
     }
 
@@ -112,29 +115,31 @@ export const POST: APIRoute = async (context) => {
     // 4. Dispatch the Email via Resend in the background
     const sendEmailTask = async () => {
       try {
+        const finalAdminEmail = adminEmail || 'faisalkhan.llc.ltd@gmail.com';
         if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
-          const res = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${resendApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              from: 'Quranific Support <support@quranific.com>',
-              to: adminEmail,
-              reply_to: email,
-              subject: `New Contact Inquiry from ${firstName} ${lastName}`,
-              text: `Name: ${firstName} ${lastName}\nEmail: ${email}\n\nMessage:\n${message}`,
+          await Promise.all([
+            fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${resendApiKey}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                from: 'Quranific Support <support@quranific.com>',
+                to: finalAdminEmail,
+                reply_to: email,
+                subject: `New Contact Inquiry from ${firstName} ${lastName}`,
+                text: `Name: ${firstName} ${lastName}\nEmail: ${email}\n\nMessage:\n${message}`,
+              }),
+            }).then(async (res) => {
+              if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
             }),
-          });
-          if (!res.ok) {
-            const errorText = await res.text();
-            throw new Error(`Resend API error: ${res.status} ${errorText}`);
-          }
+            sendContactAutoResponder(email, firstName, resendApiKey),
+          ]);
         } else {
           // Local Mock Mode
           console.log('\n====== 📨 MOCK EMAIL DISPATCH ======');
-          console.log(`To: ${adminEmail}`);
+          console.log(`To: ${finalAdminEmail}`);
           console.log(`From: ${firstName} ${lastName} <${email}>`);
           console.log(`Message: \n${message}`);
           console.log('====================================\n');

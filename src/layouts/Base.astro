@@ -109,8 +109,27 @@ const baseSchema = {
     />
 
     <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline
-    ></script>
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer
+      is:inline
+      data-astro-rerun></script>
+    <script is:inline data-astro-rerun>
+      document.addEventListener('astro:page-load', () => {
+        if (typeof turnstile !== 'undefined') {
+          const widgets = document.querySelectorAll('.cf-turnstile');
+          widgets.forEach((widget) => {
+            if (!widget.hasChildNodes()) {
+              turnstile.render(widget, {
+                sitekey: widget.getAttribute('data-sitekey'),
+                theme: widget.getAttribute('data-theme') || 'light',
+              });
+            }
+          });
+        }
+      });
+    </script>
 
     <title>{title}</title>
     <meta name="description" content={description} />
