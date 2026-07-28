@@ -47,7 +47,8 @@ export const POST: APIRoute = async (context) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const locals = context.locals as any;
     const runtime = locals.runtime;
-    const env = runtime?.env ?? import.meta.env;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const env = (runtime?.env ?? import.meta.env ?? {}) as Record<string, any>;
     const kv = env.SESSION;
     const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') || 'unknown';
 
@@ -192,14 +193,12 @@ export const POST: APIRoute = async (context) => {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error: unknown) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     console.error('[Newsletter Fatal 500]:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error. Could not process subscription.' }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return new Response(JSON.stringify({ error: `System Crash: ${errorMessage}` }), {
+      status: 500,
+    });
   }
 };
