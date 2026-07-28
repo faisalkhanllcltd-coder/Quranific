@@ -5,46 +5,61 @@ import Button from '../ui/Button.astro';
 import { SITE, MAIN_NAVIGATION } from '../../constants/site';
 ---
 
-{SITE.announcement.enabled && (
-  <div 
-    id="promo-bar" 
-    class="relative z-40 bg-gradient-to-r from-[#022c22] via-[#064e3b] to-[#022c22] border-b border-emerald-900/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] text-emerald-50 py-1.5 px-4 sm:px-6 flex items-center justify-center text-[11px] md:text-xs font-medium tracking-wide transition-all duration-300 overflow-hidden"
-  >
-    <div class="relative flex items-center flex-wrap justify-center gap-1.5 md:gap-2 text-center pr-6 md:pr-10">
-      
-      <span class="leading-tight drop-shadow-sm">
-        <span class="opacity-90">{SITE.announcement.text}</span> 
-        <span class="text-emerald-300 font-extrabold tracking-wide mx-0.5">{SITE.announcement.highlight}</span> 
-        <span class="opacity-90">{SITE.announcement.suffix}</span>
-      </span>
-      
-      <a 
-        href={SITE.announcement.linkUrl} 
-        class="inline-flex items-center text-emerald-300 hover:text-white underline decoration-emerald-500/40 hover:decoration-emerald-300 underline-offset-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-sm ml-1"
-      >
-        <span set:html={SITE.announcement.linkText} class="font-bold uppercase tracking-wider" />
-      </a>
-    </div>
-
-    <button 
-      id="close-promo"
-      aria-label="Close promotion"
-      class="absolute right-1 md:right-2 top-1/2 -translate-y-1/2 min-w-[44px] min-h-[44px] p-2.5 text-emerald-400/80 hover:text-emerald-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-full transition-colors active:scale-95 flex items-center justify-center"
+{
+  SITE.announcement.enabled && (
+    <div
+      id="promo-bar"
+      class="relative z-40 bg-gradient-to-r from-[#022c22] via-[#064e3b] to-[#022c22] border-b border-emerald-900/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] text-emerald-50 py-1.5 px-4 sm:px-6 flex items-center justify-center text-[11px] md:text-xs font-medium tracking-wide transition-all duration-300 overflow-hidden"
     >
-      <svg class="w-3.5 h-3.5 md:w-4 md:h-4 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-      </svg>
-    </button>
-  </div>
-)}
+      <div class="relative flex items-center flex-wrap justify-center gap-1.5 md:gap-2 text-center pr-6 md:pr-10">
+        <span class="leading-tight drop-shadow-sm">
+          <span class="opacity-90">{SITE.announcement.text}</span>
+          <span class="text-emerald-300 font-extrabold tracking-wide mx-0.5">
+            {SITE.announcement.highlight}
+          </span>
+          <span class="opacity-90">{SITE.announcement.suffix}</span>
+        </span>
+
+        <a
+          href={SITE.announcement.linkUrl}
+          class="inline-flex items-center text-emerald-300 hover:text-white underline decoration-emerald-500/40 hover:decoration-emerald-300 underline-offset-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-sm ml-1"
+        >
+          <span set:html={SITE.announcement.linkText} class="font-bold uppercase tracking-wider" />
+        </a>
+      </div>
+
+      <button
+        id="close-promo"
+        aria-label="Close promotion"
+        class="absolute right-1 md:right-2 top-1/2 -translate-y-1/2 min-w-[44px] min-h-[44px] p-2.5 text-emerald-400/80 hover:text-emerald-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-full transition-colors active:scale-95 flex items-center justify-center"
+      >
+        <svg
+          class="w-3.5 h-3.5 md:w-4 md:h-4 drop-shadow-sm"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  )
+}
 
 <header
   id="main-header"
-  class="sticky top-0 z-50 w-full transition-all duration-300 ease-out h-[88px] bg-transparent border-b border-transparent"
+  class="fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 transform ease-out h-[88px] bg-transparent border-b border-transparent"
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-full">
-
-    <a href="/" class="flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg">
+    <a
+      href="/"
+      class="flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg"
+    >
       <img
         src="/images/quranific-logo-green.svg"
         alt="Quranific — Home"
@@ -58,14 +73,16 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
     </a>
 
     <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-8 h-full">
-      {MAIN_NAVIGATION.map((item) => (
-        <a
-          href={item.href}
-          class="text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded relative flex items-center h-full"
-        >
-          {item.label}
-        </a>
-      ))}
+      {
+        MAIN_NAVIGATION.map((item) => (
+          <a
+            href={item.href}
+            class="text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded relative flex items-center h-full"
+          >
+            {item.label}
+          </a>
+        ))
+      }
     </nav>
 
     <div class="hidden md:flex items-center gap-6">
@@ -81,9 +98,8 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
         Book Your Free Class
       </Button>
     </div>
-    
-    <MobileMenu />
 
+    <MobileMenu />
   </div>
 </header>
 
@@ -106,8 +122,8 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
     closeBtn.addEventListener('click', () => {
       sessionStorage.setItem(PROMO_KEY, 'true');
       promoBar.style.opacity = '0';
-      promoBar.style.height = promoBar.offsetHeight + 'px'; 
-      
+      promoBar.style.height = promoBar.offsetHeight + 'px';
+
       requestAnimationFrame(() => {
         promoBar.style.height = '0px';
         promoBar.style.paddingTop = '0px';
@@ -125,6 +141,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
   // HEADER SCROLL LOGIC
   // ---------------------------------------------------------------------------
   let headerAbortController: AbortController | null = null;
+  let lastScrollY = window.scrollY;
 
   function initHeaderScroll(): void {
     const header = document.getElementById('main-header');
@@ -134,20 +151,45 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
     headerAbortController?.abort();
     headerAbortController = new AbortController();
     const { signal } = headerAbortController;
+    lastScrollY = window.scrollY;
 
     const handleScroll = (): void => {
-      const triggerPoint = promoBar && promoBar.style.display !== 'none' ? promoBar.offsetHeight : 20;
+      const currentScrollY = window.scrollY;
+      const triggerPoint =
+        promoBar && promoBar.style.display !== 'none' ? promoBar.offsetHeight : 20;
 
-      if (window.scrollY > triggerPoint) {
-        header.classList.remove('h-[88px]', 'bg-transparent', 'border-transparent');
-        header.classList.add('h-[64px]', 'bg-white/90', 'backdrop-blur-2xl', 'border-emerald-100', 'shadow-sm');
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling DOWN
+        header.classList.add('-translate-y-full');
       } else {
-        header.classList.add('h-[88px]', 'bg-transparent', 'border-transparent');
-        header.classList.remove('h-[64px]', 'bg-white/90', 'backdrop-blur-2xl', 'border-emerald-100', 'shadow-sm');
+        // Scrolling UP or at top
+        header.classList.remove('-translate-y-full');
+
+        if (currentScrollY > triggerPoint) {
+          header.classList.remove('h-[88px]', 'bg-transparent', 'border-transparent');
+          header.classList.add(
+            'h-[64px]',
+            'bg-white/90',
+            'backdrop-blur-2xl',
+            'border-emerald-100',
+            'shadow-sm'
+          );
+        } else {
+          header.classList.add('h-[88px]', 'bg-transparent', 'border-transparent');
+          header.classList.remove(
+            'h-[64px]',
+            'bg-white/90',
+            'backdrop-blur-2xl',
+            'border-emerald-100',
+            'shadow-sm'
+          );
+        }
       }
+
+      lastScrollY = currentScrollY;
     };
 
-    handleScroll(); 
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true, signal });
   }
 
