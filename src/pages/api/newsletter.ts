@@ -1,4 +1,5 @@
 // src/pages/api/newsletter.ts
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
 import { sendNewsletterWelcome } from '../../lib/email';
@@ -46,10 +47,9 @@ export const POST: APIRoute = async (context) => {
     // 1. Safe Edge Context Extraction
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const locals = context.locals as any;
-    const runtime = locals.runtime;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const env = (runtime?.env ?? import.meta.env ?? {}) as Record<string, any>;
-    const kv = env.SESSION;
+    const runtimeEnv = env as Record<string, any>;
+    const kv = runtimeEnv.SESSION;
     const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') || 'unknown';
 
     // 2. Distributed IP Rate Limiting via KV
@@ -83,7 +83,6 @@ export const POST: APIRoute = async (context) => {
       );
     }
 
-    const runtimeEnv = env as Record<string, unknown>;
     const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
       runtimeEnv.TURNSTILE_SECRET_KEY) as string;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
