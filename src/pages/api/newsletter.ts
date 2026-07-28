@@ -1,5 +1,4 @@
 // src/pages/api/newsletter.ts
-import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
 import { sendNewsletterWelcome } from '../../lib/email';
@@ -42,18 +41,17 @@ async function verifyTurnstile(token: string, secret: string, remoteip?: string)
 }
 // CRITICAL: This cannot be a static file
 
-// ─── KV Helper ──────────────────────────────────────────────────────────────
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getKV(): any {
-  return (env as Record<string, unknown>).SESSION || null;
-}
-
 export const POST: APIRoute = async (context) => {
   try {
-    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') ?? 'unknown';
-    const kv = getKV();
+    // 1. Safe Edge Context Extraction
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const locals = context.locals as any;
+    const runtime = locals.runtime;
+    const env = runtime?.env ?? import.meta.env;
+    const kv = env.SESSION;
+    const cfConnectingIp = context.request.headers.get('CF-Connecting-IP') || 'unknown';
 
-    // 1. Distributed IP Rate Limiting via KV
+    // 2. Distributed IP Rate Limiting via KV
     if (kv && cfConnectingIp !== 'unknown') {
       const rateLimitKey = `RL:NEWSLETTER:${cfConnectingIp}`;
       const attemptsStr = (await kv.get(rateLimitKey)) as string | null;
@@ -180,22 +178,22 @@ export const POST: APIRoute = async (context) => {
       }
     };
 
-    const localsRuntime = (
-      context.locals as { runtime?: { ctx?: { waitUntil: (p: Promise<unknown>) => void } } }
-    ).runtime;
-    if (localsRuntime?.ctx?.waitUntil) {
-      localsRuntime.ctx.waitUntil(sendEmailTask());
+    // 3. Background Task Execution (Safe)
+    if (locals.cfContext?.waitUntil) {
+      locals.cfContext.waitUntil(sendEmailTask());
+    } else if (locals.runtime?.ctx?.waitUntil) {
+      locals.runtime.ctx.waitUntil(sendEmailTask());
     } else {
       sendEmailTask().catch(console.error);
     }
 
-    // 3. Return success immediately
+    // 4. Return success immediately
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error: unknown) {
-    console.error('Newsletter API Critical Error:', error);
+    console.error('[Newsletter Fatal 500]:', error);
     return new Response(
       JSON.stringify({ error: 'Internal server error. Could not process subscription.' }),
       {
