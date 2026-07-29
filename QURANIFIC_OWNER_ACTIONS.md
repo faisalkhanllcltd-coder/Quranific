@@ -11,7 +11,7 @@ This document tracks every unverified fact, missing credential, policy approval,
 - [x] Confirm background checks are conducted during our rigorous training and vetting process prior to teaching.
 
 - [x] Confirm average turnaround time for teacher matching is under 24 hours (or within 3–6 hours).
-- [x] Confirm progress reports are sent within 30 minutes of session ending.
+- [x] Confirmed: trial-class follow-up feedback sent within 1-2 hours; ongoing progress reports are on-demand (parent-requested, monthly or custom range) — no automatic per-class or fixed-cadence report.
 - [x] Confirm parent-controlled opt-in for session recordings.
 - [ ] Verify the standard pricing ($39, $59) or replace with actual figures.
 - [ ] Confirm all base plan prices ($33/$39, $50/$59, $76/$89) and sibling discounts (10%).

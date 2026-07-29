@@ -22,14 +22,17 @@ import { MOBILE_NAVIGATION } from '../../constants/site';
     </svg>
   </button>
 
-  <div id="mobile-menu-overlay" class="fixed inset-0 z-[60] invisible overflow-hidden">
+  <div
+    id="mobile-menu-overlay"
+    class="fixed inset-0 z-[60] invisible overflow-hidden bg-emerald-950/20 backdrop-blur-sm transition-opacity duration-300 opacity-0"
+  >
     <div
       id="mobile-menu-drawer"
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
       inert
-      class="absolute inset-y-0 right-0 w-full sm:w-80 bg-[#fefdf9] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col pt-6 px-4 sm:px-6"
+      class="absolute inset-y-0 right-0 w-full sm:w-80 bg-[#fefdf9] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col pt-6 px-4 sm:px-6 shadow-2xl will-change-transform"
     >
       <div class="flex items-center justify-between mb-12">
         <a
@@ -103,51 +106,88 @@ import { MOBILE_NAVIGATION } from '../../constants/site';
   let mobileMenuAbortController: AbortController | null = null;
 
   function initMobileMenu(): void {
-    document.body.style.overflow = ''; // Always reset in case of interruption
     mobileMenuAbortController?.abort();
     mobileMenuAbortController = new AbortController();
     const { signal } = mobileMenuAbortController;
 
-    const toggleBtn = document.getElementById('mobile-menu-toggle') as HTMLButtonElement | null;
-    const closeBtn = document.getElementById('mobile-menu-close') as HTMLButtonElement | null;
-    const drawer = document.getElementById('mobile-menu-drawer') as HTMLElement | null;
-    const overlay = document.getElementById('mobile-menu-overlay') as HTMLElement | null;
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const closeBtn = document.getElementById('mobile-menu-close');
+    const drawer = document.getElementById('mobile-menu-drawer');
 
     if (!toggleBtn || !closeBtn || !drawer || !overlay) return;
 
-    const FOCUSABLE = 'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"])';
+    // ASTRO SAFE PORTAL: Move to root body to escape Header transform contexts
+    if (overlay.parentNode !== document.body) {
+      document.body.appendChild(overlay);
+    }
 
+    // Cleanup: Destroy the portaled overlay before Astro swaps the page to prevent ghost duplicates
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        if (overlay.parentNode === document.body) {
+          overlay.remove();
+        }
+      },
+      { signal }
+    );
+
+    const FOCUSABLE = 'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"])';
     function getFocusables(): HTMLElement[] {
       return Array.from(drawer!.querySelectorAll<HTMLElement>(FOCUSABLE));
     }
 
-    function openMenu(): void {
-      drawer!.removeAttribute('inert');
+    function openMenu(e?: Event): void {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation(); // Stop event bubbling storm
+      }
+
+      // 1. Remove display: none to inject into render tree
       overlay!.classList.remove('invisible');
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          drawer!.classList.remove('translate-x-full');
-          drawer!.classList.add('translate-x-0');
-        });
-      });
+      drawer!.removeAttribute('inert');
+
+      // 2. Force hardware paint recalculation before animating
+      void drawer!.offsetWidth;
+
+      // 3. Trigger GPU-accelerated slide and fade
+      overlay!.classList.remove('opacity-0');
+      drawer!.classList.remove('translate-x-full');
+      drawer!.classList.add('translate-x-0');
+
+      // 4. Stricter iOS scroll lock
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+
       toggleBtn!.setAttribute('aria-expanded', 'true');
       closeBtn!.focus();
     }
 
-    function closeMenu(): void {
+    function closeMenu(e?: Event): void {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      overlay!.classList.add('opacity-0');
       drawer!.classList.add('translate-x-full');
       drawer!.classList.remove('translate-x-0');
+
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+
       toggleBtn!.setAttribute('aria-expanded', 'false');
-      const animDuration = parseFloat(getComputedStyle(drawer!).transitionDuration || '0.3') * 1000;
+      drawer!.setAttribute('inert', '');
+
+      // Fixed 300ms timeout matching Tailwind classes. No layout thrashing!
       setTimeout(() => {
         overlay!.classList.add('invisible');
-        drawer!.setAttribute('inert', '');
         toggleBtn!.focus();
-      }, animDuration || 300);
+      }, 300);
     }
 
+    // Keyboard Trap
     drawer.addEventListener(
       'keydown',
       (e: KeyboardEvent) => {
@@ -171,21 +211,11 @@ import { MOBILE_NAVIGATION } from '../../constants/site';
       { signal }
     );
 
-    // Outside-click closure: fires only when the menu is open and the click
-    // lands outside both the drawer panel and the hamburger toggle button.
-    document.addEventListener(
+    // Click outside to close (Attached directly to overlay, heavily optimized)
+    overlay.addEventListener(
       'click',
       (e: MouseEvent) => {
-        const isOpen = !drawer!.hasAttribute('inert');
-        if (!isOpen) return;
-
-        const target = e.target as Node | null;
-        const clickedInsideDrawer = drawer!.contains(target);
-        const clickedToggleBtn = toggleBtn!.contains(target);
-
-        if (!clickedInsideDrawer && !clickedToggleBtn) {
-          closeMenu();
-        }
+        if (e.target === overlay) closeMenu(e);
       },
       { signal }
     );
@@ -193,7 +223,11 @@ import { MOBILE_NAVIGATION } from '../../constants/site';
     toggleBtn.addEventListener('click', openMenu, { signal });
     closeBtn.addEventListener('click', closeMenu, { signal });
 
-    document.addEventListener('astro:before-preparation', closeMenu, { signal });
+    // Close automatically if a link inside the drawer is clicked
+    const links = drawer.querySelectorAll('a');
+    links.forEach((link) => {
+      link.addEventListener('click', () => closeMenu(), { signal });
+    });
   }
 
   document.addEventListener('astro:page-load', initMobileMenu);
