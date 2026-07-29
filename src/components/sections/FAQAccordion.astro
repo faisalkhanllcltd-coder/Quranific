@@ -8,7 +8,44 @@ const { questions } = Astro.props;
 
 <section class="py-16 md:py-24 lg:py-32 bg-[#fefdf9]" id="faq">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-20 items-start">
+    <div class="grid lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-20 items-start">
+      <div class="space-y-4">
+        {
+          questions.map((item) => (
+            <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary
+                aria-expanded="false"
+                class="flex items-center justify-between cursor-pointer p-4 sm:p-6 font-semibold text-emerald-950 text-base sm:text-lg select-none"
+                style="-webkit-tap-highlight-color: transparent;"
+              >
+                {item.question}
+                <span
+                  class="transition-transform duration-300 group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-100 shrink-0 ml-4"
+                  aria-hidden="true"
+                >
+                  <svg
+                    fill="none"
+                    height="16"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    viewBox="0 0 24 24"
+                    width="16"
+                  >
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </span>
+              </summary>
+              <div
+                class="text-emerald-900/80 text-sm sm:text-[15px] font-medium leading-relaxed px-4 sm:px-6 pb-4 sm:pb-6"
+                set:html={item.answer}
+              />
+            </details>
+          ))
+        }
+      </div>
+
       <div class="self-start lg:sticky lg:top-32">
         <div
           class="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-widest rounded-full mb-6"
@@ -52,43 +89,6 @@ const { questions } = Astro.props;
             will refund you in full. No questions, no forms, no chasing. Just send one email.
           </p>
         </div>
-      </div>
-
-      <div class="space-y-4">
-        {
-          questions.map((item) => (
-            <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
-              <summary
-                aria-expanded="false"
-                class="flex items-center justify-between cursor-pointer p-4 sm:p-6 font-semibold text-emerald-950 text-base sm:text-lg select-none"
-                style="-webkit-tap-highlight-color: transparent;"
-              >
-                {item.question}
-                <span
-                  class="transition-transform duration-300 group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-100 shrink-0 ml-4"
-                  aria-hidden="true"
-                >
-                  <svg
-                    fill="none"
-                    height="16"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2.5"
-                    viewBox="0 0 24 24"
-                    width="16"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </span>
-              </summary>
-              <div
-                class="text-emerald-900/80 text-sm sm:text-[15px] font-medium leading-relaxed px-4 sm:px-6 pb-4 sm:pb-6"
-                set:html={item.answer}
-              />
-            </details>
-          ))
-        }
       </div>
     </div>
   </div>
