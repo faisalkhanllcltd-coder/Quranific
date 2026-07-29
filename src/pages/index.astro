@@ -6,6 +6,7 @@ import Footer from '../components/global/Footer.astro';
 import HomeHero from '../components/sections/HomeHero.astro';
 import TestimonialGrid from '../components/sections/TestimonialGrid.astro';
 import FAQAccordion from '../components/sections/FAQAccordion.astro';
+import { faqs } from '../data/faqs';
 import FinalCTA from '../components/sections/FinalCTA.astro';
 import PainPoints from '../components/sections/PainPoints.astro';
 import QuranificDifference from '../components/sections/QuranificDifference.astro';
@@ -24,23 +25,6 @@ const PAGE_CONTENT = {
     primaryCtaText: 'Book Your Free Class',
     primaryCtaLink: '/funnel/signup',
   },
-  faq: [
-    {
-      question: 'What if my child misses a class?',
-      answer:
-        'Every single missed class has a guaranteed make-up session. No exceptions, no expiry.',
-    },
-    {
-      question: "Is my child's session safe and private?",
-      answer:
-        'Every session is strictly 1-on-1, conducted on a private, secure video link. Sessions are never recorded without explicit parental consent.',
-    },
-    {
-      question: "What if it doesn't work for us?",
-      answer:
-        'The first class is completely free, no credit card needed. If you join and are not satisfied within your first paid month, we refund every penny.',
-    },
-  ],
 };
 
 // Elite Edge SEO: Deep Semantic JSON-LD
@@ -68,7 +52,7 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: PAGE_CONTENT.faq.map((item) => ({
+    mainEntity: faqs.home.map((item) => ({
       '@type': 'Question',
       name: item.question,
       acceptedAnswer: {
@@ -116,7 +100,7 @@ const jsonLd = [
 
     <HowItWorks />
 
-    <FAQAccordion />
+    <FAQAccordion questions={faqs.home} />
 
     <AdultCTA />
 
