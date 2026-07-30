@@ -5,6 +5,7 @@ import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
 import HomeHero from '../components/sections/HomeHero.astro';
 import TestimonialGrid from '../components/sections/TestimonialGrid.astro';
+import { testimonials } from '../data/testimonials';
 import FAQAccordion from '../components/sections/FAQAccordion.astro';
 import { faqs } from '../data/faqs';
 import FinalCTA from '../components/sections/FinalCTA.astro';
@@ -96,7 +97,7 @@ const jsonLd = [
 
     <QuranificDifference />
 
-    <TestimonialGrid />
+    <TestimonialGrid testimonials={testimonials} />
 
     <HowItWorks />
 
