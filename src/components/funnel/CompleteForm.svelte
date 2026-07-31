@@ -35,6 +35,27 @@
         .catch(() => {
           // Network error — allow the user to attempt the submit anyway.
         });
+
+      const params = new URLSearchParams(window.location.search);
+
+      const savedCourse = params.get('course') || sessionStorage.getItem('q_track_course');
+      if (savedCourse) selectedCourse = savedCourse;
+
+      const savedGender = params.get('gender') || sessionStorage.getItem('q_track_gender');
+      if (savedGender) selectedGender = savedGender;
+
+      const savedTeacher =
+        params.get('teacherGender') || sessionStorage.getItem('q_track_teacherGender');
+      if (savedTeacher) selectedTeacher = savedTeacher;
+
+      const savedLevel = params.get('level') || sessionStorage.getItem('q_track_level');
+      if (savedLevel) selectedLevel = savedLevel;
+
+      const savedDays = params.get('days') || sessionStorage.getItem('q_track_days');
+      if (savedDays) selectedDays = savedDays;
+
+      const savedSchedule = params.get('schedule') || sessionStorage.getItem('q_track_schedule');
+      if (savedSchedule) selectedSchedule = savedSchedule;
     }
   });
 

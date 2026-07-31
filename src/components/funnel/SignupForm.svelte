@@ -5,6 +5,29 @@
   let loading = $state(false);
   let errorMsg = $state('');
   let trafficSource = $state('organic');
+  let name = $state('');
+  let email = $state('');
+  let whatsapp = $state('');
+  let country = $state('');
+  let emailError = $state('');
+  let phoneError = $state('');
+
+  function validateEmail() {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email && !regex.test(email)) {
+      emailError = 'Please enter a valid email address.';
+    } else {
+      emailError = '';
+    }
+  }
+
+  function validatePhone() {
+    if (whatsapp && whatsapp.length < 6) {
+      phoneError = 'Please enter a valid phone number.';
+    } else {
+      phoneError = '';
+    }
+  }
 
   // URL params passed from fee calculator or course finder (enrollType, sessions, billing, age, level)
   // Also capture ad attribution params (gclid, utm_source, utm_campaign, utm_medium, utm_content)
@@ -16,26 +39,60 @@
   onMount(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      trafficSource = params.get('source') || 'organic';
-      // Capture all context and attribution params for passthrough
-      const ctxKeys = [
+      trafficSource = params.get('source') || sessionStorage.getItem('q_track_source') || 'organic';
+
+      const trackingKeys = [
+        'fbclid',
+        'gclid',
+        'ttclid',
+        'utm_source',
+        'utm_campaign',
+        'utm_medium',
+        'utm_content',
+        'source',
+      ];
+      const contextKeys = [
         'enrollType',
         'sessions',
         'billing',
         'age',
         'level',
-        'gclid',
-        'utm_source',
-        'utm_campaign',
-        'utm_medium',
-        'utm_content',
+        'course',
+        'gender',
+        'teacherGender',
+        'days',
+        'schedule',
       ];
+      const allKeys = [...trackingKeys, ...contextKeys];
+
       const captured: Record<string, string> = {};
-      ctxKeys.forEach((k) => {
-        const v = params.get(k);
-        if (v) captured[k] = v;
+      allKeys.forEach((k) => {
+        const urlVal = params.get(k);
+        if (urlVal) {
+          captured[k] = urlVal;
+          sessionStorage.setItem('q_track_' + k, urlVal);
+        } else {
+          const storedVal = sessionStorage.getItem('q_track_' + k);
+          if (storedVal) captured[k] = storedVal;
+        }
       });
       ctxParams = captured;
+
+      if (typeof localStorage !== 'undefined') {
+        name = localStorage.getItem('q_draft_name') || '';
+        email = localStorage.getItem('q_draft_email') || '';
+        whatsapp = localStorage.getItem('q_draft_whatsapp') || '';
+        country = localStorage.getItem('q_draft_country') || '';
+      }
+    }
+  });
+
+  $effect(() => {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('q_draft_name', name);
+      localStorage.setItem('q_draft_email', email);
+      localStorage.setItem('q_draft_whatsapp', whatsapp);
+      localStorage.setItem('q_draft_country', country);
     }
   });
 
@@ -73,6 +130,9 @@
       const result = await response.json();
 
       if (response.ok || result.success) {
+        ['name', 'email', 'whatsapp', 'country'].forEach((k) =>
+          localStorage.removeItem('q_draft_' + k)
+        );
         window.location.href = '/funnel/complete';
         return;
       } else {
@@ -119,6 +179,8 @@
       name="name"
       autocomplete="name"
       required
+      bind:value={name}
+      enterkeyhint="next"
       disabled={loading}
       class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-base disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 placeholder:text-emerald-900/30"
       placeholder="e.g. Abdullah Khan"
@@ -129,14 +191,21 @@
     <label for="email" class="block text-sm font-semibold text-emerald-950">Email Address</label>
     <input
       type="email"
+      inputmode="email"
       id="email"
       name="email"
       autocomplete="email"
       required
+      bind:value={email}
+      onblur={validateEmail}
+      enterkeyhint="next"
       disabled={loading}
       class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-base disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 placeholder:text-emerald-900/30"
       placeholder="you@example.com"
     />
+    {#if emailError}
+      <p class="text-xs text-red-500 mt-1">{emailError}</p>
+    {/if}
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -144,14 +213,21 @@
       <label for="whatsapp" class="block text-sm font-semibold text-emerald-950">WhatsApp</label>
       <input
         type="tel"
+        inputmode="tel"
         id="whatsapp"
         name="whatsapp"
         autocomplete="tel"
         required
+        bind:value={whatsapp}
+        onblur={validatePhone}
+        enterkeyhint="next"
         disabled={loading}
         class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-base disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 placeholder:text-emerald-900/30"
         placeholder="+1234..."
       />
+      {#if phoneError}
+        <p class="text-xs text-red-500 mt-1">{phoneError}</p>
+      {/if}
       <p class="text-xs text-gray-500 mt-1">
         We'll message you here to confirm your child's trial time.
       </p>
@@ -164,6 +240,8 @@
         name="country"
         autocomplete="country-name"
         required
+        bind:value={country}
+        enterkeyhint="done"
         disabled={loading}
         class="w-full px-4 py-3.5 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-base disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 placeholder:text-emerald-900/30"
         placeholder="e.g. United Kingdom"
@@ -182,4 +260,41 @@
       Continue to Step 2 &rarr;
     {/if}
   </button>
+
+  <div
+    class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-emerald-900/70 font-medium text-center"
+  >
+    <span class="flex items-center gap-1">
+      <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"
+        ><path
+          fill-rule="evenodd"
+          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+          clip-rule="evenodd"
+        /></svg
+      >
+      100% Free Trial Class
+    </span>
+    <span class="hidden sm:inline text-emerald-300">•</span>
+    <span class="flex items-center gap-1">
+      <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"
+        ><path
+          fill-rule="evenodd"
+          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+          clip-rule="evenodd"
+        /></svg
+      >
+      Male & Female Tutors
+    </span>
+    <span class="hidden sm:inline text-emerald-300">•</span>
+    <span class="flex items-center gap-1">
+      <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"
+        ><path
+          fill-rule="evenodd"
+          d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+          clip-rule="evenodd"
+        /></svg
+      >
+      No Payment Info Required
+    </span>
+  </div>
 </form>
