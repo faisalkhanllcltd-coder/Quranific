@@ -5,6 +5,20 @@ import Button from '../ui/Button.astro';
 import { SITE, MAIN_NAVIGATION } from '../../constants/site';
 ---
 
+<script is:inline>
+  if (
+    typeof sessionStorage !== 'undefined' &&
+    sessionStorage.getItem('quranific_promo_dismissed') === 'true'
+  ) {
+    document.documentElement.classList.add('hide-promo');
+  }
+</script>
+<style>
+  html.hide-promo #promo-bar {
+    display: none !important;
+  }
+</style>
+
 {
   SITE.announcement.enabled && (
     <div
@@ -141,7 +155,6 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
   // HEADER SCROLL LOGIC
   // ---------------------------------------------------------------------------
   let headerAbortController: AbortController | null = null;
-  let lastScrollY = window.scrollY;
 
   function initHeaderScroll(): void {
     const header = document.getElementById('main-header');
@@ -151,14 +164,14 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
     headerAbortController?.abort();
     headerAbortController = new AbortController();
     const { signal } = headerAbortController;
-    lastScrollY = window.scrollY;
+    let localLastScrollY = window.scrollY;
 
     const handleScroll = (): void => {
       const currentScrollY = window.scrollY;
       const triggerPoint =
         promoBar && promoBar.style.display !== 'none' ? promoBar.offsetHeight : 20;
 
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      if (currentScrollY > localLastScrollY && currentScrollY > 100) {
         // Scrolling DOWN
         header.classList.add('-translate-y-full');
       } else {
@@ -186,7 +199,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
         }
       }
 
-      lastScrollY = currentScrollY;
+      localLastScrollY = currentScrollY;
     };
 
     handleScroll();

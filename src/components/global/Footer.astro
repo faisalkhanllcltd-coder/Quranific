@@ -9,34 +9,42 @@ const socialLinks = [
   {
     label: 'Facebook',
     href: SITE.social.facebook,
-    svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10v4h3v7h4v-7h3l1-4h-4v-2a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2h-3"/>',
   },
   {
     label: 'Instagram',
     href: SITE.social.instagram,
-    svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 8a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/><path d="M16.5 7.5v.01"/>',
   },
   {
     label: 'TikTok',
     href: SITE.social.tiktok,
-    svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 12a4 4 0 1 0 4 4v-12a5 5 0 0 0 5 5"/>',
   },
   {
     label: 'YouTube',
     href: SITE.social.youtube,
-    svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 8a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-12a4 4 0 0 1-4-4v-8z"/><path d="M10 9l5 3l-5 3z"/>',
   },
   {
     label: 'Pinterest',
     href: SITE.social.pinterest,
-    svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 20l4 -9"/><path d="M10.7 14c.437 1.263 1.43 2 2.55 2c2.071 0 3.75 -1.554 3.75 -4a5 5 0 1 0 -9.7 1.7"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>',
   },
   {
     label: 'X',
     href: SITE.social.x,
-    svg: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/>',
   },
 ] as const;
+
+const SOCIAL_ICONS: Record<string, string> = {
+  Facebook:
+    '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10v4h3v7h4v-7h3l1-4h-4v-2a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2h-3"/>',
+  Instagram:
+    '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 8a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/><path d="M16.5 7.5v.01"/>',
+  TikTok:
+    '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 12a4 4 0 1 0 4 4v-12a5 5 0 0 0 5 5"/>',
+  YouTube:
+    '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 8a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-12a4 4 0 0 1-4-4v-8z"/><path d="M10 9l5 3l-5 3z"/>',
+  Pinterest:
+    '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 20l4 -9"/><path d="M10.7 14c.437 1.263 1.43 2 2.55 2c2.071 0 3.75 -1.554 3.75 -4a5 5 0 1 0 -9.7 1.7"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>',
+  X: '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/>',
+};
 
 const linkClass =
   'text-emerald-300/55 hover:text-white transition-colors duration-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm';
@@ -97,7 +105,7 @@ const headingClass = 'text-emerald-500 font-semibold tracking-[0.2em] uppercase 
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   aria-hidden="true"
-                  set:html={social.svg}
+                  set:html={SOCIAL_ICONS[social.label]}
                 />
               </a>
             ))
@@ -226,7 +234,22 @@ const headingClass = 'text-emerald-500 font-semibold tracking-[0.2em] uppercase 
 </footer>
 
 <script>
+  declare global {
+    interface Window {
+      turnstile: { render: (el: Element) => void };
+    }
+  }
+
   document.addEventListener('astro:page-load', () => {
+    // SPA: Re-render Cloudflare Turnstile on View Transitions
+    if (typeof window !== 'undefined' && 'turnstile' in window) {
+      document.querySelectorAll('.cf-turnstile').forEach((el) => {
+        // Only render if Astro swapped in a fresh, empty container
+        if (el.innerHTML.trim() === '') {
+          window.turnstile.render(el);
+        }
+      });
+    }
     const form = document.getElementById('newsletter-form') as HTMLFormElement;
     const btn = document.getElementById('newsletter-submit-btn') as HTMLButtonElement;
     const input = document.getElementById('footer-email') as HTMLInputElement;

@@ -1,7 +1,7 @@
 ---
 // src/components/global/MobileMenu.astro
 // Pure HTML/Tailwind with Vanilla JS. Zero hydration cost.
-import { MOBILE_NAVIGATION } from '../../constants/site';
+import { SITE, MOBILE_NAVIGATION } from '../../constants/site';
 ---
 
 <div class="lg:hidden">
@@ -86,16 +86,18 @@ import { MOBILE_NAVIGATION } from '../../constants/site';
 
       <div class="mt-auto pb-12 flex flex-col gap-4">
         <a
-          href="/portals"
+          href={SITE.whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
           class="w-full text-center py-2.5 font-semibold text-emerald-900 bg-emerald-50 rounded-xl border border-emerald-100 hover:bg-emerald-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 min-h-[44px] flex items-center justify-center"
         >
-          Student Login
+          WhatsApp Support
         </a>
         <a
           href="/funnel/signup"
           class="w-full text-center py-2.5 font-semibold text-white bg-emerald-700 rounded-xl shadow-lg hover:bg-emerald-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white min-h-[44px] flex items-center justify-center"
         >
-          Book Your Free Class
+          Sign up now
         </a>
       </div>
     </div>
