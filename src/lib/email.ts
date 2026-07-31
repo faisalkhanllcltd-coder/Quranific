@@ -17,6 +17,12 @@ export interface Step1Data {
   w: string; // whatsapp
   c: string; // country
   s?: string; // source
+  fb?: string;
+  gc?: string;
+  tt?: string;
+  us?: string;
+  uc?: string;
+  um?: string;
 }
 
 export interface Step2Data {

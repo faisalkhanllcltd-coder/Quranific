@@ -75,6 +75,15 @@ export const POST: APIRoute = async (context) => {
     const data = await context.request.formData();
     const formData = Object.fromEntries(data);
 
+    const trk = {
+      fb: (formData.fbclid as string) || '',
+      gc: (formData.gclid as string) || '',
+      tt: (formData.ttclid as string) || '',
+      us: (formData.utm_source as string) || '',
+      uc: (formData.utm_campaign as string) || '',
+      um: (formData.utm_medium as string) || '',
+    };
+
     const parsed = signupSchema.safeParse(formData);
     if (!parsed.success) {
       return new Response(JSON.stringify({ error: parsed.error.errors[0].message }), {
@@ -134,6 +143,7 @@ export const POST: APIRoute = async (context) => {
       w: validData.whatsapp,
       c: validData.country,
       s: validData.source,
+      ...trk,
     })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
@@ -151,6 +161,7 @@ export const POST: APIRoute = async (context) => {
             w: validData.whatsapp,
             c: validData.country,
             s: validData.source,
+            ...trk,
           },
           resendApiKey,
           adminEmail

@@ -93,7 +93,19 @@ export const POST: APIRoute = async (context) => {
     }
 
     // 2. Decode and verify the 15-minute session token
-    let step1Data: { n: string; e: string; w: string; c: string; s: string };
+    let step1Data: {
+      n: string;
+      e: string;
+      w: string;
+      c: string;
+      s: string;
+      fb?: string;
+      gc?: string;
+      tt?: string;
+      us?: string;
+      uc?: string;
+      um?: string;
+    };
     let jti: string | undefined;
 
     try {
@@ -122,6 +134,25 @@ export const POST: APIRoute = async (context) => {
     }
 
     // 4. Process emails asynchronously using waitUntil
+    const dispatchWebhookTask = async () => {
+      const webhookUrl = runtimeEnv.ZAPIER_WEBHOOK_URL as string;
+      if (!webhookUrl) return; // Fail silently if not configured
+      try {
+        await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event: 'Lead_Complete',
+            timestamp: new Date().toISOString(),
+            lead: step1Data,
+            preferences: parsed.data,
+          }),
+        });
+      } catch (err) {
+        console.error('[Webhook Dispatch Failed]:', err);
+      }
+    };
+
     const sendEmailsTask = async () => {
       try {
         try {
@@ -172,14 +203,18 @@ export const POST: APIRoute = async (context) => {
     };
 
     // Background Task Execution (Mandate 1 - Modernized Path)
+    const executeBackgroundTasks = async () => {
+      await Promise.allSettled([sendEmailsTask(), dispatchWebhookTask()]);
+    };
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const locals = context.locals as any;
     if (locals.cfContext?.waitUntil) {
-      locals.cfContext.waitUntil(sendEmailsTask());
+      locals.cfContext.waitUntil(executeBackgroundTasks());
     } else if (locals.runtime?.ctx?.waitUntil) {
-      locals.runtime.ctx.waitUntil(sendEmailsTask());
+      locals.runtime.ctx.waitUntil(executeBackgroundTasks());
     } else {
-      sendEmailsTask().catch(console.error);
+      executeBackgroundTasks().catch(console.error);
     }
 
     // 6. Clear the session cookie
