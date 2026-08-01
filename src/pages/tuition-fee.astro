@@ -104,175 +104,9 @@ const Icons = {
 
       <div
         slot="visual"
-        class="bg-white rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 p-6 sm:p-8 transform lg:rotate-1 hover:rotate-0 transition-transform duration-500 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150 w-full"
+        class="w-full h-96 bg-emerald-950/5 border border-emerald-900/10 rounded-[2rem] flex items-center justify-center text-emerald-800/50"
       >
-        <h3 class="text-xl font-bold text-emerald-950 mb-1">Calculate your monthly fee</h3>
-        <p class="text-sm text-emerald-800/70 font-medium mb-6">
-          See your exact cost in 30 seconds. No surprises.
-        </p>
-
-        <!-- Who is enrolling — lightweight toggle, lead data only, does not affect price -->
-        <div
-          class="flex items-center gap-3 mb-6 p-3 bg-emerald-50 rounded-xl border border-emerald-100"
-        >
-          <span class="text-xs font-bold text-emerald-800/60 uppercase tracking-wider shrink-0"
-            >For:</span
-          >
-          <div class="flex gap-2" id="calc-who-btns">
-            <button
-              class="calc-who px-3 py-1.5 bg-white border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-              data-val="child"
-              data-label="Child">Child</button
-            >
-            <button
-              class="calc-who px-3 py-1.5 bg-white border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-              data-val="adult"
-              data-label="Adult">Adult</button
-            >
-          </div>
-          <span class="text-xs font-medium text-emerald-700 ml-auto" id="calc-who-val"></span>
-        </div>
-
-        <div class="space-y-5">
-          <!-- Duration -->
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-sm font-bold text-emerald-900/60 uppercase tracking-wider"
-                >Session length</span
-              >
-              <span class="text-sm font-bold text-emerald-700" id="calc-dur-val">–</span>
-            </div>
-            <div class="flex gap-2" id="calc-dur-btns">
-              <button
-                class="calc-btn flex-1 px-4 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-                data-group="dur"
-                data-val="30"
-                data-label="30 min">30 min</button
-              >
-              <button
-                class="calc-btn flex-1 px-4 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-                data-group="dur"
-                data-val="40"
-                data-label="40 min">40 min</button
-              >
-            </div>
-          </div>
-
-          <!-- Sessions per week -->
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-sm font-bold text-emerald-900/60 uppercase tracking-wider"
-                >Sessions / week</span
-              >
-              <span class="text-sm font-bold text-emerald-700" id="calc-sess-val">–</span>
-            </div>
-            <div class="flex gap-2" id="calc-sess-btns">
-              <button
-                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-                data-group="sess"
-                data-val="2"
-                data-label="2×">2×</button
-              >
-              <button
-                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-                data-group="sess"
-                data-val="3"
-                data-label="3×">3×</button
-              >
-              <button
-                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-                data-group="sess"
-                data-val="4"
-                data-label="4×">4×</button
-              >
-              <button
-                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-                data-group="sess"
-                data-val="5"
-                data-label="5×">5×</button
-              >
-            </div>
-          </div>
-
-          <!-- Currency -->
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-sm font-bold text-emerald-900/60 uppercase tracking-wider"
-                >Currency</span
-              >
-            </div>
-            <select
-              id="calc-currency-select"
-              class="w-full px-4 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition-colors appearance-none cursor-pointer"
-            >
-              <option value="USD">USA (USD $)</option>
-              <option value="GBP">UK (GBP £)</option>
-              <option value="EUR">Europe (EUR €)</option>
-              <option value="AED">UAE (AED د.إ)</option>
-              <option value="SGD">Singapore (SGD S$)</option>
-              <option value="CAD">Canada (CAD C$)</option>
-              <option value="AUD">Australia (AUD A$)</option>
-              <option value="SAR">Saudi Arabia (SAR ﷼)</option>
-            </select>
-          </div>
-
-          <!-- Billing cycle -->
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-sm font-bold text-emerald-900/60 uppercase tracking-wider"
-                >Billing cycle</span
-              >
-              <span class="text-sm font-bold text-emerald-700" id="calc-billing-val">–</span>
-            </div>
-            <div class="flex gap-2" id="calc-billing-btns">
-              <button
-                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors"
-                data-group="billing"
-                data-val="monthly"
-                data-label="Monthly"
-                data-discount="0">Monthly</button
-              >
-              <button
-                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors flex items-center justify-center gap-1"
-                data-group="billing"
-                data-val="sixMonth"
-                data-label="6 Months"
-                data-discount="0.05"
-                >6 Mo <span
-                  class="bg-amber-50 text-amber-600 text-[9px] px-1 py-0.5 rounded border border-amber-200"
-                  >−5%</span
-                ></button
-              >
-              <button
-                class="calc-btn flex-1 px-3 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900/70 hover:border-emerald-700 transition-colors flex items-center justify-center gap-1"
-                data-group="billing"
-                data-val="annual"
-                data-label="12 Months"
-                data-discount="0.15"
-                >12 Mo <span
-                  class="bg-amber-50 text-amber-600 text-[9px] px-1 py-0.5 rounded border border-amber-200"
-                  >−15%</span
-                ></button
-              >
-            </div>
-          </div>
-
-          <div class="h-px bg-emerald-100" aria-hidden="true"></div>
-
-          <!-- Result box -->
-          <div
-            class="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 transition-colors duration-300"
-            id="calc-result-box"
-          >
-            <div class="text-center text-sm font-medium text-emerald-800/70 py-2">
-              Select options above to see your price
-            </div>
-          </div>
-
-          <Button href="/funnel/signup" variant="primary" class="w-full mt-2" id="calc-cta-btn"
-            >Book Your Free Class →</Button
-          >
-        </div>
+        <!-- TODO: Next Session UI Target -->
       </div>
     </PageHero>
 
@@ -1092,9 +926,6 @@ const Icons = {
 
   <script is:inline>
     document.addEventListener('astro:page-load', () => {
-      // --- 1. MAIN FEE CALCULATOR (rebuilt 2026-07-27) ---
-      // Pricing data sourced from src/constants/pricing.ts — inlined at build time
-      // PRICING[currency][duration_min][sessions_per_week] = monthly base price (USD-derived)
       const PRICING_DATA = {
         USD: {
           '30': { '2': 40, '3': 50, '4': 55, '5': 60 },
@@ -1139,168 +970,10 @@ const Icons = {
         AUD: 'A$',
         SAR: '﷼',
       };
-      const BILLING_DISCOUNTS = { monthly: 0, sixMonth: 0.05, annual: 0.15 };
 
-      const calcState = { who: null, dur: null, sess: null, currency: 'USD', billing: null };
-
-      // Helper: apply selected/deselected class toggling — hover:text-emerald-700 stripped from selected
-      function selectCalcBtn(group, clickedBtn) {
-        const container = clickedBtn.parentElement;
-        container.querySelectorAll('.calc-btn').forEach((b) => {
-          if (b.dataset.group !== group) return;
-          b.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700');
-          b.classList.add(
-            'bg-cream-50',
-            'text-emerald-900/70',
-            'border-emerald-200',
-            'hover:text-emerald-700'
-          );
-        });
-        clickedBtn.classList.remove(
-          'bg-cream-50',
-          'text-emerald-900/70',
-          'border-emerald-200',
-          'hover:text-emerald-700'
-        );
-        clickedBtn.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
-      }
-
-      // Helper: apply selected/deselected for the lightweight Who toggle (calc-who class)
-      function selectWhoBtn(clickedBtn) {
-        document.querySelectorAll('.calc-who').forEach((b) => {
-          b.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700');
-          b.classList.add(
-            'bg-white',
-            'text-emerald-900/70',
-            'border-emerald-200',
-            'hover:text-emerald-700'
-          );
-        });
-        clickedBtn.classList.remove(
-          'bg-white',
-          'text-emerald-900/70',
-          'border-emerald-200',
-          'hover:text-emerald-700'
-        );
-        clickedBtn.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
-      }
-
-      // Bind Who toggle
-      document.querySelectorAll('.calc-who').forEach((btn) => {
-        if (btn.dataset.bound) return;
-        btn.dataset.bound = 'true';
-        btn.addEventListener('click', function () {
-          selectWhoBtn(this);
-          calcState.who = this.dataset.val;
-          const whoVal = document.getElementById('calc-who-val');
-          if (whoVal) whoVal.textContent = this.dataset.label;
-          // who doesn't affect price — no recalc needed
-        });
-      });
-
-      // Bind all .calc-btn buttons (dur, sess, billing)
-      document.querySelectorAll('.calc-btn').forEach((btn) => {
-        if (btn.dataset.bound) return;
-        btn.dataset.bound = 'true';
-        btn.addEventListener('click', function () {
-          const group = this.dataset.group;
-          if (!group) return; // safety guard for any non-grouped calc-btn
-          selectCalcBtn(group, this);
-          calcState[group] = this.dataset.val;
-          // Update label display
-          const labelMap = {
-            dur: 'calc-dur-val',
-            sess: 'calc-sess-val',
-            billing: 'calc-billing-val',
-          };
-          const valElem = document.getElementById(labelMap[group]);
-          if (valElem) valElem.textContent = this.dataset.label;
-          updateCalcResult();
-          updateCalcCta();
-        });
-      });
-
-      // Bind currency select
-      const currencySelect = document.getElementById('calc-currency-select');
-      if (currencySelect && !currencySelect.dataset.bound) {
-        currencySelect.dataset.bound = 'true';
-        currencySelect.addEventListener('change', function () {
-          calcState.currency = this.value;
-          updateCalcResult();
-          updateCalcCta();
-        });
-      }
-
-      function updateCalcResult() {
-        if (!calcState.dur || !calcState.sess || !calcState.billing) return;
-        const cur = calcState.currency || 'USD';
-        const base = PRICING_DATA[cur]?.[calcState.dur]?.[calcState.sess] ?? 0;
-        const discount = BILLING_DISCOUNTS[calcState.billing] ?? 0;
-        const price = Math.round(base * (1 - discount));
-        const sym = CURRENCY_SYMBOLS[cur] ?? cur;
-        const sessPerMonth = parseInt(calcState.sess) * 4;
-        const perSesh = sessPerMonth > 0 ? (price / sessPerMonth).toFixed(2) : '—';
-        const billingLabel =
-          calcState.billing === 'annual'
-            ? '12-month'
-            : calcState.billing === 'sixMonth'
-              ? '6-month'
-              : 'monthly';
-        const totalLine =
-          calcState.billing === 'annual'
-            ? `<div class="flex justify-between items-center mb-4"><span class="text-sm text-emerald-800/80 font-medium">Total billed</span><span class="text-sm font-bold text-emerald-950">${sym}${price * 12}</span></div>`
-            : calcState.billing === 'sixMonth'
-              ? `<div class="flex justify-between items-center mb-4"><span class="text-sm text-emerald-800/80 font-medium">Total billed</span><span class="text-sm font-bold text-emerald-950">${sym}${price * 6}</span></div>`
-              : '';
-        const savingAmt =
-          discount > 0
-            ? Math.round(base * discount * (calcState.billing === 'annual' ? 12 : 6))
-            : 0;
-        const html = `
-          <div class="flex justify-between items-center mb-2"><span class="text-sm text-emerald-800/80 font-medium">Sessions / month</span><span class="text-sm font-bold text-emerald-950">${sessPerMonth} sessions</span></div>
-          <div class="flex justify-between items-center mb-4"><span class="text-sm text-emerald-800/80 font-medium">Per session</span><span class="text-sm font-bold text-emerald-950">${sym}${perSesh}</span></div>
-          ${totalLine}
-          <div class="pt-4 border-t border-emerald-100 flex justify-between items-center">
-            <span class="text-[15px] font-bold text-emerald-950">Monthly fee</span>
-            <div class="text-right">
-              <div class="font-serif text-3xl font-bold text-emerald-700 leading-none mb-1">${sym}${price}<span class="text-sm font-medium text-emerald-800/60">/mo</span></div>
-              ${savingAmt > 0 ? `<div class="text-[10px] font-bold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full inline-block">You save ${sym}${savingAmt} on ${billingLabel} plan</div>` : ''}
-            </div>
-          </div>
-        `;
-        const box = document.getElementById('calc-result-box');
-        if (box) {
-          box.innerHTML = html;
-          box.classList.remove('bg-emerald-50', 'border-emerald-100');
-          box.classList.add('bg-white', 'border-emerald-200', 'shadow-sm');
-        }
-        // Store final price on state for URL param passthrough
-        calcState._price = price;
-        calcState._sym = sym;
-      }
-
-      function updateCalcCta() {
-        // Merge calculator selections into the CTA URL — preserve all existing ad params (gclid, utm_*)
-        const base = new URL('/funnel/signup', window.location.origin);
-        const existing = new URLSearchParams(window.location.search);
-        existing.forEach((v, k) => base.searchParams.set(k, v));
-        if (calcState.who) base.searchParams.set('enrollType', calcState.who);
-        if (calcState.dur) base.searchParams.set('duration', calcState.dur);
-        if (calcState.sess) base.searchParams.set('sessions', calcState.sess);
-        if (calcState.currency) base.searchParams.set('currency', calcState.currency);
-        if (calcState.billing) base.searchParams.set('billing', calcState.billing);
-        if (calcState._price) base.searchParams.set('price', calcState._price);
-        document.querySelectorAll('a[href*="/funnel/signup"]').forEach((a) => {
-          a.href = base.toString();
-        });
-      }
-
-      // --- 2. PRICING GRID (plans section — reads same PRICING_DATA as calculator, no new numbers) ---
-      // UNIQUE vs hero calculator: this table shows discounted price + annual/6mo savings
-      // across ALL 4 frequencies simultaneously. Hero calc shows one frequency at a time.
+      // --- PRICING GRID LOGIC ---
       const planState = { dur: '30', currency: 'USD', billing: 'monthly', discount: 0 };
 
-      // Hover-safe: strips hover:text-emerald-700 from selected button, restores on deselect
       function selectPlanBtn(group, clickedBtn) {
         const container = clickedBtn.parentElement;
         container.querySelectorAll('.plan-btn').forEach((b) => {
@@ -1328,7 +1001,6 @@ const Icons = {
         const discount = planState.discount || 0;
         const billing = planState.billing || 'monthly';
         const sym = CURRENCY_SYMBOLS[cur] ?? cur;
-        // Months covered by the billing period (for total-saving calculation)
         const billingMonths = billing === 'annual' ? 12 : billing === 'sixMonth' ? 6 : 1;
 
         ['2', '3', '4', '5'].forEach((sess) => {
@@ -1352,11 +1024,8 @@ const Icons = {
 
           if (symEl) symEl.textContent = sym;
           if (priceEl) priceEl.textContent = discounted;
-
-          // Per-class rate line
           if (perEl) perEl.textContent = `\u2248 ${sym}${perClass} / class`;
 
-          // Savings badge — unique feature: visible simultaneously across all 4 frequencies
           if (saveEl) {
             if (discount > 0) {
               const saving = Math.round(base * discount * billingMonths);
@@ -1369,7 +1038,6 @@ const Icons = {
         });
       }
 
-      // Bind plan duration buttons
       document.querySelectorAll('.plan-btn[data-group="plan-dur"]').forEach((btn) => {
         if (btn.dataset.bound) return;
         btn.dataset.bound = 'true';
@@ -1380,7 +1048,6 @@ const Icons = {
         });
       });
 
-      // Bind plan billing buttons
       document.querySelectorAll('.plan-btn[data-group="plan-billing"]').forEach((btn) => {
         if (btn.dataset.bound) return;
         btn.dataset.bound = 'true';
@@ -1392,7 +1059,6 @@ const Icons = {
         });
       });
 
-      // Bind plan currency select
       const planCurrencySelect = document.getElementById('plan-currency-select');
       if (planCurrencySelect && !planCurrencySelect.dataset.bound) {
         planCurrencySelect.dataset.bound = 'true';
@@ -1402,7 +1068,6 @@ const Icons = {
         });
       }
 
-      // Default: 30 min, Monthly, USD — set selected state on load
       const planDurDefault = document.querySelector('#plan-dur-btns .plan-btn[data-val="30"]');
       const planBillingDefault = document.querySelector(
         '#plan-billing-btns .plan-btn[data-val="monthly"]'
@@ -1411,30 +1076,24 @@ const Icons = {
       if (planBillingDefault) selectPlanBtn('plan-billing', planBillingDefault);
       updatePlanGrid();
 
-      // --- 3. SIBLING CALCULATOR (preserved unchanged) ---
+      // --- SIBLING CALCULATOR LOGIC ---
       const addBtn = document.getElementById('sib-add-btn');
       if (addBtn && !addBtn.dataset.bound) {
         addBtn.dataset.bound = 'true';
-
         addBtn.addEventListener('click', function addSibling() {
           const row2 = document.getElementById('child2-row');
-
           if (row2 && row2.classList.contains('hidden')) {
             row2.classList.remove('hidden');
             row2.classList.add('flex');
-
             const label = document.getElementById('sib-total-label');
             if (label) label.textContent = '2 children enrolled';
-
             const total = document.getElementById('sib-total-num');
             if (total) total.textContent = '$94';
-
             const savingBadge = document.getElementById('sib-saving');
             if (savingBadge) {
               savingBadge.classList.remove('hidden');
               savingBadge.classList.add('block');
             }
-
             addBtn.textContent = 'Contact us for 3+ children →';
             addBtn.onclick = (e) => {
               e.preventDefault();
