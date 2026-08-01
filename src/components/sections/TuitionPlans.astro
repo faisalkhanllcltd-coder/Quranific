@@ -1,0 +1,23 @@
+---
+import Section from '../ui/Section.astro';
+import PricingGrid from '../fees/PricingGrid.svelte';
+---
+
+<Section height={900} class="py-12 md:py-24 lg:py-32" id="plans">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3"
+        >Tuition Plans</span
+      >
+      <h2 class="text-4xl lg:text-5xl font-bold text-emerald-950 mb-4 tracking-tight">
+        One product.<br />
+        <em class="font-serif italic text-emerald-700 font-medium">Pick your pace.</em>
+      </h2>
+      <p class="text-lg text-emerald-900/80 font-medium max-w-2xl mx-auto">
+        Same teacher, same quality, same guarantee at every frequency. Choose how many sessions fit
+        your child&rsquo;s week &mdash; change it any time.
+      </p>
+    </div>
+    <PricingGrid client:load />
+  </div>
+</Section>

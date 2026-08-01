@@ -34,6 +34,38 @@ export const faqs: Record<string, FAQ[]> = {
     },
   ],
   general: [], // Common QA: "How long is each class?", "Do I need to buy textbooks?"
+  pricing: [
+    {
+      question: 'When does billing start? Do I pay before the first class?',
+      answer:
+        'No. <strong class="text-emerald-950">Your first class is completely free</strong> and requires no payment details. Billing begins only after you choose to continue (which means after you have attended the free trial, received the progress report, and made a conscious decision to enrol). You choose when the first payment happens, not us.',
+    },
+    {
+      question: 'Can I change my plan later?',
+      answer:
+        'Yes, always. You can upgrade, downgrade, or change session frequency at any time. <strong class="text-emerald-950">Changes take effect from the next billing cycle</strong>, with no penalty and no admin fee. If your child\'s progress accelerates and you want to add sessions, or if life gets busier and you need to reduce frequency, one message to us handles it completely.',
+    },
+    {
+      question: 'What exactly is covered by the make-up guarantee?',
+      answer:
+        'Every session your child misses, for any reason, has a guaranteed replacement. <strong class="text-emerald-950">There are no limits, no exclusions, and no "only applies if you give 24 hours\' notice" clauses</strong>. Your child is ill on the day? Make-up scheduled. Family travel? Make-up scheduled. Teacher unavailable? Make-up scheduled, and we tell you in advance. The replacement is booked within the same calendar week where possible, or the following week for late notice.',
+    },
+    {
+      question: 'What happens if I want to cancel?',
+      answer:
+        'Cancel before your next billing date and you will not be charged. <strong class="text-emerald-950">No notice period. No cancellation fee. No lock-in.</strong> Send us one message (WhatsApp, email, or through the parent dashboard) and we confirm the cancellation immediately. If you are on an annual plan and cancel mid-year, we refund the remaining months pro-rata without question.',
+    },
+    {
+      question: 'Are there any fees not listed on this page?',
+      answer:
+        'No. The price you see on this page is the price you pay. <strong class="text-emerald-950">No setup fee. No resource fee. No platform access charge. No "teacher matching" fee.</strong> We have listed every cost component on this page deliberately, because we find it frustrating when pricing pages make you feel like you are about to discover something unpleasant at checkout. You are not.',
+    },
+    {
+      question: 'Can I pay in my local currency?',
+      answer:
+        'Prices are listed in USD, which is our base currency. <strong class="text-emerald-950">Your card is charged in USD and your bank applies its standard conversion rate</strong>. We do not add a foreign exchange surcharge. Families in the UK, UAE, Canada, Australia, and the EU all pay in USD. If you would prefer an invoice in your local currency for accounting purposes, contact us and we will arrange it.',
+    },
+  ],
   fees: [], // Pricing QA: "Are there sibling discounts?", "Is it a monthly contract?"
   courses: [], // Curriculum QA: "Do you teach Hifz?", "What if I am an absolute beginner?"
   teachers: [], // Vetting QA: "Can I request a female teacher?", "Are teachers native Arabic speakers?"

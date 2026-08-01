@@ -4,9 +4,11 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
 import Section from '../components/ui/Section.astro';
-import Button from '../components/ui/Button.astro';
 import PageHero from '../components/sections/PageHero.astro';
-import PricingGrid from '../components/fees/PricingGrid.svelte';
+import TuitionPlans from '../components/sections/TuitionPlans.astro';
+import Scholarship from '../components/sections/Scholarship.astro';
+import FAQAccordion from '../components/sections/FAQAccordion.astro';
+import { faqs } from '../data/faqs';
 
 // Elite Edge SEO: Attached AggregateOffer to a specific Service entity
 const jsonLd = {
@@ -32,13 +34,8 @@ const jsonLd = {
   },
 };
 
-// Reusable SVGs mapped for zero DOM bloat
 const Icons = {
   check: `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`,
-  xIcon: `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`,
-  shield: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
-  chevronDown: `<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`,
-  sparkle: `<svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>`,
 };
 ---
 
@@ -113,13 +110,11 @@ const Icons = {
         slot="visual"
         class="relative w-full h-96 lg:h-full min-h-[400px] rounded-[2rem] overflow-hidden bg-emerald-950 border border-emerald-900/10 shadow-2xl group flex items-center justify-center"
       >
-        <!-- TODO: Replace src with actual GIF -->
         <img
           src="/images/platform-demo.gif"
           alt="Live 1-on-1 Quranific Class"
           class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
         />
-        <!-- Playful UI Overlay -->
         <div class="absolute bottom-6 left-6 right-6 flex items-center justify-between z-10">
           <div
             class="bg-white/95 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-2.5 shadow-xl"
@@ -133,171 +128,9 @@ const Icons = {
       </div>
     </PageHero>
 
-    <Section height={900} class="py-12 md:py-24 lg:py-32" id="plans">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3"
-            >Tuition Plans</span
-          >
-          <h2 class="text-4xl lg:text-5xl font-bold text-emerald-950 mb-4 tracking-tight">
-            One product.<br />
-            <em class="font-serif italic text-emerald-700 font-medium">Pick your pace.</em>
-          </h2>
-          <p class="text-lg text-emerald-900/80 font-medium max-w-2xl mx-auto">
-            Same teacher, same quality, same guarantee at every frequency. Choose how many sessions
-            fit your child&rsquo;s week &mdash; change it any time.
-          </p>
-        </div>
+    <TuitionPlans />
 
-        <PricingGrid client:load />
-      </div>
-    </Section>
-
-    <Section height={800} class="py-12 md:py-24 lg:py-32 bg-emerald-950 relative overflow-hidden">
-      <div
-        class="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[100px] pointer-events-none"
-        aria-hidden="true"
-      >
-      </div>
-      <div
-        class="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none"
-        aria-hidden="true"
-      >
-      </div>
-
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="grid lg:grid-cols-[1.2fr_1fr] gap-16 lg:gap-24 items-center">
-          <div>
-            <span class="text-xs font-bold tracking-[0.15em] uppercase text-white/40 block mb-4"
-              >Need-Based Support</span
-            >
-            <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">
-              Cost should never stop <br />a child from learning <br /><em
-                class="font-serif italic text-amber-400 font-medium">the Quran.</em
-              >
-            </h2>
-            <p class="text-[17px] text-emerald-100/70 font-medium leading-relaxed mb-10 max-w-xl">
-              We offer a limited number of partial scholarships for families facing genuine
-              financial hardship. These are not token gestures. We provide up to 50% fee reduction
-              for qualifying families, funded from a portion of every subscription we collect.
-            </p>
-
-            <div class="space-y-4 mb-10">
-              <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
-                <span
-                  class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5"
-                  aria-hidden="true"></span><span
-                  >Available for families in financial hardship, assessed with dignity and
-                  discretion</span
-                >
-              </div>
-              <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
-                <span
-                  class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5"
-                  aria-hidden="true"></span><span
-                  >Up to <strong class="text-white">50% fee reduction</strong> on any plan</span
-                >
-              </div>
-              <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
-                <span
-                  class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5"
-                  aria-hidden="true"></span><span>Applications reviewed within 5 working days</span>
-              </div>
-              <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
-                <span
-                  class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5"
-                  aria-hidden="true"></span><span
-                  >Renewed automatically. No annual reapplication needed.</span
-                >
-              </div>
-              <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
-                <span
-                  class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5"
-                  aria-hidden="true"></span><span
-                  >100% confidential. Your teacher will never know.</span
-                >
-              </div>
-            </div>
-
-            <Button href="mailto:scholarships@quranific.com" variant="secondary"
-              >Apply for a Scholarship →</Button
-            >
-          </div>
-
-          <div class="bg-white/5 border border-white/10 rounded-3xl p-8 lg:p-10 backdrop-blur-md">
-            <div
-              class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-200 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest mb-6"
-            >
-              <span aria-hidden="true">🌙</span> Scholarship Programme
-            </div>
-            <p class="font-serif text-2xl italic text-white/90 leading-relaxed mb-10">
-              "We cannot fulfil the Quran's own message (that knowledge belongs to everyone) if cost
-              becomes a barrier to a child learning it."
-            </p>
-
-            <div class="space-y-8 relative">
-              <div
-                class="absolute left-[17px] top-[30px] bottom-[30px] w-0.5 bg-white/10"
-                aria-hidden="true"
-              >
-              </div>
-
-              <div class="flex gap-5 relative z-10">
-                <div
-                  class="w-9 h-9 rounded-full bg-white/10 border border-white/20 text-white/70 font-bold text-sm flex items-center justify-center shrink-0"
-                  aria-hidden="true"
-                >
-                  1
-                </div>
-                <div>
-                  <div class="font-bold text-white/90 text-[15px] mb-1">
-                    Email scholarships@quranific.com
-                  </div>
-                  <div class="text-[13px] text-white/40 font-medium">
-                    Tell us about your situation in plain language. No forms, no documentation
-                    required at this stage.
-                  </div>
-                </div>
-              </div>
-              <div class="flex gap-5 relative z-10">
-                <div
-                  class="w-9 h-9 rounded-full bg-white/10 border border-white/20 text-white/70 font-bold text-sm flex items-center justify-center shrink-0"
-                  aria-hidden="true"
-                >
-                  2
-                </div>
-                <div>
-                  <div class="font-bold text-white/90 text-[15px] mb-1">
-                    We review and respond in 5 days
-                  </div>
-                  <div class="text-[13px] text-white/40 font-medium">
-                    Our review is private. We assess on need, not documentation. We respond to every
-                    application.
-                  </div>
-                </div>
-              </div>
-              <div class="flex gap-5 relative z-10">
-                <div
-                  class="w-9 h-9 rounded-full bg-white/10 border border-white/20 text-white/70 font-bold text-sm flex items-center justify-center shrink-0"
-                  aria-hidden="true"
-                >
-                  3
-                </div>
-                <div>
-                  <div class="font-bold text-white/90 text-[15px] mb-1">
-                    Your child begins at the adjusted fee
-                  </div>
-                  <div class="text-[13px] text-white/40 font-medium">
-                    The scholarship is applied before your first payment. Same quality, same
-                    teacher, same everything.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Section>
+    <Scholarship />
 
     <Section height={800} class="py-12 md:py-24 bg-cream-50 border-y border-emerald-100" id="faq">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -315,7 +148,6 @@ const Icons = {
               These are the real questions parents ask before paying. We have answered every one
               without spin.
             </p>
-
             <div class="bg-white border border-emerald-100 rounded-3xl p-8 shadow-sm">
               <div class="text-4xl mb-4" aria-hidden="true">🛡️</div>
               <h3 class="font-bold text-xl text-emerald-950 mb-3">Our Full-Month Guarantee</h3>
@@ -326,152 +158,7 @@ const Icons = {
               </p>
             </div>
           </div>
-
-          <div class="space-y-4">
-            <details
-              class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden shadow-sm"
-            >
-              <summary
-                class="flex items-center justify-between cursor-pointer p-6 font-semibold text-emerald-950 text-[17px]"
-              >
-                When does billing start? Do I pay before the first class?
-                <span
-                  class="transition group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-200"
-                  aria-hidden="true"
-                >
-                  <span set:html={Icons.chevronDown} />
-                </span>
-              </summary>
-              <div class="text-emerald-800 text-[15px] font-medium leading-relaxed px-6 pb-6">
-                No. <strong class="text-emerald-950">Your first class is completely free</strong> and
-                requires no payment details. Billing begins only after you choose to continue (which means
-                after you have attended the free trial, received the progress report, and made a conscious
-                decision to enrol). You choose when the first payment happens, not us.
-              </div>
-            </details>
-
-            <details
-              class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden shadow-sm"
-            >
-              <summary
-                class="flex items-center justify-between cursor-pointer p-6 font-semibold text-emerald-950 text-[17px]"
-              >
-                Can I change my plan later?
-                <span
-                  class="transition group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-200"
-                  aria-hidden="true"
-                >
-                  <span set:html={Icons.chevronDown} />
-                </span>
-              </summary>
-              <div class="text-emerald-800 text-[15px] font-medium leading-relaxed px-6 pb-6">
-                Yes, always. You can upgrade, downgrade, or change session frequency at any time. <strong
-                  class="text-emerald-950">Changes take effect from the next billing cycle</strong
-                >, with no penalty and no admin fee. If your child's progress accelerates and you
-                want to add sessions, or if life gets busier and you need to reduce frequency, one
-                message to us handles it completely.
-              </div>
-            </details>
-
-            <details
-              class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden shadow-sm"
-            >
-              <summary
-                class="flex items-center justify-between cursor-pointer p-6 font-semibold text-emerald-950 text-[17px]"
-              >
-                What exactly is covered by the make-up guarantee?
-                <span
-                  class="transition group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-200"
-                  aria-hidden="true"
-                >
-                  <span set:html={Icons.chevronDown} />
-                </span>
-              </summary>
-              <div class="text-emerald-800 text-[15px] font-medium leading-relaxed px-6 pb-6">
-                Every session your child misses, for any reason, has a guaranteed replacement. <strong
-                  class="text-emerald-950"
-                  >There are no limits, no exclusions, and no "only applies if you give 24 hours'
-                  notice" clauses</strong
-                >. Your child is ill on the day? Make-up scheduled. Family travel? Make-up
-                scheduled. Teacher unavailable? Make-up scheduled, and we tell you in advance. The
-                replacement is booked within the same calendar week where possible, or the following
-                week for late notice.
-              </div>
-            </details>
-
-            <details
-              class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden shadow-sm"
-            >
-              <summary
-                class="flex items-center justify-between cursor-pointer p-6 font-semibold text-emerald-950 text-[17px]"
-              >
-                What happens if I want to cancel?
-                <span
-                  class="transition group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-200"
-                  aria-hidden="true"
-                >
-                  <span set:html={Icons.chevronDown} />
-                </span>
-              </summary>
-              <div class="text-emerald-800 text-[15px] font-medium leading-relaxed px-6 pb-6">
-                Cancel before your next billing date and you will not be charged. <strong
-                  class="text-emerald-950"
-                  >No notice period. No cancellation fee. No lock-in.</strong
-                > Send us one message (WhatsApp, email, or through the parent dashboard) and we confirm
-                the cancellation immediately. If you are on an annual plan and cancel mid-year, we refund
-                the remaining months pro-rata without question.
-              </div>
-            </details>
-
-            <details
-              class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden shadow-sm"
-            >
-              <summary
-                class="flex items-center justify-between cursor-pointer p-6 font-semibold text-emerald-950 text-[17px]"
-              >
-                Are there any fees not listed on this page?
-                <span
-                  class="transition group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-200"
-                  aria-hidden="true"
-                >
-                  <span set:html={Icons.chevronDown} />
-                </span>
-              </summary>
-              <div class="text-emerald-800 text-[15px] font-medium leading-relaxed px-6 pb-6">
-                No. The price you see on this page is the price you pay. <strong
-                  class="text-emerald-950"
-                  >No setup fee. No resource fee. No platform access charge. No "teacher matching"
-                  fee.</strong
-                > We have listed every cost component on this page deliberately, because we find it frustrating
-                when pricing pages make you feel like you are about to discover something unpleasant at
-                checkout. You are not.
-              </div>
-            </details>
-
-            <details
-              class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden shadow-sm"
-            >
-              <summary
-                class="flex items-center justify-between cursor-pointer p-6 font-semibold text-emerald-950 text-[17px]"
-              >
-                Can I pay in my local currency?
-                <span
-                  class="transition group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-200"
-                  aria-hidden="true"
-                >
-                  <span set:html={Icons.chevronDown} />
-                </span>
-              </summary>
-              <div class="text-emerald-800 text-[15px] font-medium leading-relaxed px-6 pb-6">
-                Prices are listed in USD, which is our base currency. <strong
-                  class="text-emerald-950"
-                  >Your card is charged in USD and your bank applies its standard conversion rate</strong
-                >. We do not add a foreign exchange surcharge. Families in the UK, UAE, Canada,
-                Australia, and the EU all pay in USD. If you would prefer an invoice in your local
-                currency for accounting purposes, contact us and we will arrange it.
-              </div>
-            </details>
-          </div>
+          <FAQAccordion questions={faqs.pricing} />
         </div>
       </div>
     </Section>

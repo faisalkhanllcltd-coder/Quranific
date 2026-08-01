@@ -1,0 +1,141 @@
+---
+import Section from '../ui/Section.astro';
+import Button from '../ui/Button.astro';
+---
+
+<Section height={800} class="py-12 md:py-24 lg:py-32 bg-emerald-950 relative overflow-hidden">
+  <div
+    class="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-white/5 rounded-full blur-[100px] pointer-events-none"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="grid lg:grid-cols-[1.2fr_1fr] gap-16 lg:gap-24 items-center">
+      <div>
+        <span class="text-xs font-bold tracking-[0.15em] uppercase text-white/40 block mb-4"
+          >Need-Based Support</span
+        >
+        <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">
+          Cost should never stop <br />a child from learning <br /><em
+            class="font-serif italic text-amber-400 font-medium">the Quran.</em
+          >
+        </h2>
+        <p class="text-[17px] text-emerald-100/70 font-medium leading-relaxed mb-10 max-w-xl">
+          We offer a limited number of partial scholarships for families facing genuine financial
+          hardship. These are not token gestures. We provide up to 50% fee reduction for qualifying
+          families, funded from a portion of every subscription we collect.
+        </p>
+
+        <div class="space-y-4 mb-10">
+          <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" aria-hidden="true"
+            ></span>
+            <span
+              >Available for families in financial hardship, assessed with dignity and discretion</span
+            >
+          </div>
+          <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" aria-hidden="true"
+            ></span>
+            <span>Up to <strong class="text-white">50% fee reduction</strong> on any plan</span>
+          </div>
+          <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" aria-hidden="true"
+            ></span>
+            <span>Applications reviewed within 5 working days</span>
+          </div>
+          <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" aria-hidden="true"
+            ></span>
+            <span>Renewed automatically. No annual reapplication needed.</span>
+          </div>
+          <div class="flex gap-4 items-start text-sm text-emerald-50/80 font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" aria-hidden="true"
+            ></span>
+            <span>100% confidential. Your teacher will never know.</span>
+          </div>
+        </div>
+        <Button href="mailto:scholarships@quranific.com" variant="secondary"
+          >Apply for a Scholarship →</Button
+        >
+      </div>
+
+      <div class="bg-white/5 border border-white/10 rounded-3xl p-8 lg:p-10 backdrop-blur-md">
+        <div
+          class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-200 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest mb-6"
+        >
+          <span aria-hidden="true">🌙</span> Scholarship Programme
+        </div>
+        <p class="font-serif text-2xl italic text-white/90 leading-relaxed mb-10">
+          "We cannot fulfil the Quran's own message (that knowledge belongs to everyone) if cost
+          becomes a barrier to a child learning it."
+        </p>
+
+        <div class="space-y-8 relative">
+          <div
+            class="absolute left-[17px] top-[30px] bottom-[30px] w-0.5 bg-white/10"
+            aria-hidden="true"
+          >
+          </div>
+          <div class="flex gap-5 relative z-10">
+            <div
+              class="w-9 h-9 rounded-full bg-white/10 border border-white/20 text-white/70 font-bold text-sm flex items-center justify-center shrink-0"
+              aria-hidden="true"
+            >
+              1
+            </div>
+            <div>
+              <div class="font-bold text-white/90 text-[15px] mb-1">
+                Email scholarships@quranific.com
+              </div>
+              <div class="text-[13px] text-white/40 font-medium">
+                Tell us about your situation in plain language. No forms, no documentation required
+                at this stage.
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-5 relative z-10">
+            <div
+              class="w-9 h-9 rounded-full bg-white/10 border border-white/20 text-white/70 font-bold text-sm flex items-center justify-center shrink-0"
+              aria-hidden="true"
+            >
+              2
+            </div>
+            <div>
+              <div class="font-bold text-white/90 text-[15px] mb-1">
+                We review and respond in 5 days
+              </div>
+              <div class="text-[13px] text-white/40 font-medium">
+                Our review is private. We assess on need, not documentation. We respond to every
+                application.
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-5 relative z-10">
+            <div
+              class="w-9 h-9 rounded-full bg-white/10 border border-white/20 text-white/70 font-bold text-sm flex items-center justify-center shrink-0"
+              aria-hidden="true"
+            >
+              3
+            </div>
+            <div>
+              <div class="font-bold text-white/90 text-[15px] mb-1">
+                Your child begins at the adjusted fee
+              </div>
+              <div class="text-[13px] text-white/40 font-medium">
+                The scholarship is applied before your first payment. Same quality, same teacher,
+                same everything.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>
