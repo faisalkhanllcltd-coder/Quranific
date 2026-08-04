@@ -3,7 +3,6 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
-import Section from '../components/ui/Section.astro';
 import PageHero from '../components/sections/PageHero.astro';
 import TuitionPlans from '../components/sections/TuitionPlans.astro';
 import Scholarship from '../components/sections/Scholarship.astro';
@@ -58,7 +57,7 @@ const Icons = {
       secondaryCtaText="Ask about pricing"
       secondaryCtaLink="https://wa.me/923112112122"
     >
-      <div slot="checklist" class="flex flex-col gap-4 mb-10">
+      <div slot="checklist" class="flex flex-col items-center gap-4 mb-10">
         <div class="flex items-center gap-3 text-sm font-medium text-emerald-800">
           <div
             class="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0"
@@ -105,63 +104,19 @@ const Icons = {
           >
         </div>
       </div>
-
-      <div
-        slot="visual"
-        class="relative w-full h-96 lg:h-full min-h-[400px] rounded-[2rem] overflow-hidden bg-emerald-950 border border-emerald-900/10 shadow-2xl group flex items-center justify-center"
-      >
-        <img
-          src="/images/platform-demo.gif"
-          alt="Live 1-on-1 Quranific Class"
-          class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-        />
-        <div class="absolute bottom-6 left-6 right-6 flex items-center justify-between z-10">
-          <div
-            class="bg-white/95 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-2.5 shadow-xl"
-          >
-            <div class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></div>
-            <span class="text-[11px] font-bold text-emerald-950 uppercase tracking-wider"
-              >Live 1-on-1</span
-            >
-          </div>
-        </div>
-      </div>
     </PageHero>
 
     <TuitionPlans />
 
     <Scholarship />
 
-    <Section height={800} class="py-12 md:py-24 bg-cream-50 border-y border-emerald-100" id="faq">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-20 items-start">
-          <div class="lg:sticky lg:top-32">
-            <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3"
-              >Pricing Questions</span
-            >
-            <h2 class="text-4xl font-bold text-emerald-950 mb-6 tracking-tight leading-tight">
-              Every question <br /><em class="font-serif italic text-emerald-700 font-medium"
-                >answered honestly.</em
-              >
-            </h2>
-            <p class="text-lg text-emerald-900/80 font-medium mb-10">
-              These are the real questions parents ask before paying. We have answered every one
-              without spin.
-            </p>
-            <div class="bg-white border border-emerald-100 rounded-3xl p-8 shadow-sm">
-              <div class="text-4xl mb-4" aria-hidden="true">🛡️</div>
-              <h3 class="font-bold text-xl text-emerald-950 mb-3">Our Full-Month Guarantee</h3>
-              <p class="text-[15px] text-emerald-800 font-medium leading-relaxed">
-                If after your first full paid month you are not completely satisfied, for any
-                reason, we refund every penny. No questions, no forms, no chasing. One email to us
-                and it is done.
-              </p>
-            </div>
-          </div>
-          <FAQAccordion questions={faqs.pricing} />
-        </div>
-      </div>
-    </Section>
+    <FAQAccordion
+      questions={faqs.pricing}
+      eyebrow="Pricing Questions"
+      title="Every question "
+      highlightWord="answered honestly."
+      subtitle="These are the real questions parents ask before paying. We have answered every one without spin."
+    />
   </main>
 
   <Footer />

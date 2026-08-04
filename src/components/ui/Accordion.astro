@@ -1,0 +1,55 @@
+---
+export interface Props {
+  questions: { question: string; answer: string }[];
+}
+const { questions } = Astro.props;
+---
+
+<div class="space-y-4">
+  {
+    questions.map((faq) => (
+      <details class="group bg-white border border-emerald-100 rounded-2xl [&_summary::-webkit-details-marker]:hidden shadow-sm">
+        <summary class="flex items-center justify-between cursor-pointer p-6 font-semibold text-emerald-950 text-[17px]">
+          {faq.question}
+          <span
+            class="transition group-open:rotate-180 bg-emerald-50 text-emerald-700 p-2 rounded-full border border-emerald-200"
+            aria-hidden="true"
+          >
+            <svg
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2.5"
+              viewBox="0 0 24 24"
+              width="20"
+              aria-hidden="true"
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </span>
+        </summary>
+        <div
+          class="text-emerald-800 text-[15px] font-medium leading-relaxed px-6 pb-6"
+          set:html={faq.answer}
+        />
+      </details>
+    ))
+  }
+</div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const detailElements = document.querySelectorAll('details.group');
+    detailElements.forEach((targetDetail) => {
+      targetDetail.addEventListener('click', () => {
+        detailElements.forEach((detail) => {
+          if (detail !== targetDetail) {
+            detail.removeAttribute('open');
+          }
+        });
+      });
+    });
+  });
+</script>

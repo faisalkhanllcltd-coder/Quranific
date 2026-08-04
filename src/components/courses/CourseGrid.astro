@@ -1,0 +1,21 @@
+---
+// src/components/courses/CourseGrid.astro
+// Data-driven grid of all courses. Wraps each <CourseCard> in a filterable container.
+// Filter tabs toggle visibility via data-category attributes on .course-wrapper divs.
+import { courses } from '../../constants/courses';
+import CourseCard from './CourseCard.astro';
+---
+
+<div
+  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+  id="course-cards-container"
+  aria-label="Available courses"
+>
+  {
+    courses.map((course) => (
+      <div class="course-wrapper" data-category={course.category}>
+        <CourseCard course={course} />
+      </div>
+    ))
+  }
+</div>

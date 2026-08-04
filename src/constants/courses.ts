@@ -1,106 +1,222 @@
-// src/data/courses.ts
+// src/constants/courses.ts
+// Single source of truth for all course data.
+// Consumed by: courses/index.astro, courses/[slug].astro, CourseCard.astro,
+//              CourseGrid.astro, ComparisonTable.astro, funnel dropdowns, JSON-LD schemas.
 
 export type CourseLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'All Levels';
-export type CourseSlug = 'basic-qaida' | 'quran-reading-with-tajweed' | 'quran-memorization' | 'quran-translation-with-tafsir' | 'advanced-tajweed-ijazah' | 'arabic-language';
+export type CourseCategory = 'Kids' | 'Adult' | 'All Ages' | 'Specialist';
+export type CourseSlug =
+  | 'basic-qaida'
+  | 'quran-reading-with-tajweed'
+  | 'quran-memorization'
+  | 'quran-translation-with-tafsir'
+  | 'advanced-tajweed-ijazah'
+  | 'arabic-language';
 
 export interface Course {
   slug: CourseSlug;
   title: string;
-  shortTitle: string;     // For mobile headers or tight UI spaces
-  shortDesc: string;      // For Header Dropdowns and Mega Page Cards
-  longDesc: string;       // For the dedicated detail page
-  icon: string;           // Emoji or SVG reference
+  shortTitle: string; // For mobile headers or tight UI spaces
+  shortDesc: string; // For header dropdowns and mega page cards
+  longDesc: string; // For the dedicated detail page
+  icon: string; // Emoji reference
   level: CourseLevel;
-  duration: string;       // E.g., "Flexible (Avg. 2-3 Months)"
-  durationMinutes: 30 | 45 | 60; // For booking/scheduling logic
-  features: string[];     // Bullet points for the sales page
-  riveFile: string;       // For animation assets
+  category: CourseCategory;
+  duration: string; // Human-readable, e.g. "Flexible (Avg. 2–3 Months)"
+  durationMinutes: 30 | 45 | 60;
+  ageRange: string; // e.g. "Ages 5–15", "Adults 18+", "All Ages"
+  frequency: string; // e.g. "2–3 sessions/week", "Flexible"
+  price: string; // e.g. "From $39/mo", "From $59/mo"
+  features: string[]; // Bullet points for the course detail page
+  riveFile: string; // For animation assets (future use)
+  // Optional fields
+  highlight?: string; // Badge on the card, e.g. "Most Popular"
+  nooraniQaida?: boolean; // Includes Noorani Qaida content
+  hifzIncluded?: 'full' | 'partial' | 'none';
+  senAdapted?: boolean; // SEN/learning-differences-adapted teaching
+  groupSize?: string; // Always "1-on-1" but kept flexible
 }
 
 // THE SINGLE SOURCE OF TRUTH
 export const courses: Course[] = [
   {
-    slug: "basic-qaida",
-    title: "Basic Qaida",
-    shortTitle: "Qaida",
-    shortDesc: "Perfect for absolute beginners.",
-    longDesc: "Start your Quranic journey by mastering the Arabic alphabet, correct pronunciation (Makharij), and basic joining of letters. This is the mandatory foundation for fluent reading.",
-    icon: "📖",
-    level: "Beginner",
-    duration: "Flexible (Avg. 2-3 Months)",
+    slug: 'basic-qaida',
+    title: 'Basic Qaida',
+    shortTitle: 'Qaida',
+    shortDesc: 'Perfect for absolute beginners — learn every Arabic letter from zero.',
+    longDesc:
+      'Start your Quranic journey by mastering the Arabic alphabet, correct pronunciation (Makharij), and the basic joining of letters. This is the mandatory foundation for fluent Quranic reading, taught gently and patiently for young learners and adult beginners alike.',
+    icon: '📖',
+    level: 'Beginner',
+    category: 'Kids',
+    duration: 'Avg. 2–3 Months',
     durationMinutes: 30,
-    features: ["Arabic Alphabet Recognition", "Correct Pronunciation (Makharij)", "Vowel Marks (Harakat)", "Joining Letters"],
-    riveFile: "course-qaida.riv"
+    ageRange: 'Ages 4–14',
+    frequency: '2–3 sessions/week',
+    price: 'From $39/mo',
+    features: [
+      'Arabic Alphabet Recognition (all 29 letters)',
+      'Correct Pronunciation & Makharij',
+      'Vowel Marks (Harakat: Fatha, Kasra, Dhamma)',
+      'Letter Joining & Word Formation',
+      'Noorani Qaida reading system',
+      'Introduction to short Surahs',
+    ],
+    riveFile: 'course-qaida.riv',
+    highlight: 'Best for Beginners',
+    nooraniQaida: true,
+    hifzIncluded: 'none',
+    senAdapted: false,
   },
   {
-    // FIX: Standardized slug to match the form dropdowns
-    slug: "quran-reading-with-tajweed",
-    title: "Quran Reading with Tajweed",
-    shortTitle: "Tajweed",
-    shortDesc: "Read fluently with proper rules.",
-    longDesc: "Learn to read the Holy Quran beautifully and accurately. We focus on implementing foundational Tajweed rules so you can recite with confidence and precision.",
-    icon: "🎙️",
-    level: "All Levels",
-    duration: "Ongoing",
+    slug: 'quran-reading-with-tajweed',
+    title: 'Quran Reading with Tajweed',
+    shortTitle: 'Tajweed',
+    shortDesc: 'Read the Quran fluently and beautifully with correct Tajweed rules.',
+    longDesc:
+      'Learn to read the Holy Quran beautifully and accurately. We focus on implementing foundational and advanced Tajweed rules — from Makhaarij to Noon Sakinah, Madd, and Waqf — so you recite with the confidence and precision the Quran deserves.',
+    icon: '🎙️',
+    level: 'All Levels',
+    category: 'All Ages',
+    duration: 'Ongoing',
     durationMinutes: 45,
-    features: ["Fluid Recitation", "Application of Tajweed Rules", "Breath Control (Waqf)", "Error Correction"],
-    riveFile: "course-tajweed.riv"
+    ageRange: 'Ages 8+',
+    frequency: '2–3 sessions/week',
+    price: 'From $39/mo',
+    features: [
+      'Full Tajweed rules: Makhaarij, Sifaat, Noon Sakinah, Madd',
+      'Fluid Recitation & Fluency Building',
+      'Waqf & Ibtida (correct stopping and starting)',
+      'Juz Amma full recitation with Tajweed applied',
+      'Error Correction by Ijazah-certified teacher',
+      'Weekly Surah sign-off assessments',
+    ],
+    riveFile: 'course-tajweed.riv',
+    highlight: 'Most Popular',
+    nooraniQaida: false,
+    hifzIncluded: 'partial',
+    senAdapted: false,
   },
   {
-    slug: "quran-memorization",
-    title: "Quran Memorization (Hifz)",
-    shortTitle: "Memorization",
-    shortDesc: "Hifz programs for all ages.",
-    longDesc: "Structured Hifz programs tailored to your memorization capacity. We employ proven retention techniques, balancing new lessons (Sabaq) with daily revision (Manzil).",
-    icon: "🧠",
-    level: "All Levels",
-    duration: "1 to 3+ Years",
+    slug: 'quran-memorization',
+    title: 'Quran Memorization (Hifz)',
+    shortTitle: 'Hifz',
+    shortDesc: 'Structured Hifz programmes for children and adults of all ages.',
+    longDesc:
+      'Structured Hifz programmes tailored to your memorisation capacity. We employ proven retention techniques — balancing new lessons (Sabaq) with daily revision (Sabqi and Manzil) — to ensure what is memorised stays memorised. Matched with an Ijazah-holding specialist.',
+    icon: '🧠',
+    level: 'All Levels',
+    category: 'All Ages',
+    duration: '1 to 3+ Years',
     durationMinutes: 45,
-    features: ["Custom Memorization Plan", "Daily Sabaq & Sabqi", "Long-term Retention (Manzil)", "Progress Tracking"],
-    riveFile: "course-hifz.riv"
+    ageRange: 'All Ages',
+    frequency: '3–5 sessions/week',
+    price: 'From $59/mo',
+    features: [
+      'Custom Memorisation Plan tailored to your pace',
+      'Daily Sabaq (new portion) & Sabqi (recent revision)',
+      'Long-term Manzil (full Quran revision) cycles',
+      'Spaced Repetition for unbreakable retention',
+      'Waqf & Ibtida: correct stopping and starting rules',
+      'Progress Tracking with on-demand reports',
+    ],
+    riveFile: 'course-hifz.riv',
+    nooraniQaida: false,
+    hifzIncluded: 'full',
+    senAdapted: false,
   },
   {
-    // FIX: Standardized slug to match the form dropdowns
-    slug: "quran-translation-with-tafsir",
-    title: "Quran Translation & Tafsir",
-    shortTitle: "Tafsir",
-    shortDesc: "Understand the meaning deeply.",
-    longDesc: "Go beyond recitation and understand the profound meanings of the verses. This course covers word-by-word translation and the historical context (Asbab al-Nuzul) of the surahs.",
-    icon: "💡",
-    level: "Intermediate",
-    duration: "Ongoing",
+    slug: 'quran-translation-with-tafsir',
+    title: 'Quran Translation & Tafsir',
+    shortTitle: 'Tafsir',
+    shortDesc: 'Understand the profound meaning of every verse, word by word.',
+    longDesc:
+      'Go beyond recitation and understand the profound meanings of the verses. This course covers word-by-word translation, grammatical analysis, and the historical context (Asbab al-Nuzul) of the Surahs, so the Quran speaks to you directly in your daily life.',
+    icon: '💡',
+    level: 'Intermediate',
+    category: 'Adult',
+    duration: 'Ongoing',
     durationMinutes: 60,
-    features: ["Word-by-Word Translation", "Contextual Tafsir", "Practical Life Application", "Thematic Studies"],
-    riveFile: "course-tafsir.riv"
+    ageRange: 'Ages 14+',
+    frequency: '1–2 sessions/week',
+    price: 'From $49/mo',
+    features: [
+      'Word-by-Word Translation with grammatical analysis',
+      'Contextual Tafsir (Asbab al-Nuzul: reasons for revelation)',
+      'Practical Life Application of Quranic guidance',
+      'Thematic Studies across related Surahs',
+      'Understanding Quranic Arabic vocabulary',
+      'Scholar-referenced commentary (Tafsir Ibn Kathir & others)',
+    ],
+    riveFile: 'course-tafsir.riv',
+    nooraniQaida: false,
+    hifzIncluded: 'none',
+    senAdapted: false,
   },
   {
-    // FIX: Standardized slug
-    slug: "advanced-tajweed-ijazah",
-    title: "Advanced Tajweed (Ijazah)",
-    shortTitle: "Ijazah",
-    shortDesc: "Mastery for dedicated students.",
-    longDesc: "For advanced reciters seeking an Ijazah (certification) with an unbroken chain of transmission (Sanad) to the Prophet Muhammad (PBUH). Strict adherence to perfect Makharij and Sifat.",
-    icon: "📜",
-    level: "Advanced",
-    duration: "Varies by Student",
+    slug: 'advanced-tajweed-ijazah',
+    title: 'Advanced Tajweed (Ijazah)',
+    shortTitle: 'Ijazah',
+    shortDesc: 'Earn an Ijazah with an unbroken chain back to the Prophet ﷺ.',
+    longDesc:
+      'For advanced reciters seeking an Ijazah — a certification with an unbroken chain of transmission (Sanad) back to the Prophet Muhammad (ﷺ). Strict adherence to perfect Makharij, Sifaat, and all Tajweed rules under direct examination by a certified Ijazah holder.',
+    icon: '📜',
+    level: 'Advanced',
+    category: 'Specialist',
+    duration: 'Varies by Student',
     durationMinutes: 60,
-    features: ["Sanad Connection", "Rigorous Testing", "Mastery of Sifat", "Official Certification"],
-    riveFile: "course-ijazah.riv"
+    ageRange: 'Adults (strong Tajweed req.)',
+    frequency: '3–5 sessions/week',
+    price: 'From $79/mo',
+    features: [
+      'Sanad Connection: unbroken chain to the Prophet ﷺ',
+      'Rigorous Testing of all Tajweed rules',
+      'Mastery of Sifaat al-Huruf (letter characteristics)',
+      'Makharij perfection under live examination',
+      'Full recitation of the Quran with teacher sign-off',
+      'Official Ijazah Certificate upon completion',
+    ],
+    riveFile: 'course-ijazah.riv',
+    highlight: 'Certification',
+    nooraniQaida: false,
+    hifzIncluded: 'full',
+    senAdapted: false,
   },
   {
-    slug: "arabic-language",
-    title: "Arabic Language",
-    shortTitle: "Arabic",
-    shortDesc: "Speak and understand Arabic.",
-    longDesc: "Master Classical (Fusha) and conversational Arabic. Understand the grammar (Nahw) and morphology (Sarf) necessary to comprehend the Quran directly in its revealed language.",
-    icon: "🗣️",
-    level: "All Levels",
-    duration: "Ongoing",
+    slug: 'arabic-language',
+    title: 'Arabic Language',
+    shortTitle: 'Arabic',
+    shortDesc: 'Master Classical Arabic grammar and vocabulary to understand the Quran directly.',
+    longDesc:
+      'Master Classical (Fusha) Arabic — the language of the Quran. Understand the grammar (Nahw) and morphology (Sarf) necessary to comprehend the Quran directly in its revealed language, removing the dependency on translations for your Quranic understanding.',
+    icon: '🗣️',
+    level: 'All Levels',
+    category: 'All Ages',
+    duration: 'Ongoing',
     durationMinutes: 45,
-    features: ["Vocabulary Building", "Grammar (Nahw & Sarf)", "Conversational Practice", "Reading Comprehension"],
-    riveFile: "course-arabic.riv"
-  }
+    ageRange: 'Ages 10+',
+    frequency: '2–3 sessions/week',
+    price: 'From $39/mo',
+    features: [
+      'Vocabulary Building (core Quranic word roots)',
+      'Grammar: Nahw (syntax) & Sarf (morphology)',
+      'Reading Comprehension of Quranic passages',
+      'Conversational Classical Arabic practice',
+      'Quran word analysis: understanding each verse directly',
+      'Medina Arabic Book series curriculum',
+    ],
+    riveFile: 'course-arabic.riv',
+    nooraniQaida: false,
+    hifzIncluded: 'none',
+    senAdapted: false,
+  },
 ];
 
-// Convenience export for funnel dropdowns
+// Convenience exports
 export const COURSE_LIST = courses;
+
+/** Distinct category values present in the data — used for filter chips. */
+export const COURSE_CATEGORIES: string[] = [
+  'All Courses',
+  ...Array.from(new Set(courses.map((c) => c.category))),
+];

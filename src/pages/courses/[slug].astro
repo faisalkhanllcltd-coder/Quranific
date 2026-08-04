@@ -1,117 +1,209 @@
 ---
 // src/pages/courses/[slug].astro
 import Page from '../../layouts/Page.astro';
-// SEO FIX (L-02): Importing the missing Breadcrumb component for Google Rich Snippets
 import Breadcrumb from '../../components/seo/Breadcrumb.astro';
-
-// ARCHITECTURE FIX: Pointing to the unified data engine
 import { courses } from '../../constants/courses';
-// SECURITY FIX (C-06): Importing canonical SITE data
 import { SITE } from '../../constants/site';
+import { faqs } from '../../data/faqs';
+import TeacherTeaserBanner from '../../components/courses/TeacherTeaserBanner.astro';
+import CoursesFAQ from '../../components/courses/CoursesFAQ.astro';
+import FinalCTA from '../../components/sections/FinalCTA.astro';
 
-// 1. Tell Astro to generate a page for every item in the Brain
 export function getStaticPaths() {
-  return courses.map(course => ({
+  return courses.map((course) => ({
     params: { slug: course.slug },
-    props: { course }, // We pass the entire course object into the page
+    props: { course },
   }));
 }
 
-// 2. Extract the specific course data for the current page
 const { course } = Astro.props;
 
-// 3. 🧠 INVISIBLE SEO: Tell Google exactly what this course is
-const schema = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Course",
-  "name": course.title,
-  "description": course.longDesc,
-  "provider": {
-    "@type": "Organization",
-    "name": "Quranific Academy",
-    "sameAs": "https://quranific.com"
+// Extract numeric value from string for Google Schema (e.g., "From $39/mo" -> "39")
+const priceMatch = course.price.match(/\d+/);
+const numericPrice = priceMatch ? priceMatch[0] : '0';
+
+// Elite Edge SEO: Dynamic JSON-LD Course Schema
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: course.title,
+  description: course.longDesc,
+  provider: {
+    '@type': 'Organization',
+    name: SITE.name,
+    sameAs: SITE.url,
   },
-  "educationalCredentialAwarded": "Certificate of Completion",
-  "hasCourseInstance": {
-    "@type": "CourseInstance",
-    "courseMode": "Online",
-    "courseWorkload": course.duration
-  }
-});
+  typicalAgeRange: course.ageRange,
+  hasCourseInstance: {
+    '@type': 'CourseInstance',
+    courseMode: 'Online',
+    courseWorkload: course.duration,
+    offers: {
+      '@type': 'Offer',
+      price: numericPrice,
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+    },
+  },
+};
+
+// Strict Google Policy Compliance: Only award credentials to actual certification tracks
+if (course.slug === 'advanced-tajweed-ijazah') {
+  schema.educationalCredentialAwarded = 'Ijazah Certificate';
+}
 ---
 
-<Page 
-  title={`${course.title} | Quranific Academy`}
-  description={course.shortDesc}
->
+<Page title={`${course.title} | ${SITE.name}`} description={course.shortDesc}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={schema} is:inline />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   </Fragment>
 
-  <div class="bg-emerald-950 pt-32 pb-6 px-4 border-b border-emerald-900/50">
-    <div class="max-w-4xl mx-auto flex items-center gap-2 text-xs font-bold text-emerald-200/60">
-      <a href="/" class="hover:text-white transition-colors">Home</a>
-      <span>/</span>
-      <a href="/courses" class="hover:text-white transition-colors">Courses</a>
-      <span>/</span>
-      <span class="text-emerald-400">{course.title}</span>
+  <!-- Hero Section -->
+  <div class="bg-emerald-950 pt-32 pb-32 relative overflow-hidden">
+    <!-- Subtle background glow -->
+    <div
+      class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none"
+      aria-hidden="true"
+    >
     </div>
-    <Breadcrumb items={[
-      { name: "Home", url: "/" },
-      { name: "Courses", url: "/courses" },
-      { name: course.title, url: `/courses/${course.slug}` }
-    ]} />
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
+      <!-- Clean, De-duplicated Breadcrumb -->
+      <div class="mb-10">
+        <Breadcrumb
+          items={[
+            { name: 'Home', url: '/' },
+            { name: 'Courses', url: '/courses' },
+            { name: course.title, url: `/courses/${course.slug}` },
+          ]}
+        />
+      </div>
+
+      <div class="text-center max-w-3xl mx-auto">
+        <!-- Conditional Highlight Ribbon -->
+        {
+          course.highlight && (
+            <div class="inline-flex items-center justify-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-bold uppercase tracking-widest rounded-full mb-6">
+              ★ {course.highlight}
+            </div>
+          )
+        }
+
+        <div class="text-5xl mb-6" aria-hidden="true">{course.icon}</div>
+
+        <h1
+          class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-tight text-balance"
+        >
+          {course.title}
+        </h1>
+
+        <p
+          class="text-lg md:text-xl text-emerald-100/80 font-medium mb-10 leading-relaxed text-balance"
+        >
+          {course.longDesc}
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a
+            href={`/funnel/signup?course=${course.slug}`}
+            class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-3.5 bg-white text-emerald-950 hover:bg-emerald-50 font-bold rounded-xl transition-all duration-200 shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] hover:scale-[1.02] text-[15px]"
+          >
+            Start Free Trial
+          </a>
+
+          <a
+            href={SITE.whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-3.5 bg-emerald-900/40 border border-emerald-700/50 text-white hover:bg-emerald-800/60 hover:border-emerald-500/50 font-semibold rounded-xl transition-all duration-200 text-[15px] backdrop-blur-sm"
+          >
+            <svg
+              class="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              ><path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
+              ></path></svg
+            >
+            Ask a Question
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <section class="py-16 md:py-24 bg-emerald-950 text-center px-4 border-b border-emerald-900">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-6xl mb-6 group-hover:scale-110 transition-transform">{course.icon}</div>
-      
-      <div class="flex items-center justify-center gap-4 mb-6">
-        <span class="px-3 py-1 rounded-full bg-emerald-900 text-emerald-300 text-xs font-bold border border-emerald-800">
-          {course.level}
-        </span>
-        <span class="px-3 py-1 rounded-full bg-emerald-900 text-emerald-300 text-xs font-bold border border-emerald-800">
-          ⏱️ {course.duration}
-        </span>
-      </div>
-      
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white font-serif mb-8 tracking-tight">
-        {course.title}
-      </h1>
-      
-      <p class="text-lg md:text-xl text-emerald-100/80 leading-relaxed max-w-2xl mx-auto mb-10">
-        {course.longDesc}
-      </p>
-
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="/funnel/signup" class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2.5 text-sm font-semibold text-emerald-950 bg-emerald-400 hover:bg-emerald-300 rounded-lg shadow-lg hover:shadow-emerald-400/20 active:scale-95 transition-all min-h-[44px]">
-          Start Your Free Trial
-        </a>
-        <a href={SITE.whatsappLink} target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2.5 text-sm font-semibold text-white bg-transparent border border-emerald-700 hover:bg-emerald-900 rounded-lg transition-all min-h-[44px]">
-          Ask a Question
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <section class="py-24 bg-[#fefdf9]">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="bg-white rounded-3xl p-8 md:p-12 border border-emerald-100 shadow-sm">
-        <h2 class="text-2xl md:text-3xl font-black text-emerald-950 font-serif mb-8">What You Will Learn</h2>
-        
-        <div class="grid sm:grid-cols-2 gap-6">
-          {course.features.map(feature => (
-            <div class="flex items-start gap-4 p-4 rounded-2xl bg-emerald-50/50 border border-emerald-50">
-              <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold">✓</div>
-              <div class="pt-1 font-bold text-emerald-900 text-sm leading-relaxed">{feature}</div>
-            </div>
-          ))}
+  <!-- Quick Facts Floating Strip -->
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-20 -mt-16">
+    <div
+      class="bg-white rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 p-6 md:p-10"
+    >
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 divide-x divide-emerald-50">
+        <div class="flex flex-col px-4 text-center">
+          <span class="text-emerald-900/50 text-[11px] font-bold uppercase tracking-widest mb-1.5"
+            >Ages</span
+          >
+          <span class="text-emerald-950 font-semibold text-[15px]">{course.ageRange}</span>
         </div>
-        
+
+        <div class="flex flex-col px-4 text-center">
+          <span class="text-emerald-900/50 text-[11px] font-bold uppercase tracking-widest mb-1.5"
+            >Schedule</span
+          >
+          <span class="text-emerald-950 font-semibold text-[15px]">{course.frequency}</span>
+        </div>
+
+        <div class="flex flex-col px-4 text-center">
+          <span class="text-emerald-900/50 text-[11px] font-bold uppercase tracking-widest mb-1.5"
+            >Duration</span
+          >
+          <span class="text-emerald-950 font-semibold text-[15px]">{course.duration}</span>
+        </div>
+
+        <div class="flex flex-col px-4 text-center">
+          <span class="text-emerald-900/50 text-[11px] font-bold uppercase tracking-widest mb-1.5"
+            >Tuition</span
+          >
+          <span class="text-emerald-950 font-semibold text-[15px]">{course.price}</span>
+        </div>
       </div>
-      
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <section class="py-24 bg-cream-50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-emerald-950 tracking-tight">
+          What You Will Learn
+        </h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-x-12 gap-y-6">
+        {
+          course.features.map((feature) => (
+            <div class="flex items-start gap-4 p-4 rounded-2xl bg-white border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div class="shrink-0 mt-0.5">
+                <svg
+                  class="w-6 h-6 text-emerald-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p class="text-emerald-900/80 font-medium text-[15px] leading-relaxed">{feature}</p>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </section>
+
+  <!-- Dynamic Bottom Funnel Components -->
+  <TeacherTeaserBanner />
+  <CoursesFAQ faqs={faqs.courses} />
+  <FinalCTA />
 </Page>

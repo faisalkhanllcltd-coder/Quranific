@@ -3,37 +3,53 @@ export type FAQ = { question: string; answer: string };
 export const faqs: Record<string, FAQ[]> = {
   home: [
     {
-      question: 'What if my child misses a class?',
+      question: 'How exactly do the online classes work?',
       answer:
-        'Every single missed class has a guaranteed make-up session: no exceptions, no expiry. Life happens: travel, illness, school events. You simply notify us and we schedule a replacement within the same week where possible. You never lose a session.',
+        'Our classes are completely live and 1-on-1, conducted via secure video call. The teacher uses an interactive digital whiteboard to guide your child through the Quran, allowing for real-time feedback and focusing strictly on their individual pace without the distractions of a group setting.',
     },
     {
-      question: 'How do I know the teacher is genuinely qualified?',
+      question: 'Do I need any special equipment or software?',
       answer:
-        'Every Quranific teacher must hold a verified <strong>ijazah</strong> (a chain of transmission connecting them to the Prophet (ﷺ) through unbroken teachers). Beyond that, they complete a 3-stage vetting process: a recorded recitation assessment, a teaching methodology interview, and a background check. You receive their full profile before the first session. If you ever want a different teacher, we switch immediately, no questions asked.',
+        'No special equipment is required. You only need a laptop, tablet, or desktop computer, a stable internet connection, and a pair of headphones to help your child focus. We provide all the necessary digital learning materials directly on the screen.',
     },
     {
-      question: "What if it doesn't work for us?",
+      question: 'How does the 1-month money-back guarantee work?',
       answer:
-        "The first class is completely free, no credit card needed and no commitment. If you join after that and you're not satisfied within your first paid month, we <strong>refund every penny</strong>. One email is all it takes. We're not interested in holding onto money from families who aren't thrilled. We'd rather earn your trust than your subscription.",
+        'It is a complete risk-reversal. If you are not entirely satisfied after your first full paid month, we will issue a full refund. No questions asked, no complicated forms, and no chasing. You just send us a single email.',
     },
     {
-      question: "Is my child's session safe and private?",
+      question: 'Can we choose a male or female teacher?',
       answer:
-        "Every session is strictly <strong>1-on-1</strong>, conducted on a private, secure video link. Sessions are never recorded without explicit parental consent. You can join any session unannounced; your child's teacher will expect this and welcomes it. All teachers also carry safeguarding training.",
+        'Yes. We understand the importance of cultural and personal comfort, so you have full control over selecting a male or female teacher. Regardless of who you choose, every single teacher on our platform holds a verified Ijazah.',
     },
     {
-      question: 'My child is a complete beginner. Is that okay?',
+      question: 'At what age can my child start?',
       answer:
-        'Beginners are our specialty. <strong>Over 60% of our students start from zero</strong>: no Arabic, no prior Quran knowledge. We assess your child\'s level in the first free class and build an individual learning plan from there. There\'s no "too late" and no "too early." We\'ve taught children from age 4 and adults in their 60s.',
+        "We have specialized courses designed for children starting from age 4. Our curriculum is highly adaptable, catering to complete beginners in our kids' programs all the way up to advanced modules for adults.",
     },
     {
-      question: 'How long until I notice a real difference?',
+      question: 'How do we get started?',
       answer:
-        "Most parents notice a shift in their child's attitude toward the Quran within the <strong>first two to three weeks</strong>. Progress in recitation depends on age, frequency of sessions, and prior exposure, but our teachers set clear, measurable milestones and share them with you weekly so you always know exactly where your child stands.",
+        'Our frictionless onboarding process takes just a few clicks. First, book a free trial class to meet your teacher. They will assess your level and recommend the best approach. After the trial, you can choose a monthly plan that fits your schedule.',
     },
   ],
-  general: [], // Common QA: "How long is each class?", "Do I need to buy textbooks?"
+  general: [
+    {
+      question: 'How do you handle time zone differences?',
+      answer:
+        "We have a truly global student base and our teachers are distributed worldwide. You can select your local time zone when booking, and we will match you with a teacher available exactly when you need them, whether it's early morning or late evening.",
+    },
+    {
+      question: 'What happens during public holidays or vacations?',
+      answer:
+        "If you're going on holiday, you can easily pause your sessions through the parent dashboard. Your billing is paused, and we hold your slot with the same teacher for when you return, ensuring continuous progression without paying for missed weeks.",
+    },
+    {
+      question: 'Do you issue certificates of completion?',
+      answer:
+        'Yes. Upon completing a specific module or course—such as finishing the Qaida or completing a Juz of memorization—your child will receive a digital certificate marking their milestone to encourage and motivate their ongoing journey.',
+    },
+  ], // Common QA: "How long is each class?", "Do I need to buy textbooks?"
   pricing: [
     {
       question: 'When does billing start? Do I pay before the first class?',
@@ -41,9 +57,19 @@ export const faqs: Record<string, FAQ[]> = {
         'No. <strong class="text-emerald-950">Your first class is completely free</strong> and requires no payment details. Billing begins only after you choose to continue (which means after you have attended the free trial, received the progress report, and made a conscious decision to enrol). You choose when the first payment happens, not us.',
     },
     {
-      question: 'Can I change my plan later?',
+      question: 'Can I upgrade or downgrade my plan at any time?',
       answer:
-        'Yes, always. You can upgrade, downgrade, or change session frequency at any time. <strong class="text-emerald-950">Changes take effect from the next billing cycle</strong>, with no penalty and no admin fee. If your child\'s progress accelerates and you want to add sessions, or if life gets busier and you need to reduce frequency, one message to us handles it completely.',
+        'Yes, always. You can increase or decrease your session frequency — or switch between plans entirely — at any point. <strong class="text-emerald-950">Changes take effect from your next billing cycle</strong>, with no penalty, no admin fee, and no minimum notice period. If your child\'s progress means they need more sessions, or your schedule tightens and you need fewer, one message to us is all it takes.',
+    },
+    {
+      question: 'How do I pay, and is the payment process secure?',
+      answer:
+        'Payments are processed through <strong class="text-emerald-950">Stripe</strong>, one of the world\'s most trusted payment platforms, used by millions of businesses globally. We accept all major debit and credit cards (Visa, Mastercard, American Express). Your card details are never stored by us — they are encrypted and held exclusively by Stripe under PCI-DSS Level 1 compliance, the highest standard available. You will receive an automatic receipt after every payment.',
+    },
+    {
+      question: 'What is your Full-Month Guarantee?',
+      answer:
+        'If after your first full paid month you are not completely satisfied, for any reason, we refund every penny. No questions, no forms, no chasing. One email to us and it is done.',
     },
     {
       question: 'What exactly is covered by the make-up guarantee?',
@@ -66,11 +92,103 @@ export const faqs: Record<string, FAQ[]> = {
         'Prices are listed in USD, which is our base currency. <strong class="text-emerald-950">Your card is charged in USD and your bank applies its standard conversion rate</strong>. We do not add a foreign exchange surcharge. Families in the UK, UAE, Canada, Australia, and the EU all pay in USD. If you would prefer an invoice in your local currency for accounting purposes, contact us and we will arrange it.',
     },
   ],
-  fees: [], // Pricing QA: "Are there sibling discounts?", "Is it a monthly contract?"
-  courses: [], // Curriculum QA: "Do you teach Hifz?", "What if I am an absolute beginner?"
+  courses: [
+    // ── SLOT 1: Trust / credibility ──────────────────────────────────────────
+    {
+      question: 'Who will be teaching my child?',
+      answer:
+        "Every Quranific teacher holds a verified <strong>Ijazah</strong> — a certified chain of Quranic transmission — and has passed our three-stage vetting process: a recorded recitation assessment, a structured teaching interview, and a full background check. You receive your teacher's complete profile before the first session. We also offer both <strong>male and female teachers</strong> so families can choose whoever they feel most comfortable with culturally and personally. If at any point you want a different teacher, we arrange a new match immediately, at no charge and with no awkward conversation required.",
+    },
+    // ── SLOT 2: Core value proposition ───────────────────────────────────────
+    {
+      question: 'Do the courses cover basic Islamic teachings like Salah and Dua?',
+      answer:
+        "Yes. Alongside Quran recitation, our teachers provide step-by-step guidance on the five daily prayers, covering the correct method of wudu, the sequence of rak'ahs, and the meaning behind each posture. Students also memorise the short Surahs most commonly recited in Salah — including Al-Fatiha and Al-Ikhlas — as well as the essential daily Duas for protection, gratitude, and morning and evening remembrance. Islamic studies content is woven naturally into the lesson rather than treated as a separate subject, so your child builds a living, practical connection to their faith from the very first session.",
+    },
+    // ── SLOT 3: Discovery / entry ─────────────────────────────────────────────
+    {
+      question: 'How do I know which programme is right for my child?',
+      answer:
+        'The free trial class is the definitive answer. In the very first session, your teacher conducts a diagnostic assessment and tells you exactly where your child stands and which programme fits best. You are not committed to any programme until after that session. If you want a head start, browse the programmes on this page — each one lists the age range, level, and learning outcomes so you can narrow down the options in under a minute.',
+    },
+    // ── SLOT 4: Objection removal — scheduling ────────────────────────────────
+    {
+      question: 'How flexible are the class timings?',
+      answer:
+        "Completely flexible. Because every session is strictly <strong>1-on-1</strong>, your class time is yours alone — there is no fixed group timetable to work around. We schedule sessions to fit your family's daily routine and accommodate any time zone worldwide. If your routine changes week to week, simply message us and we adjust. Many of our families book different slots on different weeks depending on school schedules, work commitments, or travel — and that is perfectly fine.",
+    },
+    // ── SLOT 5: Accessibility — SEN ───────────────────────────────────────────
+    {
+      question: 'My child has ADHD or a learning difference. Which course works for them?',
+      answer:
+        "The <strong>Basic Qaida</strong> or <strong>Quran Reading with Tajweed</strong> programmes can both be delivered in SEN-adapted format at no extra charge. Sessions are shortened to 20–25 minutes, structured differently with more frequent breaks, and taught by a teacher with specific SEN training. Simply note your child's needs in the signup form and we match them to the right teacher from day one.",
+    },
+    // ── SLOT 6: Accessibility — language ─────────────────────────────────────
+    {
+      question: 'What languages are the classes taught in?',
+      answer:
+        'Classes are delivered in <strong>English, Urdu, and Arabic</strong>, depending on your preference. Most of our teachers are fluent in all three and will naturally switch to whichever language your child is most comfortable in — or blend languages mid-session when it helps comprehension. You can specify your language preference in the signup form, and we match your child to a teacher whose first language aligns with yours.',
+    },
+    // ── SLOT 7: Risk removal — switching ──────────────────────────────────────
+    {
+      question: 'Can my child switch programmes if the level turns out to be wrong?',
+      answer:
+        'Yes, always, and at no extra cost. If the teacher sees a better fit after the first few sessions, they will tell you directly and recommend the switch themselves. We have no financial incentive to keep your child in the wrong programme. Switching is handled in one message and takes effect from the very next session.',
+    },
+    // ── SLOT 8: Progression milestone ────────────────────────────────────────
+    {
+      question: 'How long until my child is ready to start Hifz (memorisation)?',
+      answer:
+        'Hifz requires a solid Tajweed foundation — a child who memorises without it will embed errors that are very hard to correct later. Our teachers assess Hifz readiness honestly. Most children completing the Quran Reading with Tajweed programme are ready to begin Hifz within 12–18 months, depending on age and session frequency. Your teacher will tell you precisely when the transition is right.',
+    },
+    // ── SLOT 9: Niche — adult privacy ─────────────────────────────────────────
+    {
+      question: 'Is the adult programme completely private?',
+      answer:
+        'Yes. In the Adult Tajweed, Adult Hifz, Tafsir, and Ijazah programmes, sessions are strictly <strong>1-on-1</strong>, never recorded without your explicit consent, and never discussed in any group setting. Your teacher knows only your first name. Progress reports go only to you. Many of our adult students specifically enrol because they want to correct mistakes they have carried for years without anyone knowing.',
+    },
+    // ── SLOT 10: Confidence — teacher chemistry ───────────────────────────────
+    {
+      question: 'What if my child does not connect with the assigned teacher?',
+      answer:
+        'Teacher chemistry matters enormously in 1-on-1 learning. If your child does not connect with their teacher for any reason — personality, teaching style, pace — simply let us know and we arrange a new match immediately. There is no awkward conversation, no forms to fill, and absolutely no charge. We have done this many times and consider it a normal part of finding the right learning relationship.',
+    },
+  ],
   teachers: [], // Vetting QA: "Can I request a female teacher?", "Are teachers native Arabic speakers?"
-  safeguarding: [], // Security QA: "How are teachers vetted?", "Who monitors the sessions?"
-  technical: [], // IT QA: "Does it work on an iPad?", "Do we need our camera on?"
+  safeguarding: [
+    {
+      question: 'Are the teachers background checked?',
+      answer:
+        'Absolutely. Every single teacher undergoes a comprehensive identity and criminal background check before they ever teach a session. We have a zero-tolerance policy on safeguarding and take the security of our students extremely seriously.',
+    },
+    {
+      question: 'Can parents observe the sessions?',
+      answer:
+        'We actively encourage it. Because the classes are conducted via a secure online link, you are welcome to sit next to your child or join the meeting from another device at any time, unannounced. We want you to feel 100% comfortable with the teaching process.',
+    },
+    {
+      question: 'How secure are the video links?',
+      answer:
+        "All classes run on secure, private video links that are uniquely generated for your child's session. They are end-to-end encrypted and cannot be accessed by anyone without the specific link and passcode.",
+    },
+  ], // Security QA: "How are teachers vetted?", "Who monitors the sessions?"
+  technical: [
+    {
+      question: 'What are the internet speed requirements?',
+      answer:
+        'A standard broadband connection (around 5 Mbps) is perfectly fine for our live 1-on-1 video classes. If you can watch a YouTube video smoothly, your connection is strong enough for our sessions.',
+    },
+    {
+      question: 'Does the platform work on an iPad or tablet?',
+      answer:
+        'Yes, our classes are fully accessible across all devices including laptops, desktops, iPads, and Android tablets. We recommend using a device with a decent-sized screen so your child can easily see the interactive whiteboard.',
+    },
+    {
+      question: 'What if I forget my password or get locked out?',
+      answer:
+        "You can instantly reset your password via the login screen. If you're having trouble connecting to a class, our 24/7 technical support team is always available via WhatsApp to get you connected within minutes so you don't lose session time.",
+    },
+  ], // IT QA: "Does it work on an iPad?", "Do we need our camera on?"
   contact: [], // Support QA: "How fast do you reply to WhatsApp?"
   legal: [], // Policy QA: "How do you store my data?"
 };

@@ -10,7 +10,7 @@ import { faqs } from '../data/faqs';
 
 const tabCategories = [
   { id: 'home', label: 'Top Questions' },
-  { id: 'fees', label: 'Pricing & Refunds' },
+  { id: 'pricing', label: 'Pricing & Refunds' },
   { id: 'courses', label: 'Curriculum' },
   { id: 'teachers', label: 'Our Teachers' },
   { id: 'safeguarding', label: 'Safety & Privacy' },
@@ -107,7 +107,7 @@ const Icons = {
           {
             tabCategories.map((category) => (
               <div data-tab-panel={category.id} class={category.id === 'home' ? 'block' : 'hidden'}>
-                <FAQAccordion questions={faqs[category.id] || []} />
+                <FAQAccordion hideLeftColumn={true} questions={faqs[category.id] || []} />
               </div>
             ))
           }
