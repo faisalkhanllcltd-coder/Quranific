@@ -49,7 +49,7 @@ const schema = {
 
 // Strict Google Policy Compliance: Only award credentials to actual certification tracks
 if (course.slug === 'advanced-tajweed-ijazah') {
-  schema.educationalCredentialAwarded = 'Ijazah Certificate';
+  Object.assign(schema, { educationalCredentialAwarded: 'Ijazah Certificate' });
 }
 ---
 
