@@ -143,6 +143,16 @@ export const POST: APIRoute = async (context) => {
       w: validData.whatsapp,
       c: validData.country,
       s: validData.source,
+      // Calculator context — short keys to minimise JWT size
+      et: validData.enrollType,
+      dur: validData.duration,
+      ses: validData.sessions,
+      cur: validData.currency,
+      bil: validData.billing,
+      prc: validData.price,
+      crs: validData.course,
+      not: validData.note,
+      // Ad attribution
       ...trk,
     })
       .setProtectedHeader({ alg: 'HS256' })

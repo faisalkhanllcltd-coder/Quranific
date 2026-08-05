@@ -99,6 +99,16 @@ export const POST: APIRoute = async (context) => {
       w: string;
       c: string;
       s: string;
+      // Calculator context (short keys)
+      et?: string;
+      dur?: string;
+      ses?: string;
+      cur?: string;
+      bil?: string;
+      prc?: string;
+      crs?: string;
+      not?: string;
+      // Ad attribution
       fb?: string;
       gc?: string;
       tt?: string;

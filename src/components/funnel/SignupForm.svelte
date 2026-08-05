@@ -53,11 +53,15 @@
       ];
       const contextKeys = [
         'enrollType',
+        'duration',
         'sessions',
+        'currency',
         'billing',
+        'price',
+        'course',
+        'note',
         'age',
         'level',
-        'course',
         'gender',
         'teacherGender',
         'days',

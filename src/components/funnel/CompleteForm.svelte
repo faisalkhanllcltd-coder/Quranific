@@ -14,6 +14,10 @@
   let selectedLevel = $state('');
   let selectedDays = $state('');
   let selectedSchedule = $state('');
+  // Pre-fill from calculator
+  let selectedDuration = $state('');
+  let selectedSessions = $state('');
+  let selectedNote = $state('');
 
   // Hidden inputs are synced via $derived — no native <select> needed
   const genderOptions = ['Male', 'Female'];
@@ -21,6 +25,8 @@
   const levelOptions = ['Beginner', 'Intermediate', 'Advanced'];
   const daysOptions = ['2 Days', '3 Days', '4 Days', '5 Days'];
   const scheduleOptions = ['Morning', 'Afternoon', 'Evening', 'Night'];
+  const durationOptions = ['30 min', '40 min'];
+  const sessionsOptions = ['2x', '3x', '4x', '5x'];
 
   onMount(() => {
     // B-4 FIX: Session is now an HttpOnly cookie — it cannot be read from JS.
@@ -56,6 +62,16 @@
 
       const savedSchedule = params.get('schedule') || sessionStorage.getItem('q_track_schedule');
       if (savedSchedule) selectedSchedule = savedSchedule;
+
+      // Pre-fill from calculator context
+      const savedDuration = params.get('duration') || sessionStorage.getItem('q_track_duration');
+      if (savedDuration) selectedDuration = savedDuration;
+
+      const savedSessions = params.get('sessions') || sessionStorage.getItem('q_track_sessions');
+      if (savedSessions) selectedSessions = savedSessions;
+
+      const savedNote = params.get('note') || sessionStorage.getItem('q_track_note');
+      if (savedNote) selectedNote = savedNote;
     }
   });
 
@@ -74,6 +90,9 @@
     formData.set('level', selectedLevel);
     formData.set('days', selectedDays);
     formData.set('schedule', selectedSchedule);
+    formData.set('duration', selectedDuration);
+    formData.set('sessions', selectedSessions);
+    formData.set('note', selectedNote);
 
     try {
       const response = await fetch('/api/complete', { method: 'POST', body: formData });
@@ -197,6 +216,45 @@
     <input type="hidden" name="level" value={selectedLevel} />
   </div>
 
+  <!-- Session Length & Sessions / Week (pre-filled from calculator) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="space-y-2">
+      <label class="block text-sm font-semibold text-emerald-950">Session Length</label>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Session length">
+        {#each durationOptions as opt (opt)}
+          <button
+            type="button"
+            disabled={loading}
+            class={pillClass(selectedDuration, opt)}
+            aria-pressed={selectedDuration === opt}
+            onclick={() => (selectedDuration = opt)}
+          >
+            {opt}
+          </button>
+        {/each}
+      </div>
+      <input type="hidden" name="duration" value={selectedDuration} />
+    </div>
+
+    <div class="space-y-2">
+      <label class="block text-sm font-semibold text-emerald-950">Sessions / Week</label>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Sessions per week">
+        {#each sessionsOptions as opt (opt)}
+          <button
+            type="button"
+            disabled={loading}
+            class={pillClass(selectedSessions, opt)}
+            aria-pressed={selectedSessions === opt}
+            onclick={() => (selectedSessions = opt)}
+          >
+            {opt}
+          </button>
+        {/each}
+      </div>
+      <input type="hidden" name="sessions" value={selectedSessions} />
+    </div>
+  </div>
+
   <!-- Days per week & Preferred Time -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="space-y-2">
@@ -234,6 +292,19 @@
       </div>
       <input type="hidden" name="schedule" value={selectedSchedule} />
     </div>
+  </div>
+
+  <!-- Additional Notes -->
+  <div class="space-y-2">
+    <label class="block text-sm font-semibold text-emerald-950">Additional Notes</label>
+    <textarea
+      bind:value={selectedNote}
+      name="note"
+      rows="3"
+      disabled={loading}
+      placeholder="Any special requirements, preferred teacher traits, or questions for us..."
+      class="w-full px-4 py-3 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 resize-none placeholder:text-emerald-900/30"
+    ></textarea>
   </div>
 
   <button

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { COURSE_LIST } from '../../constants/courses';
+
   const PRICING_DATA = {
     USD: {
       '30': { '2': 33, '3': 41, '4': 46, '5': 50 },
@@ -52,6 +54,8 @@
   let sess = $state('3');
   let currency = $state('USD');
   let billing = $state('monthly');
+  let selectedCourse = $state(COURSE_LIST[0]?.slug || 'basic-qaida');
+  let courseNote = $state('');
 
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
   let basePrice = $derived((PRICING_DATA as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0);
@@ -67,9 +71,9 @@
     billing === 'annual' ? '12-month' : billing === 'sixMonth' ? '6-month' : 'monthly'
   );
 
-  // Hydration-safe relative URL
+  // Hydration-safe relative URL — includes course and note
   let queryParams = $derived(
-    `?enrollType=${who}&duration=${dur}&sessions=${sess}&currency=${currency}&billing=${billing}&price=${finalPrice}`
+    `?enrollType=${who}&duration=${dur}&sessions=${sess}&currency=${currency}&billing=${billing}&price=${finalPrice}&course=${encodeURIComponent(selectedCourse)}&note=${encodeURIComponent(courseNote)}`
   );
   let baseHref = $derived(`/funnel/signup${queryParams}`);
 
@@ -118,6 +122,30 @@
   </div>
 
   <div class="space-y-5">
+    <!-- Course -->
+    <div>
+      <div class="flex justify-between items-center mb-3">
+        <span class="text-sm font-bold text-emerald-900/60 uppercase tracking-wider">Course</span>
+      </div>
+      <select
+        bind:value={selectedCourse}
+        class="w-full px-4 py-2.5 bg-cream-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-900/70 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition-colors cursor-pointer"
+      >
+        {#each COURSE_LIST as course (course.slug)}
+          <option value={course.slug}>{course.title}</option>
+        {/each}
+        <option value="other">Not sure / Others</option>
+      </select>
+      {#if selectedCourse === 'other'}
+        <textarea
+          bind:value={courseNote}
+          rows="3"
+          placeholder="Type your message or leave it blank and talk directly with admin after submitting the form."
+          class="mt-3 w-full px-4 py-3 bg-cream-50 border border-emerald-200 rounded-lg text-sm text-emerald-900/80 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition-colors resize-none placeholder:text-emerald-900/30"
+        ></textarea>
+      {/if}
+    </div>
+
     <!-- Duration -->
     <div>
       <div class="flex justify-between items-center mb-3">

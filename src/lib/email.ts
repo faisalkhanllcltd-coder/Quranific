@@ -17,12 +17,22 @@ export interface Step1Data {
   w: string; // whatsapp
   c: string; // country
   s?: string; // source
-  fb?: string;
-  gc?: string;
-  tt?: string;
-  us?: string;
-  uc?: string;
-  um?: string;
+  // Ad attribution (short keys from JWT)
+  fb?: string; // fbclid
+  gc?: string; // gclid
+  tt?: string; // ttclid
+  us?: string; // utm_source
+  uc?: string; // utm_campaign
+  um?: string; // utm_medium
+  // Calculator context (short keys from JWT)
+  et?: string; // enrollType
+  dur?: string; // duration
+  ses?: string; // sessions
+  cur?: string; // currency
+  bil?: string; // billing
+  prc?: string; // price
+  crs?: string; // course (from calculator)
+  not?: string; // note (free-text from calculator)
 }
 
 export interface Step2Data {
@@ -32,6 +42,9 @@ export interface Step2Data {
   days: string;
   gender: string;
   teacherGender: string;
+  duration?: string;
+  sessions?: string;
+  note?: string;
 }
 
 const FALLBACK_ADMIN_EMAIL = 'faisalkhan.llc.ltd@gmail.com';
@@ -106,6 +119,21 @@ export async function sendFullAdminNotification(
   const safeWhatsapp = esc(String(step1Data.w || ''));
   const safeCountry = esc(String(step1Data.c || ''));
   const safeSource = esc(String(step1Data.s || 'organic'));
+  // Calculator context from JWT
+  const safeEnrollType = esc(String(step1Data.et || '—'));
+  const safeDuration = esc(String(step2Data.duration || step1Data.dur || '—'));
+  const safeSessions = esc(String(step2Data.sessions || step1Data.ses || '—'));
+  const safeCurrency = esc(String(step1Data.cur || '—'));
+  const safeBilling = esc(String(step1Data.bil || '—'));
+  const safePrice = esc(String(step1Data.prc || '—'));
+  const safeNote = esc(String(step2Data.note || step1Data.not || 'No additional notes'));
+  // Ad attribution
+  const safeGclid = esc(String(step1Data.gc || ''));
+  const safeFbclid = esc(String(step1Data.fb || ''));
+  const safeUtmSource = esc(String(step1Data.us || ''));
+  const safeUtmCampaign = esc(String(step1Data.uc || ''));
+  const safeUtmMedium = esc(String(step1Data.um || ''));
+  // Step 2 fields
   const safeCourse = esc(String(step2Data.course || ''));
   const safeLevel = esc(String(step2Data.level || ''));
   const safeSchedule = esc(String(step2Data.schedule || ''));
@@ -122,8 +150,23 @@ export async function sendFullAdminNotification(
         <p style="margin: 0 0 8px 0;"><strong>Traffic Source:</strong> <span style="color: #059669; font-weight: bold;">${safeSource}</span></p>
         <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${safeEmail}</p>
         <p style="margin: 0 0 8px 0;"><strong>WhatsApp:</strong> ${safeWhatsapp}</p>
-        <p style="margin: 0;"><strong>Country:</strong> ${safeCountry}</p>
+        <p style="margin: 0;""><strong>Country:</strong> ${safeCountry}</p>
       </div>
+
+      <h3 style="color: #0f172a; border-bottom: 2px solid #d1fae5; padding-bottom: 6px;">📊 Pre-fill Context &amp; Notes</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Enrol Type:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">${safeEnrollType}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Session Length:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">${safeDuration}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Sessions / Week:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">${safeSessions}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Currency:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">${safeCurrency}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Billing Cycle:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">${safeBilling}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Calculator Price:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #059669; font-weight: bold;">${safePrice}</td></tr>
+        <tr>
+          <td style="padding: 8px 0; vertical-align: top;"><strong>Additional Notes:</strong></td>
+          <td style="padding: 8px 0; color: #1e3a5f; font-style: italic;">${safeNote}</td>
+        </tr>
+      </table>
+
       <h3 style="color: #0f172a;">Course Preferences</h3>
       <table style="width: 100%; border-collapse: collapse;">
         <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Course:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">${safeCourse}</td></tr>
@@ -131,10 +174,24 @@ export async function sendFullAdminNotification(
         <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Schedule:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">${safeSchedule} (${safeDays})</td></tr>
         <tr><td style="padding: 8px 0;"><strong>Gender Match:</strong></td><td style="padding: 8px 0;">${safeGender} Student / ${safeTeacher}</td></tr>
       </table>
+
+      ${
+        safeGclid || safeFbclid || safeUtmSource
+          ? `
+      <h3 style="color: #0f172a; margin-top: 20px;">Ad Attribution</h3>
+      <table style="width: 100%; border-collapse: collapse; font-size: 12px; color: #64748b;">
+        ${safeGclid ? `<tr><td style="padding: 4px 0;"><strong>gclid:</strong></td><td style="padding: 4px 0;">${safeGclid}</td></tr>` : ''}
+        ${safeFbclid ? `<tr><td style="padding: 4px 0;"><strong>fbclid:</strong></td><td style="padding: 4px 0;">${safeFbclid}</td></tr>` : ''}
+        ${safeUtmSource ? `<tr><td style="padding: 4px 0;"><strong>utm_source:</strong></td><td style="padding: 4px 0;">${safeUtmSource}</td></tr>` : ''}
+        ${safeUtmCampaign ? `<tr><td style="padding: 4px 0;"><strong>utm_campaign:</strong></td><td style="padding: 4px 0;">${safeUtmCampaign}</td></tr>` : ''}
+        ${safeUtmMedium ? `<tr><td style="padding: 4px 0;"><strong>utm_medium:</strong></td><td style="padding: 4px 0;">${safeUtmMedium}</td></tr>` : ''}
+      </table>`
+          : ''
+      }
     </div>
   `;
 
-  const text = `🎉 New Student Lead: ${safeName}\n\nTraffic Source: ${safeSource}\nEmail: ${safeEmail}\nWhatsApp: ${safeWhatsapp}\nCountry: ${safeCountry}\n\nCourse Preferences\nCourse: ${safeCourse}\nLevel: ${safeLevel}\nSchedule: ${safeSchedule} (${safeDays})\nGender Match: ${safeGender} Student / ${safeTeacher}`;
+  const text = `🎉 New Student Lead: ${safeName}\n\nTraffic Source: ${safeSource}\nEmail: ${safeEmail}\nWhatsApp: ${safeWhatsapp}\nCountry: ${safeCountry}\n\nPre-fill Context\nEnrol Type: ${safeEnrollType}\nSession Length: ${safeDuration}\nSessions/Week: ${safeSessions}\nCurrency: ${safeCurrency}\nBilling: ${safeBilling}\nCalculator Price: ${safePrice}\nAdditional Notes: ${safeNote}\n\nCourse Preferences\nCourse: ${safeCourse}\nLevel: ${safeLevel}\nSchedule: ${safeSchedule} (${safeDays})\nGender Match: ${safeGender} Student / ${safeTeacher}`;
 
   try {
     const res = await fetch('https://api.resend.com/emails', {
