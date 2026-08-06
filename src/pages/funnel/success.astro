@@ -3,39 +3,29 @@ import Funnel from '../../layouts/Funnel.astro';
 import StepIndicator from '../../components/funnel/StepIndicator.svelte';
 import { generateWhatsAppLink } from '../../lib/helpers';
 import { jwtVerify } from 'jose';
+import { env } from 'cloudflare:workers';
 
-// DEBUG 1: Is the cookie even arriving?
+// 1. Session Guard
 const cookie = Astro.cookies.get('q_session');
 if (!cookie || !cookie.value) {
-  return new Response(
-    JSON.stringify(
-      {
-        FATAL_ERROR: 'Cookie missing in success.astro',
-        headers: Object.fromEntries(Astro.request.headers.entries()),
-      },
-      null,
-      2
-    ),
-    { status: 500, headers: { 'Content-Type': 'application/json' } }
-  );
+  return Astro.redirect('/funnel/signup');
 }
 
+// 2. Decode Session Token Server-Side
 let studentName: string;
 let course: string;
 let duration: string;
 let sessions: string;
 let note: string;
 let leadId: string;
-let debugSecret = 'UNDEFINED';
 
 try {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const locals = Astro.locals as any;
-  const jwtSecret = locals?.runtime?.env?.JWT_SECRET || import.meta.env.JWT_SECRET;
-  debugSecret = jwtSecret ? `FOUND (length: ${jwtSecret.length})` : 'MISSING';
+  // Astro v6 Standard: Read from cloudflare:workers env
+  const runtimeEnv = env as Record<string, unknown>;
+  const jwtSecret = (runtimeEnv.JWT_SECRET as string) || (import.meta.env.JWT_SECRET as string);
 
   if (!jwtSecret) {
-    throw new Error('JWT_SECRET is completely undefined in Astro runtime');
+    throw new Error('Missing JWT_SECRET in environment');
   }
 
   const secret = new TextEncoder().encode(jwtSecret);
@@ -48,24 +38,13 @@ try {
   sessions = (payload.ses as string) || '';
   note = (payload.not as string) || '';
 } catch (err) {
-  // DEBUG 2: What is the exact JWT failure?
-  return new Response(
-    JSON.stringify(
-      {
-        FATAL_ERROR: 'JWT Verification Crashed',
-        errorMessage: String(err),
-        secretStatus: debugSecret,
-        cookieValueSnippet: cookie.value.substring(0, 15) + '...',
-        localsType: typeof Astro.locals,
-      },
-      null,
-      2
-    ),
-    { status: 500, headers: { 'Content-Type': 'application/json' } }
-  );
+  console.error('[Step 3 JWT Verification Failed]:', err);
+  return Astro.redirect('/funnel/signup');
 }
 
+// 3. Construct Dynamic WhatsApp Message
 const safeNote = note.length > 100 ? note.substring(0, 100) + '...' : note;
+
 const messageParts = [
   leadId ? `*Ref: ${leadId}*` : '',
   `As-salamu alaykum! I just completed my registration on Quranific.`,
@@ -77,6 +56,7 @@ const messageParts = [
   safeNote ? `*Note:* ${safeNote}` : '',
   `I am ready to schedule my free trial class!`,
 ];
+
 const fullMessage = messageParts.filter(Boolean).join('\n\n');
 const waLink = generateWhatsAppLink(fullMessage);
 ---
