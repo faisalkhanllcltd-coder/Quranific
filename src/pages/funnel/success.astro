@@ -19,24 +19,32 @@ let note: string;
 let leadId: string;
 
 try {
-  const secret = new TextEncoder().encode(
-    import.meta.env.JWT_SECRET || 'fallback-secret-key-change-in-env'
-  );
+  // CRITICAL FIX: Pull secret from Astro's Cloudflare runtime context
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const locals = Astro.locals as any;
+  const jwtSecret = locals?.runtime?.env?.JWT_SECRET || import.meta.env.JWT_SECRET;
+
+  if (!jwtSecret) {
+    throw new Error('Missing JWT_SECRET in runtime environment');
+  }
+
+  const secret = new TextEncoder().encode(jwtSecret);
   const { payload } = await jwtVerify(cookie.value, secret);
 
+  leadId = (payload.lid as string) || '';
   studentName = (payload.n as string) || '';
   course = (payload.crs as string) || '';
   duration = (payload.dur as string) || '';
   sessions = (payload.ses as string) || '';
   note = (payload.not as string) || '';
-  leadId = (payload.lid as string) || '';
-} catch {
-  // Invalid or expired session cookie -> redirect to start
+} catch (err) {
+  console.error('[Step 3 JWT Verification Failed]:', err);
   return Astro.redirect('/funnel/signup');
 }
 
 // 3. Construct Dynamic WhatsApp Message
 const safeNote = note.length > 100 ? note.substring(0, 100) + '...' : note;
+
 const messageParts = [
   leadId ? `*Ref: ${leadId}*` : '',
   `As-salamu alaykum! I just completed my registration on Quranific.`,
