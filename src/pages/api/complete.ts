@@ -229,12 +229,11 @@ export const POST: APIRoute = async (context) => {
       executeBackgroundTasks().catch(console.error);
     }
 
-    // 6. Clear the session cookie
+    // 6. Return success (Do NOT clear the session cookie, success.astro needs it)
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Set-Cookie': 'q_session=; HttpOnly; Secure; SameSite=Strict; Max-Age=0; Path=/funnel',
       },
     });
   } catch (error) {
