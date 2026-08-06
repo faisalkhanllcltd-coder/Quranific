@@ -17,6 +17,7 @@ export interface Step1Data {
   w: string; // whatsapp
   c: string; // country
   s?: string; // source
+  lid?: string; // Lead ID for email threading
   // Ad attribution (short keys from JWT)
   fb?: string; // fbclid
   gc?: string; // gclid
@@ -63,6 +64,7 @@ export async function sendStep1AdminNotification(
   const safeWhatsapp = esc(String(step1Data.w || 'Unknown'));
   const safeCountry = esc(String(step1Data.c || 'Unknown'));
   const safeSource = esc(String(step1Data.s || 'organic'));
+  const safeLid = esc(String(step1Data.lid || 'UNKNOWN'));
 
   const finalAdminEmail = adminEmail || FALLBACK_ADMIN_EMAIL;
 
@@ -92,7 +94,7 @@ export async function sendStep1AdminNotification(
       body: JSON.stringify({
         from: 'System <onboarding@quranific.com>',
         to: finalAdminEmail,
-        subject: `⏳ Partial Lead: ${safeName}`,
+        subject: `[ID: ${safeLid}] ⏳ Partial Lead - ${safeName}`,
         html,
         text,
       }),
@@ -119,6 +121,7 @@ export async function sendFullAdminNotification(
   const safeWhatsapp = esc(String(step1Data.w || ''));
   const safeCountry = esc(String(step1Data.c || ''));
   const safeSource = esc(String(step1Data.s || 'organic'));
+  const safeLid = esc(String(step1Data.lid || 'UNKNOWN'));
   // Calculator context from JWT
   const safeEnrollType = esc(String(step1Data.et || '—'));
   const safeDuration = esc(String(step2Data.duration || step1Data.dur || '—'));
@@ -203,7 +206,7 @@ export async function sendFullAdminNotification(
       body: JSON.stringify({
         from: 'System <onboarding@quranific.com>',
         to: finalAdminEmail,
-        subject: `🚨 NEW LEAD: ${safeName} - ${safeCourse}`,
+        subject: `[ID: ${safeLid}] 🎉 Full Registration - ${safeName}`,
         html,
         text,
       }),

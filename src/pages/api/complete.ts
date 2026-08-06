@@ -99,6 +99,8 @@ export const POST: APIRoute = async (context) => {
       w: string;
       c: string;
       s: string;
+      // Lead ID for email threading and DLQ correlation
+      lid?: string;
       // Calculator context (short keys)
       et?: string;
       dur?: string;
@@ -170,7 +172,7 @@ export const POST: APIRoute = async (context) => {
         } catch (adminErr) {
           console.error('[Step 2 Admin Notification Failed]:', adminErr);
           if (kv) {
-            const deadLetterKey = `FAILED_LEAD_ADMIN:${Date.now()}`;
+            const deadLetterKey = `FAILED_LEAD_STEP2:${step1Data.lid || Date.now()}`;
             const deadLetterPayload = JSON.stringify({
               failedAt: new Date().toISOString(),
               step1: step1Data,
@@ -188,7 +190,7 @@ export const POST: APIRoute = async (context) => {
         } catch (welcomeErr) {
           console.error('[Step 2 Welcome Email Failed]:', welcomeErr);
           if (kv) {
-            const deadLetterKey = `FAILED_LEAD_WELCOME:${Date.now()}`;
+            const deadLetterKey = `FAILED_LEAD_WELCOME:${step1Data.lid || Date.now()}`;
             const deadLetterPayload = JSON.stringify({
               failedAt: new Date().toISOString(),
               step1: step1Data,

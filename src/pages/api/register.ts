@@ -136,6 +136,7 @@ export const POST: APIRoute = async (context) => {
     // Stateless Session Management via JWT
     const secretKey = new TextEncoder().encode(jwtSecret);
     const jti = crypto.randomUUID();
+    const leadId = jti.substring(0, 6).toUpperCase();
 
     const token = await new SignJWT({
       n: validData.name,
@@ -143,6 +144,8 @@ export const POST: APIRoute = async (context) => {
       w: validData.whatsapp,
       c: validData.country,
       s: validData.source,
+      // Lead ID for email threading and DLQ correlation
+      lid: leadId,
       // Calculator context — short keys to minimise JWT size
       et: validData.enrollType,
       dur: validData.duration,
@@ -171,6 +174,7 @@ export const POST: APIRoute = async (context) => {
             w: validData.whatsapp,
             c: validData.country,
             s: validData.source,
+            lid: leadId,
             ...trk,
           },
           resendApiKey,
@@ -178,6 +182,18 @@ export const POST: APIRoute = async (context) => {
         );
       } catch (err) {
         console.error('[Step 1 Admin Notification Failed]:', err);
+        // ── Dead-Letter Queue: persist failed lead for manual recovery ──────────
+        if (kv) {
+          const deadLetterKey = `FAILED_LEAD_STEP1:${leadId}`;
+          const deadLetterPayload = JSON.stringify({
+            failedAt: new Date().toISOString(),
+            step1: validData,
+            reason: String(err),
+          });
+          kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch((e: unknown) =>
+            console.error('[Dead-Letter KV Write Failed]:', e)
+          );
+        }
       }
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

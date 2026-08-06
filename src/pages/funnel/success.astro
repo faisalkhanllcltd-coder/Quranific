@@ -1,17 +1,56 @@
 ---
-// src/pages/funnel/success.astro
 import Funnel from '../../layouts/Funnel.astro';
 import StepIndicator from '../../components/funnel/StepIndicator.svelte';
 import { generateWhatsAppLink } from '../../lib/helpers';
+import { jwtVerify } from 'jose';
 
-// Central helper to generate the secure, encoded link
-const waLink = generateWhatsAppLink(
-  "As-salamu alaykum! I just completed my registration on Quranific and I'm ready to schedule my free trial."
-);
-
-if (!Astro.cookies.has('q_session')) {
+// 1. Session Guard
+const cookie = Astro.cookies.get('q_session');
+if (!cookie || !cookie.value) {
   return Astro.redirect('/funnel/signup');
 }
+
+// 2. Decode Session Token Server-Side
+let studentName: string;
+let course: string;
+let duration: string;
+let sessions: string;
+let note: string;
+let leadId: string;
+
+try {
+  const secret = new TextEncoder().encode(
+    import.meta.env.JWT_SECRET || 'fallback-secret-key-change-in-env'
+  );
+  const { payload } = await jwtVerify(cookie.value, secret);
+
+  studentName = (payload.n as string) || '';
+  course = (payload.crs as string) || '';
+  duration = (payload.dur as string) || '';
+  sessions = (payload.ses as string) || '';
+  note = (payload.not as string) || '';
+  leadId = (payload.lid as string) || '';
+} catch {
+  // Invalid or expired session cookie -> redirect to start
+  return Astro.redirect('/funnel/signup');
+}
+
+// 3. Construct Dynamic WhatsApp Message
+const safeNote = note.length > 100 ? note.substring(0, 100) + '...' : note;
+const messageParts = [
+  leadId ? `*Ref: ${leadId}*` : '',
+  `As-salamu alaykum! I just completed my registration on Quranific.`,
+  studentName ? `*Name:* ${studentName}` : '',
+  course ? `*Course:* ${course}` : '',
+  duration || sessions
+    ? `*Plan:* ${duration ? `${duration} min` : ''}${duration && sessions ? ' | ' : ''}${sessions ? `${sessions}x/week` : ''}`
+    : '',
+  safeNote ? `*Note:* ${safeNote}` : '',
+  `I am ready to schedule my free trial class!`,
+];
+
+const fullMessage = messageParts.filter(Boolean).join('\n\n');
+const waLink = generateWhatsAppLink(fullMessage);
 ---
 
 <Funnel title="Registration Successful | Quranific">

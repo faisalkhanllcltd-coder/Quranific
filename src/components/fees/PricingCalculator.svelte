@@ -140,6 +140,7 @@
         <textarea
           bind:value={courseNote}
           rows="3"
+          maxlength="500"
           placeholder="Type your message or leave it blank and talk directly with admin after submitting the form."
           class="mt-3 w-full px-4 py-3 bg-cream-50 border border-emerald-200 rounded-lg text-sm text-emerald-900/80 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition-colors resize-none placeholder:text-emerald-900/40"
         ></textarea>

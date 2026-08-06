@@ -301,6 +301,7 @@
       bind:value={selectedNote}
       name="note"
       rows="3"
+      maxlength="500"
       disabled={loading}
       placeholder="Any special requirements, preferred teacher traits, or questions for us..."
       class="w-full px-4 py-3 bg-slate-50 border border-emerald-200 rounded-xl text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 resize-none placeholder:text-emerald-900/30"

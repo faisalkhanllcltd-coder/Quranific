@@ -21,7 +21,7 @@ export const signupSchema = z.object({
   billing: z.string().optional(),
   price: z.string().optional(),
   course: z.string().optional(),
-  note: z.string().optional(),
+  note: z.string().max(500, 'Note must be 500 characters or less').optional(),
   age: z.string().optional(),
   level: z.string().optional(),
   // ── Ad attribution (all optional) ─────────────────────────────────────────
