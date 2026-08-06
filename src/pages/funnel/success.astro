@@ -1,9 +1,19 @@
 ---
+export const prerender = false; // Mandate: Force SSR, disable static build
+
 import Funnel from '../../layouts/Funnel.astro';
 import StepIndicator from '../../components/funnel/StepIndicator.svelte';
 import { generateWhatsAppLink } from '../../lib/helpers';
 import { jwtVerify } from 'jose';
 import { env } from 'cloudflare:workers';
+
+// Mandate: Force Cloudflare edge to never cache this private route
+Astro.response.headers.set(
+  'Cache-Control',
+  'no-store, no-cache, must-revalidate, proxy-revalidate'
+);
+Astro.response.headers.set('Pragma', 'no-cache');
+Astro.response.headers.set('Expires', '0');
 
 // 1. Session Guard
 const cookie = Astro.cookies.get('q_session');
