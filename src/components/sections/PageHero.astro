@@ -13,6 +13,7 @@ interface Props {
   primaryCtaLink?: string;
   secondaryCtaText?: string;
   secondaryCtaLink?: string;
+  bottomPadding?: boolean;
 }
 
 const {
@@ -24,13 +25,17 @@ const {
   primaryCtaLink = '/funnel/signup',
   secondaryCtaText,
   secondaryCtaLink,
+  bottomPadding = true,
 } = Astro.props;
 
 const hasVisual = Astro.slots.has('visual');
 ---
 
 <section
-  class="relative bg-cream-50 overflow-hidden selection:bg-emerald-200 selection:text-emerald-950 pt-8 pb-16 md:pt-12 md:pb-24 lg:pt-16 lg:pb-32"
+  class:list={[
+    'relative bg-cream-50 overflow-hidden selection:bg-emerald-200 selection:text-emerald-950 pt-8 md:pt-12 lg:pt-16',
+    bottomPadding ? 'pb-16 md:pb-24 lg:pb-32' : 'pb-4 md:pb-6 lg:pb-8',
+  ]}
 >
   <!-- Background: dot-pattern (always visible, not gated) -->
   <div

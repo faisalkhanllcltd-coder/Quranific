@@ -51,10 +51,19 @@
   let currency = $state('USD');
   let billing = $state('monthly');
 
+  let selectedPlan = $state('5');
+
+  // NEW EDGE-PRO STATE: Dismissible UI Note
+  let showCourseNote = $state(true);
+
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
 
   let discount = $derived(BILLING_DISCOUNTS[billing]);
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);
+
+  let checkoutUrl = $derived(
+    `/funnel/signup?sessions=${selectedPlan}x&duration=${dur}&billing=${billing}&currency=${currency}`
+  );
 
   function getBasePrice(sess: string) {
     return (PRICING_DATA as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
@@ -70,22 +79,64 @@
   }
 </script>
 
-<div class="flex flex-wrap items-center justify-center gap-3 mb-10">
+<!-- Dismissible Course Note -->
+{#if showCourseNote}
   <div
-    class="flex items-center gap-2 bg-white border border-emerald-100 rounded-xl px-4 py-2.5 shadow-sm"
+    class="max-w-3xl mx-auto mb-6 bg-emerald-50 border border-emerald-200/70 rounded-xl p-3 sm:p-4 flex items-start sm:items-center justify-between gap-3 shadow-sm transition-all animate-in fade-in slide-in-from-top-2 mx-4 md:mx-auto"
+  >
+    <div class="flex items-start sm:items-center gap-3 text-sm font-medium text-emerald-900/80">
+      <svg
+        class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5 sm:mt-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <p>
+        <strong class="text-emerald-950">Good to know:</strong> All subjects (Qaida, Tajweed, Hifz) cost
+        exactly the same, and you can change your class frequency whenever you need to.
+      </p>
+    </div>
+    <button
+      onclick={() => (showCourseNote = false)}
+      class="shrink-0 p-1 text-emerald-900/40 hover:text-emerald-900 transition-colors rounded-lg hover:bg-emerald-100/50"
+      aria-label="Dismiss"
+    >
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+{/if}
+
+<!-- Mobile fix: flex-col on small screens, flex-row on md+ -->
+<div
+  class="flex flex-col md:flex-row flex-wrap items-center justify-center gap-3 mb-10 w-full px-4 md:px-0"
+>
+  <!-- Length Bubble -->
+  <div
+    class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 bg-white border border-emerald-100 rounded-xl px-4 py-3 sm:py-2.5 shadow-sm w-full md:w-auto"
   >
     <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
       >Length:</span
     >
-    <div class="flex gap-1.5">
+    <div class="flex gap-1.5 w-full sm:w-auto">
       <button
-        class="px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {dur === '30'
+        class="flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {dur ===
+        '30'
           ? 'bg-emerald-700 text-white border-emerald-700'
           : 'bg-emerald-50 text-emerald-900/70 border-emerald-200 hover:text-emerald-700 hover:border-emerald-700'}"
         onclick={() => (dur = '30')}>30 min</button
       >
       <button
-        class="px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {dur === '40'
+        class="flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {dur ===
+        '40'
           ? 'bg-emerald-700 text-white border-emerald-700'
           : 'bg-emerald-50 text-emerald-900/70 border-emerald-200 hover:text-emerald-700 hover:border-emerald-700'}"
         onclick={() => (dur = '40')}>40 min</button
@@ -93,22 +144,24 @@
     </div>
   </div>
 
+  <!-- Billing Bubble -->
   <div
-    class="flex items-center gap-2 bg-white border border-emerald-100 rounded-xl px-4 py-2.5 shadow-sm"
+    class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 bg-white border border-emerald-100 rounded-xl px-4 py-3 sm:py-2.5 shadow-sm w-full md:w-auto"
   >
     <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
       >Billing:</span
     >
-    <div class="flex gap-1.5 flex-wrap">
+    <!-- Mobile fix: stacked column of buttons on very small screens, inline row on larger -->
+    <div class="flex flex-col sm:flex-row gap-1.5 w-full sm:w-auto">
       <button
-        class="px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {billing ===
+        class="w-full sm:w-auto px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {billing ===
         'monthly'
           ? 'bg-emerald-700 text-white border-emerald-700'
           : 'bg-emerald-50 text-emerald-900/70 border-emerald-200 hover:text-emerald-700 hover:border-emerald-700'}"
         onclick={() => (billing = 'monthly')}>Monthly</button
       >
       <button
-        class="px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {billing ===
+        class="w-full sm:w-auto px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {billing ===
         'sixMonth'
           ? 'bg-emerald-700 text-white border-emerald-700'
           : 'bg-emerald-50 text-emerald-900/70 border-emerald-200 hover:text-emerald-700 hover:border-emerald-700'}"
@@ -118,7 +171,7 @@
         ></button
       >
       <button
-        class="px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {billing ===
+        class="w-full sm:w-auto px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {billing ===
         'annual'
           ? 'bg-emerald-700 text-white border-emerald-700'
           : 'bg-emerald-50 text-emerald-900/70 border-emerald-200 hover:text-emerald-700 hover:border-emerald-700'}"
@@ -130,15 +183,16 @@
     </div>
   </div>
 
+  <!-- Currency Bubble -->
   <div
-    class="flex items-center gap-2 bg-white border border-emerald-100 rounded-xl px-4 py-2.5 shadow-sm"
+    class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 bg-white border border-emerald-100 rounded-xl px-4 py-3 sm:py-2.5 shadow-sm w-full md:w-auto"
   >
     <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
       >Currency:</span
     >
     <select
       bind:value={currency}
-      class="bg-transparent text-sm font-bold text-emerald-900/80 focus:outline-none cursor-pointer pr-2"
+      class="w-full sm:w-auto text-center sm:text-left bg-transparent text-sm font-bold text-emerald-900/80 focus:outline-none cursor-pointer pr-2"
     >
       <option value="USD">USD $</option>
       <option value="GBP">GBP £</option>
@@ -152,156 +206,301 @@
   </div>
 </div>
 
-<div class="max-w-5xl mx-auto mb-8">
+<div class="max-w-5xl mx-auto mb-8 px-4 md:px-0">
   <div class="bg-white rounded-2xl border border-emerald-100 shadow-md overflow-hidden">
-    <div class="grid grid-cols-1 sm:grid-cols-4">
+    <div class="grid grid-cols-1 sm:grid-cols-4 relative">
       <!-- 2x / week -->
-      <div class="border-b sm:border-b-0 sm:border-r border-emerald-100 p-6">
-        <div class="text-xs font-black tracking-widest uppercase text-emerald-900/40 mb-1">
-          2&times; / week
+      <button
+        type="button"
+        onclick={() => (selectedPlan = '2')}
+        class="relative border-b sm:border-b-0 sm:border-r border-emerald-100 p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none
+               {selectedPlan === '2' ? 'bg-emerald-50/30 z-10' : 'bg-white hover:bg-slate-50/70'}"
+      >
+        {#if selectedPlan === '2'}
+          <div class="absolute inset-0 pointer-events-none z-20">
+            <div
+              class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 to-amber-400"
+            ></div>
+            <div
+              class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 to-amber-400"
+            ></div>
+            <div class="absolute top-0 bottom-0 left-0 w-[2px] bg-emerald-500"></div>
+            <div class="absolute top-0 bottom-0 right-0 w-[2px] bg-amber-400"></div>
+          </div>
+        {/if}
+
+        <div class="flex items-center justify-between sm:block w-full">
+          <div class="text-left">
+            <div
+              class="text-xs font-black tracking-widest uppercase {selectedPlan === '2'
+                ? 'text-emerald-700'
+                : 'text-emerald-900/40'} mb-0.5 sm:mb-1 transition-colors"
+            >
+              2&times; / week
+            </div>
+            <div class="text-[11px] font-medium text-emerald-900/40">8 sessions / month</div>
+          </div>
+
+          <div class="text-right sm:text-left sm:mt-5 mt-0">
+            <div class="flex items-baseline justify-end sm:justify-start gap-0.5 mb-0.5 sm:mb-1">
+              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+                >{getFinalPrice('2')}</span
+              >
+              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            </div>
+            <div class="text-[11px] font-medium text-emerald-800/50">
+              {sym}{(getFinalPrice('2') / 8).toFixed(2)} / class
+            </div>
+          </div>
         </div>
-        <div class="text-[11px] font-medium text-emerald-900/40 mb-5">8 sessions / month</div>
-        <div class="flex items-baseline gap-0.5 mb-1">
-          <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-          <span class="font-serif text-4xl font-bold text-emerald-950">{getFinalPrice('2')}</span>
-          <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
-        </div>
-        <div class="text-[11px] font-medium text-emerald-800/50 mb-2">
-          {sym}{(getFinalPrice('2') / 8).toFixed(2)} / class
-        </div>
-        <div class="text-[10px] font-bold text-green-600 {discount > 0 ? 'block' : 'hidden'}">
+
+        <div
+          class="text-[10px] font-bold text-emerald-600 text-left mt-2 {discount > 0
+            ? 'block'
+            : 'hidden'}"
+        >
           You save {sym}{getSavingAmt('2')}
         </div>
-      </div>
+      </button>
 
       <!-- 3x / week -->
-      <div class="border-b sm:border-b-0 sm:border-r border-emerald-100 p-6">
-        <div class="text-xs font-black tracking-widest uppercase text-emerald-900/40 mb-1">
-          3&times; / week
+      <button
+        type="button"
+        onclick={() => (selectedPlan = '3')}
+        class="relative border-b sm:border-b-0 sm:border-r border-emerald-100 p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none
+               {selectedPlan === '3' ? 'bg-emerald-50/30 z-10' : 'bg-white hover:bg-slate-50/70'}"
+      >
+        {#if selectedPlan === '3'}
+          <div class="absolute inset-0 pointer-events-none z-20">
+            <div
+              class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 to-amber-400"
+            ></div>
+            <div
+              class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 to-amber-400"
+            ></div>
+            <div class="absolute top-0 bottom-0 left-0 w-[2px] bg-emerald-500"></div>
+            <div class="absolute top-0 bottom-0 right-0 w-[2px] bg-amber-400"></div>
+          </div>
+        {/if}
+
+        <div class="flex items-center justify-between sm:block w-full">
+          <div class="text-left">
+            <div
+              class="text-xs font-black tracking-widest uppercase {selectedPlan === '3'
+                ? 'text-emerald-700'
+                : 'text-emerald-900/40'} mb-0.5 sm:mb-1 transition-colors"
+            >
+              3&times; / week
+            </div>
+            <div class="text-[11px] font-medium text-emerald-900/40">12 sessions / month</div>
+          </div>
+
+          <div class="text-right sm:text-left sm:mt-5 mt-0">
+            <div class="flex items-baseline justify-end sm:justify-start gap-0.5 mb-0.5 sm:mb-1">
+              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+                >{getFinalPrice('3')}</span
+              >
+              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            </div>
+            <div class="text-[11px] font-medium text-emerald-800/50">
+              {sym}{(getFinalPrice('3') / 12).toFixed(2)} / class
+            </div>
+          </div>
         </div>
-        <div class="text-[11px] font-medium text-emerald-900/40 mb-5">12 sessions / month</div>
-        <div class="flex items-baseline gap-0.5 mb-1">
-          <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-          <span class="font-serif text-4xl font-bold text-emerald-950">{getFinalPrice('3')}</span>
-          <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
-        </div>
-        <div class="text-[11px] font-medium text-emerald-800/50 mb-2">
-          {sym}{(getFinalPrice('3') / 12).toFixed(2)} / class
-        </div>
-        <div class="text-[10px] font-bold text-green-600 {discount > 0 ? 'block' : 'hidden'}">
+
+        <div
+          class="text-[10px] font-bold text-emerald-600 text-left mt-2 {discount > 0
+            ? 'block'
+            : 'hidden'}"
+        >
           You save {sym}{getSavingAmt('3')}
         </div>
-      </div>
+      </button>
 
       <!-- 4x / week -->
-      <div class="border-b sm:border-b-0 sm:border-r border-emerald-100 p-6">
-        <div class="text-xs font-black tracking-widest uppercase text-emerald-900/40 mb-1">
-          4&times; / week
+      <button
+        type="button"
+        onclick={() => (selectedPlan = '4')}
+        class="relative border-b sm:border-b-0 sm:border-r border-emerald-100 p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none
+               {selectedPlan === '4' ? 'bg-emerald-50/30 z-10' : 'bg-white hover:bg-slate-50/70'}"
+      >
+        {#if selectedPlan === '4'}
+          <div class="absolute inset-0 pointer-events-none z-20">
+            <div
+              class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 to-amber-400"
+            ></div>
+            <div
+              class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 to-amber-400"
+            ></div>
+            <div class="absolute top-0 bottom-0 left-0 w-[2px] bg-emerald-500"></div>
+            <div class="absolute top-0 bottom-0 right-0 w-[2px] bg-amber-400"></div>
+          </div>
+        {/if}
+
+        <div class="flex items-center justify-between sm:block w-full">
+          <div class="text-left">
+            <div
+              class="text-xs font-black tracking-widest uppercase {selectedPlan === '4'
+                ? 'text-emerald-700'
+                : 'text-emerald-900/40'} mb-0.5 sm:mb-1 transition-colors"
+            >
+              4&times; / week
+            </div>
+            <div class="text-[11px] font-medium text-emerald-900/40">16 sessions / month</div>
+          </div>
+
+          <div class="text-right sm:text-left sm:mt-5 mt-0">
+            <div class="flex items-baseline justify-end sm:justify-start gap-0.5 mb-0.5 sm:mb-1">
+              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+                >{getFinalPrice('4')}</span
+              >
+              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            </div>
+            <div class="text-[11px] font-medium text-emerald-800/50">
+              {sym}{(getFinalPrice('4') / 16).toFixed(2)} / class
+            </div>
+          </div>
         </div>
-        <div class="text-[11px] font-medium text-emerald-900/40 mb-5">16 sessions / month</div>
-        <div class="flex items-baseline gap-0.5 mb-1">
-          <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-          <span class="font-serif text-4xl font-bold text-emerald-950">{getFinalPrice('4')}</span>
-          <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
-        </div>
-        <div class="text-[11px] font-medium text-emerald-800/50 mb-2">
-          {sym}{(getFinalPrice('4') / 16).toFixed(2)} / class
-        </div>
-        <div class="text-[10px] font-bold text-green-600 {discount > 0 ? 'block' : 'hidden'}">
+
+        <div
+          class="text-[10px] font-bold text-emerald-600 text-left mt-2 {discount > 0
+            ? 'block'
+            : 'hidden'}"
+        >
           You save {sym}{getSavingAmt('4')}
         </div>
-      </div>
+      </button>
 
       <!-- 5x / week — amber accent -->
-      <div class="relative p-6">
-        <div class="absolute top-0 left-0 right-0 h-[3px] bg-amber-400" aria-hidden="true"></div>
-        <div class="text-[9px] font-black tracking-widest uppercase text-amber-600 mb-1 pt-1">
+      <button
+        type="button"
+        onclick={() => (selectedPlan = '5')}
+        class="relative p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none
+               {selectedPlan === '5' ? 'bg-emerald-50/30 z-10' : 'bg-white hover:bg-slate-50/70'}"
+      >
+        {#if selectedPlan !== '5'}
+          <div class="absolute top-0 left-0 right-0 h-[3px] bg-amber-400" aria-hidden="true"></div>
+        {/if}
+        {#if selectedPlan === '5'}
+          <div class="absolute inset-0 pointer-events-none z-20">
+            <div
+              class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 to-amber-400"
+            ></div>
+            <div
+              class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 to-amber-400"
+            ></div>
+            <div class="absolute top-0 bottom-0 left-0 w-[2px] bg-emerald-500"></div>
+            <div class="absolute top-0 bottom-0 right-0 w-[2px] bg-amber-400"></div>
+          </div>
+        {/if}
+
+        <div
+          class="text-[9px] font-black tracking-widest uppercase text-amber-600 mb-2 sm:mb-1 pt-1 text-left"
+        >
           Most families choose this
         </div>
-        <div class="text-xs font-black tracking-widest uppercase text-emerald-900/40 mb-1">
-          5&times; / week
+
+        <div class="flex items-center justify-between sm:block w-full">
+          <div class="text-left">
+            <div
+              class="text-xs font-black tracking-widest uppercase {selectedPlan === '5'
+                ? 'text-emerald-700'
+                : 'text-emerald-900/40'} mb-0.5 sm:mb-1 transition-colors"
+            >
+              5&times; / week
+            </div>
+            <div class="text-[11px] font-medium text-emerald-900/40">20 sessions / month</div>
+          </div>
+
+          <div class="text-right sm:text-left sm:mt-5 mt-0">
+            <div class="flex items-baseline justify-end sm:justify-start gap-0.5 mb-0.5 sm:mb-1">
+              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+                >{getFinalPrice('5')}</span
+              >
+              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            </div>
+            <div class="text-[11px] font-medium text-emerald-800/50">
+              {sym}{(getFinalPrice('5') / 20).toFixed(2)} / class
+            </div>
+          </div>
         </div>
-        <div class="text-[11px] font-medium text-emerald-900/40 mb-5">20 sessions / month</div>
-        <div class="flex items-baseline gap-0.5 mb-1">
-          <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-          <span class="font-serif text-4xl font-bold text-emerald-950">{getFinalPrice('5')}</span>
-          <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
-        </div>
-        <div class="text-[11px] font-medium text-emerald-800/50 mb-2">
-          {sym}{(getFinalPrice('5') / 20).toFixed(2)} / class
-        </div>
-        <div class="text-[10px] font-bold text-green-600 {discount > 0 ? 'block' : 'hidden'}">
+
+        <div
+          class="text-[10px] font-bold text-emerald-600 text-left mt-2 {discount > 0
+            ? 'block'
+            : 'hidden'}"
+        >
           You save {sym}{getSavingAmt('5')}
         </div>
-      </div>
+      </button>
     </div>
 
-    <div class="border-t border-emerald-100 bg-emerald-50/40 px-6 py-5">
-      <div class="text-[10px] font-bold tracking-widest uppercase text-emerald-900/40 mb-3">
-        Included at every frequency
-      </div>
-      <div class="flex flex-wrap gap-x-6 gap-y-2">
-        <div class="flex items-center gap-2 text-xs font-medium text-emerald-900/70">
-          <svg
-            class="w-4 h-4 text-emerald-600 shrink-0"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2.5"
-            aria-hidden="true"
-            ><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg
+    <!-- Edge-Pro CTA Area: Live E-commerce Receipt & Text Link -->
+    <div
+      class="border-t border-emerald-100 bg-emerald-50/40 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4"
+    >
+      <div class="flex flex-col text-center sm:text-left">
+        <span class="text-[10px] font-black tracking-widest uppercase text-emerald-900/40 mb-1.5"
+          >Your Selection</span
+        >
+
+        <!-- Native English Configuration -->
+        <div
+          class="text-sm font-medium text-emerald-900/70 flex flex-wrap items-center justify-center sm:justify-start gap-x-2 gap-y-1"
+        >
+          <span
+            ><strong class="text-emerald-950 font-bold">{selectedPlan} classes</strong> / week</span
           >
-          Same dedicated teacher
+          <span class="opacity-30">•</span>
+          <span><strong class="text-emerald-950 font-bold">{dur} mins</strong> / class</span>
+          <span class="opacity-30">•</span>
+          <span
+            >Billed <strong class="text-emerald-950 font-bold"
+              >{billing === 'monthly'
+                ? 'Monthly'
+                : billing === 'sixMonth'
+                  ? 'Bi-annually'
+                  : 'Annually'}</strong
+            ></span
+          >
         </div>
-        <div class="flex items-center gap-2 text-xs font-medium text-emerald-900/70">
-          <svg
-            class="w-4 h-4 text-emerald-600 shrink-0"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2.5"
-            aria-hidden="true"
-            ><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg
+
+        <!-- Live Total & Savings Receipt -->
+        <div class="mt-2 flex items-center justify-center sm:justify-start gap-2.5">
+          <span class="text-lg font-black text-emerald-950"
+            >{sym}{getFinalPrice(selectedPlan)}<span
+              class="text-xs font-bold text-emerald-800/50 ml-0.5">/ mo</span
+            ></span
           >
-          Make-up class guarantee
-        </div>
-        <div class="flex items-center gap-2 text-xs font-medium text-emerald-900/70">
-          <svg
-            class="w-4 h-4 text-emerald-600 shrink-0"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2.5"
-            aria-hidden="true"
-            ><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg
-          >
-          Sit-in access anytime
-        </div>
-        <div class="flex items-center gap-2 text-xs font-medium text-emerald-900/70">
-          <svg
-            class="w-4 h-4 text-emerald-600 shrink-0"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2.5"
-            aria-hidden="true"
-            ><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg
-          >
-          Progress report
-        </div>
-        <div class="flex items-center gap-2 text-xs font-medium text-emerald-900/70">
-          <svg
-            class="w-4 h-4 text-emerald-600 shrink-0"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2.5"
-            aria-hidden="true"
-            ><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg
-          >
-          Full-month guarantee
+          {#if discount > 0}
+            <span
+              class="text-[10px] font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full border border-emerald-200/50"
+            >
+              Saves {sym}{getSavingAmt(selectedPlan)}
+            </span>
+          {/if}
         </div>
       </div>
+
+      <a
+        href={checkoutUrl}
+        class="group inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:text-emerald-900 transition-colors mt-2 sm:mt-0"
+      >
+        Continue to Registration
+        <svg
+          class="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
     </div>
   </div>
 </div>

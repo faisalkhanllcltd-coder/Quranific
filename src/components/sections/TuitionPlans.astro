@@ -1,23 +1,47 @@
 ---
 import Section from '../ui/Section.astro';
 import PricingGrid from '../fees/PricingGrid.svelte';
+
+const Icons = {
+  check: `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`,
+};
+
+const features = [
+  { title: 'First class always free', desc: 'No credit card required' },
+  { title: 'Full-month guarantee', desc: 'Refund if unsatisfied' },
+  { title: 'Make-up guarantee', desc: 'Every absence replaced' },
+  { title: 'Progress report', desc: 'Included in every plan' },
+];
 ---
 
-<Section height={900} class="py-12 md:py-24 lg:py-32" id="plans">
+<Section height={900} class="pb-12 md:pb-24 lg:pb-32 pt-8 md:pt-10 lg:pt-12" id="plans">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12">
-      <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3"
-        >Tuition Plans</span
-      >
-      <h2 class="text-4xl lg:text-5xl font-bold text-emerald-950 mb-4 tracking-tight">
-        One product.<br />
-        <em class="font-serif italic text-emerald-700 font-medium">Pick your pace.</em>
+    <div class="text-center mb-10 md:mb-12">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-emerald-950 tracking-tight">
+        Choose your plan.
       </h2>
-      <p class="text-lg text-emerald-900/80 font-medium max-w-2xl mx-auto">
-        Same teacher, same quality, same guarantee at every frequency. Choose how many sessions fit
-        your child&rsquo;s week &mdash; change it any time.
-      </p>
     </div>
+
     <PricingGrid client:load />
+
+    <!-- Edge-Pro 4-Column Features Grid -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 max-w-5xl mx-auto mt-6"
+    >
+      {
+        features.map((feature) => (
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-white border border-emerald-100/70 shadow-[0_2px_10px_-4px_rgba(4,120,87,0.1)] hover:border-emerald-300 hover:shadow-[0_4px_16px_-4px_rgba(4,120,87,0.15)] transition-all duration-300 text-left group">
+            <div
+              class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100/50 mt-0.5 group-hover:bg-emerald-100 group-hover:text-emerald-700 transition-colors duration-300"
+              set:html={Icons.check}
+            />
+            <div class="flex flex-col gap-0.5">
+              <span class="text-sm font-bold text-emerald-950">{feature.title}</span>
+              <span class="text-sm font-medium text-emerald-700/70">{feature.desc}</span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </Section>

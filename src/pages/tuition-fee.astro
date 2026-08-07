@@ -32,10 +32,6 @@ const jsonLd = {
     },
   },
 };
-
-const Icons = {
-  check: `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`,
-};
 ---
 
 <Base
@@ -48,63 +44,13 @@ const Icons = {
 
   <main class="bg-cream-50 selection:bg-emerald-200 selection:text-emerald-950 font-sans">
     <PageHero
-      eyebrow="Transparent · No hidden fees"
+      eyebrow="Transparent Tuition Plans"
       title="Honest pricing. Everything included."
       highlightWord="Nothing hidden."
-      subtitle="We are not going to make you read the small print. Every price you see here is the price you pay. No setup fees, no resource fees. One simple monthly amount that covers everything."
-      primaryCtaText="See All Plans ↓"
-      primaryCtaLink="#plans"
-      secondaryCtaText="Ask about pricing"
-      secondaryCtaLink="https://wa.me/923112112122"
-    >
-      <div slot="checklist" class="flex flex-col items-center gap-4 mb-10">
-        <div class="flex items-center gap-3 text-sm font-medium text-emerald-800">
-          <div
-            class="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0"
-            set:html={Icons.check}
-          />
-          <span
-            ><strong class="text-emerald-950">First class always free</strong> (no credit card required)</span
-          >
-        </div>
-        <div class="flex items-center gap-3 text-sm font-medium text-emerald-800">
-          <div
-            class="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0"
-            set:html={Icons.check}
-          />
-          <span
-            ><strong class="text-emerald-950">Full-month guarantee</strong>: Refund if unsatisfied</span
-          >
-        </div>
-        <div class="flex items-center gap-3 text-sm font-medium text-emerald-800">
-          <div
-            class="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0"
-            set:html={Icons.check}
-          />
-          <span
-            ><strong class="text-emerald-950">Make-up guarantee</strong>: Every absence replaced</span
-          >
-        </div>
-        <div class="flex items-center gap-3 text-sm font-medium text-emerald-800">
-          <div
-            class="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0"
-            set:html={Icons.check}
-          />
-          <span
-            ><strong class="text-emerald-950">Progress report</strong>: Included in every plan</span
-          >
-        </div>
-        <div class="flex items-center gap-3 text-sm font-medium text-emerald-800">
-          <div
-            class="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0"
-            set:html={Icons.check}
-          />
-          <span
-            ><strong class="text-emerald-950">Cancel any time</strong>: No lock-in, no hidden fees</span
-          >
-        </div>
-      </div>
-    </PageHero>
+      subtitle="No small print. No setup fees. No resource fees. One monthly number — and it's the number you pay."
+      primaryCtaText=""
+      bottomPadding={false}
+    />
 
     <TuitionPlans />
 
