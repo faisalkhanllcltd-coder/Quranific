@@ -32,7 +32,6 @@
   // URL params passed from fee calculator or course finder (enrollType, sessions, billing, age, level)
   // Also capture ad attribution params (gclid, utm_source, utm_campaign, utm_medium, utm_content)
   // These are injected as hidden inputs on submit — no matching visible form fields exist yet.
-  // TODO(owner): if you want pre-selection of course type on this page, add a visible selector field.
   let ctxParams = $state<Record<string, string>>({});
 
   // Capture the Meta/Google Ad tracking parameter on mount
@@ -67,10 +66,11 @@
         'days',
         'schedule',
       ];
-      const allKeys = [...trackingKeys, ...contextKeys];
 
       const captured: Record<string, string> = {};
-      allKeys.forEach((k) => {
+
+      // Phase A: Process Ad Tracking (Always preserve unless explicitly overwritten by URL)
+      trackingKeys.forEach((k) => {
         const urlVal = params.get(k);
         if (urlVal) {
           captured[k] = urlVal;
@@ -80,6 +80,53 @@
           if (storedVal) captured[k] = storedVal;
         }
       });
+
+      // Phase B: Process Form Context (Smart Wipe & Normalization)
+      const isContextualVisit = contextKeys.some((k) => params.has(k));
+
+      contextKeys.forEach((k) => {
+        if (isContextualVisit) {
+          let urlVal = params.get(k);
+
+          if (urlVal) {
+            // FUZZY NORMALIZER: Force URL params to exactly match Svelte Step 2 Radio Buttons
+            if (k === 'course') {
+              const lower = urlVal.toLowerCase();
+              if (lower.includes('qaida')) urlVal = 'Basic Qaida';
+              else if (lower.includes('tajweed') && !lower.includes('advanced'))
+                urlVal = 'Quran Reading with Tajweed';
+              else if (lower.includes('hifz') || lower.includes('memorization'))
+                urlVal = 'Quran Memorization (Hifz)';
+              else if (lower.includes('advanced') || lower.includes('ijazah'))
+                urlVal = 'Advanced Tajweed (Ijazah)';
+              else if (lower.includes('arabic') || lower.includes('language'))
+                urlVal = 'Arabic Language';
+            }
+
+            if (k === 'gender' || k === 'level' || k === 'schedule') {
+              // Capitalize first letter
+              urlVal = urlVal.charAt(0).toUpperCase() + urlVal.slice(1).toLowerCase();
+            }
+
+            if (k === 'teacherGender') {
+              const lower = urlVal.toLowerCase();
+              if (lower.includes('male') && !lower.includes('female')) urlVal = 'Male Teacher';
+              else if (lower.includes('female')) urlVal = 'Female Teacher';
+              else urlVal = 'No Preference';
+            }
+
+            captured[k] = urlVal;
+            sessionStorage.setItem('q_track_' + k, urlVal);
+          } else {
+            // Calculator didn't send this key, do not leak old data
+            sessionStorage.removeItem('q_track_' + k);
+          }
+        } else {
+          // ORGANIC VISIT (Header Button): Wipe the contextual slate completely clean
+          sessionStorage.removeItem('q_track_' + k);
+        }
+      });
+
       ctxParams = captured;
 
       if (typeof localStorage !== 'undefined') {
