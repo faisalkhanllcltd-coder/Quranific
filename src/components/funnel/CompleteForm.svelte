@@ -1,98 +1,115 @@
 <script lang="ts">
   import { Loader2, AlertCircle } from 'lucide-svelte';
   import { onMount } from 'svelte';
-  // ARCHITECTURE FIX: Routing to the unified data engine
   import { COURSE_LIST } from '../../constants/courses';
+  import { GENDERS, LEVELS, SCHEDULES, DAYS } from '../../lib/helpers';
 
   let loading = $state(false);
-  let errorMsg = $state('');
+  let globalError = $state('');
+  let fieldErrors = $state<Record<string, boolean>>({});
 
-  // Segmented-control reactive state (replaces <select> bindings)
+  // Core state for native radio bindings
   let selectedCourse = $state('');
   let selectedGender = $state('');
   let selectedTeacher = $state('Male Teacher');
   let selectedLevel = $state('');
   let selectedDays = $state('');
   let selectedSchedule = $state('');
-  // Pre-fill from calculator
+
+  // Optional state
   let selectedDuration = $state('');
-  let selectedSessions = $state('');
   let selectedNote = $state('');
 
-  // Hidden inputs are synced via $derived — no native <select> needed
-  const genderOptions = ['Male', 'Female'];
+  // Fallback options for items not in helpers.ts
   const teacherOptions = ['Male Teacher', 'Female Teacher', 'No Preference'];
-  const levelOptions = ['Beginner', 'Intermediate', 'Advanced'];
-  const daysOptions = ['2 Days', '3 Days', '4 Days', '5 Days'];
-  const scheduleOptions = ['Morning', 'Afternoon', 'Evening', 'Night'];
   const durationOptions = ['30 min', '40 min'];
-  const sessionsOptions = ['2x', '3x', '4x', '5x'];
 
   onMount(() => {
-    // B-4 FIX: Session is now an HttpOnly cookie — it cannot be read from JS.
-    // We do a lightweight pre-flight HEAD to detect a 401 and redirect.
     if (typeof window !== 'undefined') {
-      fetch('/api/complete', { method: 'HEAD' })
-        .then((res) => {
-          if (res.status === 401) {
-            window.location.assign('/funnel/signup');
-          }
-        })
-        .catch(() => {
-          // Network error — allow the user to attempt the submit anyway.
-        });
-
       const params = new URLSearchParams(window.location.search);
 
-      const savedCourse = params.get('course') || sessionStorage.getItem('q_track_course');
-      if (savedCourse) selectedCourse = savedCourse;
+      // Pre-fill from URL or Session Storage
+      selectedCourse = params.get('course') || sessionStorage.getItem('q_track_course') || '';
+      selectedGender = params.get('gender') || sessionStorage.getItem('q_track_gender') || '';
+      selectedTeacher =
+        params.get('teacherGender') ||
+        sessionStorage.getItem('q_track_teacherGender') ||
+        'Male Teacher';
+      selectedLevel = params.get('level') || sessionStorage.getItem('q_track_level') || '';
+      selectedSchedule = params.get('schedule') || sessionStorage.getItem('q_track_schedule') || '';
+      selectedDuration = params.get('duration') || sessionStorage.getItem('q_track_duration') || '';
+      selectedNote = params.get('note') || sessionStorage.getItem('q_track_note') || '';
 
-      const savedGender = params.get('gender') || sessionStorage.getItem('q_track_gender');
-      if (savedGender) selectedGender = savedGender;
+      // Smart Mapping: If user comes from calculator with "sessions=3x", map it to "days=3 Days"
+      const incomingSessions =
+        params.get('sessions') || sessionStorage.getItem('q_track_sessions') || '';
+      selectedDays = params.get('days') || sessionStorage.getItem('q_track_days') || '';
 
-      const savedTeacher =
-        params.get('teacherGender') || sessionStorage.getItem('q_track_teacherGender');
-      if (savedTeacher) selectedTeacher = savedTeacher;
-
-      const savedLevel = params.get('level') || sessionStorage.getItem('q_track_level');
-      if (savedLevel) selectedLevel = savedLevel;
-
-      const savedDays = params.get('days') || sessionStorage.getItem('q_track_days');
-      if (savedDays) selectedDays = savedDays;
-
-      const savedSchedule = params.get('schedule') || sessionStorage.getItem('q_track_schedule');
-      if (savedSchedule) selectedSchedule = savedSchedule;
-
-      // Pre-fill from calculator context
-      const savedDuration = params.get('duration') || sessionStorage.getItem('q_track_duration');
-      if (savedDuration) selectedDuration = savedDuration;
-
-      const savedSessions = params.get('sessions') || sessionStorage.getItem('q_track_sessions');
-      if (savedSessions) selectedSessions = savedSessions;
-
-      const savedNote = params.get('note') || sessionStorage.getItem('q_track_note');
-      if (savedNote) selectedNote = savedNote;
+      if (!selectedDays && incomingSessions) {
+        const numericMatch = incomingSessions.match(/\d+/);
+        if (numericMatch) {
+          selectedDays = `${numericMatch[0]} Days`;
+        }
+      }
     }
   });
 
+  function validateForm(): boolean {
+    fieldErrors = {};
+    let isValid = true;
+
+    if (!selectedCourse) {
+      fieldErrors.course = true;
+      isValid = false;
+    }
+    if (!selectedGender) {
+      fieldErrors.gender = true;
+      isValid = false;
+    }
+    if (!selectedTeacher) {
+      fieldErrors.teacherGender = true;
+      isValid = false;
+    }
+    if (!selectedLevel) {
+      fieldErrors.level = true;
+      isValid = false;
+    }
+    if (!selectedDays) {
+      fieldErrors.days = true;
+      isValid = false;
+    }
+    if (!selectedSchedule) {
+      fieldErrors.schedule = true;
+      isValid = false;
+    }
+
+    if (!isValid) {
+      globalError = 'Please complete all required fields highlighted in red.';
+    }
+    return isValid;
+  }
+
   async function handleSubmit(event: SubmitEvent) {
     event.preventDefault();
-    loading = true;
-    errorMsg = '';
+    globalError = '';
 
+    if (!validateForm()) {
+      // Smooth scroll to top so user instantly sees the error banner
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    loading = true;
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
 
-    // Inject the segmented-control values into the FormData
-    formData.set('course', selectedCourse);
-    formData.set('gender', selectedGender);
-    formData.set('teacherGender', selectedTeacher);
-    formData.set('level', selectedLevel);
-    formData.set('days', selectedDays);
-    formData.set('schedule', selectedSchedule);
-    formData.set('duration', selectedDuration);
-    formData.set('sessions', selectedSessions);
-    formData.set('note', selectedNote);
+    // Background Sync: Ensure webhook receives "sessions" matching the chosen "days"
+    if (selectedDays) {
+      const numericMatch = selectedDays.match(/\d+/);
+      if (numericMatch) {
+        formData.set('sessions', `${numericMatch[0]}x`);
+      }
+    }
 
     try {
       const response = await fetch('/api/complete', { method: 'POST', body: formData });
@@ -108,194 +125,207 @@
 
       window.location.assign('/funnel/success');
     } catch (err: unknown) {
-      errorMsg = err instanceof Error ? err.message : 'A network error occurred. Please try again.';
+      globalError =
+        err instanceof Error ? err.message : 'A network error occurred. Please try again.';
       loading = false;
     }
   }
 
-  // Pill classes — shared style tokens
-  const pill = {
-    base: 'px-3 py-1.5 text-sm rounded-lg border font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600',
-    off: 'bg-transparent border-gray-200 text-gray-600 hover:bg-gray-50',
-    on: 'bg-emerald-50 border-emerald-600 text-emerald-800 ring-1 ring-emerald-600',
-  };
-
-  function pillClass(selected: string, value: string): string {
-    return `${pill.base} ${selected === value ? pill.on : pill.off}`;
-  }
+  // Base shared styles for the native radio UI (Tailwind Peer classes)
+  const labelBase = 'cursor-pointer select-none flex-auto';
+  const pillBase =
+    'w-full px-3 py-2.5 text-sm text-center font-medium rounded-xl border transition-all duration-200 flex items-center justify-center h-full';
+  const pillOff =
+    'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 peer-focus-visible:ring-2 peer-focus-visible:ring-emerald-600 peer-focus-visible:ring-offset-1';
+  const pillOn =
+    'peer-checked:bg-emerald-50 peer-checked:border-emerald-600 peer-checked:text-emerald-800 peer-checked:ring-1 peer-checked:ring-emerald-600 peer-checked:shadow-sm';
+  const errorRing = 'ring-2 ring-red-400 ring-offset-2 rounded-xl p-1 -m-1';
 </script>
 
-<form onsubmit={handleSubmit} class="space-y-6 w-full relative z-10">
-  {#if errorMsg}
+<!-- Added pb-12 so the button is never cut off by mobile device home bars -->
+<form onsubmit={handleSubmit} class="space-y-8 w-full relative z-10 pb-12">
+  {#if globalError}
     <div
       class="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl text-sm flex items-center gap-3 animate-in fade-in zoom-in duration-300"
     >
       <AlertCircle class="w-5 h-5 shrink-0" />
-      {errorMsg}
+      {globalError}
     </div>
   {/if}
 
   <!-- Course select -->
-  <div class="space-y-2">
-    <label class="block text-sm font-semibold text-emerald-950">Select Course *</label>
-    <div class="flex flex-wrap gap-2" role="group" aria-label="Select course">
+  <div class="space-y-3">
+    <label class="block text-sm font-semibold text-emerald-950"
+      >Select Course <span class="text-red-500">*</span></label
+    >
+    <div class="flex flex-wrap gap-2 {fieldErrors.course ? errorRing : ''}">
       {#each COURSE_LIST as course (course.title)}
-        <button
-          type="button"
-          disabled={loading}
-          class={pillClass(selectedCourse, course.title)}
-          aria-pressed={selectedCourse === course.title}
-          onclick={() => (selectedCourse = course.title)}
-        >
-          {course.title}
-        </button>
+        <label class={labelBase}>
+          <input
+            type="radio"
+            name="course"
+            value={course.title}
+            bind:group={selectedCourse}
+            disabled={loading}
+            class="peer sr-only"
+          />
+          <div class="{pillBase} {pillOff} {pillOn}">
+            {course.title}
+          </div>
+        </label>
       {/each}
     </div>
-    <input type="hidden" name="course" value={selectedCourse} />
   </div>
 
   <!-- Student Gender & Teacher Preference -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="space-y-2">
-      <label class="block text-sm font-semibold text-emerald-950">Student Gender *</label>
-      <div class="flex flex-wrap gap-2" role="group" aria-label="Student gender">
-        {#each genderOptions as opt (opt)}
-          <button
-            type="button"
-            disabled={loading}
-            class={pillClass(selectedGender, opt)}
-            aria-pressed={selectedGender === opt}
-            onclick={() => (selectedGender = opt)}
-          >
-            {opt}
-          </button>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="space-y-3">
+      <label class="block text-sm font-semibold text-emerald-950"
+        >Student Gender <span class="text-red-500">*</span></label
+      >
+      <div class="flex flex-wrap gap-2 {fieldErrors.gender ? errorRing : ''}">
+        {#each GENDERS as opt (opt.value)}
+          <label class={labelBase}>
+            <input
+              type="radio"
+              name="gender"
+              value={opt.value}
+              bind:group={selectedGender}
+              disabled={loading}
+              class="peer sr-only"
+            />
+            <div class="{pillBase} {pillOff} {pillOn}">
+              {opt.label}
+            </div>
+          </label>
         {/each}
       </div>
-      <input type="hidden" name="gender" value={selectedGender} />
     </div>
 
-    <div class="space-y-2">
-      <label class="block text-sm font-semibold text-emerald-950">Teacher Preference *</label>
-      <div class="flex flex-wrap gap-2" role="group" aria-label="Teacher preference">
+    <div class="space-y-3">
+      <label class="block text-sm font-semibold text-emerald-950"
+        >Teacher Preference <span class="text-red-500">*</span></label
+      >
+      <div class="flex flex-wrap gap-2 {fieldErrors.teacherGender ? errorRing : ''}">
         {#each teacherOptions as opt (opt)}
-          <button
-            type="button"
-            disabled={loading}
-            class={pillClass(selectedTeacher, opt)}
-            aria-pressed={selectedTeacher === opt}
-            onclick={() => (selectedTeacher = opt)}
-          >
-            {opt}
-          </button>
+          <label class={labelBase}>
+            <input
+              type="radio"
+              name="teacherGender"
+              value={opt}
+              bind:group={selectedTeacher}
+              disabled={loading}
+              class="peer sr-only"
+            />
+            <div class="{pillBase} {pillOff} {pillOn}">
+              {opt}
+            </div>
+          </label>
         {/each}
       </div>
-      <input type="hidden" name="teacherGender" value={selectedTeacher} />
-      <!-- PHASE 2: Helper text — context for non-Muslim or new-to-Islam parents -->
-      <p class="text-xs text-gray-500 mt-1">
+      <p class="text-xs text-emerald-700/80 leading-relaxed mt-2">
         We match your child with a teacher of your preferred gender when available.
       </p>
     </div>
   </div>
 
   <!-- Current Level -->
-  <div class="space-y-2">
-    <label class="block text-sm font-semibold text-emerald-950">Current Level *</label>
-    <div class="flex flex-wrap gap-2" role="group" aria-label="Current level">
-      {#each levelOptions as opt (opt)}
-        <button
-          type="button"
-          disabled={loading}
-          class={pillClass(selectedLevel, opt)}
-          aria-pressed={selectedLevel === opt}
-          onclick={() => (selectedLevel = opt)}
-        >
-          {opt}
-        </button>
+  <div class="space-y-3">
+    <label class="block text-sm font-semibold text-emerald-950"
+      >Current Level <span class="text-red-500">*</span></label
+    >
+    <div class="flex flex-wrap gap-2 {fieldErrors.level ? errorRing : ''}">
+      {#each LEVELS as opt (opt.value)}
+        <label class={labelBase}>
+          <input
+            type="radio"
+            name="level"
+            value={opt.value}
+            bind:group={selectedLevel}
+            disabled={loading}
+            class="peer sr-only"
+          />
+          <div class="{pillBase} {pillOff} {pillOn}">
+            {opt.label}
+          </div>
+        </label>
       {/each}
-    </div>
-    <input type="hidden" name="level" value={selectedLevel} />
-  </div>
-
-  <!-- Session Length & Sessions / Week (pre-filled from calculator) -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="space-y-2">
-      <label class="block text-sm font-semibold text-emerald-950">Session Length</label>
-      <div class="flex flex-wrap gap-2" role="group" aria-label="Session length">
-        {#each durationOptions as opt (opt)}
-          <button
-            type="button"
-            disabled={loading}
-            class={pillClass(selectedDuration, opt)}
-            aria-pressed={selectedDuration === opt}
-            onclick={() => (selectedDuration = opt)}
-          >
-            {opt}
-          </button>
-        {/each}
-      </div>
-      <input type="hidden" name="duration" value={selectedDuration} />
-    </div>
-
-    <div class="space-y-2">
-      <label class="block text-sm font-semibold text-emerald-950">Sessions / Week</label>
-      <div class="flex flex-wrap gap-2" role="group" aria-label="Sessions per week">
-        {#each sessionsOptions as opt (opt)}
-          <button
-            type="button"
-            disabled={loading}
-            class={pillClass(selectedSessions, opt)}
-            aria-pressed={selectedSessions === opt}
-            onclick={() => (selectedSessions = opt)}
-          >
-            {opt}
-          </button>
-        {/each}
-      </div>
-      <input type="hidden" name="sessions" value={selectedSessions} />
     </div>
   </div>
 
   <!-- Days per week & Preferred Time -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="space-y-2">
-      <label class="block text-sm font-semibold text-emerald-950">Days per week *</label>
-      <div class="flex flex-wrap gap-2" role="group" aria-label="Days per week">
-        {#each daysOptions as opt (opt)}
-          <button
-            type="button"
-            disabled={loading}
-            class={pillClass(selectedDays, opt)}
-            aria-pressed={selectedDays === opt}
-            onclick={() => (selectedDays = opt)}
-          >
-            {opt}
-          </button>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="space-y-3">
+      <label class="block text-sm font-semibold text-emerald-950"
+        >Days per week <span class="text-red-500">*</span></label
+      >
+      <div class="flex flex-wrap gap-2 {fieldErrors.days ? errorRing : ''}">
+        {#each DAYS as opt (opt.value)}
+          <label class={labelBase}>
+            <input
+              type="radio"
+              name="days"
+              value={opt.value}
+              bind:group={selectedDays}
+              disabled={loading}
+              class="peer sr-only"
+            />
+            <div class="{pillBase} {pillOff} {pillOn}">
+              {opt.label}
+            </div>
+          </label>
         {/each}
       </div>
-      <input type="hidden" name="days" value={selectedDays} />
     </div>
 
-    <div class="space-y-2">
-      <label class="block text-sm font-semibold text-emerald-950">Preferred Time *</label>
-      <div class="flex flex-wrap gap-2" role="group" aria-label="Preferred time">
-        {#each scheduleOptions as opt (opt)}
-          <button
-            type="button"
-            disabled={loading}
-            class={pillClass(selectedSchedule, opt)}
-            aria-pressed={selectedSchedule === opt}
-            onclick={() => (selectedSchedule = opt)}
-          >
-            {opt}
-          </button>
+    <div class="space-y-3">
+      <label class="block text-sm font-semibold text-emerald-950"
+        >Preferred Time <span class="text-red-500">*</span></label
+      >
+      <div class="flex flex-wrap gap-2 {fieldErrors.schedule ? errorRing : ''}">
+        {#each SCHEDULES as opt (opt.value)}
+          <label class={labelBase}>
+            <input
+              type="radio"
+              name="schedule"
+              value={opt.value}
+              bind:group={selectedSchedule}
+              disabled={loading}
+              class="peer sr-only"
+            />
+            <div class="{pillBase} {pillOff} {pillOn}">
+              {opt.label}
+            </div>
+          </label>
         {/each}
       </div>
-      <input type="hidden" name="schedule" value={selectedSchedule} />
+    </div>
+  </div>
+
+  <!-- Session Length (Optional) -->
+  <div class="space-y-3 md:w-1/2 md:pr-4">
+    <label class="block text-sm font-semibold text-emerald-950">Session Length</label>
+    <div class="flex flex-wrap gap-2">
+      {#each durationOptions as opt (opt)}
+        <label class={labelBase}>
+          <input
+            type="radio"
+            name="duration"
+            value={opt}
+            bind:group={selectedDuration}
+            disabled={loading}
+            class="peer sr-only"
+          />
+          <div class="{pillBase} {pillOff} {pillOn}">
+            {opt}
+          </div>
+        </label>
+      {/each}
     </div>
   </div>
 
   <!-- Additional Notes -->
-  <div class="space-y-2">
+  <div class="space-y-3">
     <label class="block text-sm font-semibold text-emerald-950">Additional Notes</label>
     <textarea
       bind:value={selectedNote}
@@ -311,7 +341,7 @@
   <button
     type="submit"
     disabled={loading}
-    class="w-full mt-8 flex items-center justify-center bg-amber-500 text-white font-bold py-4 px-6 rounded-xl hover:bg-amber-600 transition-all duration-300 ease-in-out disabled:opacity-70 text-lg shadow-lg shadow-amber-500/20 active:scale-[0.98]"
+    class="w-full mt-4 flex items-center justify-center bg-amber-500 text-white font-bold py-4 px-6 rounded-xl hover:bg-amber-600 transition-all duration-300 ease-in-out disabled:opacity-70 text-lg shadow-lg shadow-amber-500/20 active:scale-[0.98]"
   >
     {#if loading}
       <Loader2 class="w-6 h-6 animate-spin" />
