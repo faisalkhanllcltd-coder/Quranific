@@ -9,17 +9,12 @@
   let dur = $state('30');
   let currency = $state('USD');
   let billing = $state('monthly');
-
   let selectedPlan = $state('5');
-
-  // NEW EDGE-PRO STATE: Dismissible UI Note
-  let showCourseNote = $state(true);
 
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
 
   let discount = $derived(BILLING_DISCOUNTS[billing]);
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);
-
   let checkoutUrl = $derived(
     `/funnel/signup?sessions=${selectedPlan}x&duration=${dur}&billing=${billing}&currency=${currency}`
   );
@@ -37,42 +32,6 @@
     return discount > 0 ? Math.round(base * discount * (billing === 'annual' ? 12 : 6)) : 0;
   }
 </script>
-
-<!-- Dismissible Course Note -->
-{#if showCourseNote}
-  <div
-    class="max-w-3xl mx-auto mb-6 bg-emerald-50 border border-emerald-200/70 rounded-xl p-3 sm:p-4 flex items-start sm:items-center justify-between gap-3 shadow-sm transition-all animate-in fade-in slide-in-from-top-2 mx-4 md:mx-auto"
-  >
-    <div class="flex items-start sm:items-center gap-3 text-sm font-medium text-emerald-900/80">
-      <svg
-        class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5 sm:mt-0"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-      <p>
-        <strong class="text-emerald-950">Good to know:</strong> All subjects (Qaida, Tajweed, Hifz) cost
-        exactly the same, and you can change your class frequency whenever you need to.
-      </p>
-    </div>
-    <button
-      onclick={() => (showCourseNote = false)}
-      class="shrink-0 p-1 text-emerald-900/40 hover:text-emerald-900 transition-colors rounded-lg hover:bg-emerald-100/50"
-      aria-label="Dismiss"
-    >
-      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-  </div>
-{/if}
 
 <!-- Mobile fix: flex-col on small screens, flex-row on md+ -->
 <div
@@ -110,7 +69,6 @@
     <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
       >Billing:</span
     >
-    <!-- Mobile fix: stacked column of buttons on very small screens, inline row on larger -->
     <div class="flex flex-col sm:flex-row gap-1.5 w-full sm:w-auto">
       <button
         class="w-full sm:w-auto px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {billing ===
@@ -172,8 +130,10 @@
       <button
         type="button"
         onclick={() => (selectedPlan = '2')}
-        class="relative border-b sm:border-b-0 sm:border-r border-emerald-100 p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none
-               {selectedPlan === '2' ? 'bg-emerald-50/30 z-10' : 'bg-white hover:bg-slate-50/70'}"
+        class="relative border-b sm:border-b-0 sm:border-r border-emerald-100 p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none {selectedPlan ===
+        '2'
+          ? 'bg-emerald-50/30 z-10'
+          : 'bg-white hover:bg-slate-50/70'}"
       >
         {#if selectedPlan === '2'}
           <div class="absolute inset-0 pointer-events-none z-20">
@@ -187,7 +147,6 @@
             <div class="absolute top-0 bottom-0 right-0 w-[2px] bg-amber-400"></div>
           </div>
         {/if}
-
         <div class="flex items-center justify-between sm:block w-full">
           <div class="text-left">
             <div
@@ -199,7 +158,6 @@
             </div>
             <div class="text-[11px] font-medium text-emerald-900/40">8 sessions / month</div>
           </div>
-
           <div class="text-right sm:text-left sm:mt-5 mt-0">
             <div class="flex items-baseline justify-end sm:justify-start gap-0.5 mb-0.5 sm:mb-1">
               <span class="text-base font-bold text-emerald-900/60">{sym}</span>
@@ -213,7 +171,6 @@
             </div>
           </div>
         </div>
-
         <div
           class="text-[10px] font-bold text-emerald-600 text-left mt-2 {discount > 0
             ? 'block'
@@ -227,8 +184,10 @@
       <button
         type="button"
         onclick={() => (selectedPlan = '3')}
-        class="relative border-b sm:border-b-0 sm:border-r border-emerald-100 p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none
-               {selectedPlan === '3' ? 'bg-emerald-50/30 z-10' : 'bg-white hover:bg-slate-50/70'}"
+        class="relative border-b sm:border-b-0 sm:border-r border-emerald-100 p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none {selectedPlan ===
+        '3'
+          ? 'bg-emerald-50/30 z-10'
+          : 'bg-white hover:bg-slate-50/70'}"
       >
         {#if selectedPlan === '3'}
           <div class="absolute inset-0 pointer-events-none z-20">
@@ -242,7 +201,6 @@
             <div class="absolute top-0 bottom-0 right-0 w-[2px] bg-amber-400"></div>
           </div>
         {/if}
-
         <div class="flex items-center justify-between sm:block w-full">
           <div class="text-left">
             <div
@@ -254,7 +212,6 @@
             </div>
             <div class="text-[11px] font-medium text-emerald-900/40">12 sessions / month</div>
           </div>
-
           <div class="text-right sm:text-left sm:mt-5 mt-0">
             <div class="flex items-baseline justify-end sm:justify-start gap-0.5 mb-0.5 sm:mb-1">
               <span class="text-base font-bold text-emerald-900/60">{sym}</span>
@@ -268,7 +225,6 @@
             </div>
           </div>
         </div>
-
         <div
           class="text-[10px] font-bold text-emerald-600 text-left mt-2 {discount > 0
             ? 'block'
@@ -282,8 +238,10 @@
       <button
         type="button"
         onclick={() => (selectedPlan = '4')}
-        class="relative border-b sm:border-b-0 sm:border-r border-emerald-100 p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none
-               {selectedPlan === '4' ? 'bg-emerald-50/30 z-10' : 'bg-white hover:bg-slate-50/70'}"
+        class="relative border-b sm:border-b-0 sm:border-r border-emerald-100 p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none {selectedPlan ===
+        '4'
+          ? 'bg-emerald-50/30 z-10'
+          : 'bg-white hover:bg-slate-50/70'}"
       >
         {#if selectedPlan === '4'}
           <div class="absolute inset-0 pointer-events-none z-20">
@@ -297,7 +255,6 @@
             <div class="absolute top-0 bottom-0 right-0 w-[2px] bg-amber-400"></div>
           </div>
         {/if}
-
         <div class="flex items-center justify-between sm:block w-full">
           <div class="text-left">
             <div
@@ -309,7 +266,6 @@
             </div>
             <div class="text-[11px] font-medium text-emerald-900/40">16 sessions / month</div>
           </div>
-
           <div class="text-right sm:text-left sm:mt-5 mt-0">
             <div class="flex items-baseline justify-end sm:justify-start gap-0.5 mb-0.5 sm:mb-1">
               <span class="text-base font-bold text-emerald-900/60">{sym}</span>
@@ -323,7 +279,6 @@
             </div>
           </div>
         </div>
-
         <div
           class="text-[10px] font-bold text-emerald-600 text-left mt-2 {discount > 0
             ? 'block'
@@ -333,12 +288,14 @@
         </div>
       </button>
 
-      <!-- 5x / week — amber accent -->
+      <!-- 5x / week -->
       <button
         type="button"
         onclick={() => (selectedPlan = '5')}
-        class="relative p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none
-               {selectedPlan === '5' ? 'bg-emerald-50/30 z-10' : 'bg-white hover:bg-slate-50/70'}"
+        class="relative p-5 sm:p-6 w-full text-left transition-colors duration-300 outline-none {selectedPlan ===
+        '5'
+          ? 'bg-emerald-50/30 z-10'
+          : 'bg-white hover:bg-slate-50/70'}"
       >
         {#if selectedPlan !== '5'}
           <div class="absolute top-0 left-0 right-0 h-[3px] bg-amber-400" aria-hidden="true"></div>
@@ -355,13 +312,11 @@
             <div class="absolute top-0 bottom-0 right-0 w-[2px] bg-amber-400"></div>
           </div>
         {/if}
-
         <div
           class="text-[9px] font-black tracking-widest uppercase text-amber-600 mb-2 sm:mb-1 pt-1 text-left"
         >
           Most families choose this
         </div>
-
         <div class="flex items-center justify-between sm:block w-full">
           <div class="text-left">
             <div
@@ -373,7 +328,6 @@
             </div>
             <div class="text-[11px] font-medium text-emerald-900/40">20 sessions / month</div>
           </div>
-
           <div class="text-right sm:text-left sm:mt-5 mt-0">
             <div class="flex items-baseline justify-end sm:justify-start gap-0.5 mb-0.5 sm:mb-1">
               <span class="text-base font-bold text-emerald-900/60">{sym}</span>
@@ -387,7 +341,6 @@
             </div>
           </div>
         </div>
-
         <div
           class="text-[10px] font-bold text-emerald-600 text-left mt-2 {discount > 0
             ? 'block'
@@ -398,7 +351,7 @@
       </button>
     </div>
 
-    <!-- Edge-Pro CTA Area: Live E-commerce Receipt & Text Link -->
+    <!-- Edge-Pro CTA Area -->
     <div
       class="border-t border-emerald-100 bg-emerald-50/40 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4"
     >
@@ -406,8 +359,6 @@
         <span class="text-[10px] font-black tracking-widest uppercase text-emerald-900/40 mb-1.5"
           >Your Selection</span
         >
-
-        <!-- Native English Configuration -->
         <div
           class="text-sm font-medium text-emerald-900/70 flex flex-wrap items-center justify-center sm:justify-start gap-x-2 gap-y-1"
         >
@@ -427,8 +378,6 @@
             ></span
           >
         </div>
-
-        <!-- Live Total & Savings Receipt -->
         <div class="mt-2 flex items-center justify-center sm:justify-start gap-2.5">
           <span class="text-lg font-black text-emerald-950"
             >{sym}{getFinalPrice(selectedPlan)}<span
@@ -438,13 +387,11 @@
           {#if discount > 0}
             <span
               class="text-[10px] font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full border border-emerald-200/50"
+              >Saves {sym}{getSavingAmt(selectedPlan)}</span
             >
-              Saves {sym}{getSavingAmt(selectedPlan)}
-            </span>
           {/if}
         </div>
       </div>
-
       <a
         href={checkoutUrl}
         class="group inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:text-emerald-900 transition-colors mt-2 sm:mt-0"
