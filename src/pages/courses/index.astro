@@ -8,12 +8,12 @@ import FinalCTA from '../../components/sections/FinalCTA.astro';
 
 // Course-specific components
 import CourseGrid from '../../components/courses/CourseGrid.astro';
-
 import TeacherTeaserBanner from '../../components/courses/TeacherTeaserBanner.astro';
 import CoursesFAQ from '../../components/courses/CoursesFAQ.astro';
+import Note from '../../components/ui/Note.astro';
 
-// Data — used for JSON-LD and filter tabs
-import { courses, COURSE_CATEGORIES } from '../../constants/courses';
+// Data
+import { courses } from '../../constants/courses';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -32,32 +32,46 @@ const jsonLd = {
 
 <Base
   title="Courses — Quranific | Find the Perfect Quran Programme for Your Child"
-  description="Not every child starts in the same place. Find the perfect 1-on-1 online Quran course for your child or yourself. Foundation, Tajweed, Hifz, Tafsir, Ijazah, and Arabic Language."
+  description="Not every child starts in the same place. Find the perfect 1-on-1 online Quran course for your child or yourself. Basic Qaida, Tajweed, Hifz, Tafsir, Ijazah, and Arabic Language."
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
 
   <Header />
 
-  <main class="bg-[#fefdf9] selection:bg-[#d1fae5] selection:text-[#064e3b] font-sans">
+  <main class="bg-cream-50 selection:bg-emerald-200 selection:text-emerald-950 font-sans">
     <!-- ─── HERO ────────────────────────────────────────────────────────────── -->
     <PageHero
-      eyebrow="6 programmes · Ages 4 to adult"
+      eyebrow="All programmes · Ages 4 to adult"
       title="Find the programme that fits "
       highlightWord="your child exactly."
-      subtitle="Not every child starts in the same place. Not every family has the same goal. Every Quranific programme is built around one learner — yours — with a dedicated teacher and a path that moves at their pace."
-      primaryCtaText="Browse All Courses ↓"
-      primaryCtaLink="#courses-grid"
-      secondaryCtaText="Book Free Trial Class"
-      secondaryCtaLink="/funnel/signup"
+      subtitle="Not every child starts in the same place. Not every family has the same goal. Every Quranific path is built around one learner — yours — with a dedicated teacher moving at their pace."
+      primaryCtaText="Book Free Trial Class"
+      primaryCtaLink="/funnel/signup"
     />
 
-    <!-- ─── COURSE FEATURES GRID ────────────────────────────────────────────────── -->
-    <section class="py-16 bg-cream-50 relative z-20 border-b border-emerald-100/50">
+    <!-- ─── COURSES GRID ─────────────────────────────────────────────────────── -->
+    <section class="py-16 md:py-20 lg:py-24 content-visibility-auto" id="courses-grid">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section header with reusable Note -->
+        <div class="text-center mb-12">
+          <h2 class="text-4xl lg:text-5xl font-bold text-emerald-950 mb-8 tracking-tight">
+            Find the perfect path.
+          </h2>
+          <Note />
+        </div>
+
+        <!-- Data-driven course cards (filters removed) -->
+        <CourseGrid />
+      </div>
+    </section>
+
+    <!-- ─── COURSE FEATURES GRID (Moved Below Grid) ────────────────────────── -->
+    <section class="py-16 bg-white relative z-20 border-y border-emerald-100/50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Feature 1: Child-Friendly Tutors -->
           <div
-            class="flex flex-col p-6 rounded-2xl bg-white border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300 group"
+            class="flex flex-col p-6 rounded-2xl bg-cream-50/50 border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300 group"
           >
             <div
               class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"
@@ -68,17 +82,21 @@ const jsonLd = {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 stroke-width="2"
-                ><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"
-                ></path><path
+                aria-hidden="true"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"
+                ></path>
+                <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-                ></path><path
+                ></path>
+                <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                ></path></svg
-              >
+                ></path>
+              </svg>
             </div>
             <h3 class="text-emerald-950 font-bold text-lg mb-2">Child-Friendly Tutors</h3>
             <p class="text-emerald-900/70 text-sm leading-relaxed font-medium">
@@ -89,7 +107,7 @@ const jsonLd = {
 
           <!-- Feature 2: Tajweed Focus -->
           <div
-            class="flex flex-col p-6 rounded-2xl bg-white border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300 group"
+            class="flex flex-col p-6 rounded-2xl bg-cream-50/50 border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300 group"
           >
             <div
               class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"
@@ -100,12 +118,14 @@ const jsonLd = {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 stroke-width="2"
-                ><path
+                aria-hidden="true"
+              >
+                <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                ></path></svg
-              >
+                ></path>
+              </svg>
             </div>
             <h3 class="text-emerald-950 font-bold text-lg mb-2">Tajweed Focus</h3>
             <p class="text-emerald-900/70 text-sm leading-relaxed font-medium">
@@ -116,7 +136,7 @@ const jsonLd = {
 
           <!-- Feature 3: Proven Results -->
           <div
-            class="flex flex-col p-6 rounded-2xl bg-white border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300 group"
+            class="flex flex-col p-6 rounded-2xl bg-cream-50/50 border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300 group"
           >
             <div
               class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"
@@ -127,11 +147,13 @@ const jsonLd = {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 stroke-width="2"
-                ><path
+                aria-hidden="true"
+              >
+                <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg
-              >
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+              </svg>
             </div>
             <h3 class="text-emerald-950 font-bold text-lg mb-2">Proven Results</h3>
             <p class="text-emerald-900/70 text-sm leading-relaxed font-medium">
@@ -142,7 +164,7 @@ const jsonLd = {
 
           <!-- Feature 4: 1-on-1 Attention -->
           <div
-            class="flex flex-col p-6 rounded-2xl bg-white border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300 group"
+            class="flex flex-col p-6 rounded-2xl bg-cream-50/50 border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300 group"
           >
             <div
               class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"
@@ -153,12 +175,14 @@ const jsonLd = {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 stroke-width="2"
-                ><path
+                aria-hidden="true"
+              >
+                <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                ></path></svg
-              >
+                ></path>
+              </svg>
             </div>
             <h3 class="text-emerald-950 font-bold text-lg mb-2">1-on-1 Attention</h3>
             <p class="text-emerald-900/70 text-sm leading-relaxed font-medium">
@@ -167,52 +191,6 @@ const jsonLd = {
             </p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ─── COURSES GRID ─────────────────────────────────────────────────────── -->
-    <section class="py-10 md:py-20 lg:py-28 bg-[#fefdf9] content-visibility-auto" id="courses-grid">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Section header -->
-        <div class="text-center mb-12">
-          <span class="text-xs font-black tracking-widest uppercase text-[#047857] block mb-3"
-            >All Programmes</span
-          >
-          <h2 class="text-4xl lg:text-5xl font-bold text-[#022c22] mb-4 tracking-tight">
-            Six paths. <em class="font-serif italic text-[#047857] font-medium">One destination.</em
-            >
-          </h2>
-          <p class="text-lg text-[#064e3b]/80 font-medium max-w-2xl mx-auto">
-            Every programme is 1-on-1, taught by a verified teacher, with on-demand progress reports
-            and a guaranteed make-up for every missed session.
-          </p>
-        </div>
-
-        <!-- Filter tabs — data-driven from COURSE_CATEGORIES -->
-        <div
-          class="flex overflow-x-auto gap-2 p-1.5 bg-white border border-emerald-100 rounded-full max-w-fit mx-auto mb-12 no-scrollbar shadow-sm"
-          role="group"
-          aria-label="Filter courses by category"
-        >
-          {
-            COURSE_CATEGORIES.map((cat, i) => (
-              <button
-                class={`px-5 py-2.5 rounded-full text-sm font-bold transition-[color,background-color,box-shadow] course-tab whitespace-nowrap ${
-                  i === 0
-                    ? 'bg-[#047857] text-white shadow-md'
-                    : 'text-[#064e3b]/60 hover:text-[#022c22]'
-                }`}
-                data-filter={cat === 'All Courses' ? 'all' : cat}
-                aria-pressed={i === 0 ? 'true' : 'false'}
-              >
-                {cat}
-              </button>
-            ))
-          }
-        </div>
-
-        <!-- Data-driven course cards -->
-        <CourseGrid />
       </div>
     </section>
 
@@ -227,35 +205,4 @@ const jsonLd = {
   </main>
 
   <Footer />
-
-  <script is:inline>
-    // ─── COURSE TAB FILTERING ─────────────────────────────────────────────────
-    // Reads data-category from .course-wrapper divs (set by CourseGrid.astro).
-    // Filter value "all" shows everything; otherwise matches category string exactly.
-    document.addEventListener('DOMContentLoaded', () => {
-      const tabs = document.querySelectorAll('.course-tab');
-
-      tabs.forEach((btn) => {
-        btn.addEventListener('click', function () {
-          filterCourses(this.getAttribute('data-filter'), this);
-        });
-      });
-
-      function filterCourses(category, activeBtn) {
-        tabs.forEach((t) => {
-          t.classList.remove('bg-[#047857]', 'text-white', 'shadow-md');
-          t.classList.add('text-[#064e3b]/60');
-          t.setAttribute('aria-pressed', 'false');
-        });
-        activeBtn.classList.remove('text-[#064e3b]/60');
-        activeBtn.classList.add('bg-[#047857]', 'text-white', 'shadow-md');
-        activeBtn.setAttribute('aria-pressed', 'true');
-
-        document.querySelectorAll('.course-wrapper').forEach((wrapper) => {
-          const cat = wrapper.getAttribute('data-category') || '';
-          wrapper.style.display = category === 'all' || cat === category ? '' : 'none';
-        });
-      }
-    });
-  </script>
 </Base>

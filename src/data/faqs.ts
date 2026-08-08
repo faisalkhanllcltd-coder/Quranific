@@ -97,7 +97,7 @@ export const faqs: Record<string, FAQ[]> = {
     {
       question: 'Who will be teaching my child?',
       answer:
-        "Every Quranific teacher holds a verified <strong>Ijazah</strong> — a certified chain of Quranic transmission — and has passed our three-stage vetting process: a recorded recitation assessment, a structured teaching interview, and a full background check. You receive your teacher's complete profile before the first session. We also offer both <strong>male and female teachers</strong> so families can choose whoever they feel most comfortable with culturally and personally. If at any point you want a different teacher, we arrange a new match immediately, at no charge and with no awkward conversation required.",
+        "Every Quranific teacher holds a verified <strong>Ijazah</strong> — a certified chain of Quranic transmission — and passes our strict <strong>four-stage</strong> vetting process before teaching a single student: Ijazah verification, a live recitation assessment, a structured teaching methodology interview, and a full safeguarding check. You receive your teacher's complete profile before the first session. We also offer both <strong>male and female teachers</strong> so families can choose whoever they feel most comfortable with culturally and personally. If at any point you want a different teacher, we arrange a new match immediately, at no charge and with no awkward conversation required.",
     },
     // ── SLOT 2: Core value proposition ───────────────────────────────────────
     {
@@ -145,7 +145,7 @@ export const faqs: Record<string, FAQ[]> = {
     {
       question: 'Is the adult programme completely private?',
       answer:
-        'Yes. In the Adult Tajweed, Adult Hifz, Tafsir, and Ijazah programmes, sessions are strictly <strong>1-on-1</strong>, never recorded without your explicit consent, and never discussed in any group setting. Your teacher knows only your first name. Progress reports go only to you. Many of our adult students specifically enrol because they want to correct mistakes they have carried for years without anyone knowing.',
+        'Yes. In the <strong>Quran Reading with Tajweed</strong>, <strong>Quran Memorization (Hifz)</strong>, <strong>Quran Translation &amp; Tafsir</strong>, and <strong>Advanced Tajweed (Ijazah)</strong> programmes, sessions are strictly <strong>1-on-1</strong>, never recorded without your explicit consent, and never discussed in any group setting. Your teacher knows only your first name. Progress reports go only to you. Many of our adult students specifically enrol because they want to correct mistakes they have carried for years without anyone knowing.',
     },
     // ── SLOT 10: Confidence — teacher chemistry ───────────────────────────────
     {

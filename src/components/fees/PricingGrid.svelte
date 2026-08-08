@@ -1,51 +1,10 @@
 <script lang="ts">
-  const PRICING_DATA = {
-    USD: {
-      '30': { '2': 33, '3': 41, '4': 46, '5': 50 },
-      '40': { '2': 44, '3': 55, '4': 61, '5': 67 },
-    },
-    GBP: {
-      '30': { '2': 30, '3': 38, '4': 42, '5': 46 },
-      '40': { '2': 40, '3': 50, '4': 56, '5': 61 },
-    },
-    EUR: {
-      '30': { '2': 36, '3': 46, '4': 50, '5': 55 },
-      '40': { '2': 48, '3': 61, '4': 66, '5': 73 },
-    },
-    AED: {
-      '30': { '2': 145, '3': 180, '4': 205, '5': 220 },
-      '40': { '2': 193, '3': 240, '4': 273, '5': 293 },
-    },
-    SGD: {
-      '30': { '2': 52, '3': 65, '4': 71, '5': 77 },
-      '40': { '2': 72, '3': 85, '4': 94, '5': 103 },
-    },
-    CAD: {
-      '30': { '2': 56, '3': 71, '4': 78, '5': 85 },
-      '40': { '2': 79, '3': 93, '4': 103, '5': 113 },
-    },
-    AUD: {
-      '30': { '2': 57, '3': 72, '4': 79, '5': 86 },
-      '40': { '2': 80, '3': 94, '4': 104, '5': 114 },
-    },
-    SAR: {
-      '30': { '2': 150, '3': 188, '4': 206, '5': 225 },
-      '40': { '2': 210, '3': 248, '4': 274, '5': 300 },
-    },
-  };
+  import { PRICING, CURRENCY_META, BILLING_DISCOUNTS } from '../../constants/pricing';
 
-  const CURRENCY_SYMBOLS: Record<string, string> = {
-    USD: '$',
-    GBP: '£',
-    EUR: '€',
-    AED: 'د.إ',
-    SGD: 'S$',
-    CAD: 'C$',
-    AUD: 'A$',
-    SAR: '﷼',
-  };
-
-  const BILLING_DISCOUNTS: Record<string, number> = { monthly: 0, sixMonth: 0.05, annual: 0.15 };
+  // Build symbol lookup from the imported CURRENCY_META array
+  const CURRENCY_SYMBOLS: Record<string, string> = Object.fromEntries(
+    CURRENCY_META.map((c) => [c.code, c.symbol])
+  );
 
   let dur = $state('30');
   let currency = $state('USD');
@@ -66,7 +25,7 @@
   );
 
   function getBasePrice(sess: string) {
-    return (PRICING_DATA as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
+    return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
   }
 
   function getFinalPrice(sess: string) {

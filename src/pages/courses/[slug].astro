@@ -8,6 +8,7 @@ import { faqs } from '../../data/faqs';
 import TeacherTeaserBanner from '../../components/courses/TeacherTeaserBanner.astro';
 import CoursesFAQ from '../../components/courses/CoursesFAQ.astro';
 import FinalCTA from '../../components/sections/FinalCTA.astro';
+import PricingCalculator from '../../components/fees/PricingCalculator.svelte';
 
 export function getStaticPaths() {
   return courses.map((course) => ({
@@ -17,10 +18,6 @@ export function getStaticPaths() {
 }
 
 const { course } = Astro.props;
-
-// Extract numeric value from string for Google Schema (e.g., "From $39/mo" -> "39")
-const priceMatch = course.price.match(/\d+/);
-const numericPrice = priceMatch ? priceMatch[0] : '0';
 
 // Elite Edge SEO: Dynamic JSON-LD Course Schema
 const schema = {
@@ -40,9 +37,8 @@ const schema = {
     courseWorkload: course.duration,
     offers: {
       '@type': 'Offer',
-      price: numericPrice,
-      priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
+      url: 'https://quranific.com/tuition-fee',
     },
   },
 };
@@ -89,7 +85,20 @@ if (course.slug === 'advanced-tajweed-ijazah') {
           )
         }
 
-        <div class="text-5xl mb-6" aria-hidden="true">{course.icon}</div>
+        <div class="mb-6 flex justify-center" aria-hidden="true">
+          <svg
+            class="w-14 h-14 text-white/80"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d={course.icon}></path>
+          </svg>
+        </div>
 
         <h1
           class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-tight text-balance"
@@ -164,7 +173,9 @@ if (course.slug === 'advanced-tajweed-ijazah') {
           <span class="text-emerald-900/50 text-[11px] font-bold uppercase tracking-widest mb-1.5"
             >Tuition</span
           >
-          <span class="text-emerald-950 font-semibold text-[15px]">{course.price}</span>
+          <a href="/tuition-fee" class="text-emerald-700 font-semibold text-[13px] hover:underline">
+            See pricing →
+          </a>
         </div>
       </div>
     </div>
@@ -199,6 +210,24 @@ if (course.slug === 'advanced-tajweed-ijazah') {
           ))
         }
       </div>
+    </div>
+  </section>
+
+  <!-- Pricing Calculator -->
+  <section class="py-16 md:py-24 bg-[#fefdf9]" aria-labelledby="calc-heading-slug">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <h2
+          id="calc-heading-slug"
+          class="text-3xl md:text-4xl font-bold text-emerald-950 tracking-tight mb-3"
+        >
+          Calculate Your Monthly Fee
+        </h2>
+        <p class="text-emerald-800/70 font-medium max-w-xl mx-auto">
+          Price is set by session length and frequency — identical across every course.
+        </p>
+      </div>
+      <PricingCalculator client:visible />
     </div>
   </section>
 

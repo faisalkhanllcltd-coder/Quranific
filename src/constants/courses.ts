@@ -46,7 +46,7 @@ export const courses: Course[] = [
     shortDesc: 'Perfect for absolute beginners — learn every Arabic letter from zero.',
     longDesc:
       'Start your Quranic journey by mastering the Arabic alphabet, correct pronunciation (Makharij), and the basic joining of letters. This is the mandatory foundation for fluent Quranic reading, taught gently and patiently for young learners and adult beginners alike.',
-    icon: '📖',
+    icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
     level: 'Beginner',
     category: 'Kids',
     duration: 'Avg. 2–3 Months',
@@ -75,7 +75,7 @@ export const courses: Course[] = [
     shortDesc: 'Read the Quran fluently and beautifully with correct Tajweed rules.',
     longDesc:
       'Learn to read the Holy Quran beautifully and accurately. We focus on implementing foundational and advanced Tajweed rules — from Makhaarij to Noon Sakinah, Madd, and Waqf — so you recite with the confidence and precision the Quran deserves.',
-    icon: '🎙️',
+    icon: 'M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z',
     level: 'All Levels',
     category: 'All Ages',
     duration: 'Ongoing',
@@ -92,7 +92,6 @@ export const courses: Course[] = [
       'Weekly Surah sign-off assessments',
     ],
     riveFile: 'course-tajweed.riv',
-    highlight: 'Most Popular',
     nooraniQaida: false,
     hifzIncluded: 'partial',
     senAdapted: false,
@@ -104,7 +103,7 @@ export const courses: Course[] = [
     shortDesc: 'Structured Hifz programmes for children and adults of all ages.',
     longDesc:
       'Structured Hifz programmes tailored to your memorisation capacity. We employ proven retention techniques — balancing new lessons (Sabaq) with daily revision (Sabqi and Manzil) — to ensure what is memorised stays memorised. Matched with an Ijazah-holding specialist.',
-    icon: '🧠',
+    icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
     level: 'All Levels',
     category: 'All Ages',
     duration: '1 to 3+ Years',
@@ -132,7 +131,7 @@ export const courses: Course[] = [
     shortDesc: 'Understand the profound meaning of every verse, word by word.',
     longDesc:
       'Go beyond recitation and understand the profound meanings of the verses. This course covers word-by-word translation, grammatical analysis, and the historical context (Asbab al-Nuzul) of the Surahs, so the Quran speaks to you directly in your daily life.',
-    icon: '💡',
+    icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
     level: 'Intermediate',
     category: 'Adult',
     duration: 'Ongoing',
@@ -160,7 +159,7 @@ export const courses: Course[] = [
     shortDesc: 'Earn an Ijazah with an unbroken chain back to the Prophet ﷺ.',
     longDesc:
       'For advanced reciters seeking an Ijazah — a certification with an unbroken chain of transmission (Sanad) back to the Prophet Muhammad (ﷺ). Strict adherence to perfect Makharij, Sifaat, and all Tajweed rules under direct examination by a certified Ijazah holder.',
-    icon: '📜',
+    icon: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z',
     level: 'Advanced',
     category: 'Specialist',
     duration: 'Varies by Student',
@@ -189,7 +188,7 @@ export const courses: Course[] = [
     shortDesc: 'Master Classical Arabic grammar and vocabulary to understand the Quran directly.',
     longDesc:
       'Master Classical (Fusha) Arabic — the language of the Quran. Understand the grammar (Nahw) and morphology (Sarf) necessary to comprehend the Quran directly in its revealed language, removing the dependency on translations for your Quranic understanding.',
-    icon: '🗣️',
+    icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
     level: 'All Levels',
     category: 'All Ages',
     duration: 'Ongoing',

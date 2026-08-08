@@ -97,6 +97,8 @@
                 urlVal = 'Quran Reading with Tajweed';
               else if (lower.includes('hifz') || lower.includes('memorization'))
                 urlVal = 'Quran Memorization (Hifz)';
+              else if (lower.includes('translation') || lower.includes('tafsir'))
+                urlVal = 'Quran Translation & Tafsir';
               else if (lower.includes('advanced') || lower.includes('ijazah'))
                 urlVal = 'Advanced Tajweed (Ijazah)';
               else if (lower.includes('arabic') || lower.includes('language'))
