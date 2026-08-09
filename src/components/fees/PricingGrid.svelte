@@ -6,6 +6,11 @@
     CURRENCY_META.map((c) => [c.code, c.symbol])
   );
 
+  interface Props {
+    liveRates?: Record<string, number> | null;
+  }
+  let { liveRates = null }: Props = $props();
+
   let dur = $state('30');
   let currency = $state('USD');
   let billing = $state('monthly');
@@ -19,8 +24,13 @@
     `/funnel/signup?sessions=${selectedPlan}x&duration=${dur}&billing=${billing}&currency=${currency}`
   );
 
-  function getBasePrice(sess: string) {
-    return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
+  function getBasePrice(sess: string): number {
+    const rate = liveRates?.[currency];
+    if (['USD', 'AED', 'SAR'].includes(currency) || typeof rate !== 'number') {
+      return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
+    }
+    const usdBase = (PRICING as PricingTier)?.['USD']?.[dur]?.[sess] ?? 0;
+    return Math.round(usdBase * rate);
   }
 
   function getFinalPrice(sess: string) {

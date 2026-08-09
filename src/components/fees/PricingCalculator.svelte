@@ -7,6 +7,11 @@
     CURRENCY_META.map((c) => [c.code, c.symbol])
   );
 
+  interface Props {
+    liveRates?: Record<string, number> | null;
+  }
+  let { liveRates = null }: Props = $props();
+
   let who = $state('child');
   let dur = $state('30');
   let sess = $state('3');
@@ -16,7 +21,15 @@
   let courseNote = $state('');
 
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
-  let basePrice = $derived((PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0);
+  function getBasePrice(s: string): number {
+    const rate = liveRates?.[currency];
+    if (['USD', 'AED', 'SAR'].includes(currency) || typeof rate !== 'number') {
+      return (PRICING as PricingTier)?.[currency]?.[dur]?.[s] ?? 0;
+    }
+    const usdBase = (PRICING as PricingTier)?.['USD']?.[dur]?.[s] ?? 0;
+    return Math.round(usdBase * rate);
+  }
+  let basePrice = $derived(getBasePrice(sess));
   let discount = $derived(BILLING_DISCOUNTS[billing]);
   let finalPrice = $derived(Math.round(basePrice * (1 - discount)));
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);

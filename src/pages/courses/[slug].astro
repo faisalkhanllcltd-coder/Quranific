@@ -47,6 +47,18 @@ const schema = {
 if (course.slug === 'advanced-tajweed-ijazah') {
   Object.assign(schema, { educationalCredentialAwarded: 'Ijazah Certificate' });
 }
+
+// @ts-expect-error -- Cloudflare runtime env not typed in Astro.locals
+const kv = Astro.locals.runtime?.env?.FX_RATES;
+let liveRates: Record<string, number> | null = null;
+if (kv) {
+  try {
+    const raw = await kv.get('LATEST_RATES');
+    if (raw) liveRates = JSON.parse(raw).rates;
+  } catch (e) {
+    console.error('KV FX fetch error:', e);
+  }
+}
 ---
 
 <Page title={`${course.title} | ${SITE.name}`} description={course.shortDesc}>
@@ -227,7 +239,7 @@ if (course.slug === 'advanced-tajweed-ijazah') {
           Price is set by session length and frequency — identical across every course.
         </p>
       </div>
-      <PricingCalculator client:visible />
+      <PricingCalculator client:visible liveRates={liveRates} />
     </div>
   </section>
 
