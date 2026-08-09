@@ -10,14 +10,12 @@ import CoursesFAQ from '../../components/courses/CoursesFAQ.astro';
 import FinalCTA from '../../components/sections/FinalCTA.astro';
 import PricingCalculator from '../../components/fees/PricingCalculator.svelte';
 
-export function getStaticPaths() {
-  return courses.map((course) => ({
-    params: { slug: course.slug },
-    props: { course },
-  }));
-}
+const { slug } = Astro.params;
+const course = courses.find((c) => c.slug === slug);
 
-const { course } = Astro.props;
+if (!course) {
+  return Astro.redirect('/404');
+}
 
 // Elite Edge SEO: Dynamic JSON-LD Course Schema
 const schema = {
