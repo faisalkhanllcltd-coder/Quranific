@@ -137,7 +137,7 @@ export async function sendFullAdminNotification(
   const safeUtmCampaign = esc(String(step1Data.uc || ''));
   const safeUtmMedium = esc(String(step1Data.um || ''));
   // Step 2 fields
-  const safeCourse = esc(String(step2Data.course || ''));
+  const safeCourse = esc(String(step2Data.course || step1Data.crs || ''));
   const safeLevel = esc(String(step2Data.level || ''));
   const safeSchedule = esc(String(step2Data.schedule || ''));
   const safeDays = esc(String(step2Data.days || ''));
