@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Loader2, AlertCircle } from 'lucide-svelte';
   import { onMount } from 'svelte';
-  import { COURSE_LIST } from '../../constants/courses';
+  import { courses as COURSE_LIST } from '../../constants/courses';
   import { GENDERS, LEVELS, SCHEDULES, DAYS } from '../../lib/helpers';
 
   let loading = $state(false);

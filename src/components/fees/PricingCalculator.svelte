@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { COURSE_LIST } from '../../constants/courses';
+  import { courses as COURSE_LIST } from '../../constants/courses';
   import { PRICING, CURRENCY_META, BILLING_DISCOUNTS } from '../../constants/pricing';
 
   // Build symbol lookup from the imported CURRENCY_META array
