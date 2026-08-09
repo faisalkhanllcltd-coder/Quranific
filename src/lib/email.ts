@@ -129,7 +129,7 @@ export async function sendFullAdminNotification(
   const safeCurrency = esc(String(step1Data.cur || '—'));
   const safeBilling = esc(String(step1Data.bil || '—'));
   const safePrice = esc(String(step1Data.prc || '—'));
-  const safeNote = esc(String(step2Data.note || step1Data.not || 'No additional notes'));
+  const safeNote = esc(String(step2Data?.note || step1Data?.not || 'No additional notes'));
   // Ad attribution
   const safeGclid = esc(String(step1Data.gc || ''));
   const safeFbclid = esc(String(step1Data.fb || ''));
@@ -137,7 +137,7 @@ export async function sendFullAdminNotification(
   const safeUtmCampaign = esc(String(step1Data.uc || ''));
   const safeUtmMedium = esc(String(step1Data.um || ''));
   // Step 2 fields
-  const safeCourse = esc(String(step2Data.course || step1Data.crs || ''));
+  const safeCourse = esc(String(step2Data?.course || step1Data?.crs || ''));
   const safeLevel = esc(String(step2Data.level || ''));
   const safeSchedule = esc(String(step2Data.schedule || ''));
   const safeDays = esc(String(step2Data.days || ''));
