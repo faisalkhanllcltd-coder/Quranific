@@ -1,15 +1,12 @@
 ---
-// src/pages/courses/[slug].astro
 import { env } from 'cloudflare:workers';
+import { courses } from '../../constants/courses';
 import Page from '../../layouts/Page.astro';
 import Breadcrumb from '../../components/seo/Breadcrumb.astro';
-import { courses } from '../../constants/courses';
-import { SITE } from '../../constants/site';
-import { faqs } from '../../data/faqs';
+import PricingCalculator from '../../components/fees/PricingCalculator.svelte';
 import TeacherTeaserBanner from '../../components/courses/TeacherTeaserBanner.astro';
 import CoursesFAQ from '../../components/courses/CoursesFAQ.astro';
 import FinalCTA from '../../components/sections/FinalCTA.astro';
-import PricingCalculator from '../../components/fees/PricingCalculator.svelte';
 
 const { slug } = Astro.params;
 const course = courses.find((c) => c.slug === slug);
@@ -18,7 +15,23 @@ if (!course) {
   return Astro.redirect('/404');
 }
 
-// Elite Edge SEO: Dynamic JSON-LD Course Schema
+// Fetch live rates safely for SSR
+let liveRates: Record<string, number> | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const FX_RATES = (env as any)?.FX_RATES;
+if (FX_RATES) {
+  try {
+    const raw = await FX_RATES.get('LATEST_RATES');
+    if (raw) liveRates = JSON.parse(raw).rates;
+  } catch (e) {
+    console.error('KV FX fetch error:', e);
+  }
+}
+
+// Prepare Related Courses
+const relatedCourses = courses.filter((c) => course.relatedSlugs?.includes(c.slug));
+
+// Generate JSON-LD Schema
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'Course',
@@ -26,8 +39,8 @@ const schema = {
   description: course.longDesc,
   provider: {
     '@type': 'Organization',
-    name: SITE.name,
-    sameAs: SITE.url,
+    name: 'Quranific',
+    sameAs: 'https://quranific.com',
   },
   typicalAgeRange: course.ageRange,
   hasCourseInstance: {
@@ -41,209 +54,236 @@ const schema = {
     },
   },
 };
-
-// Strict Google Policy Compliance: Only award credentials to actual certification tracks
-if (course.slug === 'advanced-tajweed-ijazah') {
-  Object.assign(schema, { educationalCredentialAwarded: 'Ijazah Certificate' });
-}
-
-let liveRates: Record<string, number> | null = null;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const FX_RATES = (env as any)?.FX_RATES;
-if (FX_RATES) {
-  try {
-    const raw = await FX_RATES.get('LATEST_RATES');
-    if (raw) liveRates = JSON.parse(raw).rates;
-  } catch (e) {
-    console.error('KV FX fetch error:', e);
-  }
-}
 ---
 
-<Page title={`${course.title} | ${SITE.name}`} description={course.shortDesc}>
-  <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-  </Fragment>
+<Page description={course.shortDesc} title={`${course.title} | Quranific`}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <!-- Hero Section -->
-  <div class="bg-emerald-950 pt-32 pb-32 relative overflow-hidden">
-    <!-- Subtle background glow -->
+  <!-- LIGHT HERO SECTION (Consistent Site Pattern) -->
+  <section class="relative bg-cream-50 pt-24 pb-16 overflow-hidden">
     <div
-      class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none"
-      aria-hidden="true"
+      class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30"
     >
     </div>
+    <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
+      <Breadcrumb />
 
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
-      <!-- Clean, De-duplicated Breadcrumb -->
-      <div class="mb-10">
-        <Breadcrumb
-          items={[
-            { name: 'Home', url: '/' },
-            { name: 'Courses', url: '/courses' },
-            { name: course.title, url: `/courses/${course.slug}` },
-          ]}
-        />
-      </div>
-
-      <div class="text-center max-w-3xl mx-auto">
-        <!-- Conditional Highlight Ribbon -->
-        {
-          course.highlight && (
-            <div class="inline-flex items-center justify-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-bold uppercase tracking-widest rounded-full mb-6">
-              ★ {course.highlight}
-            </div>
-          )
-        }
-
-        <div class="mb-6 flex justify-center" aria-hidden="true">
+      <div class="mt-8 flex justify-center">
+        <div
+          class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-700 mb-6 shadow-sm"
+        >
           <svg
-            class="w-14 h-14 text-white/80"
+            class="w-8 h-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
             stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
             aria-hidden="true"
           >
-            <path d={course.icon}></path>
+            <path stroke-linecap="round" stroke-linejoin="round" d={course.icon}></path>
           </svg>
         </div>
+      </div>
 
-        <h1
-          class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-tight text-balance"
+      {
+        course.highlight && (
+          <span class="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 shadow-sm">
+            ★ {course.highlight}
+          </span>
+        )
+      }
+
+      <h1
+        class="text-4xl md:text-5xl lg:text-6xl font-bold text-emerald-950 tracking-tight max-w-4xl mx-auto"
+      >
+        {course.title}
+      </h1>
+
+      <p class="mt-6 text-lg md:text-xl text-emerald-800/80 max-w-2xl mx-auto leading-relaxed">
+        {course.longDesc}
+      </p>
+
+      <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+        <a
+          href={`/funnel/signup?course=${course.slug}`}
+          class="inline-flex justify-center items-center px-8 py-3.5 text-[15px] font-semibold rounded-full bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-md ring-1 ring-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
         >
-          {course.title}
-        </h1>
-
-        <p
-          class="text-lg md:text-xl text-emerald-100/80 font-medium mb-10 leading-relaxed text-balance"
+          Start Free Trial
+        </a>
+        <a
+          href="https://wa.me/message/FF4LDK3JR2GPN1"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex justify-center items-center px-8 py-3.5 text-[15px] font-semibold rounded-full bg-white text-emerald-900 border border-emerald-200 hover:bg-emerald-50 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
         >
-          {course.longDesc}
-        </p>
-
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href={`/funnel/signup?course=${course.slug}`}
-            class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-3.5 bg-white text-emerald-950 hover:bg-emerald-50 font-bold rounded-xl transition-all duration-200 shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] hover:scale-[1.02] text-[15px]"
+          <svg
+            class="w-5 h-5 mr-2 text-[#25D366]"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            ><path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
+            ></path></svg
           >
-            Start Free Trial
-          </a>
-
-          <a
-            href={SITE.whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-3.5 bg-emerald-900/40 border border-emerald-700/50 text-white hover:bg-emerald-800/60 hover:border-emerald-500/50 font-semibold rounded-xl transition-all duration-200 text-[15px] backdrop-blur-sm"
-          >
-            <svg
-              class="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              ><path
-                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
-              ></path></svg
-            >
-            Ask a Question
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Quick Facts Floating Strip -->
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-20 -mt-16">
-    <div
-      class="bg-white rounded-3xl shadow-xl shadow-emerald-900/5 border border-emerald-100 p-6 md:p-10"
-    >
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 divide-x divide-emerald-50">
-        <div class="flex flex-col px-4 text-center">
-          <span class="text-emerald-900/50 text-[11px] font-bold uppercase tracking-widest mb-1.5"
-            >Ages</span
-          >
-          <span class="text-emerald-950 font-semibold text-[15px]">{course.ageRange}</span>
-        </div>
-
-        <div class="flex flex-col px-4 text-center">
-          <span class="text-emerald-900/50 text-[11px] font-bold uppercase tracking-widest mb-1.5"
-            >Schedule</span
-          >
-          <span class="text-emerald-950 font-semibold text-[15px]">{course.frequency}</span>
-        </div>
-
-        <div class="flex flex-col px-4 text-center">
-          <span class="text-emerald-900/50 text-[11px] font-bold uppercase tracking-widest mb-1.5"
-            >Duration</span
-          >
-          <span class="text-emerald-950 font-semibold text-[15px]">{course.duration}</span>
-        </div>
-
-        <div class="flex flex-col px-4 text-center">
-          <span class="text-emerald-900/50 text-[11px] font-bold uppercase tracking-widest mb-1.5"
-            >Tuition</span
-          >
-          <a href="/tuition-fee" class="text-emerald-700 font-semibold text-[13px] hover:underline">
-            See pricing →
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Features Section -->
-  <section class="py-24 bg-cream-50">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-emerald-950 tracking-tight">
-          What You Will Learn
-        </h2>
-      </div>
-
-      <div class="grid sm:grid-cols-2 gap-x-12 gap-y-6">
-        {
-          course.features.map((feature) => (
-            <div class="flex items-start gap-4 p-4 rounded-2xl bg-white border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div class="shrink-0 mt-0.5">
-                <svg
-                  class="w-6 h-6 text-emerald-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <p class="text-emerald-900/80 font-medium text-[15px] leading-relaxed">{feature}</p>
-            </div>
-          ))
-        }
+          Ask a Question
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- Pricing Calculator -->
-  <section class="py-16 md:py-24 bg-[#fefdf9]" aria-labelledby="calc-heading-slug">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-10">
-        <h2
-          id="calc-heading-slug"
-          class="text-3xl md:text-4xl font-bold text-emerald-950 tracking-tight mb-3"
-        >
-          Calculate Your Monthly Fee
-        </h2>
-        <p class="text-emerald-800/70 font-medium max-w-xl mx-auto">
-          Price is set by session length and frequency — identical across every course.
-        </p>
+  <!-- QUICK FACTS STRIP -->
+  <section class="border-y border-emerald-100 bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div>
+          <p class="text-[12px] uppercase tracking-wider text-emerald-900/60 font-semibold mb-1">
+            Age Group
+          </p>
+          <p class="text-[15px] font-medium text-emerald-950">{course.ageRange}</p>
+        </div>
+        <div>
+          <p class="text-[12px] uppercase tracking-wider text-emerald-900/60 font-semibold mb-1">
+            Pacing
+          </p>
+          <p class="text-[15px] font-medium text-emerald-950">{course.duration}</p>
+        </div>
+        <div>
+          <p class="text-[12px] uppercase tracking-wider text-emerald-900/60 font-semibold mb-1">
+            Group Size
+          </p>
+          <p class="text-[15px] font-medium text-emerald-950">{course.groupSize}</p>
+        </div>
+        <div>
+          <p class="text-[12px] uppercase tracking-wider text-emerald-900/60 font-semibold mb-1">
+            Language
+          </p>
+          <p class="text-[15px] font-medium text-emerald-950">
+            {course.instructionLanguage.join(' / ')}
+          </p>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <!-- TRUST (TEACHER) BANNER -->
+  <TeacherTeaserBanner />
+
+  <!-- RICH CONTENT: WHY & WHO -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+      <div class="bg-cream-50 rounded-3xl p-8 border border-emerald-100">
+        <h2 class="text-2xl font-bold text-emerald-950 mb-4">Why This Course?</h2>
+        <p class="text-emerald-800/80 leading-relaxed">{course.whyThisCourse}</p>
+      </div>
+      <div class="bg-emerald-950 text-white rounded-3xl p-8 shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Who is it for?</h2>
+        <p class="text-emerald-100/80 leading-relaxed">{course.whoItsFor}</p>
+
+        <h3 class="text-lg font-bold mt-8 mb-3 text-emerald-300">Prerequisites</h3>
+        <ul class="space-y-2">
+          {
+            course.prerequisites.map((req: string) => (
+              <li class="flex items-start text-emerald-100/80">
+                <span class="mr-2 text-emerald-400 font-bold">✓</span> {req}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CURRICULUM & FEATURES -->
+  <section class="py-20 bg-cream-50 border-y border-emerald-100">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-emerald-950">Curriculum Structure</h2>
+        <p class="mt-4 text-emerald-800/80">A clear, step-by-step pathway to mastery.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+        <!-- Core Modules -->
+        <div class="space-y-6">
+          {
+            course.curriculum.map((mod: { title: string; desc: string }, i: number) => (
+              <div class="flex gap-4">
+                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center">
+                  {i + 1}
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-emerald-950">{mod.title}</h3>
+                  <p class="text-emerald-800/80 text-sm mt-1">{mod.desc}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- Platform Features -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-emerald-50">
+          <h3 class="text-xl font-bold text-emerald-950 mb-6">What's Included</h3>
+          <ul class="space-y-4">
+            {
+              course.features.map((feature: string) => (
+                <li class="flex items-start">
+                  <svg
+                    class="w-5 h-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    aria-hidden="true"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span class="text-[15px] text-emerald-800">{feature}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING ISLAND -->
+  <section class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 id={`calc-heading-${course.slug}`} class="text-3xl font-bold text-emerald-950 mb-4">
+        Calculate Your Monthly Fee
+      </h2>
+      <p class="text-emerald-800/80 mb-10">Transparent pricing. No contracts. Cancel anytime.</p>
+
       <PricingCalculator client:visible liveRates={liveRates} />
     </div>
   </section>
 
-  <!-- Dynamic Bottom Funnel Components -->
-  <TeacherTeaserBanner />
-  <CoursesFAQ faqs={faqs.courses} />
+  <!-- RELATED COURSES CROSS-SELL -->
+  {
+    relatedCourses.length > 0 && (
+      <section class="py-20 bg-cream-50 border-t border-emerald-100">
+        <div class="max-w-7xl mx-auto px-6">
+          <h2 class="text-2xl font-bold text-emerald-950 mb-8 text-center">
+            Next Steps & Related Paths
+          </h2>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto justify-center">
+            {relatedCourses.map((rc) => (
+              <a
+                href={`/courses/${rc.slug}`}
+                class="group block bg-white rounded-2xl p-6 shadow-sm border border-emerald-50 hover:shadow-md hover:border-emerald-200 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
+              >
+                <h3 class="font-bold text-emerald-950 group-hover:text-emerald-600 transition-colors">
+                  {rc.title}
+                </h3>
+                <p class="text-sm text-emerald-800/70 mt-2 line-clamp-2">{rc.shortDesc}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CoursesFAQ />
   <FinalCTA />
 </Page>
