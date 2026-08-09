@@ -1,5 +1,6 @@
 ---
 // src/pages/courses/[slug].astro
+import { env } from 'cloudflare:workers';
 import Page from '../../layouts/Page.astro';
 import Breadcrumb from '../../components/seo/Breadcrumb.astro';
 import { courses } from '../../constants/courses';
@@ -46,12 +47,10 @@ if (course.slug === 'advanced-tajweed-ijazah') {
   Object.assign(schema, { educationalCredentialAwarded: 'Ijazah Certificate' });
 }
 
-// @ts-expect-error -- Cloudflare runtime env not typed in Astro.locals
-const kv = Astro.locals.runtime?.env?.FX_RATES;
 let liveRates: Record<string, number> | null = null;
-if (kv) {
+if (env && env.FX_RATES) {
   try {
-    const raw = await kv.get('LATEST_RATES');
+    const raw = await env.FX_RATES.get('LATEST_RATES');
     if (raw) liveRates = JSON.parse(raw).rates;
   } catch (e) {
     console.error('KV FX fetch error:', e);

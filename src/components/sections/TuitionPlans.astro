@@ -1,4 +1,5 @@
 ---
+import { env } from 'cloudflare:workers';
 import Section from '../ui/Section.astro';
 import PricingGrid from '../fees/PricingGrid.svelte';
 import Note from '../ui/Note.astro';
@@ -13,6 +14,16 @@ const features = [
   { title: 'Make-up guarantee', desc: 'Every absence replaced' },
   { title: 'Progress report', desc: 'Included in every plan' },
 ];
+
+let liveRates: Record<string, number> | null = null;
+if (env && env.FX_RATES) {
+  try {
+    const raw = await env.FX_RATES.get('LATEST_RATES');
+    if (raw) liveRates = JSON.parse(raw).rates;
+  } catch (e) {
+    console.error('KV FX fetch error:', e);
+  }
+}
 ---
 
 <Section class="pb-12 md:pb-24 lg:pb-32 pt-8 md:pt-10 lg:pt-12" height={900} id="plans">
@@ -26,7 +37,7 @@ const features = [
       <Note />
     </div>
 
-    <PricingGrid client:load />
+    <PricingGrid client:load liveRates={liveRates} />
 
     <!-- Edge-Pro 4-Column Features Grid -->
     <div

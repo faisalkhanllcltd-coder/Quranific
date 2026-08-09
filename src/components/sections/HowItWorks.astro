@@ -1,4 +1,5 @@
 ---
+import { env } from 'cloudflare:workers';
 import Section from '../ui/Section.astro';
 import PricingCalculator from '../fees/PricingCalculator.svelte';
 
@@ -16,6 +17,16 @@ export const howTo = [
     text: 'Your first class is 100% free. If you choose to continue, you are fully protected by our full-month, no-questions-asked refund guarantee.',
   },
 ];
+
+let liveRates: Record<string, number> | null = null;
+if (env && env.FX_RATES) {
+  try {
+    const raw = await env.FX_RATES.get('LATEST_RATES');
+    if (raw) liveRates = JSON.parse(raw).rates;
+  } catch (e) {
+    console.error('KV FX fetch error:', e);
+  }
+}
 ---
 
 <Section
@@ -89,7 +100,7 @@ export const howTo = [
       </div>
 
       <div class="w-full min-w-0 flex items-center justify-center">
-        <PricingCalculator client:visible />
+        <PricingCalculator client:visible liveRates={liveRates} />
       </div>
     </div>
   </div>
