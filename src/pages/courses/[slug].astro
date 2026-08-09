@@ -48,9 +48,11 @@ if (course.slug === 'advanced-tajweed-ijazah') {
 }
 
 let liveRates: Record<string, number> | null = null;
-if (env && env.FX_RATES) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const FX_RATES = (env as any)?.FX_RATES;
+if (FX_RATES) {
   try {
-    const raw = await env.FX_RATES.get('LATEST_RATES');
+    const raw = await FX_RATES.get('LATEST_RATES');
     if (raw) liveRates = JSON.parse(raw).rates;
   } catch (e) {
     console.error('KV FX fetch error:', e);

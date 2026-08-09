@@ -45,3 +45,9 @@ interface Env {
   // Cloudflare KV namespace for live FX rates
   FX_RATES: KVNamespace;
 }
+
+declare module 'cloudflare:workers' {
+  interface Env {
+    FX_RATES: import('@cloudflare/workers-types').KVNamespace;
+  }
+}
