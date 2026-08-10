@@ -36,7 +36,7 @@ export default defineConfig({
       target: 'esnext',
     },
     optimizeDeps: {
-      exclude: ['astro:middleware'],
+      exclude: ['astro:middleware', 'lucide-svelte'],
     },
   },
   prefetch: {
