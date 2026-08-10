@@ -10,6 +10,7 @@ import partytown from '@astrojs/partytown';
 export default defineConfig({
   site: 'https://quranific.com',
   output: 'server',
+  compressHTML: true,
   adapter: cloudflare({
     imageService: 'cloudflare',
     platformProxy: {
