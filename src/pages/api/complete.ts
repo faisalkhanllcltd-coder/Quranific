@@ -75,7 +75,7 @@ export const POST: APIRoute = async (context) => {
 
     const parsed = completeSchema.safeParse(formData);
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: parsed.error.errors[0].message }), {
+      return new Response(JSON.stringify({ error: parsed.error.issues[0].message }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });

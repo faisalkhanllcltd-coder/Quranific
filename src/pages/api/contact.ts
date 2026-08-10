@@ -7,7 +7,7 @@ import { sendContactAutoResponder } from '../../lib/email';
 const contactSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Invalid email address'),
+  email: z.email({ error: 'Invalid email address' }),
   message: z.string().min(1, 'Message is required'),
   // Turnstile token from the cf-turnstile widget
   'cf-turnstile-response': z.string().min(1, 'Please complete the security check.'),
@@ -80,7 +80,7 @@ export const POST: APIRoute = async (context) => {
     // 2. Validate all fields including the Turnstile token
     const parsed = contactSchema.safeParse(data);
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: parsed.error.errors[0].message }), {
+      return new Response(JSON.stringify({ error: parsed.error.issues[0].message }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });

@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { sendNewsletterWelcome } from '../../lib/email';
 
 const newsletterSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.email({ error: 'Invalid email address' }),
 });
 
 export const prerender = false;
@@ -110,7 +110,7 @@ export const POST: APIRoute = async (context) => {
     // 1. Validate incoming data with Zod
     const parsed = newsletterSchema.safeParse(data);
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: parsed.error.errors[0].message }), {
+      return new Response(JSON.stringify({ error: parsed.error.issues[0].message }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });

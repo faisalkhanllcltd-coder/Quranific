@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const signupSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100),
-  email: z.string().email('Please enter a valid email address').toLowerCase().trim(),
+  email: z.email({ error: 'Please enter a valid email address' }).toLowerCase().trim(),
   whatsapp: z
     .string()
     .min(7, 'WhatsApp number too short')
@@ -36,12 +36,12 @@ export const signupSchema = z.object({
 
 export const completeSchema = z.object({
   course: z.string().min(1, 'Please select a course'),
-  gender: z.enum(['Male', 'Female'], { required_error: 'Please select student gender' }),
+  gender: z.enum(['Male', 'Female'], { error: 'Please select student gender' }),
   teacherGender: z.enum(['Male Teacher', 'Female Teacher', 'No Preference'], {
-    required_error: 'Please select teacher preference',
+    error: 'Please select teacher preference',
   }),
   level: z.enum(['Beginner', 'Intermediate', 'Advanced'], {
-    required_error: 'Please select a level',
+    error: 'Please select a level',
   }),
   days: z.string().min(1, 'Please select days per week'),
   schedule: z.string().min(1, 'Please select preferred time'),
