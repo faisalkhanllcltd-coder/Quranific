@@ -6,29 +6,15 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "types": [
-      "astro/client",
-      "@cloudflare/workers-types/2023-07-01"
-    ],
+    "types": ["astro/client", "@cloudflare/workers-types"],
     "baseUrl": ".",
     "paths": {
       // CONFIG FIX (M-08): Fallback array ensures case-insensitive matching for Linux build servers
-      "@constants/*": [
-        "src/constants/*",
-        "src/CONSTANTS/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@layouts/*": [
-        "src/layouts/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
-      "@styles/*": [
-        "src/styles/*"
-      ]
+      "@constants/*": ["src/constants/*", "src/CONSTANTS/*"],
+      "@components/*": ["src/components/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@utils/*": ["src/utils/*"],
+      "@styles/*": ["src/styles/*"]
     }
   }
 }
