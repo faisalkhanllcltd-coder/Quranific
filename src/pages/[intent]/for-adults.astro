@@ -1,77 +1,69 @@
 ---
-// src/pages/ads/[audience].astro
+// src/pages/[intent]/for-adults.astro
 import Base from '../../layouts/Base.astro';
 import { SITE } from '../../constants/site';
 
+export const prerender = true;
+
 export function getStaticPaths() {
-  return [
-    { params: { audience: 'kids' } },
-    { params: { audience: 'adults' } },
-    { params: { audience: 'ladies' } },
-  ];
+  return [{ params: { intent: 'quran-classes' } }, { params: { intent: 'quran-teacher' } }];
 }
 
-const { audience } = Astro.params;
+const { intent } = Astro.params;
 
-const adCopy = {
-  kids: {
-    seoTitle: 'Quran Classes for Kids | Fun & Engaging Online Tutors',
+type Intent = 'quran-classes' | 'quran-teacher';
+
+const intentCopy: Record<
+  Intent,
+  { h1: string; subhead: string; seoTitle: string; seoDesc: string }
+> = {
+  'quran-classes': {
+    h1: 'Online Quran Classes for Adults — Flexible 1-on-1 Sessions',
+    subhead:
+      'Master Quran recitation, Tajweed, or Hifz on your own schedule. Structured 1-on-1 classes for busy professionals — from absolute beginner to Ijazah level.',
+    seoTitle: 'Online Quran Classes for Adults | Flexible 1-on-1 Tutors',
     seoDesc:
-      'Patient, certified online Quran tutors for children. Interactive learning, flexible scheduling, and strict safeguarding.',
-    badge: 'Parent-Approved Safeguarding',
-    title: 'Give Your Child the Gift of the Quran.',
-    subtitle:
-      'Engaging, fun, and patient 1-on-1 online Quran classes designed specifically for children. Watch them build a lifelong love for Islam.',
-    benefits: [
-      'Patient & Certified Tutors',
-      'Interactive & Fun Lessons',
-      'Flexible Parent Schedules',
-      'Progress Tracking Dashboard',
-    ],
+      '1-on-1 Quran classes for adults, tailored to your schedule and goals. Start from zero or advance your Tajweed and Hifz — 24/7 flexible booking.',
   },
-  adults: {
-    seoTitle: 'Quran Classes for Adults | Flexible 1-on-1 Online Tutors',
+  'quran-teacher': {
+    h1: 'Find a Personal Quran Teacher for Adults — Learn at Your Pace',
+    subhead:
+      'Get matched with a dedicated Quran teacher who builds your sessions around your schedule, goals, and current level — whether you are a complete beginner or returning to practice.',
+    seoTitle: 'Online Quran Teacher for Adults | Dedicated 1-on-1 Sessions',
     seoDesc:
-      '1-on-1 tailored Quran classes for adults. 24/7 flexible scheduling for busy professionals from absolute beginners to advanced.',
-    badge: '24/7 Professional Pacing',
-    title: 'Master the Quran, No Matter Your Schedule.',
-    subtitle:
-      '1-on-1 personalized sessions for busy professionals. Whether you are starting from zero or pursuing an Ijazah, we build the schedule around you.',
-    benefits: [
-      '24/7 Flexible Scheduling',
-      'Learn at Your Own Pace',
-      'Tajweed & Hifz Tracks',
-      'Private 1-on-1 Focus',
-    ],
-  },
-  ladies: {
-    seoTitle: 'Quran Classes for Ladies | 100% Female Arab Tutors',
-    seoDesc:
-      'Exclusive 1-on-1 Quran classes for ladies taught by certified female Arab scholars. Complete privacy and comfortable pacing.',
-    badge: '100% Verified Female Faculty',
-    title: 'Learn the Quran in a 100% Private Environment.',
-    subtitle:
-      'Exclusive 1-on-1 classes taught strictly by certified female Arab scholars. A safe, comfortable, and empowering space for sisters to learn.',
-    benefits: [
-      '100% Female Tutors',
-      'Complete Privacy Guaranteed',
-      'Comfortable Learning Pace',
-      'Tajweed & Tafsir Focus',
-    ],
+      'Find a dedicated online Quran teacher for adults. Personalised 1-on-1 sessions fitted to your schedule and Quran goals. Book a free trial today.',
   },
 };
 
-const content = adCopy[audience as keyof typeof adCopy];
+const copy = intentCopy[intent as Intent];
+
+// SEO Shield: canonical always resolves to the quran-classes master URL
+const canonicalUrl = `${SITE.url}/quran-classes/for-adults`;
+
+const benefits = [
+  '24/7 Flexible Scheduling',
+  'Learn at Your Own Pace',
+  'Tajweed & Hifz Tracks',
+  'Private 1-on-1 Focus',
+];
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: content.seoTitle,
-  description: content.seoDesc,
+  name: copy.seoTitle,
+  description: copy.seoDesc,
+  url: canonicalUrl,
 };
 ---
 
-<Base title={content.seoTitle} description={content.seoDesc} robots="noindex, nofollow">
+<Base
+  title={copy.seoTitle}
+  description={copy.seoDesc}
+  canonical={canonicalUrl}
+  robots="index, follow"
+>
+  <!-- Noindex fallback — uncomment to pull from all search indexes if needed -->
+  <!-- <meta name="robots" content="noindex, nofollow" /> -->
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline slot="head" />
 
   <main class="min-h-screen relative bg-cream-50 overflow-hidden font-sans">
@@ -99,36 +91,37 @@ const jsonLd = {
         </a>
       </header>
 
-      <!-- Split Layout -->
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <!-- Hero: Intent-Matched H1 + Subhead -->
+      <section class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <!-- Left: Copy & CTAs -->
         <div class="max-w-2xl">
           <span
             class="inline-block px-4 py-1.5 rounded-full bg-emerald-100/80 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-6 border border-emerald-200 shadow-sm"
           >
-            ★ {content.badge}
+            ★ 24/7 Professional Pacing
           </span>
 
+          <!-- Dynamic H1: swapped per [intent] for 10/10 Google Ads message match -->
           <h1
             class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-emerald-950 tracking-tight leading-[1.1] mb-6"
           >
-            {content.title}
+            {copy.h1}
           </h1>
 
+          <!-- Dynamic Subhead: audience-aware for adult learners, intent-matched -->
           <p class="text-lg md:text-xl text-emerald-800/80 leading-relaxed mb-10">
-            {content.subtitle}
+            {copy.subhead}
           </p>
 
           <div class="flex flex-col sm:flex-row items-center gap-4">
-            <!-- PRIMARY CTA — data-track-cta triggers attribution script below -->
+            <!-- PRIMARY CTA: source encodes intent + audience for full attribution -->
             <a
-              href={`/funnel/signup?source=ad_${audience}`}
+              href={`/funnel/signup?source=${intent}_adults`}
               data-track-cta
-              class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 text-[15px] font-bold rounded-full bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-900/20 ring-1 ring-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+              class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 text-[15px] font-bold rounded-full bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-900/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
             >
               Book Your Free Class
             </a>
-            <!-- WHATSAPP CTA — uses SITE.whatsappLink, not hardcoded number -->
             <a
               href={SITE.whatsappLink}
               target="_blank"
@@ -161,7 +154,7 @@ const jsonLd = {
             <h2 class="text-2xl font-bold text-emerald-950 mb-6">Top Rated Academy</h2>
             <ul class="space-y-4">
               {
-                content.benefits.map((benefit) => (
+                benefits.map((benefit) => (
                   <li class="flex items-center gap-3 text-emerald-900 font-medium">
                     <div class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
                       <svg
@@ -186,35 +179,33 @@ const jsonLd = {
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <!-- Conversion Sequence: paste audience-specific body copy here -->
+      <main id="conversion-sequence"></main>
     </div>
   </main>
 
-  <!-- Attribution Preservation: forwards gclid/utm_* from the ad URL into the CTA href -->
+  <!-- Attribution Preservation: forwards gclid/utm_* from the ad URL into CTA href -->
   <script is:inline>
     const attachAttribution = () => {
       const ctaButtons = document.querySelectorAll('a[data-track-cta]');
       if (!ctaButtons.length) return;
-
       const currentParams = new URLSearchParams(window.location.search);
-
       ctaButtons.forEach((button) => {
         try {
           const targetUrl = new URL(button.getAttribute('href'), window.location.origin);
-
           currentParams.forEach((value, key) => {
             if (!targetUrl.searchParams.has(key)) {
               targetUrl.searchParams.set(key, value);
             }
           });
-
           button.setAttribute('href', targetUrl.toString());
         } catch {
           // Non-fatal: attribution best-effort only
         }
       });
     };
-
     attachAttribution();
     document.addEventListener('astro:page-load', attachAttribution);
   </script>
