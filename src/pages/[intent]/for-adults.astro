@@ -1,7 +1,9 @@
 ---
 // src/pages/[intent]/for-adults.astro
 import Base from '../../layouts/Base.astro';
+import Button from '../../components/ui/Button.astro';
 import { SITE } from '../../constants/site';
+import { TESTIMONIALS_DATA } from '../../constants/testimonials';
 
 export const prerender = true;
 
@@ -13,38 +15,115 @@ const { intent } = Astro.params;
 
 type Intent = 'quran-classes' | 'quran-teacher';
 
+// ── 90/10 Split: hero swapped per intent for Google Ads message match ──────
 const intentCopy: Record<
   Intent,
   { h1: string; subhead: string; seoTitle: string; seoDesc: string }
 > = {
   'quran-classes': {
-    h1: 'Online Quran Classes for Adults — Flexible 1-on-1 Sessions',
+    h1: 'Premium Online Quran Classes for Adults',
     subhead:
-      'Master Quran recitation, Tajweed, or Hifz on your own schedule. Structured 1-on-1 classes for busy professionals — from absolute beginner to Ijazah level.',
-    seoTitle: 'Online Quran Classes for Adults | Flexible 1-on-1 Tutors',
+      'Private, 1-on-1 online classes. Flexible scheduling and judgment-free teaching — whether you are starting from zero or perfecting your Tajweed.',
+    seoTitle: 'Online Quran Classes for Adults | Private 1-on-1 | Quranific',
     seoDesc:
-      '1-on-1 Quran classes for adults, tailored to your schedule and goals. Start from zero or advance your Tajweed and Hifz — 24/7 flexible booking.',
+      'Private, 1-on-1 Quran classes for adults. Judgment-free, flexible scheduling around your busy life. Start from zero or advance your Tajweed. First class free.',
   },
   'quran-teacher': {
-    h1: 'Find a Personal Quran Teacher for Adults — Learn at Your Pace',
+    h1: 'Find an Expert Quran Teacher Who Fits Your Schedule',
     subhead:
-      'Get matched with a dedicated Quran teacher who builds your sessions around your schedule, goals, and current level — whether you are a complete beginner or returning to practice.',
-    seoTitle: 'Online Quran Teacher for Adults | Dedicated 1-on-1 Sessions',
+      'Match with a vetted, professional teacher. 100% private sessions built around your busy life. Start risk-free today.',
+    seoTitle: 'Find a Quran Teacher for Adults | Vetted & Private | Quranific',
     seoDesc:
-      'Find a dedicated online Quran teacher for adults. Personalised 1-on-1 sessions fitted to your schedule and Quran goals. Book a free trial today.',
+      'Find a vetted 1-on-1 Quran teacher for adults. Flexible, private sessions around your schedule — Tajweed, Hifz, or Quran from scratch. First class free.',
   },
 };
 
 const copy = intentCopy[intent as Intent];
 
-// SEO Shield: canonical always resolves to the quran-classes master URL
+// SEO Shield: canonical → master quran-classes URL regardless of intent
 const canonicalUrl = `${SITE.url}/quran-classes/for-adults`;
 
-const benefits = [
-  '24/7 Flexible Scheduling',
-  'Learn at Your Own Pace',
-  'Tajweed & Hifz Tracks',
-  'Private 1-on-1 Focus',
+// Testimonials: Amna (spiritual depth, own journey) + Naseerullah Babar (flexibility)
+const adultsTestimonials = TESTIMONIALS_DATA.filter((t) =>
+  ['Amna', 'Naseerullah Babar'].includes(t.name)
+);
+
+const vettingSteps = [
+  {
+    n: '01',
+    title: 'Ijazah Verification',
+    body: 'We confirm the teacher holds a valid chain of Ijazah — a certified lineage of Quranic transmission. No exceptions.',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`,
+  },
+  {
+    n: '02',
+    title: 'Live Recitation Assessment',
+    body: 'Our academic team conducts a live Tajweed assessment to ensure professional, elite-level recitation.',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>`,
+  },
+  {
+    n: '03',
+    title: 'Adult Pedagogy Interview',
+    body: 'We probe specifically for adult-teaching ability. How do they explain complex Tajweed rules to an English-speaking professional? We hire for patience, logic, and clarity — not rote repetition.',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+  },
+  {
+    n: '04',
+    title: 'Professional Conduct Check',
+    body: 'Every teacher is vetted for punctuality, professionalism, and strict privacy standards.',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+  },
+];
+
+const trustPoints = [
+  '100% private, 1-on-1 sessions',
+  'Strict male-to-male and female-to-female matching available',
+  'Reschedule classes easily when life gets busy',
+  'Distraction-free, professional learning environment',
+];
+
+const onboardingSteps = [
+  {
+    n: '1',
+    title: 'Book your free class.',
+    body: 'No card required. Tell us your goals and your preferred schedule.',
+  },
+  {
+    n: '2',
+    title: 'Judgment-Free Assessment.',
+    body: 'Meet your teacher. Even if you are starting from the absolute alphabet (Qaida), there is zero judgment. The teacher simply listens to understand your starting line.',
+  },
+  {
+    n: '3',
+    title: 'Experience a real lesson.',
+    body: "See exactly how the teaching style fits you. If it's not a perfect match, we will assign a different teacher — or we part ways with no hard feelings.",
+  },
+];
+
+const guaranteeCards = [
+  { label: 'Free first class', sub: 'No card required' },
+  { label: '30-day refund', sub: 'If not satisfied, one email' },
+  { label: 'Make-up guarantee', sub: 'Missed sessions rescheduled' },
+];
+
+const faqItems = [
+  {
+    q: "Am I too old to start, or what if I don't know Arabic?",
+    a: 'You are never too old. A large portion of our adult students start from the very beginning (the Noorani Qaida). You do not need to know Arabic — our teachers specialise in guiding beginners step-by-step in English.',
+  },
+  {
+    q: 'How much does it cost?',
+    a: 'From $40/month depending on session length and frequency. Full pricing is transparent — no hidden fees.',
+    link: { text: 'See full pricing →', href: '/tuition-fee' },
+  },
+  {
+    q: 'Can I request a specific gender for my teacher?',
+    a: 'Absolutely. We offer strict male-to-male and female-to-female matching for absolute comfort and privacy.',
+  },
+  {
+    q: 'What if my schedule changes every week?',
+    a: 'Classes run 24/7 across time zones. You can easily adjust your schedule or reschedule individual sessions when work or family commitments come up.',
+  },
 ];
 
 const jsonLd = {
@@ -59,134 +138,642 @@ const jsonLd = {
 <Base
   title={copy.seoTitle}
   description={copy.seoDesc}
+  robots="noindex, follow"
   canonical={canonicalUrl}
-  robots="index, follow"
 >
-  <!-- Noindex fallback — uncomment to pull from all search indexes if needed -->
-  <!-- <meta name="robots" content="noindex, nofollow" /> -->
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline slot="head" />
 
-  <main class="min-h-screen relative bg-cream-50 overflow-hidden font-sans">
-    <!-- Dot Grid (Site Standard) -->
-    <div
-      class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30 z-0"
-      aria-hidden="true"
-    >
-    </div>
-    <!-- Glow Blob -->
-    <div
-      class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[600px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none z-0"
-      aria-hidden="true"
-    >
-    </div>
+  <div class="bg-white antialiased">
+    <!-- ════════════════════════════════════════════════════════════
+         § 1  HERO — Grand Slam Offer + 3-Second Hook
+         Dark professional header, split layout desktop
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="relative overflow-hidden bg-emerald-950">
+      <!-- Subtle grid texture -->
+      <div
+        class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:48px_48px] pointer-events-none"
+        aria-hidden="true"
+      >
+      </div>
+      <!-- Glow -->
+      <div
+        class="absolute top-0 right-0 w-[600px] h-[400px] bg-emerald-600/10 blur-[150px] rounded-full pointer-events-none"
+        aria-hidden="true"
+      >
+      </div>
 
-    <div class="relative z-10 max-w-6xl mx-auto px-6 py-8">
-      <!-- Minimal Header -->
-      <header class="flex justify-between items-center mb-16 md:mb-24">
-        <a
-          href="/"
-          class="inline-flex items-center gap-2 font-serif font-black text-2xl text-emerald-950 hover:opacity-80 transition-opacity"
+      <div class="quranific-container relative z-10 py-8">
+        <!-- Ad-lander header: logo only -->
+        <header class="mb-14 md:mb-20">
+          <a
+            href="/"
+            class="inline-flex items-center gap-1 font-serif font-black text-xl text-white hover:opacity-70 transition-opacity"
+          >
+            Quranific<span class="text-emerald-400">.</span>
+          </a>
+        </header>
+
+        <div
+          class="grid lg:grid-cols-[1fr_380px] gap-12 xl:gap-20 items-center pb-16 sm:pb-20 lg:pb-24"
         >
-          Quranific<span class="text-emerald-600">.</span>
-        </a>
-      </header>
-
-      <!-- Hero: Intent-Matched H1 + Subhead -->
-      <section class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-        <!-- Left: Copy & CTAs -->
-        <div class="max-w-2xl">
-          <span
-            class="inline-block px-4 py-1.5 rounded-full bg-emerald-100/80 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-6 border border-emerald-200 shadow-sm"
-          >
-            ★ 24/7 Professional Pacing
-          </span>
-
-          <!-- Dynamic H1: swapped per [intent] for 10/10 Google Ads message match -->
-          <h1
-            class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-emerald-950 tracking-tight leading-[1.1] mb-6"
-          >
-            {copy.h1}
-          </h1>
-
-          <!-- Dynamic Subhead: audience-aware for adult learners, intent-matched -->
-          <p class="text-lg md:text-xl text-emerald-800/80 leading-relaxed mb-10">
-            {copy.subhead}
-          </p>
-
-          <div class="flex flex-col sm:flex-row items-center gap-4">
-            <!-- PRIMARY CTA: source encodes intent + audience for full attribution -->
-            <a
-              href={`/funnel/signup?source=${intent}_adults`}
-              data-track-cta
-              class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 text-[15px] font-bold rounded-full bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-900/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+          <!-- Left: headline + CTAs -->
+          <div>
+            <div
+              class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-900 border border-emerald-700 text-emerald-300 text-xs font-bold uppercase tracking-widest mb-6"
             >
-              Book Your Free Class
-            </a>
-            <a
-              href={SITE.whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 text-[15px] font-bold rounded-full bg-white text-emerald-900 border border-emerald-200 hover:bg-emerald-50 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+              <span aria-hidden="true">★</span> Free First Class · No Card Required
+            </div>
+
+            <!-- Dynamic H1 per intent -->
+            <h1
+              class="font-serif text-4xl sm:text-5xl lg:text-[3.5rem] font-black text-white leading-[1.06] tracking-tight mb-5"
             >
-              <svg
-                class="w-5 h-5 mr-2 text-[#25D366]"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
+              {copy.h1}
+            </h1>
+
+            <!-- Dynamic subhead per intent -->
+            <p
+              class="text-xl md:text-2xl text-emerald-100/70 font-medium leading-relaxed mb-4 max-w-xl"
+            >
+              {copy.subhead}
+            </p>
+
+            <!-- Price anchor -->
+            <p class="text-sm font-semibold text-emerald-400/60 mb-8 uppercase tracking-wide">
+              From <strong class="text-emerald-300">$40/mo</strong> ·
+              <a
+                href="/tuition-fee"
+                class="underline underline-offset-2 hover:text-emerald-300 transition-colors"
+                >Full pricing</a
               >
-                <path
-                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
-                ></path>
-              </svg>
-              Chat on WhatsApp
-            </a>
+            </p>
+
+            <!-- CTAs -->
+            <div class="flex flex-col sm:flex-row gap-3 mb-8">
+              <Button
+                href={`/funnel/signup?source=ad_adults_${intent}`}
+                data-track-cta
+                variant="secondary"
+                class="px-8 py-4 text-base font-bold rounded-xl shadow-xl"
+              >
+                Book Your Free Class
+              </Button>
+              <Button
+                href={SITE.whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="ghost"
+                class="px-8 py-4 text-base font-bold rounded-xl border-emerald-700 text-emerald-100 hover:bg-emerald-900"
+              >
+                <svg
+                  class="w-5 h-5 mr-2 shrink-0 text-[#25D366]"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
+                  ></path>
+                </svg>
+                Chat on WhatsApp
+              </Button>
+            </div>
+
+            <!-- Trust strip -->
+            <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-emerald-300/60 font-medium">
+              {
+                [
+                  '✓ Judgment-free',
+                  '✓ Flexible scheduling',
+                  '✓ Full-month refund guarantee',
+                  '✓ Male & Female Hafiz',
+                ].map((b) => <span>{b}</span>)
+              }
+            </div>
+          </div>
+
+          <!-- Right: floating credential card (desktop) -->
+          <div class="hidden lg:block">
+            <div
+              class="bg-emerald-900/80 border border-emerald-700/50 backdrop-blur-sm rounded-2xl p-8"
+            >
+              <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-5">
+                Why professionals choose us
+              </p>
+              <ul class="space-y-4">
+                {
+                  [
+                    {
+                      icon: '🔒',
+                      text: '100% private — no group classes, no awkward reading aloud',
+                    },
+                    { icon: '🕐', text: 'Schedule 24/7 — evenings, weekends, lunch breaks' },
+                    { icon: '↩', text: 'Reschedule any class directly from your portal' },
+                    { icon: '♾', text: 'Start from zero — no Arabic required' },
+                  ].map(({ icon, text }) => (
+                    <li class="flex items-start gap-3 text-sm text-emerald-100/80 font-medium leading-snug">
+                      <span class="text-base leading-none mt-0.5" aria-hidden="true">
+                        {icon}
+                      </span>
+                      {text}
+                    </li>
+                  ))
+                }
+              </ul>
+              <div class="mt-6 pt-6 border-t border-emerald-700/40">
+                <div class="flex items-center gap-2 mb-1">
+                  <div class="flex gap-0.5">
+                    {
+                      Array(5)
+                        .fill(null)
+                        .map(() => (
+                          <svg
+                            class="w-4 h-4 text-gold-400"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))
+                    }
+                  </div>
+                  <span class="text-white font-bold text-sm">4.9 / 5</span>
+                </div>
+                <p class="text-emerald-400/50 text-xs">from verified adult students</p>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Right: Glassmorphism Trust Card -->
-        <div class="relative w-full max-w-lg mx-auto lg:ml-auto">
-          <div
-            class="bg-white/60 backdrop-blur-md rounded-[2rem] p-8 shadow-xl border border-white/80 relative z-10"
+    <!-- ════════════════════════════════════════════════════════════
+         § 2  PROBLEM — The Honest Problem / Unspoken Anxieties
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quranific-section bg-white border-b border-slate-100">
+      <div class="quranific-container">
+        <div class="max-w-3xl">
+          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+            The Honest Problem
+          </p>
+          <h2
+            class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight mb-8"
           >
-            <div class="flex items-center gap-1 mb-6 text-amber-400 text-xl" aria-hidden="true">
-              ★★★★★
+            Learning as an adult feels harder than it should.
+          </h2>
+          <div class="space-y-5 text-lg text-slate-600 leading-relaxed max-w-prose">
+            <p>
+              Between a full-time job, family responsibilities, and an unpredictable schedule,
+              finding a consistent time is hard enough. Group classes can feel embarrassing if you
+              are a beginner, and local mosques often cater mostly to children.
+            </p>
+            <p>
+              You might feel like you've started too late, or that your basic Arabic isn't good
+              enough to even begin. The friction of just getting started stops most people from ever
+              trying.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         § 3  OUTCOME — Working Backwards from the Dream
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quranific-section bg-cream-50 border-b border-emerald-50">
+      <div class="quranific-container">
+        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+              Six Months From Now
+            </p>
+            <h2
+              class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight mb-6"
+            >
+              This doesn't have to be a source of stress anymore.
+            </h2>
+            <div class="space-y-4 text-lg text-emerald-900/75 leading-relaxed max-w-prose">
+              <p>
+                Picture yourself reading the Quran fluently, without stuttering or second-guessing.
+                You actually understand the Tajweed rules, and for the first time, you feel a deep,
+                focused spiritual connection in your Salah because you know exactly how to recite.
+              </p>
+              <p class="font-medium text-emerald-950">
+                That is the goal — confidence, fluency, and connection, on your schedule.
+              </p>
             </div>
-            <h2 class="text-2xl font-bold text-emerald-950 mb-6">Top Rated Academy</h2>
-            <ul class="space-y-4">
-              {
-                benefits.map((benefit) => (
-                  <li class="flex items-center gap-3 text-emerald-900 font-medium">
-                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
-                      <svg
-                        class="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2.5"
-                      >
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    {benefit}
-                  </li>
-                ))
-              }
-            </ul>
-            <div class="mt-8 pt-6 border-t border-emerald-100/50">
-              <p class="text-sm font-semibold text-emerald-800/60 uppercase tracking-widest">
-                Trusted by thousands of students globally.
+          </div>
+
+          <!-- OUTCOME IMAGE placeholder -->
+          <div
+            class="bg-slate-200 aspect-[4/3] rounded-2xl flex items-center justify-center text-slate-500 font-medium text-sm shadow-sm"
+          >
+            [ASSET: Adult reading Quran confidently — aspirational lifestyle photo]
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         § 4  MECHANISM — 4-Stage Vetting + Why 1-on-1
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quranific-section bg-white border-b border-slate-100">
+      <div class="quranific-container">
+        <div class="max-w-3xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+            Why It Works
+          </p>
+          <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
+            Every teacher passes a 4-stage vetting process.
+          </h2>
+        </div>
+
+        <ol class="grid sm:grid-cols-2 gap-5 mb-10">
+          {
+            vettingSteps.map(({ n, title, body, icon }) => (
+              <li class="bg-cream-50 border border-slate-100 rounded-2xl p-7 shadow-sm">
+                <div class="flex items-start gap-3 mb-4">
+                  <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                    <Fragment set:html={icon} />
+                  </div>
+                  <span class="text-xs font-black text-slate-300 tracking-widest mt-3">{n}</span>
+                </div>
+                <p class="font-bold text-emerald-950 text-lg mb-2">{title}</p>
+                <p class="text-slate-500 leading-relaxed text-sm">{body}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <!-- 1-on-1 callout for adults: privacy + pace -->
+        <div class="bg-emerald-950 rounded-2xl p-8 max-w-3xl">
+          <p class="font-bold text-emerald-300 text-sm uppercase tracking-wider mb-3">
+            Why 1-on-1 matters for adults
+          </p>
+          <p class="text-emerald-100/85 leading-relaxed text-lg">
+            <strong class="text-white">100% privacy.</strong> There is no embarrassing group reading.
+            The pace is set entirely by you. Ask as many questions as you need
+            <strong class="text-white">without feeling rushed.</strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         § 5  VIDEO PREVIEW — The Look Inside
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quranific-section bg-cream-50 border-b border-emerald-50">
+      <div class="quranific-container">
+        <div class="max-w-3xl mb-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+            The Look Inside
+          </p>
+          <h2 class="font-serif text-2xl md:text-3xl font-black text-emerald-950 leading-tight">
+            Clean, professional, and completely private.
+          </h2>
+        </div>
+
+        <!-- VIDEO PLACEHOLDER -->
+        <!-- VISUAL: 30-second screen recording of adult portal — distraction-free UI, shared Mushaf -->
+        <div
+          class="max-w-3xl bg-slate-200 aspect-video rounded-2xl flex flex-col items-center justify-center gap-3 mb-4 shadow-sm"
+        >
+          <div class="w-14 h-14 rounded-full bg-slate-300 flex items-center justify-center">
+            <svg
+              class="w-6 h-6 text-slate-500"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+          </div>
+          <p class="text-slate-500 text-sm font-medium">
+            [ASSET: 30s adult portal screen recording — shared Mushaf, distraction-free UI]
+          </p>
+        </div>
+        <p class="text-slate-400 text-sm italic max-w-3xl">
+          Clean, professional, and private. This is what a real class looks like.
+        </p>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         § 6  TRUST — Bezos Trust Engine / Zero Friction & Privacy
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quranific-section bg-white border-b border-slate-100">
+      <div class="quranific-container">
+        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
+          <ul class="space-y-4 order-2 lg:order-1">
+            {
+              trustPoints.map((point) => (
+                <li class="flex items-start gap-4 bg-cream-50 border border-slate-100 rounded-xl px-6 py-4 shadow-sm">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mt-0.5">
+                    <svg
+                      class="w-3.5 h-3.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      aria-hidden="true"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span class="text-emerald-950 font-medium text-base">{point}</span>
+                </li>
+              ))
+            }
+          </ul>
+
+          <div class="order-1 lg:order-2">
+            <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+              Full Transparency
+            </p>
+            <h2
+              class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight mb-6"
+            >
+              Your learning journey is entirely private.
+            </h2>
+            <div class="space-y-4 text-lg text-slate-600 leading-relaxed max-w-prose">
+              <p>
+                Work meeting ran late? Reschedule your class directly from your portal. Traveling?
+                Log in from anywhere. You control the pace, and your teacher is there to guide you —
+                not grade you.
               </p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Conversion Sequence: paste audience-specific body copy here -->
-      <main id="conversion-sequence"></main>
-    </div>
-  </main>
+    <!-- ════════════════════════════════════════════════════════════
+         § 7  ONBOARDING — Magic Moment: make the first step tiny
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quranific-section bg-emerald-950">
+      <div class="quranific-container">
+        <div class="max-w-3xl mb-10">
+          <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
+            How It Works
+          </p>
+          <h2 class="font-serif text-3xl md:text-4xl font-black text-white leading-tight">
+            Three steps. The third one changes everything.
+          </h2>
+        </div>
 
-  <!-- Attribution Preservation: forwards gclid/utm_* from the ad URL into CTA href -->
+        <ol class="grid md:grid-cols-3 gap-5 max-w-5xl">
+          {
+            onboardingSteps.map(({ n, title, body }) => (
+              <li class="bg-emerald-900/60 border border-emerald-700/50 rounded-2xl p-7">
+                <div class="w-10 h-10 rounded-full bg-emerald-600 text-white font-black text-base flex items-center justify-center mb-5">
+                  {n}
+                </div>
+                <p class="font-bold text-white text-lg leading-snug mb-3">{title}</p>
+                <p class="text-emerald-300/70 leading-relaxed text-sm">{body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         § 8  PROOF — Testimonials from src/constants/testimonials.ts
+         Amna + Naseerullah Babar: adults, scheduling, depth of learning
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quranific-section bg-white border-b border-slate-100">
+      <div class="quranific-container">
+        <div class="max-w-3xl mb-10">
+          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+            Undeniable Proof
+          </p>
+          <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
+            Real students. Real results.
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 max-w-4xl">
+          {
+            adultsTestimonials.map((t) => (
+              <figure
+                class={`rounded-2xl p-8 border shadow-sm ${t.theme === 'dark' ? 'bg-emerald-950 border-emerald-800' : 'bg-cream-50 border-slate-100'}`}
+              >
+                <div class="flex gap-1 mb-5" aria-hidden="true">
+                  {Array(5)
+                    .fill(null)
+                    .map(() => (
+                      <svg class="w-4 h-4 text-gold-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                </div>
+                <blockquote
+                  class={`text-base font-medium leading-relaxed mb-6 ${t.theme === 'dark' ? 'text-emerald-100/90' : 'text-emerald-950'}`}
+                >
+                  &ldquo;{t.content}&rdquo;
+                </blockquote>
+                <figcaption class="flex items-center gap-3">
+                  <div
+                    class={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${t.theme === 'dark' ? 'bg-emerald-800 text-emerald-200' : 'bg-emerald-100 text-emerald-700'}`}
+                  >
+                    {t.initials}
+                  </div>
+                  <div>
+                    <p
+                      class={`font-bold text-sm ${t.theme === 'dark' ? 'text-white' : 'text-emerald-950'}`}
+                    >
+                      {t.name}
+                    </p>
+                    <p
+                      class={`text-xs ${t.theme === 'dark' ? 'text-emerald-400' : 'text-slate-400'}`}
+                    >
+                      {t.locationAndRole} · {t.enrollmentTime}
+                    </p>
+                  </div>
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+
+        <p class="mt-8 text-xs text-slate-300 max-w-2xl leading-relaxed">
+          Results may vary. All reviews are verified against active student accounts. No
+          compensation was provided.
+        </p>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         § 9  GUARANTEE — Hormozi Absolute Risk Reversal
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quranific-section bg-cream-50 border-b border-emerald-50">
+      <div class="quranific-container">
+        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+              Our Guarantee
+            </p>
+            <h2
+              class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight mb-6"
+            >
+              We carry all the risk.<br />You carry none.
+            </h2>
+            <div class="space-y-4 text-lg text-slate-600 leading-relaxed max-w-prose">
+              <p>
+                <strong class="text-emerald-950">Your first class is free.</strong> No card required.
+                No commitment.
+              </p>
+              <p>
+                If you continue and you're not satisfied after your first full paid month — for <em
+                  >any</em
+                > reason — you get a full refund. No forms, no chasing. One email.
+              </p>
+              <p>
+                <strong class="text-emerald-950">Missed a session?</strong> It gets made up, guaranteed.
+                There's no lock-in contract. Cancel any time.
+              </p>
+            </div>
+
+            <div class="mt-8">
+              <Button
+                href={`/funnel/signup?source=ad_adults_${intent}`}
+                data-track-cta
+                variant="primary"
+                class="px-8 py-4 text-base font-bold rounded-xl"
+              >
+                Book Your Free Class
+              </Button>
+            </div>
+          </div>
+
+          <div class="grid gap-4">
+            {
+              guaranteeCards.map(({ label, sub }) => (
+                <div class="bg-white border border-slate-100 rounded-xl px-7 py-5 shadow-sm flex items-center gap-5">
+                  <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-bold text-emerald-950 text-base">{label}</p>
+                    <p class="text-slate-400 text-sm">{sub}</p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         § 10  FAQ — Cost of Inaction & Friction Elimination
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quranific-section bg-white border-b border-slate-100">
+      <div class="quranific-container">
+        <div class="max-w-3xl mb-10">
+          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+            Common Questions
+          </p>
+          <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
+            Answered honestly.
+          </h2>
+        </div>
+
+        <dl class="max-w-3xl divide-y divide-slate-100">
+          {
+            faqItems.map(({ q, a, link }) => (
+              <div class="py-7">
+                <dt class="font-bold text-emerald-950 text-lg mb-2">{q}</dt>
+                <dd class="text-slate-500 leading-relaxed text-base">
+                  {a}
+                  {link && (
+                    <a
+                      href={link.href}
+                      class="ml-1 text-emerald-600 font-semibold underline underline-offset-2 hover:text-emerald-700 transition-colors"
+                    >
+                      {link.text}
+                    </a>
+                  )}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         § 11  FINAL CTA — Value Stack & Closing Argument
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quranific-section bg-emerald-950">
+      <div class="quranific-container">
+        <div class="max-w-2xl">
+          <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
+            What's Waiting
+          </p>
+          <h2 class="font-serif text-3xl md:text-5xl font-black text-white leading-tight mb-6">
+            One free class.<br />No card. No risk.
+          </h2>
+          <p class="text-xl text-emerald-100/70 leading-relaxed mb-4 max-w-xl">
+            A professional teacher matched to your goals. A full-month guarantee if you continue.
+            That's what's waiting on the other side of one click.
+          </p>
+          <p class="text-sm text-emerald-400/50 mb-10">
+            From <strong class="text-emerald-300">$40/mo</strong> ·
+            <a
+              href="/tuition-fee"
+              class="underline underline-offset-2 hover:text-emerald-300 transition-colors"
+              >Full pricing</a
+            >
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <Button
+              href={`/funnel/signup?source=ad_adults_${intent}`}
+              data-track-cta
+              variant="secondary"
+              class="px-12 py-5 text-lg font-extrabold rounded-xl shadow-2xl"
+            >
+              Book Your Free Class
+            </Button>
+            <Button
+              href={SITE.whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="ghost"
+              class="px-8 py-5 text-base font-bold rounded-xl border-emerald-700 text-emerald-200 hover:bg-emerald-900"
+            >
+              Ask a question first
+            </Button>
+          </div>
+
+          <p class="mt-6 text-emerald-400/40 text-sm">
+            No credit card · Cancel anytime · Full refund if unsatisfied
+          </p>
+        </div>
+      </div>
+    </section>
+  </div><!-- /bg-white -->
+
+  <!-- ════════════════════════════════════════════════════════════
+       ATTRIBUTION PRESERVATION
+       Merges inbound gclid / utm_* / fbclid into all CTA hrefs.
+       Established site pattern — do not modify.
+       ═══════════════════════════════════════════════════════════ -->
   <script is:inline>
     const attachAttribution = () => {
       const ctaButtons = document.querySelectorAll('a[data-track-cta]');
