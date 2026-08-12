@@ -17,10 +17,20 @@ export default defineConfig({
       enabled: true, // Mandate 11: 1:1 Local Edge Simulation
     },
   }),
+  // Permanent redirects: old /ads/* URLs → new semantic intent routes
+  redirects: {
+    '/ads/kids': '/quran-classes/for-kids',
+    '/ads/adults': '/quran-classes/for-adults',
+    '/ads/ladies': '/quran-classes/for-women',
+  },
   integrations: [
     svelte(),
     sitemap({
-      filter: (page) => !['/api/', '/funnel/', '/ads/'].some((path) => page.includes(path)),
+      // Exclude API routes, funnel, old ad paths, and paid lander routes
+      filter: (page) =>
+        !['/api/', '/funnel/', '/ads/', '/for-kids', '/for-adults', '/for-women'].some((path) =>
+          page.includes(path)
+        ),
     }),
 
     partytown({

@@ -2,6 +2,7 @@
 // src/pages/[intent]/for-kids.astro
 import Base from '../../layouts/Base.astro';
 import { SITE } from '../../constants/site';
+import { TESTIMONIALS_DATA } from '../../constants/testimonials';
 
 export const prerender = true;
 
@@ -13,123 +14,123 @@ const { intent } = Astro.params;
 
 type Intent = 'quran-classes' | 'quran-teacher';
 
+// ── Dynamic copy: intent-matched for 10/10 Google Ads message match ────────
 const intentCopy: Record<
   Intent,
   { h1: string; subhead: string; seoTitle: string; seoDesc: string }
 > = {
   'quran-classes': {
-    h1: 'Fun Quran Classes for Kids — 1-on-1 Online Learning',
+    h1: 'A Quran Class Your Child Actually Looks Forward To',
     subhead:
-      'Certified, patient tutors run structured online Quran classes designed for children aged 4–16. Interactive lessons, flexible parent schedules, and real progress from day one.',
-    seoTitle: 'Online Quran Classes for Kids | Certified 1-on-1 Tutors',
+      "1-on-1 online classes for kids, taught by vetted teachers who know how to hold a child's attention. First class free.",
+    seoTitle: 'Online Quran Classes for Kids | 1-on-1, Vetted Teachers | Quranific',
     seoDesc:
-      'Enrol your child in live 1-on-1 online Quran classes. Patient, certified tutors specialising in Qaida, Tajweed, and Hifz for ages 4–16.',
+      '1-on-1 online Quran classes for kids with vetted, patient teachers. Tajweed, Qaida, and Hifz. First class free — no card required.',
   },
   'quran-teacher': {
-    h1: 'Find Your Child a Personal Quran Teacher — Online & 1-on-1',
+    h1: 'Find a Quran Teacher Your Child Actually Connects With',
     subhead:
-      "We hand-pick a certified Quran teacher matched to your child's age, level, and pace — so every session feels personalised, safe, and effective.",
-    seoTitle: 'Online Quran Teacher for Kids | Hand-Picked 1-on-1 Tutors',
+      'Every teacher passes a 4-stage vetting process before meeting your child. Match with the right one, risk-free, starting with a free first class.',
+    seoTitle: 'Find a Quran Teacher for Kids | Vetted, 1-on-1, Online | Quranific',
     seoDesc:
-      "Get a dedicated online Quran teacher for your child. Certified tutors matched to your child's age and level. Book a free trial today.",
+      "Find a vetted 1-on-1 Quran teacher for your child. 4-stage vetting, safeguarding-checked, and matched to your child's level. First class free.",
   },
 };
 
 const copy = intentCopy[intent as Intent];
 
-// SEO Shield: canonical always resolves to the quran-classes master URL
-const canonicalUrl = `${SITE.url}/quran-classes/for-kids`;
-
-const benefits = [
-  'Patient & Certified Tutors',
-  'Interactive & Fun Lessons',
-  'Flexible Parent Schedules',
-  'Progress Tracking Dashboard',
-];
+// ── Testimonials: filter for child engagement + teacher trust signals ──────
+const kidsTestimonials = TESTIMONIALS_DATA.filter((t) =>
+  ['Saleem Al Mustarshid', 'Naseerullah Babar'].includes(t.name)
+);
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: copy.seoTitle,
   description: copy.seoDesc,
-  url: canonicalUrl,
 };
 ---
 
-<Base
-  title={copy.seoTitle}
-  description={copy.seoDesc}
-  canonical={canonicalUrl}
-  robots="index, follow"
->
-  <!-- Noindex fallback — uncomment to pull from all search indexes if needed -->
-  <!-- <meta name="robots" content="noindex, nofollow" /> -->
+<Base title={copy.seoTitle} description={copy.seoDesc} robots="noindex, follow">
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline slot="head" />
 
-  <main class="min-h-screen relative bg-cream-50 overflow-hidden font-sans">
-    <!-- Dot Grid (Site Standard) -->
-    <div
-      class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30 z-0"
-      aria-hidden="true"
-    >
-    </div>
-    <!-- Glow Blob -->
-    <div
-      class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[600px] bg-amber-400/10 blur-[120px] rounded-full pointer-events-none z-0"
-      aria-hidden="true"
-    >
-    </div>
+  <div class="min-h-screen bg-white font-sans antialiased">
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 1: HERO
+         ─── Light dot-grid + emerald blob (sitewide spec) ────────── -->
+    <section class="relative overflow-hidden bg-cream-50">
+      <div
+        class="absolute inset-0 bg-[radial-gradient(#d1fae5_1px,transparent_1px)] [background-size:20px_20px] opacity-40 z-0"
+        aria-hidden="true"
+      >
+      </div>
+      <div
+        class="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-400/15 blur-[120px] rounded-full pointer-events-none z-0"
+        aria-hidden="true"
+      >
+      </div>
 
-    <div class="relative z-10 max-w-6xl mx-auto px-6 py-8">
-      <!-- Minimal Header -->
-      <header class="flex justify-between items-center mb-16 md:mb-24">
-        <a
-          href="/"
-          class="inline-flex items-center gap-2 font-serif font-black text-2xl text-emerald-950 hover:opacity-80 transition-opacity"
-        >
-          Quranific<span class="text-emerald-600">.</span>
-        </a>
-      </header>
-
-      <!-- Hero: Intent-Matched H1 + Subhead -->
-      <section class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-        <!-- Left: Copy & CTAs -->
-        <div class="max-w-2xl">
-          <span
-            class="inline-block px-4 py-1.5 rounded-full bg-amber-100/80 text-amber-800 text-xs font-bold uppercase tracking-wider mb-6 border border-amber-200 shadow-sm"
+      <div class="relative z-10 max-w-6xl mx-auto px-6 py-8">
+        <!-- Minimal header: logo only — no nav leakage on ad lander -->
+        <header class="mb-16 md:mb-20">
+          <a
+            href="/"
+            class="inline-flex items-center gap-1.5 font-serif font-black text-xl text-emerald-950 hover:opacity-75 transition-opacity"
           >
-            ★ Parent-Approved Safeguarding
-          </span>
+            Quranific<span class="text-emerald-600">.</span>
+          </a>
+        </header>
 
-          <!-- Dynamic H1: swapped per [intent] for 10/10 Google Ads message match -->
+        <div class="max-w-3xl">
+          <!-- Intent badge -->
+          <div
+            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-bold uppercase tracking-widest mb-6"
+          >
+            <span aria-hidden="true">★</span> Free First Class · No Card Required
+          </div>
+
+          <!-- Dynamic H1: swapped per [intent] ─── The 3-Second Rule Hook -->
           <h1
-            class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-emerald-950 tracking-tight leading-[1.1] mb-6"
+            class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-emerald-950 leading-[1.08] tracking-tight mb-6"
           >
             {copy.h1}
           </h1>
 
-          <!-- Dynamic Subhead: audience-aware, intent-matched -->
-          <p class="text-lg md:text-xl text-emerald-800/80 leading-relaxed mb-10">
+          <!-- Dynamic Subhead -->
+          <p
+            class="text-xl md:text-2xl text-emerald-800/80 font-medium leading-relaxed mb-8 max-w-2xl"
+          >
             {copy.subhead}
           </p>
 
-          <div class="flex flex-col sm:flex-row items-center gap-4">
-            <!-- PRIMARY CTA: source encodes intent + audience for full attribution -->
+          <!-- Price anchor: static, no calculator -->
+          <p class="text-sm font-semibold text-emerald-700/70 mb-8 uppercase tracking-wider">
+            From <strong class="text-emerald-900">$40/mo</strong> · Full pricing at
             <a
-              href={`/funnel/signup?source=${intent}_kids`}
-              data-track-cta
-              class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 text-[15px] font-bold rounded-full bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-900/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+              href="/tuition-fee"
+              class="underline underline-offset-2 hover:text-emerald-700 transition-colors"
+              >/tuition-fee</a
             >
-              Book Your Free Class
+          </p>
+
+          <!-- CTAs -->
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a
+              href={`/funnel/signup?source=ad_kids_${intent}`}
+              data-track-cta
+              class="inline-flex justify-center items-center px-8 py-4 text-base font-bold rounded-full bg-emerald-600 text-white hover:bg-emerald-700 active:scale-[0.98] transition-all shadow-lg shadow-emerald-900/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+            >
+              Book Your Child's Free Class
             </a>
             <a
               href={SITE.whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 text-[15px] font-bold rounded-full bg-white text-emerald-900 border border-emerald-200 hover:bg-emerald-50 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+              class="inline-flex justify-center items-center gap-2 px-8 py-4 text-base font-bold rounded-full bg-white text-emerald-900 border border-emerald-200 hover:bg-emerald-50 active:scale-[0.98] transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
             >
               <svg
-                class="w-5 h-5 mr-2 text-[#25D366]"
+                class="w-5 h-5 shrink-0 text-[#25D366]"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -138,55 +139,462 @@ const jsonLd = {
                   d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
                 ></path>
               </svg>
-              Chat on WhatsApp
+              Ask a Question First
             </a>
           </div>
-        </div>
 
-        <!-- Right: Glassmorphism Trust Card -->
-        <div class="relative w-full max-w-lg mx-auto lg:ml-auto">
-          <div
-            class="bg-white/60 backdrop-blur-md rounded-[2rem] p-8 shadow-xl border border-white/80 relative z-10"
-          >
-            <div class="flex items-center gap-1 mb-6 text-amber-400 text-xl" aria-hidden="true">
-              ★★★★★
-            </div>
-            <h2 class="text-2xl font-bold text-emerald-950 mb-6">Top Rated Academy</h2>
-            <ul class="space-y-4">
-              {
-                benefits.map((benefit) => (
-                  <li class="flex items-center gap-3 text-emerald-900 font-medium">
-                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
-                      <svg
-                        class="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2.5"
-                      >
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    {benefit}
-                  </li>
-                ))
-              }
-            </ul>
-            <div class="mt-8 pt-6 border-t border-emerald-100/50">
-              <p class="text-sm font-semibold text-emerald-800/60 uppercase tracking-widest">
-                Trusted by thousands of students globally.
-              </p>
-            </div>
+          <!-- Microtrust strip -->
+          <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-emerald-800/60 font-medium">
+            <span>✓ No credit card</span>
+            <span>✓ Cancel anytime</span>
+            <span>✓ Full-month refund guarantee</span>
+            <span>✓ Safeguarding-checked teachers</span>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Conversion Sequence: paste audience-specific body copy here -->
-      <main id="conversion-sequence"></main>
-    </div>
-  </main>
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 2: PROBLEM / ANXIETY
+         ─── Acknowledge the real friction before selling ─────────── -->
+    <section class="py-20 bg-white border-t border-emerald-50">
+      <div class="max-w-3xl mx-auto px-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+          The Honest Problem
+        </p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-emerald-950 leading-tight mb-8">
+          Finding a good Quran teacher is harder than it should be.
+        </h2>
+        <div
+          class="prose prose-emerald max-w-none space-y-4 text-emerald-900/80 text-lg leading-relaxed"
+        >
+          <p>
+            Between school, homework, and everything else, finding time for a proper Quran teacher
+            is hard enough. Finding a <em>good</em> one — patient, qualified, actually able to hold a
+            child's attention — is harder.
+          </p>
+          <p>
+            Group classes move too fast or too slow. Local tutors are booked solid or hard to vet.
+            And screen time already feels like enough of a battle without adding another video call
+            your child dreads.
+          </p>
+        </div>
+      </div>
+    </section>
 
-  <!-- Attribution Preservation: forwards gclid/utm_* from the ad URL into CTA href -->
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 3: DREAM OUTCOME
+         ─── Paint the picture before explaining the mechanism ─────── -->
+    <section class="py-20 bg-emerald-950 text-white">
+      <div class="max-w-3xl mx-auto px-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
+          Six Months From Now
+        </p>
+        <h2 class="text-3xl md:text-4xl font-extrabold leading-tight mb-8">
+          This doesn't have to be a chore anymore.
+        </h2>
+        <p class="text-emerald-100/90 text-xl leading-relaxed mb-6">
+          Picture your child reading with real confidence, correcting their own Tajweed, <strong
+            class="text-white">asking to show you what they learned</strong
+          > instead of being reminded to log on.
+        </p>
+        <p class="text-emerald-100/80 text-lg leading-relaxed">
+          That's the actual goal — not attendance. Understanding.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 4: MECHANISM
+         ─── Specificity kills skepticism ─────────────────────────── -->
+    <section class="py-20 bg-white">
+      <div class="max-w-3xl mx-auto px-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+          Why It Works
+        </p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-emerald-950 leading-tight mb-8">
+          Every teacher passes a 4-stage vetting process.
+        </h2>
+
+        <ol class="space-y-6 mb-10">
+          {
+            [
+              {
+                n: '01',
+                title: 'Ijazah Verification',
+                body: 'We confirm the teacher holds a valid chain of Ijazah — a certified lineage of Quranic transmission. No exceptions.',
+              },
+              {
+                n: '02',
+                title: 'Live Recitation Assessment',
+                body: 'Our academic team conducts a live Tajweed assessment. Not a CV review — an actual recitation, evaluated to professional standards.',
+              },
+              {
+                n: '03',
+                title: 'Teaching Methodology Interview',
+                body: "We probe specifically for child-teaching ability: how do they explain a concept when a child doesn't understand? How do they keep an 8-year-old engaged after 15 minutes? Concrete answers only.",
+              },
+              {
+                n: '04',
+                title: 'Full Safeguarding Check',
+                body: 'Every teacher completes a formal safeguarding background check before they ever meet a student. This is non-negotiable and renewed annually.',
+              },
+            ].map(({ n, title, body }) => (
+              <li class="flex gap-6 items-start">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-black text-sm">
+                  {n}
+                </span>
+                <div>
+                  <p class="font-bold text-emerald-950 text-lg mb-1">{title}</p>
+                  <p class="text-emerald-800/75 leading-relaxed">{body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-6">
+          <p class="font-bold text-amber-900 mb-2">Why 1-on-1 matters for kids specifically</p>
+          <p class="text-amber-800/80 leading-relaxed">
+            Group Zoom classes fail children because one teacher cannot actually <em>see</em> one child.
+            In a group, the pace is set by the slowest or fastest kid — not yours. Every Quranific session
+            is 1-on-1, every time, so the pace is set by your child.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 5: VISUAL PROOF PLACEHOLDER
+         ─── Social proof via video is the highest-trust signal ──── -->
+    <section class="py-20 bg-emerald-950">
+      <div class="max-w-3xl mx-auto px-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
+          Real Session Preview
+        </p>
+
+        <!-- VISUAL: 30-45 second screen recording of live session - tutor shared Mushaf, child webcam reacting -->
+        <div
+          class="aspect-video bg-emerald-900/60 rounded-2xl border border-emerald-700/40 flex items-center justify-center mb-4"
+        >
+          <div class="text-center text-emerald-400/60">
+            <svg
+              class="w-16 h-16 mx-auto mb-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+              ></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="text-sm font-medium">Session preview loading…</p>
+          </div>
+        </div>
+        <p class="text-emerald-300/70 text-sm text-center italic">
+          This is what a real class looks like — not a demo.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 6: PEACE OF MIND / TRANSPARENCY
+         ─── Remove the hidden-cost anxiety ───────────────────────── -->
+    <section class="py-20 bg-white border-t border-emerald-50">
+      <div class="max-w-3xl mx-auto px-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+          Full Transparency
+        </p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-emerald-950 leading-tight mb-8">
+          You don't need to hover over every session.
+        </h2>
+
+        <div class="space-y-6 text-emerald-900/80 text-lg leading-relaxed">
+          <p>
+            Ask your teacher for a progress update any time. Nothing is hidden, nothing is locked
+            behind a subscription tier.
+          </p>
+          <p>
+            Every teacher is safeguarding-checked before they ever meet your child, and <strong
+              class="text-emerald-950"
+              >you can sit in on any class, any time — no notice needed.</strong
+            >
+          </p>
+        </div>
+
+        <ul class="mt-8 space-y-3">
+          {
+            [
+              'Progress updates on request — always included, no extra fee',
+              'Sit in on any session, announced or unannounced',
+              'Direct teacher contact from your first class onward',
+              'Safeguarding checks renewed annually — not a one-time box-tick',
+            ].map((point) => (
+              <li class="flex items-start gap-3 text-emerald-900">
+                <svg
+                  class="w-5 h-5 shrink-0 mt-0.5 text-emerald-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  aria-hidden="true"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span class="text-base font-medium">{point}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 7: ONBOARDING / MAGIC MOMENT
+         ─── Make the first step feel trivially small ─────────────── -->
+    <section class="py-20 bg-emerald-50 border-t border-emerald-100">
+      <div class="max-w-3xl mx-auto px-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+          How It Works
+        </p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-emerald-950 leading-tight mb-10">
+          Three steps. The third one is the point.
+        </h2>
+
+        <ol class="space-y-6">
+          {
+            [
+              {
+                n: '1',
+                title: 'Book your free class — no card required.',
+                body: "Tell us your child's age, current Quran level, and when you're free. That's all we need to match you with the right teacher.",
+              },
+              {
+                n: '2',
+                title: 'Meet your teacher and start where your child is.',
+                body: 'No placement test. No pressure. In the first session, the teacher listens before they teach — understanding where your child is starting from, what they enjoy, and how they learn.',
+              },
+              {
+                n: '3',
+                title: 'Watch your child want to come back for the next one.',
+                body: "That's the whole point of the trial: not a sales pitch, a real first lesson. If your child isn't engaged, we'll find a better match — or we part ways, no hard feelings.",
+              },
+            ].map(({ n, title, body }) => (
+              <li class="flex gap-5 items-start bg-white rounded-2xl p-6 border border-emerald-100 shadow-sm">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-600 text-white font-black text-base flex items-center justify-center">
+                  {n}
+                </span>
+                <div>
+                  <p class="font-bold text-emerald-950 text-lg mb-1">{title}</p>
+                  <p class="text-emerald-800/70 leading-relaxed text-base">{body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 8: TESTIMONIALS (REAL — from src/constants/testimonials.ts)
+         ─── Specific proof, specific names, specific outcomes ─────── -->
+    <section class="py-20 bg-white border-t border-emerald-50">
+      <div class="max-w-3xl mx-auto px-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+          Real Families, Real Results
+        </p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-emerald-950 leading-tight mb-10">
+          Don't take our word for it.
+        </h2>
+
+        <div class="space-y-6">
+          {
+            kidsTestimonials.map((t) => (
+              <figure class="bg-emerald-50 border border-emerald-100 rounded-2xl p-8">
+                <blockquote class="text-emerald-950 text-lg font-medium leading-relaxed mb-6">
+                  &ldquo;{t.content}&rdquo;
+                </blockquote>
+                <figcaption class="flex items-center gap-4">
+                  <div
+                    class="w-11 h-11 rounded-full bg-emerald-200 text-emerald-800 font-bold text-sm flex items-center justify-center shrink-0"
+                    aria-hidden="true"
+                  >
+                    {t.initials}
+                  </div>
+                  <div>
+                    <p class="font-bold text-emerald-950 text-sm">{t.name}</p>
+                    <p class="text-emerald-700/60 text-sm">
+                      {t.locationAndRole} · {t.enrollmentTime} enrolled
+                    </p>
+                  </div>
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+
+        <p class="mt-6 text-xs text-emerald-700/50 leading-relaxed">
+          Results may vary. Testimonials represent individual experiences of enrolled families. All
+          reviews are verified against active student accounts.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 9: RISK REVERSAL / GRAND SLAM OFFER
+         ─── Make saying yes feel safer than saying no ──────────────── -->
+    <section class="py-20 bg-emerald-950 text-white">
+      <div class="max-w-3xl mx-auto px-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
+          Our Guarantee
+        </p>
+        <h2 class="text-3xl md:text-4xl font-extrabold leading-tight mb-8">
+          We carry all the risk. You carry none.
+        </h2>
+
+        <div class="space-y-4 text-emerald-100/90 text-lg leading-relaxed mb-8">
+          <p>
+            <strong class="text-white">Your first class is free.</strong> No card required. No commitment.
+          </p>
+          <p>
+            If you continue and you're not satisfied after your first full paid month — for <em
+              >any</em
+            > reason — you get a full refund. No forms, no chasing. One email.
+          </p>
+          <p>
+            <strong class="text-white">Missed a session?</strong> It gets made up, guaranteed. There's
+            no lock-in contract. Cancel any time.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-4 mb-10">
+          {
+            [
+              { label: 'Free first class', sub: 'No card required' },
+              { label: '30-day refund', sub: 'If not satisfied, one email' },
+              { label: 'Make-up guarantee', sub: 'Missed sessions rescheduled' },
+            ].map(({ label, sub }) => (
+              <div class="bg-emerald-900/60 border border-emerald-700/50 rounded-xl p-5 text-center">
+                <p class="font-bold text-white text-base mb-1">{label}</p>
+                <p class="text-emerald-300/70 text-sm">{sub}</p>
+              </div>
+            ))
+          }
+        </div>
+
+        <a
+          href={`/funnel/signup?source=ad_kids_${intent}`}
+          data-track-cta
+          class="inline-flex justify-center items-center px-10 py-4 text-base font-bold rounded-full bg-white text-emerald-950 hover:bg-emerald-50 active:scale-[0.98] transition-all shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
+        >
+          Book Your Child's Free Class
+        </a>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 10: FAQ
+         ─── Answer the 4 real objections before they're raised ────── -->
+    <section class="py-20 bg-white border-t border-emerald-50">
+      <div class="max-w-3xl mx-auto px-6">
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+          Common Questions
+        </p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-emerald-950 leading-tight mb-10">
+          Answered honestly.
+        </h2>
+
+        <dl class="divide-y divide-emerald-100 space-y-0">
+          {
+            [
+              {
+                q: 'How much does it cost?',
+                a: 'From $40/month depending on session length and how often your child meets their teacher. Full pricing is transparent — no hidden fees.',
+                link: { text: 'See full pricing →', href: '/tuition-fee' },
+              },
+              {
+                q: 'What if I have more than one child?',
+                a: "Sibling discounts apply automatically: 10% off your second child, 20% off your third. No need to ask — it's applied at checkout.",
+              },
+              {
+                q: "What if the schedule doesn't fit?",
+                a: 'Classes run 24/7 across time zones. You set the frequency, and you can adjust it any time — no penalty, no process.',
+              },
+              {
+                q: 'What happens if we wait?',
+                a: "Nothing happens to us. But the earlier a child starts building a real relationship with Tajweed, the more natural it becomes. Patterns formed young are patterns that last. The free trial costs nothing to find out if now's the right time.",
+              },
+            ].map(({ q, a, link }) => (
+              <div class="py-6">
+                <dt class="font-bold text-emerald-950 text-lg mb-2">{q}</dt>
+                <dd class="text-emerald-800/75 leading-relaxed">
+                  {a}
+                  {link && (
+                    <a
+                      href={link.href}
+                      class="ml-1 text-emerald-600 font-semibold hover:text-emerald-700 underline underline-offset-2 transition-colors"
+                    >
+                      {link.text}
+                    </a>
+                  )}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION 11: FINAL CTA / VALUE STACK
+         ─── Restate the offer, then make the action tiny ─────────── -->
+    <section class="py-24 bg-emerald-950 text-white">
+      <div class="max-w-3xl mx-auto px-6 text-center">
+        <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
+          What's Waiting
+        </p>
+        <h2 class="text-3xl md:text-4xl font-extrabold leading-tight mb-6">
+          One free class. No card. No risk.
+        </h2>
+        <p class="text-emerald-100/80 text-xl leading-relaxed mb-4 max-w-xl mx-auto">
+          A vetted teacher matched to your child. A full-month guarantee if you continue. That's
+          what's waiting on the other side of one click.
+        </p>
+        <p class="text-emerald-400/70 text-base mb-10">
+          From <strong class="text-emerald-300">$40/mo</strong> ·
+          <a
+            href="/tuition-fee"
+            class="underline underline-offset-2 hover:text-emerald-300 transition-colors"
+            >Full pricing</a
+          >
+        </p>
+
+        <a
+          href={`/funnel/signup?source=ad_kids_${intent}`}
+          data-track-cta
+          class="inline-flex justify-center items-center px-12 py-5 text-lg font-extrabold rounded-full bg-emerald-500 text-white hover:bg-emerald-400 active:scale-[0.98] transition-all shadow-2xl shadow-emerald-900/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
+        >
+          Book Your Child's Free Class
+        </a>
+
+        <p class="mt-5 text-emerald-400/50 text-sm">
+          No credit card · Cancel anytime · Full refund if unsatisfied
+        </p>
+      </div>
+    </section>
+  </div><!-- /min-h-screen -->
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ATTRIBUTION PRESERVATION
+       ─── Merges inbound gclid/utm_* into all CTA hrefs ────────── -->
   <script is:inline>
     const attachAttribution = () => {
       const ctaButtons = document.querySelectorAll('a[data-track-cta]');
