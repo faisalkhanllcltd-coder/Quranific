@@ -55,3 +55,4 @@ This document tracks every unverified fact, missing credential, policy approval,
   - `for-adults.astro` hero card: `4.9 / 5` star rating
   - `for-women.astro` hero card: `4.9 / 5` star rating
     Action required: if these numbers are real and verifiable (CRM / LMS / review platform), create `src/constants/stats.ts` with authoritative values and restore the numeric displays. Do not restore hardcoded estimates.
+- [ ] WOMEN'S PAGE — Testimonial content gap (2026-08-14). After filtering to female-only testimonials per audit, the Women's landing page has exactly **1 testimonial** (Amna). Naseerullah Babar was removed as he is a male parent voice, off-strategy for a sisters-only page. The single card is currently displayed centered. Action required: gather 2–3 additional testimonials from real enrolled female students or mothers, add them to `src/constants/testimonials.ts`, and restore the grid layout. This is a content decision, not a code decision.

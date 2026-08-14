@@ -143,7 +143,7 @@ const jsonLd = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline slot="head" />
 
-  <div class="bg-white antialiased">
+  <div class="bg-cream-50 antialiased">
     <!-- ════════════════════════════════════════════════════════════
          § 1  HERO — Grand Slam Offer + 3-Second Hook
          Dark professional header, split layout desktop
@@ -181,7 +181,20 @@ const jsonLd = {
             <div
               class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-900 border border-emerald-700 text-emerald-300 text-xs font-bold uppercase tracking-widest mb-6"
             >
-              <span aria-hidden="true">★</span> Free First Class · No Card Required
+              <svg
+                class="w-3.5 h-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2.5"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              Free First Class · No Card Required
             </div>
 
             <!-- Dynamic H1 per intent -->
@@ -264,17 +277,24 @@ const jsonLd = {
                 {
                   [
                     {
-                      icon: '🔒',
+                      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
                       text: '100% private — no group classes, no awkward reading aloud',
                     },
-                    { icon: '🕐', text: 'Schedule 24/7 — evenings, weekends, lunch breaks' },
-                    { icon: '↩', text: 'Reschedule any class directly from your portal' },
-                    { icon: '♾', text: 'Start from zero — no Arabic required' },
+                    {
+                      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+                      text: 'Schedule 24/7 — evenings, weekends, lunch breaks',
+                    },
+                    {
+                      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>`,
+                      text: 'Reschedule any class directly from your portal',
+                    },
+                    {
+                      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+                      text: 'Start from zero — no Arabic required',
+                    },
                   ].map(({ icon, text }) => (
                     <li class="flex items-start gap-3 text-sm text-emerald-100/80 font-medium leading-snug">
-                      <span class="text-base leading-none mt-0.5" aria-hidden="true">
-                        {icon}
-                      </span>
+                      <span class="text-emerald-400 mt-0.5 shrink-0" set:html={icon} />
                       {text}
                     </li>
                   ))
@@ -377,13 +397,12 @@ const jsonLd = {
 
         <ol class="grid sm:grid-cols-2 gap-5 mb-10">
           {
-            vettingSteps.map(({ n, title, body, icon }) => (
+            vettingSteps.map(({ title, body, icon }) => (
               <li class="bg-cream-50 border border-slate-100 rounded-2xl p-7 shadow-sm">
-                <div class="flex items-start gap-3 mb-4">
+                <div class="flex items-center gap-3 mb-4">
                   <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
                     <Fragment set:html={icon} />
                   </div>
-                  <span class="text-xs font-black text-slate-300 tracking-widest mt-3">{n}</span>
                 </div>
                 <p class="font-bold text-emerald-950 text-lg mb-2">{title}</p>
                 <p class="text-slate-500 leading-relaxed text-sm">{body}</p>
@@ -745,7 +764,7 @@ const jsonLd = {
         </div>
       </div>
     </section>
-  </div><!-- /bg-white -->
+  </div><!-- /bg-cream-50 -->
 
   <!-- ════════════════════════════════════════════════════════════
        ATTRIBUTION PRESERVATION
