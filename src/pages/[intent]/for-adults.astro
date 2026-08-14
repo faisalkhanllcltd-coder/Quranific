@@ -273,7 +273,7 @@ const jsonLd = {
               <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-5">
                 Why professionals choose us
               </p>
-              <ul class="space-y-4">
+              <ul class="space-y-5">
                 {
                   [
                     {
@@ -293,7 +293,7 @@ const jsonLd = {
                       text: 'Start from zero — no Arabic required',
                     },
                   ].map(({ icon, text }) => (
-                    <li class="flex items-start gap-3 text-sm text-white font-medium leading-snug">
+                    <li class="flex items-start gap-3 text-lg text-emerald-100 font-medium leading-snug">
                       <span class="text-emerald-400 mt-0.5 shrink-0" set:html={icon} />
                       {text}
                     </li>
@@ -471,11 +471,11 @@ const jsonLd = {
          ═══════════════════════════════════════════════════════════ -->
     <section class="quranific-section bg-white border-b border-slate-100">
       <div class="quranific-container">
-        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
-          <ul class="space-y-4 order-2 lg:order-1">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <ul class="space-y-5 order-2 lg:order-1">
             {
               trustPoints.map((point) => (
-                <li class="flex items-start gap-3 text-base text-emerald-950 font-medium">
+                <li class="flex items-start gap-3 text-lg text-slate-700 font-medium">
                   <svg
                     class="w-5 h-5 shrink-0 text-emerald-600 mt-0.5"
                     fill="none"
