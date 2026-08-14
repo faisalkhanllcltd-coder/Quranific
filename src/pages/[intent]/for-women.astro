@@ -421,7 +421,7 @@ const jsonLd = {
         <ol class="grid sm:grid-cols-2 gap-5 mb-10">
           {
             vettingSteps.map(({ title, body, icon }) => (
-              <li class="bg-cream-50 border border-slate-100 rounded-2xl p-7 shadow-sm">
+              <li class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl p-8">
                 <div class="flex items-center gap-3 mb-4">
                   <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center">
                     <Fragment set:html={icon} />
@@ -556,12 +556,12 @@ const jsonLd = {
         <ol class="grid md:grid-cols-3 gap-5 max-w-5xl">
           {
             onboardingSteps.map(({ n, title, body }) => (
-              <li class="bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-7">
+              <li class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl p-8">
                 <div class="w-10 h-10 rounded-full bg-purple-700/60 text-white font-black text-base flex items-center justify-center mb-5">
                   {n}
                 </div>
-                <p class="font-bold text-white text-lg leading-snug mb-3">{title}</p>
-                <p class="text-white leading-relaxed text-sm">{body}</p>
+                <p class="font-bold text-emerald-950 text-lg leading-snug mb-3">{title}</p>
+                <p class="text-emerald-800/80 leading-relaxed text-sm">{body}</p>
               </li>
             ))
           }
@@ -589,7 +589,7 @@ const jsonLd = {
           {
             womenTestimonials.map((t) => (
               <figure
-                class={`rounded-2xl p-8 border shadow-sm ${t.theme === 'dark' ? 'bg-emerald-950 border-emerald-800' : 'bg-cream-50 border-slate-100'}`}
+                class={`rounded-2xl p-8 border transition-all duration-300 hover:shadow-md ${t.theme === 'dark' ? 'bg-emerald-950 border-emerald-800 shadow-xl' : 'bg-white border-slate-200 shadow-sm'}`}
               >
                 <div class="flex gap-1 mb-5" aria-hidden="true">
                   {Array(5)
