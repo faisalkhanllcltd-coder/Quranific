@@ -214,7 +214,7 @@ const jsonLd = {
                 href={`/funnel/signup?source=ad_kids_${intent}`}
                 data-track-cta
                 variant="primary"
-                class="px-8 py-4 text-base font-bold rounded-xl shadow-lg shadow-emerald-900/15"
+                class="px-6 py-3 text-sm font-semibold shadow-lg shadow-emerald-900/10"
               >
                 Book Your Child's Free Class
               </Button>
@@ -223,7 +223,7 @@ const jsonLd = {
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="ghost"
-                class="px-8 py-4 text-base font-bold rounded-xl"
+                class="px-6 py-3 text-sm font-semibold"
               >
                 <svg
                   class="w-5 h-5 mr-2 shrink-0 text-[#25D366]"
@@ -255,8 +255,7 @@ const jsonLd = {
           <!-- Right: floating trust card -->
           <div class="hidden lg:block">
             <div class="bg-white border border-emerald-100 rounded-2xl shadow-xl p-8">
-              <!-- Star rating -->
-              <div class="flex gap-1 mb-1" aria-label="Rated 4.9 out of 5">
+              <div class="flex gap-1 mb-3" aria-hidden="true">
                 {
                   Array(5)
                     .fill(null)
@@ -272,23 +271,19 @@ const jsonLd = {
                     ))
                 }
               </div>
-              <p class="text-2xl font-extrabold text-emerald-950 mb-0.5">4.9 / 5</p>
-              <p class="text-sm text-emerald-700/60 mb-6">from verified enrolled families</p>
+              <p class="text-sm font-semibold text-emerald-950 mb-0.5">
+                Trusted by families worldwide
+              </p>
+              <p class="text-sm text-emerald-700/60 mb-6">
+                Verified enrolled families across 20+ countries
+              </p>
 
-              <div class="space-y-4 border-t border-emerald-50 pt-6">
-                {
-                  [
-                    { stat: '3,000+', label: 'Active students' },
-                    { stat: '22', label: 'Countries served' },
-                    { stat: '94%', label: 'Retention rate' },
-                    { stat: '4-stage', label: 'Teacher vetting' },
-                  ].map(({ stat, label }) => (
-                    <div class="flex items-center justify-between text-sm">
-                      <span class="text-emerald-800/60 font-medium">{label}</span>
-                      <span class="font-bold text-emerald-950">{stat}</span>
-                    </div>
-                  ))
-                }
+              <div class="space-y-3 border-t border-emerald-50 pt-6">
+                <p class="text-sm font-semibold text-emerald-950">Trusted by families worldwide</p>
+                <p class="text-sm text-emerald-700/60">UK · USA · UAE · Australia · Canada</p>
+                <p class="text-sm text-emerald-700/60">
+                  Vetted teachers · 4-stage vetting · Safeguarding-checked
+                </p>
               </div>
             </div>
           </div>
@@ -473,20 +468,18 @@ const jsonLd = {
           <ul class="space-y-4">
             {
               trustPoints.map((point) => (
-                <li class="flex items-start gap-4 bg-cream-50 border border-emerald-100 rounded-xl px-6 py-4">
-                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mt-0.5">
-                    <svg
-                      class="w-3.5 h-3.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="3"
-                      aria-hidden="true"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span class="text-emerald-950 font-medium text-base">{point}</span>
+                <li class="flex items-start gap-3 text-base text-emerald-950 font-medium">
+                  <svg
+                    class="w-5 h-5 shrink-0 text-emerald-600 mt-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    aria-hidden="true"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  {point}
                 </li>
               ))
             }
@@ -634,7 +627,7 @@ const jsonLd = {
           href={`/funnel/signup?source=ad_kids_${intent}`}
           data-track-cta
           variant="white"
-          class="px-10 py-4 text-base font-bold rounded-xl"
+          class="px-6 py-3 text-sm font-semibold shadow-lg shadow-black/20"
         >
           Book Your Child's Free Class
         </Button>
@@ -687,7 +680,7 @@ const jsonLd = {
           What's Waiting
         </p>
         <h2
-          class="font-serif text-3xl md:text-5xl font-black text-white leading-tight mb-6 max-w-2xl mx-auto"
+          class="font-serif text-2xl md:text-3xl font-black text-white leading-tight mb-6 max-w-2xl mx-auto"
         >
           One free class. No card. No risk.
         </h2>
@@ -708,7 +701,7 @@ const jsonLd = {
           href={`/funnel/signup?source=ad_kids_${intent}`}
           data-track-cta
           variant="secondary"
-          class="px-12 py-5 text-lg font-extrabold rounded-xl shadow-2xl"
+          class="px-8 py-4 text-base font-bold shadow-lg shadow-black/20"
         >
           Book Your Child's Free Class
         </Button>

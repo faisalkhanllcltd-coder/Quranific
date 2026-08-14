@@ -50,3 +50,8 @@ This document tracks every unverified fact, missing credential, policy approval,
 - [ ] PENDING — set up conversion tracking (GA4 + Google Ads conversion tag, or Google Tag Manager) in Base.astro before running any Google Ads campaigns. Currently zero analytics exist in the codebase — gclid/utm\_\* params are captured in hidden form fields (funnel/signup) but nothing fires a conversion event on submission yet. Ads spend without this means no bidding optimization data reaches Google.
 - [ ] PENDING — SGD/CAD/AUD rates in src/constants/pricing.ts are hardcoded as of 2026-07-27 (SGD 1.29, CAD 1.41, AUD 1.43) and will drift from live market rates over time — refresh periodically. AED/SAR are pegged to USD and do not need refreshing.
 - [x] GBP/EUR/AED pricing confirmed by owner — exact values, not rate-derived.
+- [ ] LANDING PAGES — Unverified numeric claims removed (2026-08-14). Across all 3 ad landing pages (`for-kids.astro`, `for-adults.astro`, `for-women.astro`), the following hardcoded stats had no source of truth in the codebase and were removed, replaced with qualitative language matching the established homepage pattern ("Trusted by families worldwide"):
+  - `for-kids.astro` hero card: `3,000+` active students, `22` countries served, `94%` retention rate, `4.9 / 5` star rating
+  - `for-adults.astro` hero card: `4.9 / 5` star rating
+  - `for-women.astro` hero card: `4.9 / 5` star rating
+    Action required: if these numbers are real and verifiable (CRM / LMS / review platform), create `src/constants/stats.ts` with authoritative values and restore the numeric displays. Do not restore hardcoded estimates.
