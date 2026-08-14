@@ -268,7 +268,7 @@ const jsonLd = {
           <!-- Right: floating credential card (desktop) -->
           <div class="hidden lg:block">
             <div
-              class="bg-emerald-900/80 border border-emerald-700/50 backdrop-blur-sm rounded-2xl p-8"
+              class="bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-8"
             >
               <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-5">
                 Why professionals choose us
@@ -293,7 +293,7 @@ const jsonLd = {
                       text: 'Start from zero — no Arabic required',
                     },
                   ].map(({ icon, text }) => (
-                    <li class="flex items-start gap-3 text-sm text-emerald-100/80 font-medium leading-snug">
+                    <li class="flex items-start gap-3 text-sm text-white font-medium leading-snug">
                       <span class="text-emerald-400 mt-0.5 shrink-0" set:html={icon} />
                       {text}
                     </li>
@@ -301,10 +301,10 @@ const jsonLd = {
                 }
               </ul>
               <div class="mt-6 pt-6 border-t border-emerald-700/40">
-                <p class="text-sm font-semibold text-emerald-200">
+                <p class="text-sm font-semibold text-white">
                   Trusted by working professionals worldwide
                 </p>
-                <p class="text-emerald-400/50 text-xs mt-1">
+                <p class="text-emerald-50 text-xs mt-1">
                   Enrolled adults from the UK, USA, UAE &amp; beyond
                 </p>
               </div>
@@ -412,7 +412,9 @@ const jsonLd = {
         </ol>
 
         <!-- 1-on-1 callout for adults: privacy + pace -->
-        <div class="bg-emerald-950 rounded-2xl p-8 max-w-3xl">
+        <div
+          class="bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-8 max-w-3xl"
+        >
           <p class="font-bold text-emerald-300 text-sm uppercase tracking-wider mb-3">
             Why 1-on-1 matters for adults
           </p>
@@ -528,12 +530,12 @@ const jsonLd = {
         <ol class="grid md:grid-cols-3 gap-5 max-w-5xl">
           {
             onboardingSteps.map(({ n, title, body }) => (
-              <li class="bg-emerald-900/60 border border-emerald-700/50 rounded-2xl p-7">
+              <li class="bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-7">
                 <div class="w-10 h-10 rounded-full bg-emerald-600 text-white font-black text-base flex items-center justify-center mb-5">
                   {n}
                 </div>
                 <p class="font-bold text-white text-lg leading-snug mb-3">{title}</p>
-                <p class="text-emerald-300/70 leading-relaxed text-sm">{body}</p>
+                <p class="text-emerald-50 leading-relaxed text-sm">{body}</p>
               </li>
             ))
           }
