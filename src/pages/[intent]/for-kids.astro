@@ -173,9 +173,7 @@ const jsonLd = {
           </a>
         </header>
 
-        <div
-          class="grid lg:grid-cols-[1fr_400px] gap-12 xl:gap-20 items-center pb-16 sm:pb-20 lg:pb-24"
-        >
+        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center pb-16 sm:pb-20 lg:pb-24">
           <!-- Left: headline + CTAs -->
           <div>
             <div
@@ -235,7 +233,7 @@ const jsonLd = {
               </a>
               <a
                 href="https://wa.me/447477382348?text=Hello! I want to start a free Quran trial for my kids."
-                class="bg-emerald-50 text-emerald-950 px-6 py-4 rounded-xl font-semibold flex items-center gap-2 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                class="bg-emerald-50 text-emerald-950 px-6 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -272,38 +270,17 @@ const jsonLd = {
             </div>
           </div>
 
-          <!-- Right: floating trust card -->
-          <div class="hidden lg:block">
-            <div class="bg-white border border-emerald-100 rounded-2xl shadow-xl p-8">
-              <div class="flex gap-1 mb-3" aria-hidden="true">
-                {
-                  Array(5)
-                    .fill(null)
-                    .map(() => (
-                      <svg
-                        class="w-5 h-5 text-gold-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))
-                }
-              </div>
-              <p class="text-sm font-semibold text-emerald-950 mb-0.5">
-                Trusted by families worldwide
-              </p>
-              <p class="text-sm text-emerald-700/60 mb-4">
-                Enrolled families from the UK, USA, UAE, Australia &amp; Canada
-              </p>
-              <div class="space-y-1 border-t border-emerald-50 pt-4">
-                <p class="text-sm text-emerald-700/60">
-                  4-stage teacher vetting · Safeguarding-checked
-                </p>
-                <p class="text-sm text-emerald-700/60">Free first class · No card required</p>
-              </div>
-            </div>
+          <!-- Right: Hero Image -->
+          <div
+            class="w-full mt-10 lg:mt-0 relative overflow-hidden rounded-[2rem] lg:rounded-[2.5rem]"
+          >
+            <img
+              src="/images/quran-classes-for-kids.webp"
+              alt="Quran Classes for Kids"
+              class="w-full h-auto object-cover"
+              loading="eager"
+              decoding="async"
+            />
           </div>
         </div>
       </div>
@@ -344,28 +321,39 @@ const jsonLd = {
          ═══════════════════════════════════════════════════════════ -->
     <section class="quranific-section bg-emerald-950">
       <div class="quranific-container">
-        <div class="max-w-3xl">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
-            Six Months From Now
-          </p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-white leading-[1.1] mb-6">
-            This doesn't have to be a chore anymore.
-          </h2>
-          <p class="text-xl text-emerald-100/85 leading-relaxed mb-4 max-w-prose">
-            Picture your child reading with real confidence, correcting their own Tajweed,
-            <strong class="text-white">asking to show you what they learned</strong> instead of being
-            reminded to log on.
-          </p>
-          <p class="text-lg text-emerald-100/65 leading-relaxed max-w-prose">
-            That's the actual goal — not attendance. Understanding.
-          </p>
-        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
+              Six Months From Now
+            </p>
+            <h2 class="font-serif text-3xl md:text-4xl font-black text-white leading-[1.1] mb-6">
+              This doesn't have to be a chore anymore.
+            </h2>
+            <p class="text-xl text-emerald-100/85 leading-relaxed mb-4 max-w-prose">
+              Picture your child reading with real confidence, correcting their own Tajweed,
+              <strong class="text-white">asking to show you what they learned</strong> instead of being
+              reminded to log on.
+            </p>
+            <p class="text-lg text-emerald-100/65 leading-relaxed max-w-prose">
+              That's the actual goal — not attendance. Understanding.
+            </p>
+          </div>
 
-        <!-- OUTCOME IMAGE placeholder -->
-        <div
-          class="mt-10 max-w-2xl bg-emerald-900/50 border border-emerald-700/30 rounded-2xl aspect-[16/7] flex items-center justify-center text-emerald-400/50 text-sm font-medium"
-        >
-          [ASSET: Outcome/aspiration photo — child reading Quran confidently]
+          <div
+            class="relative w-full aspect-[4/3] lg:aspect-square rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-white/10"
+          >
+            <img
+              src="/images/Quran-teacher-for-kids.webp"
+              alt="Child confidently reading the Quran"
+              class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out"
+              loading="lazy"
+            />
+            <!-- Subtle inner gradient for depth -->
+            <div
+              class="absolute inset-0 border border-white/10 rounded-[2rem] z-10 pointer-events-none"
+            >
+            </div>
+          </div>
         </div>
       </div>
     </section>

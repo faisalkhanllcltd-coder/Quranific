@@ -2,7 +2,7 @@
   "name": "quranific",
   "type": "module",
   "version": "1.0.0",
-  "description": "E-commerce and EdTech platform infrastructure",
+  "description": "Online Quran Academy",
   "author": "Faisal Khan (Quranific LTD)",
   "private": true,
   "scripts": {
