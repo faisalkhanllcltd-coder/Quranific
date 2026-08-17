@@ -357,7 +357,7 @@ const jsonLd = {
          ═══════════════════════════════════════════════════════════ -->
     <section class="quranific-section bg-cream-50 border-b border-emerald-50">
       <div class="quranific-container">
-        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
             <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
               Six Months From Now
@@ -379,11 +379,22 @@ const jsonLd = {
             </div>
           </div>
 
-          <!-- OUTCOME IMAGE placeholder -->
+          <!-- RIGHT COLUMN: Premium Image Wrapper -->
           <div
-            class="bg-slate-200 aspect-[4/3] rounded-2xl flex items-center justify-center text-slate-500 font-medium text-sm shadow-sm"
+            class="relative w-full aspect-[4/3] lg:aspect-square rounded-[2rem] overflow-hidden shadow-2xl shadow-emerald-950/10 ring-1 ring-emerald-950/5"
           >
-            [ASSET: Adult reading Quran confidently — aspirational lifestyle photo]
+            <img
+              src="/images/quran-classes-for-adults.webp"
+              alt="Adult confidently reading the Quran"
+              class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out"
+              loading="lazy"
+              decoding="async"
+            />
+            <!-- Subtle inner border for depth on light backgrounds -->
+            <div
+              class="absolute inset-0 border border-emerald-900/10 rounded-[2rem] z-10 pointer-events-none"
+            >
+            </div>
           </div>
         </div>
       </div>
