@@ -2,6 +2,12 @@
 // src/pages/[intent]/for-women.astro
 import Base from '../../layouts/Base.astro';
 import Button from '../../components/ui/Button.astro';
+import LandingProblem from '../../components/landing/LandingProblem.astro';
+import LandingTrust from '../../components/landing/LandingTrust.astro';
+import LandingOnboarding from '../../components/landing/LandingOnboarding.astro';
+import LandingTestimonials from '../../components/landing/LandingTestimonials.astro';
+import LandingFAQ from '../../components/landing/LandingFAQ.astro';
+import LandingFinalCTA from '../../components/landing/LandingFinalCTA.astro';
 import { SITE } from '../../constants/site';
 import { TESTIMONIALS_DATA } from '../../constants/testimonials';
 
@@ -44,8 +50,9 @@ const copy = intentCopy[intent as Intent];
 const canonicalUrl = `${SITE.url}/quran-classes/for-women`;
 
 // Testimonials: Amna only (real female voice — own spiritual journey)
-// NOTE: Content gap — only 1 verified female testimonial exists. Owner action required to gather
-// additional female student testimonials before the Women's page can show fuller social proof.
+// NOTE: Content gap — only 1 verified female testimonial exists.
+// Owner action required: gather additional female student testimonials.
+// See QURANIFIC_OWNER_ACTIONS.md
 const womenTestimonials = TESTIMONIALS_DATA.filter((t) => ['Amna'].includes(t.name));
 
 const vettingSteps = [
@@ -143,7 +150,7 @@ const jsonLd = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline slot="head" />
 
-  <div class="bg-white antialiased">
+  <div class="bg-cream-50 antialiased">
     <!-- ════════════════════════════════════════════════════════════
          § 1  HERO — Grand Slam Offer + 3-Second Hook
          Warm dark hero with purple-tinted privacy glow
@@ -227,19 +234,19 @@ const jsonLd = {
               >
             </p>
 
-            <!-- CTAs — data-track-cta for attribution script targeting -->
+            <!-- CTAs: Hero = variant="primary" per top-funnel mapping -->
             <div class="flex flex-col sm:flex-row gap-3 mb-8">
               <Button
                 href={`/funnel/signup?source=ad_women_${intent}`}
                 data-track-cta
-                variant="secondary"
-                class="px-6 py-3 text-sm font-semibold shadow-lg shadow-black/20"
+                variant="primary"
+                class="px-8 py-4 text-base font-bold shadow-sm"
               >
                 Book Your Free Class
               </Button>
               <a
                 href="https://wa.me/447477382348?text=Hello! I'm interested in Quran classes for sisters."
-                class="bg-emerald-50 text-emerald-950 px-6 py-4 rounded-xl font-semibold flex items-center gap-2 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                class="bg-emerald-50 text-emerald-950 px-6 py-3 rounded-lg font-semibold flex items-center gap-2 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -340,43 +347,22 @@ const jsonLd = {
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 2  PROBLEM — Honest Problem / Unspoken Anxieties
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-white border-b border-slate-100">
-      <div class="quranific-container">
-        <div class="max-w-3xl">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-            The Honest Problem
-          </p>
-          <h2
-            class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-[1.1] mb-8"
-          >
-            Finding a safe, consistent learning space is harder than it should be.
-          </h2>
-          <div class="space-y-5 text-lg text-slate-600 leading-relaxed max-w-prose">
-            <p>
-              Between managing a household, a career, and daily responsibilities, finding time for
-              your own Quran journey is hard enough. Mosque classes often don't fit your schedule,
-              and finding a qualified, relatable female teacher online without privacy concerns can
-              be daunting.
-            </p>
-            <p>
-              You might feel like you've started too late, or worry about interruptions at home. The
-              friction of just trying to find a safe, consistent learning environment stops many
-              sisters from ever beginning.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- § 2  PROBLEM -->
+    <LandingProblem
+      eyebrow="The Honest Problem"
+      headline="Finding a safe, consistent learning space is harder than it should be."
+      paragraphs={[
+        "Between managing a household, a career, and daily responsibilities, finding time for your own Quran journey is hard enough. Mosque classes often don't fit your schedule, and finding a qualified, relatable female teacher online without privacy concerns can be daunting.",
+        "You might feel like you've started too late, or worry about interruptions at home. The friction of just trying to find a safe, consistent learning environment stops many sisters from ever beginning.",
+      ]}
+    />
 
     <!-- ════════════════════════════════════════════════════════════
          § 3  OUTCOME — Working Backwards from the Dream
          ═══════════════════════════════════════════════════════════ -->
     <section class="quranific-section bg-cream-50 border-b border-emerald-50">
       <div class="quranific-container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
           <div>
             <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
               Six Months From Now
@@ -399,22 +385,11 @@ const jsonLd = {
             </div>
           </div>
 
-          <!-- RIGHT COLUMN: Premium Image Wrapper -->
+          <!-- OUTCOME IMAGE placeholder — TODO(owner): replace with aspirational lifestyle photo -->
           <div
-            class="relative w-full aspect-[4/3] lg:aspect-square rounded-[2rem] overflow-hidden shadow-2xl shadow-emerald-950/10 ring-1 ring-emerald-950/5"
+            class="bg-slate-100 border border-slate-200 aspect-[4/3] rounded-2xl flex items-center justify-center text-slate-400 font-medium text-sm shadow-sm"
           >
-            <img
-              src="/images/quran-classes-for-women.webp"
-              alt="Sister peacefully reading the Quran"
-              class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out"
-              loading="lazy"
-              decoding="async"
-            />
-            <!-- Subtle inner border for depth on light backgrounds -->
-            <div
-              class="absolute inset-0 border border-emerald-900/10 rounded-[2rem] z-10 pointer-events-none"
-            >
-            </div>
+            Session preview coming soon
           </div>
         </div>
       </div>
@@ -480,14 +455,14 @@ const jsonLd = {
           </h2>
         </div>
 
-        <!-- VIDEO PLACEHOLDER -->
-        <!-- VISUAL: 30-second screen recording of portal — distraction-free UI, shared Mushaf, Ustadha session -->
+        <!-- VIDEO PLACEHOLDER: owner action required — replace with real screen recording -->
+        <!-- TODO(owner): 30s screen recording of portal — Ustadha session, distraction-free, shared Mushaf -->
         <div
-          class="max-w-3xl bg-slate-200 aspect-video rounded-2xl flex flex-col items-center justify-center gap-3 mb-4 shadow-sm"
+          class="max-w-3xl bg-slate-100 border border-slate-200 aspect-video rounded-2xl flex flex-col items-center justify-center gap-3 mb-4 shadow-sm"
         >
-          <div class="w-14 h-14 rounded-full bg-slate-300 flex items-center justify-center">
+          <div class="w-14 h-14 rounded-full bg-slate-200 flex items-center justify-center">
             <svg
-              class="w-6 h-6 text-slate-500"
+              class="w-6 h-6 text-slate-400"
               fill="currentColor"
               viewBox="0 0 24 24"
               aria-hidden="true"
@@ -495,9 +470,7 @@ const jsonLd = {
               <path d="M8 5v14l11-7z"></path>
             </svg>
           </div>
-          <p class="text-slate-500 text-sm font-medium">
-            [ASSET: 30s portal screen recording — Ustadha session, distraction-free, shared Mushaf]
-          </p>
+          <p class="text-slate-400 text-sm font-medium">Session preview coming soon</p>
         </div>
         <p class="text-slate-400 text-sm italic max-w-3xl">
           Clean, professional, and a 100% secure sisters-only learning space.
@@ -505,152 +478,34 @@ const jsonLd = {
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 6  TRUST — Bezos Trust Engine / Zero Friction & Privacy
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-white border-b border-slate-100">
-      <div class="quranific-container">
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <ul class="space-y-5 order-2 lg:order-1">
-            {
-              trustPoints.map((point) => (
-                <li class="flex items-start gap-3 text-lg text-slate-700 font-medium">
-                  <svg
-                    class="w-5 h-5 shrink-0 text-purple-600 mt-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    aria-hidden="true"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  {point}
-                </li>
-              ))
-            }
-          </ul>
+    <!-- § 6  TRUST -->
+    <LandingTrust
+      headline="Your privacy is sacred."
+      body={[
+        'Learn comfortably from home with a guaranteed female Ustadha. Work meeting ran late? Baby woke up? Reschedule your class directly from your portal.',
+        'You control the pace, and your teacher is there to guide you with empathy — not judge you.',
+      ]}
+      trustPoints={trustPoints}
+      accent="purple"
+      reversed={true}
+    />
 
-          <div class="order-1 lg:order-2">
-            <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-              Full Transparency
-            </p>
-            <h2
-              class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight mb-6"
-            >
-              Your privacy is sacred.
-            </h2>
-            <div class="space-y-4 text-lg text-slate-600 leading-relaxed max-w-prose">
-              <p>
-                Learn comfortably from home with a guaranteed female Ustadha. Work meeting ran late?
-                Baby woke up? Reschedule your class directly from your portal.
-              </p>
-              <p>
-                You control the pace, and your teacher is there to guide you with empathy — not
-                judge you.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- § 7  ONBOARDING -->
+    <LandingOnboarding
+      headline="Three steps. The third one is the point."
+      steps={onboardingSteps}
+      theme="dark"
+      accent="purple"
+    />
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 7  ONBOARDING — Magic Moment: three steps
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-emerald-950">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-10">
-          <p class="text-xs font-bold uppercase tracking-widest text-purple-300 mb-4">
-            How It Works
-          </p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-white leading-tight">
-            Three steps. The third one is the point.
-          </h2>
-        </div>
-
-        <ol class="grid md:grid-cols-3 gap-5 max-w-5xl">
-          {
-            onboardingSteps.map(({ n, title, body }) => (
-              <li class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl p-8">
-                <div class="w-10 h-10 rounded-full bg-purple-700/60 text-white font-black text-base flex items-center justify-center mb-5">
-                  {n}
-                </div>
-                <p class="font-bold text-emerald-950 text-lg leading-snug mb-3">{title}</p>
-                <p class="text-emerald-800/80 leading-relaxed text-sm">{body}</p>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════
-         § 8  PROOF — Testimonials (src/constants/testimonials.ts)
-         Amna (own journey — verified female testimonial)
-         NOTE: Content gap — 1 testimonial. See QURANIFIC_OWNER_ACTIONS.md.
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-white border-b border-slate-100">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-10">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-            Undeniable Proof
-          </p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
-            Real students. Real results.
-          </h2>
-        </div>
-
-        <div class="max-w-xl mx-auto">
-          {
-            womenTestimonials.map((t) => (
-              <figure
-                class={`rounded-2xl p-8 border transition-all duration-300 hover:shadow-md ${t.theme === 'dark' ? 'bg-emerald-950 border-emerald-800 shadow-xl' : 'bg-white border-slate-200 shadow-sm'}`}
-              >
-                <div class="flex gap-1 mb-5" aria-hidden="true">
-                  {Array(5)
-                    .fill(null)
-                    .map(() => (
-                      <svg class="w-4 h-4 text-gold-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                </div>
-                <blockquote
-                  class={`text-base font-medium leading-relaxed mb-6 ${t.theme === 'dark' ? 'text-emerald-100/90' : 'text-emerald-950'}`}
-                >
-                  &ldquo;{t.content}&rdquo;
-                </blockquote>
-                <figcaption class="flex items-center gap-3">
-                  <div
-                    class={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${t.theme === 'dark' ? 'bg-emerald-800 text-emerald-200' : 'bg-purple-100 text-purple-700'}`}
-                  >
-                    {t.initials}
-                  </div>
-                  <div>
-                    <p
-                      class={`font-bold text-sm ${t.theme === 'dark' ? 'text-white' : 'text-emerald-950'}`}
-                    >
-                      {t.name}
-                    </p>
-                    <p
-                      class={`text-xs ${t.theme === 'dark' ? 'text-emerald-400' : 'text-slate-400'}`}
-                    >
-                      {t.locationAndRole} · {t.enrollmentTime}
-                    </p>
-                  </div>
-                </figcaption>
-              </figure>
-            ))
-          }
-        </div>
-
-        <p class="mt-8 text-xs text-slate-300 max-w-2xl leading-relaxed">
-          Results may vary. All reviews are verified against active student accounts. No
-          compensation was provided.
-        </p>
-      </div>
-    </section>
+    <!-- § 8  TESTIMONIALS -->
+    <LandingTestimonials
+      testimonials={womenTestimonials}
+      eyebrow="Undeniable Proof"
+      headline="Real students. Real results."
+      cols={1}
+      avatarAccent="purple"
+    />
 
     <!-- ════════════════════════════════════════════════════════════
          § 9  GUARANTEE — Hormozi Absolute Risk Reversal
@@ -682,12 +537,14 @@ const jsonLd = {
                 There's no lock-in contract. Cancel any time.
               </p>
             </div>
+
+            <!-- Guarantee CTA: variant="secondary" per mid-funnel mapping -->
             <div class="mt-8">
               <Button
                 href={`/funnel/signup?source=ad_women_${intent}`}
                 data-track-cta
-                variant="primary"
-                class="px-6 py-3 text-sm font-semibold shadow-lg shadow-emerald-900/10"
+                variant="secondary"
+                class="px-8 py-4 text-base font-bold shadow-lg shadow-black/20"
               >
                 Book Your Free Class
               </Button>
@@ -720,103 +577,25 @@ const jsonLd = {
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 10  FAQ — Cost of Inaction & Friction Elimination
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-white border-b border-slate-100">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-10">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-            Common Questions
-          </p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
-            Answered honestly.
-          </h2>
-        </div>
+    <!-- § 10  FAQ -->
+    <LandingFAQ items={faqItems} />
 
-        <dl class="max-w-3xl divide-y divide-slate-100">
-          {
-            faqItems.map(({ q, a, link }) => (
-              <div class="py-7">
-                <dt class="font-bold text-emerald-950 text-lg mb-2">{q}</dt>
-                <dd class="text-slate-500 leading-relaxed text-base">
-                  {a}
-                  {link && (
-                    <a
-                      href={link.href}
-                      class="ml-1 text-emerald-600 font-semibold underline underline-offset-2 hover:text-emerald-700 transition-colors"
-                    >
-                      {link.text}
-                    </a>
-                  )}
-                </dd>
-              </div>
-            ))
-          }
-        </dl>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════
-         § 11  FINAL CTA — Value Stack & Closing Argument
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-emerald-950">
-      <div class="quranific-container">
-        <div class="max-w-2xl">
-          <p class="text-xs font-bold uppercase tracking-widest text-purple-300 mb-4">
-            What's Waiting
-          </p>
-          <h2
-            class="font-serif text-2xl md:text-3xl font-black text-white leading-[1.1] mb-6 max-w-2xl mx-auto"
-          >
-            One free class.<br />No card. No risk.
-          </h2>
-          <p class="text-xl text-emerald-100/70 leading-relaxed mb-4 max-w-2xl mx-auto">
-            A professional Ustadha matched to your goals. A full-month guarantee if you continue.
-            That's what's waiting on the other side of one click.
-          </p>
-          <p class="text-sm text-emerald-400/50 mb-10">
-            From <strong class="text-emerald-300">$40/mo</strong> ·
-            <a
-              href="/tuition-fee"
-              class="underline underline-offset-2 hover:text-emerald-300 transition-colors"
-              >Full pricing</a
-            >
-          </p>
-
-          <div class="flex flex-col sm:flex-row gap-4">
-            <Button
-              href={`/funnel/signup?source=ad_women_${intent}`}
-              data-track-cta
-              variant="secondary"
-              class="px-8 py-4 text-base font-bold shadow-lg shadow-black/20"
-            >
-              Book Your Free Class
-            </Button>
-            <Button
-              href={SITE.whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="ghost"
-              class="px-6 py-3 text-sm font-semibold border-emerald-700 text-emerald-200 hover:bg-emerald-900"
-            >
-              Ask a question first
-            </Button>
-          </div>
-
-          <p class="mt-6 text-emerald-400/40 text-sm">
-            No credit card · Cancel anytime · Full refund if unsatisfied
-          </p>
-        </div>
-      </div>
-    </section>
+    <!-- § 11  FINAL CTA -->
+    <LandingFinalCTA
+      headline="One free class.<br />No card. No risk."
+      subhead="A professional Ustadha matched to your goals. A full-month guarantee if you continue. That's what's waiting on the other side of one click."
+      ctaHref={`/funnel/signup?source=ad_women_${intent}`}
+      ctaLabel="Book Your Free Class"
+      showWhatsapp={true}
+      accent="purple"
+    />
   </div><!-- /bg-cream-50 -->
 
   <!-- ════════════════════════════════════════════════════════════
        ATTRIBUTION PRESERVATION (Client-Side — SSG Safe)
        Reads window.location.search at runtime.
        Merges inbound gclid / utm_* / fbclid into all CTA hrefs.
-       Targets both data-track-cta and .cta-booking-btn selectors.
+       Targets a[data-track-cta] selector.
        ═══════════════════════════════════════════════════════════ -->
   <script is:inline>
     const attachAttribution = () => {

@@ -1,0 +1,49 @@
+---
+// src/components/landing/LandingFAQ.astro
+
+interface FaqItem {
+  q: string;
+  a: string;
+  link?: { text: string; href: string };
+}
+
+interface Props {
+  items: FaqItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="quranific-section bg-white border-b border-emerald-50">
+  <div class="quranific-container">
+    <div class="max-w-3xl mb-10">
+      <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+        Common Questions
+      </p>
+      <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
+        Answered honestly.
+      </h2>
+    </div>
+
+    <dl class="max-w-3xl divide-y divide-emerald-100">
+      {
+        items.map(({ q, a, link }) => (
+          <div class="py-7">
+            <dt class="font-bold text-emerald-950 text-lg mb-2">{q}</dt>
+            <dd class="text-emerald-800/70 leading-relaxed text-base">
+              {a}
+              {link && (
+                <a
+                  href={link.href}
+                  class="ml-1 text-emerald-600 font-semibold underline underline-offset-2 hover:text-emerald-700 transition-colors"
+                >
+                  {link.text}
+                </a>
+              )}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

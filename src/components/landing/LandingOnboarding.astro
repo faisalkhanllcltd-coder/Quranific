@@ -1,0 +1,57 @@
+---
+// src/components/landing/LandingOnboarding.astro
+
+interface Step {
+  n: string;
+  title: string;
+  body: string;
+}
+
+interface Props {
+  headline: string;
+  steps: Step[];
+  /** 'light' = bg-emerald-50 (kids), 'dark' = bg-emerald-950 (adults/women) */
+  theme?: 'light' | 'dark';
+  /** Accent color for step circle. 'emerald' (default) or 'purple' (women) */
+  accent?: 'emerald' | 'purple';
+}
+
+const { headline, steps, theme = 'light', accent = 'emerald' } = Astro.props;
+
+const sectionBg = theme === 'dark' ? 'bg-emerald-950' : 'bg-emerald-50 border-b border-emerald-100';
+const eyebrowColor =
+  theme === 'dark'
+    ? accent === 'purple'
+      ? 'text-purple-300'
+      : 'text-emerald-400'
+    : 'text-emerald-600';
+const headlineColor = theme === 'dark' ? 'text-white' : 'text-emerald-950';
+const circleBg = accent === 'purple' ? 'bg-purple-700/60 text-white' : 'bg-emerald-600 text-white';
+---
+
+<section class={`quranific-section ${sectionBg}`}>
+  <div class="quranific-container">
+    <div class="max-w-3xl mb-10">
+      <p class={`text-xs font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>How It Works</p>
+      <h2 class={`font-serif text-3xl md:text-4xl font-black leading-tight ${headlineColor}`}>
+        {headline}
+      </h2>
+    </div>
+
+    <ol class="grid md:grid-cols-3 gap-6 max-w-5xl">
+      {
+        steps.map(({ n, title, body }) => (
+          <li class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl p-8">
+            <div
+              class={`w-10 h-10 rounded-full font-black text-base flex items-center justify-center mb-5 ${circleBg}`}
+            >
+              {n}
+            </div>
+            <p class="font-bold text-emerald-950 text-lg leading-snug mb-3">{title}</p>
+            <p class="text-emerald-800/65 leading-relaxed text-sm">{body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

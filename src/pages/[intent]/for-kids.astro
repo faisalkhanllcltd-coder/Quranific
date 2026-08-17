@@ -2,6 +2,12 @@
 // src/pages/[intent]/for-kids.astro
 import Base from '../../layouts/Base.astro';
 import Button from '../../components/ui/Button.astro';
+import LandingProblem from '../../components/landing/LandingProblem.astro';
+import LandingTrust from '../../components/landing/LandingTrust.astro';
+import LandingOnboarding from '../../components/landing/LandingOnboarding.astro';
+import LandingTestimonials from '../../components/landing/LandingTestimonials.astro';
+import LandingFAQ from '../../components/landing/LandingFAQ.astro';
+import LandingFinalCTA from '../../components/landing/LandingFinalCTA.astro';
 import { SITE } from '../../constants/site';
 import { TESTIMONIALS_DATA } from '../../constants/testimonials';
 
@@ -43,7 +49,7 @@ const copy = intentCopy[intent as Intent];
 // SEO Shield: canonical always points to master quran-classes URL
 const canonicalUrl = `${SITE.url}/quran-classes/for-kids`;
 
-// Testimonials: all 3 targeted entries — child engagement + teacher trust
+// Testimonials: page-level filter — pre-filtered array passed to component
 const kidsTestimonials = TESTIMONIALS_DATA.filter((t) =>
   ['Amna', 'Saleem Al Mustarshid', 'Naseerullah Babar'].includes(t.name)
 );
@@ -219,21 +225,19 @@ const jsonLd = {
               >
             </p>
 
-            <!-- CTAs — use Button component for site consistency -->
+            <!-- CTAs: Hero = variant="primary" per funnel mapping -->
             <div class="flex flex-col sm:flex-row gap-3 mb-8">
-              <a
+              <Button
                 href={`/enroll/step-1?intent=${intent}`}
-                class="bg-emerald-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-sm group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                data-track-cta
+                variant="primary"
+                class="px-8 py-4 text-base font-bold shadow-sm"
               >
-                <div
-                  class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"
-                >
-                </div>
-                <span class="relative z-10">Start Free Trial</span>
-              </a>
+                Start Free Trial
+              </Button>
               <a
                 href="https://wa.me/447477382348?text=Hello! I want to start a free Quran trial for my kids."
-                class="bg-emerald-50 text-emerald-950 px-6 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                class="bg-emerald-50 text-emerald-950 px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -286,35 +290,15 @@ const jsonLd = {
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 2  PROBLEM — Acknowledge the friction before selling
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-white border-b border-emerald-50">
-      <div class="quranific-container">
-        <div class="max-w-3xl">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-            The Honest Problem
-          </p>
-          <h2
-            class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-[1.1] mb-8"
-          >
-            Finding a good Quran teacher is harder than it should be.
-          </h2>
-          <div class="space-y-5 text-lg text-emerald-900/75 leading-relaxed max-w-prose">
-            <p>
-              Between school, homework, and everything else, finding time for a proper Quran teacher
-              is hard enough. Finding a <em>good</em> one — patient, qualified, actually able to hold
-              a child's attention — is harder.
-            </p>
-            <p>
-              Group classes move too fast or too slow. Local tutors are booked solid or hard to vet.
-              And screen time already feels like enough of a battle without adding another video
-              call your child dreads.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- § 2  PROBLEM -->
+    <LandingProblem
+      eyebrow="The Honest Problem"
+      headline="Finding a good Quran teacher is harder than it should be."
+      paragraphs={[
+        "Between school, homework, and everything else, finding time for a proper Quran teacher is hard enough. Finding a <em>good</em> one — patient, qualified, actually able to hold a child's attention — is harder.",
+        'Group classes move too fast or too slow. Local tutors are booked solid or hard to vet. And screen time already feels like enough of a battle without adding another video call your child dreads.',
+      ]}
+    />
 
     <!-- ════════════════════════════════════════════════════════════
          § 3  OUTCOME — Paint the picture before the mechanism
@@ -349,7 +333,6 @@ const jsonLd = {
               loading="lazy"
               decoding="async"
             />
-            <!-- Subtle inner gradient for depth -->
             <div
               class="absolute inset-0 border border-white/10 rounded-[2rem] z-10 pointer-events-none"
             >
@@ -438,7 +421,6 @@ const jsonLd = {
               decoding="async"
             />
 
-            <!-- Subtle inner gradient for depth -->
             <div
               class="absolute inset-0 border border-white/10 rounded-[2rem] z-10 pointer-events-none"
             >
@@ -461,151 +443,34 @@ const jsonLd = {
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 6  TRUST / TRANSPARENCY — Remove hidden-cost anxiety
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-white border-b border-emerald-50">
-      <div class="quranific-container">
-        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
-          <div>
-            <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-              Full Transparency
-            </p>
-            <h2
-              class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight mb-6"
-            >
-              You don't need to hover over every session.
-            </h2>
-            <p class="text-lg text-emerald-900/75 leading-relaxed mb-4">
-              Ask your teacher for a progress update any time. Nothing is hidden, nothing is locked
-              behind a subscription tier.
-            </p>
-            <p class="text-lg text-emerald-900/75 leading-relaxed">
-              Every teacher is safeguarding-checked before they ever meet your child, and
-              <strong class="text-emerald-950">
-                you can sit in on any class, any time — no notice needed.</strong
-              >
-            </p>
-          </div>
+    <!-- § 6  TRUST / TRANSPARENCY -->
+    <LandingTrust
+      headline="You don't need to hover over every session."
+      body={[
+        'Ask your teacher for a progress update any time. Nothing is hidden, nothing is locked behind a subscription tier.',
+        'Every teacher is safeguarding-checked before they ever meet your child, and <strong class="text-emerald-950">you can sit in on any class, any time — no notice needed.</strong>',
+      ]}
+      trustPoints={trustPoints}
+      accent="emerald"
+      reversed={false}
+    />
 
-          <ul class="space-y-5">
-            {
-              trustPoints.map((point) => (
-                <li class="flex items-start gap-3 text-lg text-slate-700 font-medium">
-                  <svg
-                    class="w-5 h-5 shrink-0 text-emerald-600 mt-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    aria-hidden="true"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  {point}
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
-    </section>
+    <!-- § 7  ONBOARDING -->
+    <LandingOnboarding
+      headline="Three steps. The third one is the point."
+      steps={onboardingSteps}
+      theme="light"
+      accent="emerald"
+    />
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 7  ONBOARDING — Make the first step feel trivially small
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-emerald-50 border-b border-emerald-100">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-10">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-            How It Works
-          </p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
-            Three steps. The third one is the point.
-          </h2>
-        </div>
-
-        <ol class="grid md:grid-cols-3 gap-6 max-w-5xl">
-          {
-            onboardingSteps.map(({ n, title, body }) => (
-              <li class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl p-8">
-                <div class="w-10 h-10 rounded-full bg-emerald-600 text-white font-black text-base flex items-center justify-center mb-5">
-                  {n}
-                </div>
-                <p class="font-bold text-emerald-950 text-lg leading-snug mb-3">{title}</p>
-                <p class="text-emerald-800/65 leading-relaxed text-sm">{body}</p>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════
-         § 8  TESTIMONIALS — Specific proof, specific names
-         Imported from src/constants/testimonials.ts
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-white border-b border-emerald-50">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-10">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-            Real Families, Real Results
-          </p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
-            Don't take our word for it.
-          </h2>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6 max-w-5xl">
-          {
-            kidsTestimonials.map((t) => (
-              <figure
-                class={`rounded-2xl p-8 border transition-all duration-300 hover:shadow-md ${t.theme === 'dark' ? 'bg-emerald-950 border-emerald-800 shadow-xl' : 'bg-white border-slate-200 shadow-sm'}`}
-              >
-                <div class="flex gap-1 mb-4" aria-hidden="true">
-                  {Array(5)
-                    .fill(null)
-                    .map(() => (
-                      <svg class="w-4 h-4 text-gold-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                </div>
-                <blockquote
-                  class={`text-base font-medium leading-relaxed mb-6 ${t.theme === 'dark' ? 'text-emerald-100/90' : 'text-emerald-950'}`}
-                >
-                  &ldquo;{t.content}&rdquo;
-                </blockquote>
-                <figcaption class="flex items-center gap-3">
-                  <div
-                    class={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${t.theme === 'dark' ? 'bg-emerald-800 text-emerald-200' : 'bg-emerald-100 text-emerald-700'}`}
-                  >
-                    {t.initials}
-                  </div>
-                  <div>
-                    <p
-                      class={`font-bold text-sm ${t.theme === 'dark' ? 'text-white' : 'text-emerald-950'}`}
-                    >
-                      {t.name}
-                    </p>
-                    <p
-                      class={`text-xs ${t.theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600/60'}`}
-                    >
-                      {t.locationAndRole} · {t.enrollmentTime}
-                    </p>
-                  </div>
-                </figcaption>
-              </figure>
-            ))
-          }
-        </div>
-
-        <p class="mt-8 text-xs text-emerald-700/40 max-w-2xl leading-relaxed">
-          Results may vary. All reviews are verified against active student accounts. No
-          compensation was provided.
-        </p>
-      </div>
-    </section>
+    <!-- § 8  TESTIMONIALS -->
+    <LandingTestimonials
+      testimonials={kidsTestimonials}
+      eyebrow="Real Families, Real Results"
+      headline="Don't take our word for it."
+      cols={3}
+      avatarAccent="emerald"
+    />
 
     <!-- ════════════════════════════════════════════════════════════
          § 9  GUARANTEE — We carry all the risk
@@ -646,96 +511,30 @@ const jsonLd = {
           }
         </div>
 
-        <a
-          href={`/enroll/step-1?intent=${intent}`}
-          class="bg-emerald-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-sm group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-        >
-          <div
-            class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"
-          >
-          </div>
-          <span class="relative z-10">Start Free Trial</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════
-         § 10  FAQ — 4 real objections answered honestly
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-white border-b border-emerald-50">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-10">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-            Common Questions
-          </p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
-            Answered honestly.
-          </h2>
-        </div>
-
-        <dl class="max-w-3xl divide-y divide-emerald-100">
-          {
-            faqItems.map(({ q, a, link }) => (
-              <div class="py-7">
-                <dt class="font-bold text-emerald-950 text-lg mb-2">{q}</dt>
-                <dd class="text-emerald-800/70 leading-relaxed text-base">
-                  {a}
-                  {link && (
-                    <a
-                      href={link.href}
-                      class="ml-1 text-emerald-600 font-semibold underline underline-offset-2 hover:text-emerald-700 transition-colors"
-                    >
-                      {link.text}
-                    </a>
-                  )}
-                </dd>
-              </div>
-            ))
-          }
-        </dl>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════
-         § 11  FINAL CTA — Restate the offer, make the action tiny
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-emerald-950">
-      <div class="quranific-container text-center">
-        <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
-          What's Waiting
-        </p>
-        <h2
-          class="font-serif text-2xl md:text-3xl font-black text-white leading-[1.1] mb-6 max-w-2xl mx-auto"
-        >
-          One free class. No card. No risk.
-        </h2>
-        <p class="text-xl text-emerald-100/75 leading-relaxed mb-4 max-w-2xl mx-auto">
-          A vetted teacher matched to your child. A full-month guarantee if you continue. That's
-          what's waiting on the other side of one click.
-        </p>
-        <p class="text-sm text-emerald-400/60 mb-10">
-          From <strong class="text-emerald-300">$40/mo</strong> ·
-          <a
-            href="/tuition-fee"
-            class="underline underline-offset-2 hover:text-emerald-300 transition-colors"
-            >Full pricing</a
-          >
-        </p>
-
+        <!-- Guarantee CTA: variant="secondary" per mid-funnel mapping -->
         <Button
-          href={`/funnel/signup?source=ad_kids_${intent}`}
+          href={`/enroll/step-1?intent=${intent}`}
           data-track-cta
           variant="secondary"
           class="px-8 py-4 text-base font-bold shadow-lg shadow-black/20"
         >
-          Book Your Child's Free Class
+          Start Free Trial
         </Button>
-
-        <p class="mt-5 text-emerald-400/40 text-sm">
-          No credit card · Cancel anytime · Full refund if unsatisfied
-        </p>
       </div>
     </section>
+
+    <!-- § 10  FAQ -->
+    <LandingFAQ items={faqItems} />
+
+    <!-- § 11  FINAL CTA -->
+    <LandingFinalCTA
+      headline="One free class. No card. No risk."
+      subhead="A vetted teacher matched to your child. A full-month guarantee if you continue. That's what's waiting on the other side of one click."
+      ctaHref={`/funnel/signup?source=ad_kids_${intent}`}
+      ctaLabel="Book Your Child's Free Class"
+      showWhatsapp={false}
+      accent="emerald"
+    />
   </div><!-- /bg-cream-50 -->
 
   <!-- ════════════════════════════════════════════════════════════
