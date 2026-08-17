@@ -8,12 +8,12 @@ interface Props {
   theme?: 'dark' | 'light';
 }
 
-const { eyebrow = 'Six Months From Now', headline, body, theme = 'light' } = Astro.props;
+const { eyebrow = 'Six Months From Now', headline, body, theme = 'dark' } = Astro.props;
 
-const sectionBg = theme === 'dark' ? 'bg-emerald-950' : 'bg-cream-50 border-b border-emerald-50';
-const eyebrowColor = theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600';
-const headlineColor = theme === 'dark' ? 'text-white' : 'text-emerald-950';
-const bodyColor = theme === 'dark' ? 'text-emerald-100/85' : 'text-emerald-900/75';
+const isDark = theme === 'dark';
+const sectionBg = isDark ? 'bg-emerald-950' : 'bg-cream-50 border-b border-emerald-50';
+const eyebrowColor = isDark ? 'text-emerald-400' : 'text-emerald-600';
+const headlineColor = isDark ? 'text-white' : 'text-emerald-950';
 ---
 
 <section class={`quranific-section ${sectionBg}`}>
@@ -28,12 +28,62 @@ const bodyColor = theme === 'dark' ? 'text-emerald-100/85' : 'text-emerald-900/7
         >
           {headline}
         </h2>
-        <div class={`space-y-4 text-lg leading-relaxed max-w-prose ${bodyColor}`}>
-          {body.map((p) => <p set:html={p} />)}
-        </div>
+
+        {
+          body[0] && (
+            <p
+              class={
+                isDark
+                  ? 'text-emerald-50/80 text-lg leading-relaxed mb-8'
+                  : 'text-emerald-900/80 text-lg leading-relaxed mb-8'
+              }
+              set:html={body[0]}
+            />
+          )
+        }
+
+        {
+          body[1] && (
+            <div
+              class={
+                isDark
+                  ? 'relative p-5 md:p-6 rounded-2xl bg-white/[0.03] border border-white/10 border-l-[3px] border-l-emerald-400 shadow-2xl backdrop-blur-sm mb-8 md:mb-0'
+                  : 'relative p-5 md:p-6 rounded-2xl bg-emerald-900/[0.03] border border-emerald-900/10 border-l-[3px] border-l-emerald-600 shadow-lg backdrop-blur-sm mb-8 md:mb-0'
+              }
+            >
+              <p
+                class={
+                  isDark
+                    ? 'text-emerald-50/90 leading-relaxed font-medium'
+                    : 'text-emerald-950 leading-relaxed font-medium'
+                }
+                set:html={body[1]}
+              />
+            </div>
+          )
+        }
+
+        {
+          body
+            .slice(2)
+            .map((p) => (
+              <p
+                class={
+                  isDark
+                    ? 'text-emerald-50/80 text-lg leading-relaxed mt-4'
+                    : 'text-emerald-900/80 text-lg leading-relaxed mt-4'
+                }
+                set:html={p}
+              />
+            ))
+        }
       </div>
 
-      <div>
+      <div class="relative w-full flex items-center justify-center z-10">
+        <div
+          class="absolute -inset-4 bg-emerald-500/20 blur-[40px] md:blur-[80px] -z-10 rounded-[3rem]"
+        >
+        </div>
         <slot name="media" />
       </div>
     </div>
