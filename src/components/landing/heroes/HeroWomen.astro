@@ -32,12 +32,18 @@ const { intent, h1, subhead } = Astro.props;
 
   <div class="quranific-container relative z-10 py-8">
     <!-- Ad-lander header: logo only, no nav leakage -->
-    <header class="mb-14 md:mb-20">
+    <header class="mb-14 md:mb-20 flex items-center justify-between">
       <a
         href="/"
-        class="inline-flex items-center gap-1 font-serif font-black text-xl text-white hover:opacity-70 transition-opacity"
+        class="inline-flex items-center hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 rounded-lg"
       >
-        Quranific<span class="text-emerald-400">.</span>
+        <img
+          src="/images/quranific-logo-gold.svg"
+          alt="Quranific Logo"
+          class="h-8 md:h-9 w-auto object-contain"
+          loading="eager"
+          decoding="async"
+        />
       </a>
     </header>
 
@@ -126,17 +132,84 @@ const { intent, h1, subhead } = Astro.props;
           </a>
         </div>
 
-        <!-- Trust strip -->
-        <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-emerald-300/60 font-medium">
-          {
-            [
-              '✓ 100% Female Ustadhas',
-              '✓ Strict Privacy',
-              '✓ Flexible scheduling',
-              '✓ Full-month guarantee',
-            ].map((b) => <span>{b}</span>)
-          }
-        </div>
+        <!-- Edge UI Trust Pills (Dark Theme - Sisters) -->
+        <ul class="flex flex-wrap items-center gap-2.5 mt-6">
+          <li
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-semibold bg-white/10 text-emerald-50 border border-white/10 shadow-sm"
+          >
+            <!-- SVG: User Check -->
+            <svg
+              class="w-3.5 h-3.5 opacity-80 text-purple-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <polyline points="16 11 18 13 22 9"></polyline>
+            </svg>
+            100% Female Ustadhas
+          </li>
+          <li
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-semibold bg-white/10 text-emerald-50 border border-white/10 shadow-sm"
+          >
+            <!-- SVG: Lock -->
+            <svg
+              class="w-3.5 h-3.5 opacity-80 text-purple-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Strict Privacy
+          </li>
+          <li
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-semibold bg-white/10 text-emerald-50 border border-white/10 shadow-sm"
+          >
+            <!-- SVG: Calendar -->
+            <svg
+              class="w-3.5 h-3.5 opacity-80 text-purple-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+              <line x1="16" x2="16" y1="2" y2="6"></line>
+              <line x1="8" x2="8" y1="2" y2="6"></line>
+              <line x1="3" x2="21" y1="10" y2="10"></line>
+            </svg>
+            Flexible scheduling
+          </li>
+          <li
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-semibold bg-white/10 text-emerald-50 border border-white/10 shadow-sm"
+          >
+            <!-- SVG: Shield Check -->
+            <svg
+              class="w-3.5 h-3.5 opacity-80 text-purple-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+            Full-month guarantee
+          </li>
+        </ul>
       </div>
 
       <!-- Right: floating privacy trust card (desktop) -->
