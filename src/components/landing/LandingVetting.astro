@@ -28,51 +28,72 @@ const {
   accentColor = 'emerald',
 } = Astro.props;
 
-const iconBg =
-  accentColor === 'purple' ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700';
+const isPurple = accentColor === 'purple';
+const eyebrowColor = isPurple ? 'text-purple-600' : 'text-emerald-600';
+const iconBg = isPurple ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700';
+const stepBadgeColor = isPurple
+  ? 'text-purple-700 bg-purple-50 border-purple-100'
+  : 'text-emerald-700 bg-emerald-50 border-emerald-100';
+const cardBorder = isPurple
+  ? 'border-purple-100 hover:border-purple-200 shadow-lg shadow-purple-900/10'
+  : 'border-emerald-100 hover:border-emerald-200 shadow-lg shadow-emerald-900/10';
+const cardTitleColor = isPurple ? 'text-purple-950' : 'text-emerald-950';
+const cardBodyColor = isPurple ? 'text-purple-900/70' : 'text-emerald-800/70';
 
-const calloutWrapper =
-  theme === 'gold'
-    ? 'bg-gold-50 border border-gold-200 rounded-2xl p-7 max-w-3xl'
-    : 'bg-emerald-950 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-8 max-w-3xl';
+// Callout Banner styling
+const isDarkCallout = theme === 'dark';
+const calloutWrapper = isDarkCallout
+  ? isPurple
+    ? 'w-full mt-10 md:mt-12 p-6 md:p-8 rounded-2xl bg-purple-950 border border-purple-800/50 shadow-xl flex flex-col items-center text-center'
+    : 'w-full mt-10 md:mt-12 p-6 md:p-8 rounded-2xl bg-emerald-950 border border-emerald-800/50 shadow-xl flex flex-col items-center text-center'
+  : 'w-full mt-10 md:mt-12 p-6 md:p-8 rounded-2xl bg-emerald-50/50 border border-emerald-100/50 flex flex-col items-center text-center';
 
-const calloutTitleColor =
-  theme === 'gold'
-    ? 'text-gold-700 font-bold text-base mb-2'
-    : accentColor === 'purple'
-      ? 'text-purple-300 font-bold text-sm uppercase tracking-wider mb-3'
-      : 'text-emerald-300 font-bold text-sm uppercase tracking-wider mb-3';
+const calloutTitleColor = isDarkCallout
+  ? isPurple
+    ? 'text-purple-300 font-bold text-lg mb-3'
+    : 'text-emerald-300 font-bold text-lg mb-3'
+  : 'text-emerald-900 font-bold text-lg mb-3';
 
-const calloutBodyColor =
-  theme === 'gold'
-    ? 'text-gold-700/80 leading-relaxed'
-    : 'text-emerald-100/85 leading-relaxed text-lg';
+const calloutBodyColor = isDarkCallout
+  ? isPurple
+    ? 'text-purple-100/90 text-sm md:text-base leading-relaxed max-w-3xl text-balance'
+    : 'text-emerald-100/90 text-sm md:text-base leading-relaxed max-w-3xl text-balance'
+  : 'text-emerald-800/80 text-sm md:text-base leading-relaxed max-w-3xl text-balance';
 ---
 
 <section class="quranific-section bg-white border-b border-emerald-50">
   <div class="quranific-container">
-    <div class="max-w-3xl mb-12">
-      <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
+    <div class="max-w-3xl mx-auto text-center flex flex-col items-center mb-12">
+      <p class={`text-xs font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>
         {eyebrow}
       </p>
-      <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
+      <h2
+        class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight text-balance"
+      >
         {headline}
       </h2>
     </div>
 
-    <ol class="grid sm:grid-cols-2 gap-6 mb-10">
+    <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full mb-10">
       {
-        steps.map(({ title, body, icon }) => (
-          <li class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl p-8">
-            <div class="flex items-center gap-4 mb-4">
+        steps.map(({ n, title, body, icon }, index) => (
+          <li
+            class={`relative flex flex-col h-full p-5 md:p-6 rounded-2xl border bg-white transition-colors group ${cardBorder}`}
+          >
+            <div class="flex items-center justify-between gap-3 mb-4">
               <div
                 class={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${iconBg}`}
               >
                 <Fragment set:html={icon} />
               </div>
+              <span
+                class={`text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${stepBadgeColor}`}
+              >
+                Step {String(n || index + 1).padStart(2, '0')}
+              </span>
             </div>
-            <p class="font-bold text-emerald-950 text-lg mb-2">{title}</p>
-            <p class="text-emerald-800/70 leading-relaxed text-base">{body}</p>
+            <p class={`text-base font-bold mb-2 ${cardTitleColor}`}>{title}</p>
+            <p class={`text-sm leading-relaxed ${cardBodyColor}`}>{body}</p>
           </li>
         ))
       }
