@@ -1,11 +1,15 @@
 ---
 // src/pages/[intent]/for-women.astro
 import Base from '../../layouts/Base.astro';
-import Button from '../../components/ui/Button.astro';
+import HeroWomen from '../../components/landing/heroes/HeroWomen.astro';
 import LandingProblem from '../../components/landing/LandingProblem.astro';
+import LandingOutcome from '../../components/landing/LandingOutcome.astro';
+import LandingVetting from '../../components/landing/LandingVetting.astro';
+import LandingPreview from '../../components/landing/LandingPreview.astro';
 import LandingTrust from '../../components/landing/LandingTrust.astro';
 import LandingOnboarding from '../../components/landing/LandingOnboarding.astro';
 import LandingTestimonials from '../../components/landing/LandingTestimonials.astro';
+import LandingGuarantee from '../../components/landing/LandingGuarantee.astro';
 import LandingFAQ from '../../components/landing/LandingFAQ.astro';
 import LandingFinalCTA from '../../components/landing/LandingFinalCTA.astro';
 import { SITE } from '../../constants/site';
@@ -151,203 +155,10 @@ const jsonLd = {
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline slot="head" />
 
   <div class="bg-cream-50 antialiased">
-    <!-- ════════════════════════════════════════════════════════════
-         § 1  HERO — Grand Slam Offer + 3-Second Hook
-         Warm dark hero with purple-tinted privacy glow
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="relative overflow-hidden bg-emerald-950">
-      <!-- Subtle dot grid -->
-      <div
-        class="absolute inset-0 bg-[radial-gradient(rgba(167,139,250,0.08)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"
-        aria-hidden="true"
-      >
-      </div>
-      <!-- Warm purple glow — sisters-only warmth signal -->
-      <div
-        class="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/10 blur-[160px] rounded-full pointer-events-none"
-        aria-hidden="true"
-      >
-      </div>
-      <div
-        class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-emerald-500/8 blur-[120px] rounded-full pointer-events-none"
-        aria-hidden="true"
-      >
-      </div>
+    <!-- § 1 HERO -->
+    <HeroWomen intent={intent} h1={copy.h1} subhead={copy.subhead} />
 
-      <div class="quranific-container relative z-10 py-8">
-        <!-- Ad-lander header: logo only, no nav leakage -->
-        <header class="mb-14 md:mb-20">
-          <a
-            href="/"
-            class="inline-flex items-center gap-1 font-serif font-black text-xl text-white hover:opacity-70 transition-opacity"
-          >
-            Quranific<span class="text-emerald-400">.</span>
-          </a>
-        </header>
-
-        <div
-          class="grid lg:grid-cols-[1fr_360px] gap-12 xl:gap-20 items-center pb-16 sm:pb-20 lg:pb-24"
-        >
-          <!-- Left: headline + CTAs -->
-          <div>
-            <!-- Sisters-only badge -->
-            <div
-              class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/60 border border-purple-700/50 text-purple-200 text-xs font-bold uppercase tracking-widest mb-6"
-            >
-              <svg
-                class="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2.5"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg>
-              100% Sisters-Only · Free First Class
-            </div>
-
-            <!-- Dynamic H1 per intent -->
-            <h1
-              class="font-serif text-4xl sm:text-5xl lg:text-[3.5rem] font-black text-white leading-[1.06] tracking-tight mb-5"
-            >
-              {copy.h1}
-            </h1>
-
-            <!-- Dynamic subhead per intent -->
-            <p
-              class="text-xl md:text-2xl text-emerald-100/70 font-medium leading-relaxed mb-4 max-w-xl"
-            >
-              {copy.subhead}
-            </p>
-
-            <!-- Price anchor -->
-            <p class="text-sm font-semibold text-emerald-400/60 mb-8 uppercase tracking-wide">
-              From <strong class="text-emerald-300">$40/mo</strong> ·
-              <a
-                href="/tuition-fee"
-                class="underline underline-offset-2 hover:text-emerald-300 transition-colors"
-                >Full pricing</a
-              >
-            </p>
-
-            <!-- CTAs: Hero = variant="primary" per top-funnel mapping -->
-            <div class="flex flex-col sm:flex-row gap-3 mb-8">
-              <Button
-                href={`/funnel/signup?source=ad_women_${intent}`}
-                data-track-cta
-                variant="primary"
-                class="px-8 py-4 text-base font-bold shadow-sm"
-              >
-                Book Your Free Class
-              </Button>
-              <a
-                href="https://wa.me/447477382348?text=Hello! I'm interested in Quran classes for sisters."
-                class="bg-emerald-50 text-emerald-950 px-6 py-3 rounded-lg font-semibold flex items-center gap-2 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <div
-                  class="absolute inset-0 bg-white/60 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"
-                >
-                </div>
-                <div class="relative z-10 flex items-center gap-2">
-                  <svg
-                    class="w-5 h-5 text-emerald-600"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"
-                    ></path>
-                  </svg>
-                  Chat on WhatsApp
-                </div>
-              </a>
-            </div>
-
-            <!-- Trust strip -->
-            <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-emerald-300/60 font-medium">
-              {
-                [
-                  '✓ 100% Female Ustadhas',
-                  '✓ Strict Privacy',
-                  '✓ Flexible scheduling',
-                  '✓ Full-month guarantee',
-                ].map((b) => <span>{b}</span>)
-              }
-            </div>
-          </div>
-
-          <!-- Right: floating privacy trust card (desktop) -->
-          <div class="hidden lg:block">
-            <div
-              class="bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-8"
-            >
-              <div class="flex items-center gap-2 mb-5">
-                <div class="w-8 h-8 rounded-full bg-purple-800/60 flex items-center justify-center">
-                  <svg
-                    class="w-4 h-4 text-purple-300"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                  </svg>
-                </div>
-                <p class="text-xs font-bold uppercase tracking-widest text-purple-300">
-                  Privacy Guaranteed
-                </p>
-              </div>
-              <ul class="space-y-5 mb-6">
-                {
-                  [
-                    {
-                      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
-                      text: 'Guaranteed female Ustadha — no exceptions',
-                    },
-                    {
-                      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
-                      text: 'Sessions are private, 1-on-1 only',
-                    },
-                    {
-                      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
-                      text: 'Learn from home — no travel required',
-                    },
-                    {
-                      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
-                      text: 'Schedule around your family, 24/7',
-                    },
-                  ].map(({ icon, text }) => (
-                    <li class="flex items-start gap-3 text-lg text-emerald-100 font-medium leading-snug">
-                      <span class="text-purple-300 mt-0.5 shrink-0" set:html={icon} />
-                      {text}
-                    </li>
-                  ))
-                }
-              </ul>
-              <div class="pt-5 border-t border-purple-700/30">
-                <p class="text-sm font-semibold text-white">Trusted by sisters worldwide</p>
-                <p class="text-white text-xs mt-1">
-                  Enrolled sisters from the UK, USA, UAE &amp; beyond
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- § 2  PROBLEM -->
+    <!-- § 2 PROBLEM -->
     <LandingProblem
       eyebrow="The Honest Problem"
       headline="Finding a safe, consistent learning space is harder than it should be."
@@ -357,128 +168,72 @@ const jsonLd = {
       ]}
     />
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 3  OUTCOME — Working Backwards from the Dream
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-cream-50 border-b border-emerald-50">
-      <div class="quranific-container">
-        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
-          <div>
-            <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-              Six Months From Now
-            </p>
-            <h2
-              class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-[1.1] mb-6"
-            >
-              This doesn't have to be a source of stress anymore.
-            </h2>
-            <div class="space-y-4 text-lg text-emerald-900/75 leading-relaxed max-w-prose">
-              <p>
-                Picture having a peaceful time in your week dedicated entirely to your connection
-                with the Quran. You are reading fluently, without second-guessing. You understand
-                the Tajweed rules, and for the first time, you feel a deep, focused spiritual
-                connection in your Salah because you know exactly how to recite.
-              </p>
-              <p class="font-medium text-emerald-950">
-                That is the goal — confidence, fluency, and peace of mind, on your schedule.
-              </p>
-            </div>
-          </div>
+    <!-- § 3 OUTCOME -->
+    <LandingOutcome
+      theme="light"
+      eyebrow="Six Months From Now"
+      headline="This doesn't have to be a source of stress anymore."
+      body={[
+        'Picture having a peaceful time in your week dedicated entirely to your connection with the Quran. You are reading fluently, without second-guessing. You understand the Tajweed rules, and for the first time, you feel a deep, focused spiritual connection in your Salah because you know exactly how to recite.',
+        '<span class="font-medium text-emerald-950">That is the goal — confidence, fluency, and peace of mind, on your schedule.</span>',
+      ]}
+    >
+      <div
+        slot="media"
+        class="relative w-full aspect-[4/3] lg:aspect-square rounded-[2rem] overflow-hidden shadow-2xl shadow-emerald-950/10 ring-1 ring-emerald-950/5"
+      >
+        <img
+          src="/images/quran-classes-for-women.webp"
+          alt="Sister peacefully reading the Quran"
+          class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out"
+          loading="lazy"
+          decoding="async"
+        />
+        <div
+          class="absolute inset-0 border border-emerald-900/10 rounded-[2rem] z-10 pointer-events-none"
+        >
+        </div>
+      </div>
+    </LandingOutcome>
 
-          <!-- OUTCOME IMAGE placeholder — TODO(owner): replace with aspirational lifestyle photo -->
-          <div
-            class="bg-slate-100 border border-slate-200 aspect-[4/3] rounded-2xl flex items-center justify-center text-slate-400 font-medium text-sm shadow-sm"
+    <!-- § 4 MECHANISM / VETTING -->
+    <LandingVetting
+      steps={vettingSteps}
+      headline="Every Ustadha passes a 4-stage vetting process."
+      eyebrow="Why It Works"
+      calloutTitle="Why 1-on-1 matters for sisters"
+      calloutBody="<strong class='text-white'>100% privacy.</strong> There is no embarrassing group reading. The pace is set entirely by you. Ask as many questions as you need <strong class='text-white'>without feeling rushed.</strong>"
+      theme="dark"
+      accentColor="purple"
+    />
+
+    <!-- § 5 LOOK INSIDE / PREVIEW -->
+    <LandingPreview
+      eyebrow="The Look Inside"
+      headline="A 100% secure sisters-only learning space."
+      body="Clean, professional, and a 100% secure sisters-only learning space."
+      theme="light"
+      layoutVariant="stacked"
+    >
+      <div
+        slot="media"
+        class="max-w-3xl bg-slate-100 border border-slate-200 aspect-video rounded-2xl flex flex-col items-center justify-center gap-3 mb-4 shadow-sm"
+      >
+        <div class="w-14 h-14 rounded-full bg-slate-200 flex items-center justify-center">
+          <svg
+            class="w-6 h-6 text-slate-400"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
           >
-            Session preview coming soon
-          </div>
+            <path d="M8 5v14l11-7z"></path>
+          </svg>
         </div>
+        <p class="text-slate-400 text-sm font-medium">Session preview coming soon</p>
       </div>
-    </section>
+    </LandingPreview>
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 4  MECHANISM — 4-Stage Vetting + Why 1-on-1
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-white border-b border-slate-100">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-12">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-            Why It Works
-          </p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
-            Every Ustadha passes a 4-stage vetting process.
-          </h2>
-        </div>
-
-        <ol class="grid sm:grid-cols-2 gap-5 mb-10">
-          {
-            vettingSteps.map(({ title, body, icon }) => (
-              <li class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl p-8">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center">
-                    <Fragment set:html={icon} />
-                  </div>
-                </div>
-                <p class="font-bold text-emerald-950 text-lg mb-2">{title}</p>
-                <p class="text-slate-500 leading-relaxed text-sm">{body}</p>
-              </li>
-            ))
-          }
-        </ol>
-
-        <!-- 1-on-1 callout: privacy + no group embarrassment -->
-        <div
-          class="bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-8 max-w-3xl"
-        >
-          <p class="font-bold text-purple-300 text-sm uppercase tracking-wider mb-3">
-            Why 1-on-1 matters for sisters
-          </p>
-          <p class="text-emerald-100/85 leading-relaxed text-lg">
-            <strong class="text-white">100% privacy.</strong> There is no embarrassing group reading.
-            The pace is set entirely by you. Ask as many questions as you need
-            <strong class="text-white">without feeling rushed.</strong>
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════
-         § 5  VIDEO PREVIEW — The Look Inside
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-cream-50 border-b border-emerald-50">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-8">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-            The Look Inside
-          </p>
-          <h2 class="font-serif text-2xl md:text-3xl font-black text-emerald-950 leading-tight">
-            A 100% secure sisters-only learning space.
-          </h2>
-        </div>
-
-        <!-- VIDEO PLACEHOLDER: owner action required — replace with real screen recording -->
-        <!-- TODO(owner): 30s screen recording of portal — Ustadha session, distraction-free, shared Mushaf -->
-        <div
-          class="max-w-3xl bg-slate-100 border border-slate-200 aspect-video rounded-2xl flex flex-col items-center justify-center gap-3 mb-4 shadow-sm"
-        >
-          <div class="w-14 h-14 rounded-full bg-slate-200 flex items-center justify-center">
-            <svg
-              class="w-6 h-6 text-slate-400"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path d="M8 5v14l11-7z"></path>
-            </svg>
-          </div>
-          <p class="text-slate-400 text-sm font-medium">Session preview coming soon</p>
-        </div>
-        <p class="text-slate-400 text-sm italic max-w-3xl">
-          Clean, professional, and a 100% secure sisters-only learning space.
-        </p>
-      </div>
-    </section>
-
-    <!-- § 6  TRUST -->
+    <!-- § 6 TRUST / TRANSPARENCY -->
     <LandingTrust
       headline="Your privacy is sacred."
       body={[
@@ -490,7 +245,7 @@ const jsonLd = {
       reversed={true}
     />
 
-    <!-- § 7  ONBOARDING -->
+    <!-- § 7 ONBOARDING -->
     <LandingOnboarding
       headline="Three steps. The third one is the point."
       steps={onboardingSteps}
@@ -498,7 +253,7 @@ const jsonLd = {
       accent="purple"
     />
 
-    <!-- § 8  TESTIMONIALS -->
+    <!-- § 8 TESTIMONIALS -->
     <LandingTestimonials
       testimonials={womenTestimonials}
       eyebrow="Undeniable Proof"
@@ -507,80 +262,26 @@ const jsonLd = {
       avatarAccent="purple"
     />
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 9  GUARANTEE — Hormozi Absolute Risk Reversal
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-cream-50 border-b border-emerald-50">
-      <div class="quranific-container">
-        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
-          <div>
-            <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-              Our Guarantee
-            </p>
-            <h2
-              class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight mb-6"
-            >
-              We carry all the risk.<br />You carry none.
-            </h2>
-            <div class="space-y-4 text-lg text-slate-600 leading-relaxed max-w-prose">
-              <p>
-                <strong class="text-emerald-950">Your first class is free.</strong> No card required.
-                No commitment.
-              </p>
-              <p>
-                If you continue and you're not satisfied after your first full paid month — for <em
-                  >any</em
-                > reason — you get a full refund. No forms, no chasing. One email.
-              </p>
-              <p>
-                <strong class="text-emerald-950">Missed a session?</strong> It gets made up, guaranteed.
-                There's no lock-in contract. Cancel any time.
-              </p>
-            </div>
+    <!-- § 9 GUARANTEE -->
+    <LandingGuarantee
+      layoutVariant="adults-light"
+      eyebrow="Our Guarantee"
+      headline="We carry all the risk.<br />You carry none."
+      body={[
+        '<strong class="text-emerald-950">Your first class is free.</strong> No card required. No commitment.',
+        "If you continue and you're not satisfied after your first full paid month — for <em>any</em> reason — you get a full refund. No forms, no chasing. One email.",
+        '<strong class="text-emerald-950">Missed a session?</strong> It gets made up, guaranteed. There\'s no lock-in contract. Cancel any time.',
+      ]}
+      cards={guaranteeCards}
+      ctaHref={`/funnel/signup?source=ad_women_${intent}`}
+      ctaLabel="Book Your Free Class"
+      accentColor="purple"
+    />
 
-            <!-- Guarantee CTA: variant="secondary" per mid-funnel mapping -->
-            <div class="mt-8">
-              <Button
-                href={`/funnel/signup?source=ad_women_${intent}`}
-                data-track-cta
-                variant="secondary"
-                class="px-8 py-4 text-base font-bold shadow-lg shadow-black/20"
-              >
-                Book Your Free Class
-              </Button>
-            </div>
-          </div>
-
-          <div class="space-y-3">
-            {
-              guaranteeCards.map(({ label, sub }) => (
-                <div class="flex items-start gap-3">
-                  <svg
-                    class="w-5 h-5 shrink-0 text-purple-600 mt-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    aria-hidden="true"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <div>
-                    <p class="font-bold text-emerald-950 text-sm">{label}</p>
-                    <p class="text-slate-400 text-xs">{sub}</p>
-                  </div>
-                </div>
-              ))
-            }
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- § 10  FAQ -->
+    <!-- § 10 FAQ -->
     <LandingFAQ items={faqItems} />
 
-    <!-- § 11  FINAL CTA -->
+    <!-- § 11 FINAL CTA -->
     <LandingFinalCTA
       headline="One free class.<br />No card. No risk."
       subhead="A professional Ustadha matched to your goals. A full-month guarantee if you continue. That's what's waiting on the other side of one click."

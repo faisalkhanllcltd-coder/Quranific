@@ -1,11 +1,15 @@
 ---
 // src/pages/[intent]/for-kids.astro
 import Base from '../../layouts/Base.astro';
-import Button from '../../components/ui/Button.astro';
+import HeroKids from '../../components/landing/heroes/HeroKids.astro';
 import LandingProblem from '../../components/landing/LandingProblem.astro';
+import LandingOutcome from '../../components/landing/LandingOutcome.astro';
+import LandingVetting from '../../components/landing/LandingVetting.astro';
+import LandingPreview from '../../components/landing/LandingPreview.astro';
 import LandingTrust from '../../components/landing/LandingTrust.astro';
 import LandingOnboarding from '../../components/landing/LandingOnboarding.astro';
 import LandingTestimonials from '../../components/landing/LandingTestimonials.astro';
+import LandingGuarantee from '../../components/landing/LandingGuarantee.astro';
 import LandingFAQ from '../../components/landing/LandingFAQ.astro';
 import LandingFinalCTA from '../../components/landing/LandingFinalCTA.astro';
 import { SITE } from '../../constants/site';
@@ -150,147 +154,10 @@ const jsonLd = {
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline slot="head" />
 
   <div class="bg-cream-50 antialiased">
-    <!-- ════════════════════════════════════════════════════════════
-         § 1  HERO
-         Split layout: copy left, trust card right (desktop)
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="relative overflow-hidden border-b border-emerald-100">
-      <!-- Dot grid -->
-      <div
-        class="absolute inset-0 bg-[radial-gradient(#d1fae5_1px,transparent_1px)] [background-size:20px_20px] opacity-50 pointer-events-none"
-        aria-hidden="true"
-      >
-      </div>
-      <!-- Glow blob -->
-      <div
-        class="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-emerald-400/10 blur-[140px] rounded-full pointer-events-none"
-        aria-hidden="true"
-      >
-      </div>
+    <!-- § 1 HERO -->
+    <HeroKids intent={intent} h1={copy.h1} subhead={copy.subhead} />
 
-      <div class="quranific-container relative z-10 py-8">
-        <!-- Minimal ad-lander header: logo only, no nav -->
-        <header class="mb-14 md:mb-20">
-          <a
-            href="/"
-            class="inline-flex items-center gap-1 font-serif font-black text-xl text-emerald-950 hover:opacity-70 transition-opacity"
-          >
-            Quranific<span class="text-emerald-600">.</span>
-          </a>
-        </header>
-
-        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center pb-16 sm:pb-20 lg:pb-24">
-          <!-- Left: headline + CTAs -->
-          <div>
-            <div
-              class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-bold uppercase tracking-widest mb-6"
-            >
-              <svg
-                class="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2.5"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg>
-              Free First Class · No Card Required
-            </div>
-
-            <!-- Dynamic H1 -->
-            <h1
-              class="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-emerald-950 leading-[1.06] tracking-tight mb-5"
-            >
-              {copy.h1}
-            </h1>
-
-            <!-- Dynamic Subhead -->
-            <p
-              class="text-xl md:text-2xl text-emerald-800/75 font-medium leading-relaxed mb-4 max-w-xl"
-            >
-              {copy.subhead}
-            </p>
-
-            <!-- Price anchor -->
-            <p class="text-sm font-semibold text-emerald-700/60 mb-8 uppercase tracking-wide">
-              From <strong class="text-emerald-900">$40/mo</strong> ·
-              <a
-                href="/tuition-fee"
-                class="underline underline-offset-2 hover:text-emerald-700 transition-colors"
-                >Full pricing</a
-              >
-            </p>
-
-            <!-- CTAs: Hero = variant="primary" per funnel mapping -->
-            <div class="flex flex-col sm:flex-row gap-3 mb-8">
-              <Button
-                href={`/enroll/step-1?intent=${intent}`}
-                data-track-cta
-                variant="primary"
-                class="px-8 py-4 text-base font-bold shadow-sm"
-              >
-                Start Free Trial
-              </Button>
-              <a
-                href="https://wa.me/447477382348?text=Hello! I want to start a free Quran trial for my kids."
-                class="bg-emerald-50 text-emerald-950 px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <div
-                  class="absolute inset-0 bg-white/60 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"
-                >
-                </div>
-                <div class="relative z-10 flex items-center gap-2">
-                  <svg
-                    class="w-5 h-5 text-emerald-600"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"
-                    ></path>
-                  </svg>
-                  Ask a question
-                </div>
-              </a>
-            </div>
-
-            <!-- Microtrust strip -->
-            <div class="flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-emerald-800/60 font-medium">
-              {
-                [
-                  '✓ No credit card',
-                  '✓ Cancel anytime',
-                  '✓ Full-month refund guarantee',
-                  '✓ Safeguarding-checked teachers',
-                ].map((b) => <span>{b}</span>)
-              }
-            </div>
-          </div>
-
-          <!-- Right: Hero Image -->
-          <div
-            class="w-full mt-10 lg:mt-0 relative overflow-hidden rounded-[2rem] lg:rounded-[2.5rem]"
-          >
-            <img
-              src="/images/quran-classes-for-kids.webp"
-              alt="Quran Classes for Kids"
-              class="w-full h-auto object-cover"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- § 2  PROBLEM -->
+    <!-- § 2 PROBLEM -->
     <LandingProblem
       eyebrow="The Honest Problem"
       headline="Finding a good Quran teacher is harder than it should be."
@@ -300,150 +167,81 @@ const jsonLd = {
       ]}
     />
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 3  OUTCOME — Paint the picture before the mechanism
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-emerald-950">
-      <div class="quranific-container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div>
-            <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
-              Six Months From Now
-            </p>
-            <h2 class="font-serif text-3xl md:text-4xl font-black text-white leading-[1.1] mb-6">
-              This doesn't have to be a chore anymore.
-            </h2>
-            <p class="text-xl text-emerald-100/85 leading-relaxed mb-4 max-w-prose">
-              Picture your child reading with real confidence, correcting their own Tajweed,
-              <strong class="text-white">asking to show you what they learned</strong> instead of being
-              reminded to log on.
-            </p>
-            <p class="text-lg text-emerald-100/65 leading-relaxed max-w-prose">
-              That's the actual goal — not attendance. Understanding.
-            </p>
-          </div>
+    <!-- § 3 OUTCOME -->
+    <LandingOutcome
+      theme="dark"
+      eyebrow="Six Months From Now"
+      headline="This doesn't have to be a chore anymore."
+      body={[
+        'Picture your child reading with real confidence — not sounding out letters painfully, but recognizing patterns, applying Tajweed naturally, and actually wanting to show you what they practiced.',
+        "That's the actual goal: a child who feels capable, not pressured. Not rushing to finish a checklist, but building a connection with the Quran that outlasts their lessons.",
+      ]}
+    >
+      <div
+        slot="media"
+        class="relative w-full aspect-[4/3] lg:aspect-square rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-white/10"
+      >
+        <img
+          src="/images/quran-teacher-for-kids.webp"
+          alt="Child confidently reciting Quran with online teacher"
+          class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out"
+          loading="lazy"
+          decoding="async"
+        />
+        <div
+          class="absolute inset-0 border border-white/10 rounded-[2rem] z-10 pointer-events-none"
+        >
+        </div>
+      </div>
+    </LandingOutcome>
 
+    <!-- § 4 MECHANISM / VETTING -->
+    <LandingVetting
+      steps={vettingSteps}
+      headline="Every teacher passes a 4-stage vetting process."
+      eyebrow="Why It Works"
+      calloutTitle="Why 1-on-1 matters for kids specifically"
+      calloutBody="Group Zoom classes fail children because one teacher cannot actually <em>see</em> one child. In a group, the pace is set by the slowest or fastest kid — not yours. Every Quranific session is 1-on-1, every time, so <strong class='text-gold-800'>the pace is set by your child</strong>."
+      theme="gold"
+      accentColor="emerald"
+    />
+
+    <!-- § 5 LOOK INSIDE / PREVIEW -->
+    <LandingPreview
+      eyebrow="Real Session Preview"
+      headline="See what a real class looks like."
+      body="This is what a real class looks like — not a demo."
+      theme="dark"
+      layoutVariant="50-50"
+    >
+      <div
+        slot="media"
+        class="relative w-full aspect-video rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-white/10 group cursor-pointer"
+      >
+        <img
+          src="/images/app.quranific-quran-classes-for-kids.webp"
+          alt="Real class session preview"
+          class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
+          loading="lazy"
+          decoding="async"
+        />
+        <div
+          class="absolute inset-0 border border-white/10 rounded-[2rem] z-10 pointer-events-none"
+        >
+        </div>
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
           <div
-            class="relative w-full aspect-[4/3] lg:aspect-square rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-white/10"
+            class="w-16 h-16 bg-emerald-500/90 rounded-full flex items-center justify-center backdrop-blur-md shadow-lg group-hover:bg-emerald-400 transition-colors duration-300 ring-4 ring-emerald-500/30"
           >
-            <img
-              src="/images/quran-teacher-for-kids.webp"
-              alt="Child confidently reading the Quran"
-              class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out"
-              loading="lazy"
-              decoding="async"
-            />
-            <div
-              class="absolute inset-0 border border-white/10 rounded-[2rem] z-10 pointer-events-none"
-            >
-            </div>
+            <svg class="w-8 h-8 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
           </div>
         </div>
       </div>
-    </section>
+    </LandingPreview>
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 4  MECHANISM — 4-Stage Vetting + Why 1-on-1
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-white border-b border-emerald-50">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-12">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-            Why It Works
-          </p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
-            Every teacher passes a 4-stage vetting process.
-          </h2>
-        </div>
-
-        <ol class="grid sm:grid-cols-2 gap-6 mb-10">
-          {
-            vettingSteps.map(({ title, body, icon }) => (
-              <li class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl p-8">
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
-                    <Fragment set:html={icon} />
-                  </div>
-                </div>
-                <p class="font-bold text-emerald-950 text-lg mb-2">{title}</p>
-                <p class="text-emerald-800/70 leading-relaxed text-base">{body}</p>
-              </li>
-            ))
-          }
-        </ol>
-
-        <!-- Why 1-on-1 callout -->
-        <div class="bg-gold-50 border border-gold-200 rounded-2xl p-7 max-w-3xl">
-          <p class="font-bold text-gold-700 text-base mb-2">
-            Why 1-on-1 matters for kids specifically
-          </p>
-          <p class="text-gold-700/80 leading-relaxed">
-            Group Zoom classes fail children because one teacher cannot actually <em>see</em> one child.
-            In a group, the pace is set by the slowest or fastest kid — not yours. Every Quranific session
-            is 1-on-1, every time, so <strong class="text-gold-800"
-              >the pace is set by your child</strong
-            >.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════
-         § 5  VIDEO PREVIEW — Social proof via real session footage
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-emerald-950 border-b border-emerald-800">
-      <div class="quranific-container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <!-- LEFT COLUMN: Heading & Description -->
-          <div>
-            <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
-              Real Session Preview
-            </p>
-            <h2
-              class="font-serif text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight mb-4"
-            >
-              See what a real class looks like.
-            </h2>
-            <p class="text-emerald-300/70 text-sm md:text-base italic max-w-prose">
-              This is what a real class looks like — not a demo.
-            </p>
-          </div>
-
-          <!-- RIGHT COLUMN: Media Preview Wrapper -->
-          <div
-            class="relative w-full aspect-video rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-white/10 group cursor-pointer"
-          >
-            <img
-              src="/images/app.quranific-quran-classes-for-kids.webp"
-              alt="Real class session preview"
-              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
-              loading="lazy"
-              decoding="async"
-            />
-
-            <div
-              class="absolute inset-0 border border-white/10 rounded-[2rem] z-10 pointer-events-none"
-            >
-            </div>
-
-            <!-- Play Button Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-              <div
-                class="w-16 h-16 bg-emerald-500/90 rounded-full flex items-center justify-center backdrop-blur-md shadow-lg group-hover:bg-emerald-400 transition-colors duration-300 ring-4 ring-emerald-500/30"
-              >
-                <svg
-                  class="w-8 h-8 text-white translate-x-0.5"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- § 6  TRUST / TRANSPARENCY -->
+    <!-- § 6 TRUST / TRANSPARENCY -->
     <LandingTrust
       headline="You don't need to hover over every session."
       body={[
@@ -455,7 +253,7 @@ const jsonLd = {
       reversed={false}
     />
 
-    <!-- § 7  ONBOARDING -->
+    <!-- § 7 ONBOARDING -->
     <LandingOnboarding
       headline="Three steps. The third one is the point."
       steps={onboardingSteps}
@@ -463,7 +261,7 @@ const jsonLd = {
       accent="emerald"
     />
 
-    <!-- § 8  TESTIMONIALS -->
+    <!-- § 8 TESTIMONIALS -->
     <LandingTestimonials
       testimonials={kidsTestimonials}
       eyebrow="Real Families, Real Results"
@@ -472,61 +270,25 @@ const jsonLd = {
       avatarAccent="emerald"
     />
 
-    <!-- ════════════════════════════════════════════════════════════
-         § 9  GUARANTEE — We carry all the risk
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="quranific-section bg-emerald-950">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-10">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
-            Our Guarantee
-          </p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-white leading-tight mb-6">
-            We carry all the risk. You carry none.
-          </h2>
-          <div class="space-y-4 text-lg text-emerald-100/80 leading-relaxed">
-            <p>
-              <strong class="text-white">Your first class is free.</strong> No card required. No commitment.
-            </p>
-            <p>
-              If you continue and you're not satisfied after your first full paid month — for <em
-                >any</em
-              > reason — you get a full refund. No forms, no chasing. One email.
-            </p>
-            <p>
-              <strong class="text-white">Missed a session?</strong> It gets made up, guaranteed. There's
-              no lock-in contract. Cancel any time.
-            </p>
-          </div>
-        </div>
+    <!-- § 9 GUARANTEE -->
+    <LandingGuarantee
+      layoutVariant="kids-dark"
+      eyebrow="Our Guarantee"
+      headline="We carry all the risk.<br />You carry none."
+      body={[
+        '<strong class="text-white">Your first class is free.</strong> No card required. No commitment.',
+        "If you continue and you're not satisfied after your first full paid month — for <em>any</em> reason — you get a full refund. No forms, no chasing. One email.",
+        '<strong class="text-white">Missed a session?</strong> It gets made up, guaranteed. There\'s no lock-in contract. Cancel any time.',
+      ]}
+      cards={guaranteeCards}
+      ctaHref={`/enroll/step-1?intent=${intent}`}
+      ctaLabel="Start Free Trial"
+    />
 
-        <div class="grid sm:grid-cols-3 gap-4 max-w-2xl mb-10">
-          {
-            guaranteeCards.map(({ label, sub }) => (
-              <div class="bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-xl p-5 text-center">
-                <p class="font-bold text-white text-sm mb-1">{label}</p>
-                <p class="text-emerald-50 text-xs">{sub}</p>
-              </div>
-            ))
-          }
-        </div>
-
-        <!-- Guarantee CTA: variant="secondary" per mid-funnel mapping -->
-        <Button
-          href={`/enroll/step-1?intent=${intent}`}
-          data-track-cta
-          variant="secondary"
-          class="px-8 py-4 text-base font-bold shadow-lg shadow-black/20"
-        >
-          Start Free Trial
-        </Button>
-      </div>
-    </section>
-
-    <!-- § 10  FAQ -->
+    <!-- § 10 FAQ -->
     <LandingFAQ items={faqItems} />
 
-    <!-- § 11  FINAL CTA -->
+    <!-- § 11 FINAL CTA -->
     <LandingFinalCTA
       headline="One free class. No card. No risk."
       subhead="A vetted teacher matched to your child. A full-month guarantee if you continue. That's what's waiting on the other side of one click."
@@ -538,9 +300,10 @@ const jsonLd = {
   </div><!-- /bg-cream-50 -->
 
   <!-- ════════════════════════════════════════════════════════════
-       ATTRIBUTION PRESERVATION
+       ATTRIBUTION PRESERVATION (Client-Side — SSG Safe)
+       Reads window.location.search at runtime.
        Merges inbound gclid / utm_* / fbclid into all CTA hrefs.
-       Uses the site's established param-merge pattern.
+       Targets a[data-track-cta] selector.
        ═══════════════════════════════════════════════════════════ -->
   <script is:inline>
     const attachAttribution = () => {
