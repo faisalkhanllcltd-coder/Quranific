@@ -410,37 +410,54 @@ const jsonLd = {
          ═══════════════════════════════════════════════════════════ -->
     <section class="quranific-section bg-emerald-950 border-b border-emerald-800">
       <div class="quranific-container">
-        <div class="max-w-3xl mb-8">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
-            Real Session Preview
-          </p>
-          <h2 class="font-serif text-2xl md:text-3xl font-black text-white leading-tight">
-            See what a real class looks like.
-          </h2>
-        </div>
-
-        <!-- VIDEO PLACEHOLDER -->
-        <!-- VISUAL: 30-45 second screen recording of live session — tutor shared Mushaf, child webcam reacting -->
-        <div
-          class="max-w-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl aspect-video flex flex-col items-center justify-center gap-3 mb-4"
-        >
-          <div class="w-14 h-14 rounded-full bg-emerald-700/50 flex items-center justify-center">
-            <svg
-              class="w-7 h-7 text-emerald-300"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <!-- LEFT COLUMN: Heading & Description -->
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">
+              Real Session Preview
+            </p>
+            <h2
+              class="font-serif text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight mb-4"
             >
-              <path d="M8 5v14l11-7z"></path>
-            </svg>
+              See what a real class looks like.
+            </h2>
+            <p class="text-emerald-300/70 text-sm md:text-base italic max-w-prose">
+              This is what a real class looks like — not a demo.
+            </p>
           </div>
-          <p class="text-white text-sm font-medium">
-            [ASSET: 30-45s live session recording — tutor + student webcam]
-          </p>
+
+          <!-- RIGHT COLUMN: Media Preview Wrapper -->
+          <div
+            class="relative w-full aspect-video rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-white/10 group cursor-pointer"
+          >
+            <img
+              src="/images/app.quranific-quran-classes-for-kids.webp"
+              alt="Real class session preview"
+              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
+              loading="lazy"
+              decoding="async"
+            />
+
+            <!-- Subtle inner gradient for depth -->
+            <div
+              class="absolute inset-0 border border-white/10 rounded-[2rem] z-10 pointer-events-none"
+            >
+            </div>
+
+            <!-- Play Button Overlay -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+              <div
+                class="w-16 h-16 bg-emerald-500/90 rounded-full flex items-center justify-center backdrop-blur-md shadow-lg group-hover:bg-emerald-400 transition-colors duration-300 ring-4 ring-emerald-500/30"
+              >
+                <svg
+                  class="w-8 h-8 text-white translate-x-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg
+                >
+              </div>
+            </div>
+          </div>
         </div>
-        <p class="text-emerald-300/60 text-sm italic max-w-3xl">
-          This is what a real class looks like — not a demo.
-        </p>
       </div>
     </section>
 
