@@ -162,9 +162,20 @@ const jsonLd = {
     <LandingProblem
       eyebrow="The Honest Problem"
       headline="Finding a good Quran teacher is harder than it should be."
-      paragraphs={[
-        "Between school, homework, and everything else, finding time for a proper Quran teacher is hard enough. Finding a <em>good</em> one — patient, qualified, actually able to hold a child's attention — is harder.",
-        'Group classes move too fast or too slow. Local tutors are booked solid or hard to vet. And screen time already feels like enough of a battle without adding another video call your child dreads.',
+      body="Between school, homework, and everything else, finding time for a proper Quran teacher is hard enough. Finding a <em>good</em> one — patient, qualified, actually able to hold a child's attention — is harder."
+      painPoints={[
+        {
+          title: 'Group Classes',
+          text: 'Move too fast or too slow, making it impossible for your child to learn at their natural pace.',
+        },
+        {
+          title: 'Local Tutors',
+          text: 'Often booked solid, inconsistent, or frustratingly hard to properly vet for safeguarding.',
+        },
+        {
+          title: 'Screen Time',
+          text: 'Feels like enough of a daily battle without adding another boring video call your child dreads.',
+        },
       ]}
     />
 

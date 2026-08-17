@@ -4,10 +4,14 @@
 interface Props {
   eyebrow: string;
   headline: string;
-  paragraphs: string[];
+  body: string;
+  painPoints: {
+    title: string;
+    text: string;
+  }[];
 }
 
-const { eyebrow, headline, paragraphs } = Astro.props;
+const { eyebrow, headline, body, painPoints } = Astro.props;
 ---
 
 <section class="quranific-section bg-white border-b border-emerald-50">
@@ -16,12 +20,37 @@ const { eyebrow, headline, paragraphs } = Astro.props;
       <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
         {eyebrow}
       </p>
-      <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-[1.1] mb-8">
+      <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-[1.1] mb-6">
         {headline}
       </h2>
-      <div class="space-y-5 text-lg text-emerald-900/75 leading-relaxed max-w-prose">
-        {paragraphs.map((p) => <p set:html={p} />)}
-      </div>
+      <p class="text-lg text-emerald-900/75 leading-relaxed max-w-prose" set:html={body} />
+    </div>
+
+    <!-- 3-Column Bento Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 max-w-5xl mx-auto">
+      {
+        painPoints.map((point) => (
+          <div class="relative flex flex-col p-6 rounded-2xl bg-rose-50/40 border border-rose-100 shadow-sm transition-all hover:shadow-md hover:border-rose-200">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-rose-100/50 text-rose-600 mb-4">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="8" x2="16" y1="12" y2="12" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">{point.title}</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">{point.text}</p>
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>

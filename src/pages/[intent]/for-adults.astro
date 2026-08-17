@@ -162,9 +162,20 @@ const jsonLd = {
     <LandingProblem
       eyebrow="The Honest Problem"
       headline="Learning as an adult feels harder than it should."
-      paragraphs={[
-        'Between a full-time job, family responsibilities, and an unpredictable schedule, finding a consistent time is hard enough. Group classes can feel embarrassing if you are a beginner, and local mosques often cater mostly to children.',
-        "You might feel like you've started too late, or that your basic Arabic isn't good enough to even begin. The friction of just getting started stops most people from ever trying.",
+      body="Between a full-time job, family responsibilities, and an unpredictable schedule, finding a consistent time is hard enough."
+      painPoints={[
+        {
+          title: 'Embarrassment & Pace',
+          text: 'Group classes move quickly and can feel intimidating or uncomfortable if you are starting from scratch.',
+        },
+        {
+          title: 'Mosque Availability',
+          text: 'Local community programs often cater primarily to children, leaving adults with few tailored options.',
+        },
+        {
+          title: 'Starting Friction',
+          text: 'Worrying you started too late or lack basic Arabic stops most adults before they even begin.',
+        },
       ]}
     />
 
