@@ -12,6 +12,7 @@ import LandingTestimonials from '../../components/landing/LandingTestimonials.as
 import LandingGuarantee from '../../components/landing/LandingGuarantee.astro';
 import LandingFAQ from '../../components/landing/LandingFAQ.astro';
 import LandingFinalCTA from '../../components/landing/LandingFinalCTA.astro';
+import StickyMobileCTA from '../../components/landing/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { TESTIMONIALS_DATA } from '../../constants/testimonials';
 
@@ -296,6 +297,15 @@ const jsonLd = {
       ctaLabel="Book Your Child's Free Class"
       showWhatsapp={false}
       accent="emerald"
+    />
+
+    <!-- Footer Overlap Spacer (Mobile) -->
+    <div class="h-28 md:hidden" aria-hidden="true"></div>
+
+    <!-- Sticky Mobile CTA Bar -->
+    <StickyMobileCTA
+      signupHref={`/funnel/signup?source=ad_kids_${intent}`}
+      whatsappHref="https://wa.me/447477382348?text=Hello! I want to start a free Quran trial for my kids."
     />
   </div><!-- /bg-cream-50 -->
 
