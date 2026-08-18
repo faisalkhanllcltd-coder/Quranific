@@ -111,12 +111,6 @@ const onboardingSteps = [
   },
 ];
 
-const guaranteeCards = [
-  { label: 'Free first class', sub: 'No card required' },
-  { label: '30-day refund', sub: 'If not satisfied, one email' },
-  { label: 'Make-up guarantee', sub: 'Missed sessions rescheduled' },
-];
-
 const faqItems = [
   {
     q: 'How much does it cost?',
@@ -269,17 +263,12 @@ const jsonLd = {
 
     <!-- § 9 GUARANTEE -->
     <LandingGuarantee
-      layoutVariant="kids-dark"
-      eyebrow="Our Guarantee"
-      headline="We carry all the risk.<br />You carry none."
-      body={[
-        '<strong class="text-white">Your first class is free.</strong> No card required. No commitment.',
-        "If you continue and you're not satisfied after your first full paid month — for <em>any</em> reason — you get a full refund. No forms, no chasing. One email.",
-        '<strong class="text-white">Missed a session?</strong> It gets made up, guaranteed. There\'s no lock-in contract. Cancel any time.',
-      ]}
-      cards={guaranteeCards}
+      eyebrow="OUR GUARANTEE"
+      headline="We carry all the risk. You carry none."
+      body="Your peace of mind is built into our platform. From your first free session to your first 30 days of paid learning, you are completely protected."
       ctaHref={`/enroll/step-1?intent=${intent}`}
-      ctaLabel="Start Free Trial"
+      ctaLabel="Book Your Free Class"
+      accentColor="emerald"
     />
 
     <!-- § 10 FAQ -->

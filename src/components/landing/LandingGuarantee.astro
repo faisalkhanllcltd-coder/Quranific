@@ -1,123 +1,147 @@
 ---
 // src/components/landing/LandingGuarantee.astro
-import Button from '../ui/Button.astro';
 
 interface GuaranteeCard {
   label: string;
   sub: string;
+  icon?: string;
 }
 
 interface Props {
   eyebrow?: string;
   headline?: string;
-  body: string[];
-  cards: GuaranteeCard[];
-  ctaHref: string;
-  ctaLabel: string;
+  body?: string | string[];
+  cards?: GuaranteeCard[];
+  ctaHref?: string;
+  ctaLabel?: string;
   layoutVariant?: 'kids-dark' | 'adults-light';
   accentColor?: 'emerald' | 'purple';
 }
 
 const {
-  eyebrow = 'Our Guarantee',
-  headline = 'We carry all the risk.<br />You carry none.',
-  body,
-  cards,
-  ctaHref,
-  ctaLabel,
-  layoutVariant = 'kids-dark',
+  eyebrow = 'OUR GUARANTEE',
+  headline = 'We carry all the risk. You carry none.',
+  body = 'Your peace of mind is built into our platform. From your first free session to your first 30 days of paid learning, you are completely protected.',
+  ctaHref = '/booking',
+  ctaLabel = 'Book Your Free Class',
   accentColor = 'emerald',
 } = Astro.props;
 
-const checkColor = accentColor === 'purple' ? 'text-purple-600' : 'text-emerald-600';
+const isPurple = accentColor === 'purple';
+const eyebrowColor = isPurple ? 'text-purple-400' : 'text-emerald-400';
+const iconBg = isPurple ? 'bg-purple-500/20 text-purple-400' : 'bg-emerald-500/20 text-emerald-400';
+const bodyText = Array.isArray(body) ? body.join(' ') : body;
 ---
 
-{
-  layoutVariant === 'kids-dark' ? (
-    <section class="quranific-section bg-emerald-950">
-      <div class="quranific-container">
-        <div class="max-w-3xl mb-10">
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">{eyebrow}</p>
-          <h2 class="font-serif text-3xl md:text-4xl font-black text-white leading-tight mb-6">
-            <Fragment set:html={headline} />
-          </h2>
-          <div class="space-y-4 text-lg text-emerald-100/75 leading-relaxed max-w-prose">
-            {body.map((p) => (
-              <p set:html={p} />
-            ))}
-          </div>
-        </div>
-
-        <div class="grid sm:grid-cols-3 gap-4 max-w-2xl mb-10">
-          {cards.map(({ label, sub }) => (
-            <div class="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm">
-              <p class="font-bold text-white text-sm mb-1">{label}</p>
-              <p class="text-emerald-300/60 text-xs">{sub}</p>
-            </div>
-          ))}
-        </div>
-
-        <Button
+<section class="quranific-section bg-emerald-950">
+  <div class="quranific-container">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
+      <!-- Left Column (Copy & CTA) -->
+      <div class="flex flex-col items-start">
+        <span class={`font-bold tracking-widest text-sm uppercase mb-3 block ${eyebrowColor}`}>
+          {eyebrow}
+        </span>
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 text-balance">
+          <Fragment set:html={headline} />
+        </h2>
+        <p class="text-emerald-50/80 text-lg leading-relaxed mb-8" set:html={bodyText} />
+        <!-- Standardized Sitewide CTA -->
+        <a
           href={ctaHref}
-          data-track-cta
-          variant="secondary"
-          class="px-8 py-4 text-base font-bold shadow-lg shadow-black/20"
+          class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-orange-500 border border-transparent rounded-full hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/30"
         >
           {ctaLabel}
-        </Button>
+        </a>
       </div>
-    </section>
-  ) : (
-    <section class="quranific-section bg-cream-50 border-b border-emerald-50">
-      <div class="quranific-container">
-        <div class="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
-          <div>
-            <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-              {eyebrow}
-            </p>
-            <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight mb-6">
-              <Fragment set:html={headline} />
-            </h2>
-            <div class="space-y-4 text-lg text-slate-600 leading-relaxed max-w-prose">
-              {body.map((p) => (
-                <p set:html={p} />
-              ))}
-            </div>
 
-            <div class="mt-8">
-              <Button
-                href={ctaHref}
-                data-track-cta
-                variant="secondary"
-                class="px-8 py-4 text-base font-bold shadow-lg shadow-black/20"
-              >
-                {ctaLabel}
-              </Button>
-            </div>
+      <!-- Right Column (Premium Glassmorphism Trust Stack) -->
+      <div class="flex flex-col space-y-4 md:space-y-5">
+        <!-- Card 1: Free Class -->
+        <div
+          class="relative bg-white/5 border border-white/10 rounded-2xl p-6 flex items-start gap-5 hover:bg-white/10 transition-colors duration-300"
+        >
+          <div class={`flex-shrink-0 mt-1 ${iconBg} p-2.5 rounded-full`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
           </div>
+          <div>
+            <h4 class="text-xl font-bold text-white mb-1">Free first class</h4>
+            <p class="text-emerald-50/70 text-base leading-relaxed">
+              No card required. No commitment. We match your child with the right teacher before you
+              pay a cent.
+            </p>
+          </div>
+        </div>
 
-          <div class="space-y-3">
-            {cards.map(({ label, sub }) => (
-              <div class="flex items-start gap-3">
-                <svg
-                  class={`w-5 h-5 shrink-0 mt-0.5 ${checkColor}`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  aria-hidden="true"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                <div>
-                  <p class="font-bold text-emerald-950 text-sm">{label}</p>
-                  <p class="text-slate-400 text-xs">{sub}</p>
-                </div>
-              </div>
-            ))}
+        <!-- Card 2: Refund Policy -->
+        <div
+          class="relative bg-white/5 border border-white/10 rounded-2xl p-6 flex items-start gap-5 hover:bg-white/10 transition-colors duration-300"
+        >
+          <div class={`flex-shrink-0 mt-1 ${iconBg} p-2.5 rounded-full`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-xl font-bold text-white mb-1">30-day refund</h4>
+            <p class="text-emerald-50/70 text-base leading-relaxed">
+              Not satisfied in your first 30 days after the trial ends? Get a full refund with one
+              email. No forms, no chasing.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: Make-up Guarantee -->
+        <div
+          class="relative bg-white/5 border border-white/10 rounded-2xl p-6 flex items-start gap-5 hover:bg-white/10 transition-colors duration-300"
+        >
+          <div class={`flex-shrink-0 mt-1 ${iconBg} p-2.5 rounded-full`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-xl font-bold text-white mb-1">Make-up guarantee</h4>
+            <p class="text-emerald-50/70 text-base leading-relaxed">
+              Missed a session? It gets made up, guaranteed. There are no lock-in contracts. Cancel
+              anytime.
+            </p>
           </div>
         </div>
       </div>
-    </section>
-  )
-}
+    </div>
+  </div>
+</section>

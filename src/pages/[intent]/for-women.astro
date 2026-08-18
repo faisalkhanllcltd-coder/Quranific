@@ -112,12 +112,6 @@ const onboardingSteps = [
   },
 ];
 
-const guaranteeCards = [
-  { label: 'Free first class', sub: 'No card required' },
-  { label: '30-day refund', sub: 'If not satisfied, one email' },
-  { label: 'Make-up guarantee', sub: 'Missed sessions rescheduled' },
-];
-
 const faqItems = [
   {
     q: 'Is it guaranteed I will have a female teacher?',
@@ -272,15 +266,9 @@ const jsonLd = {
 
     <!-- § 9 GUARANTEE -->
     <LandingGuarantee
-      layoutVariant="adults-light"
-      eyebrow="Our Guarantee"
-      headline="We carry all the risk.<br />You carry none."
-      body={[
-        '<strong class="text-emerald-950">Your first class is free.</strong> No card required. No commitment.',
-        "If you continue and you're not satisfied after your first full paid month — for <em>any</em> reason — you get a full refund. No forms, no chasing. One email.",
-        '<strong class="text-emerald-950">Missed a session?</strong> It gets made up, guaranteed. There\'s no lock-in contract. Cancel any time.',
-      ]}
-      cards={guaranteeCards}
+      eyebrow="OUR GUARANTEE"
+      headline="We carry all the risk. You carry none."
+      body="Your peace of mind is built into our platform. From your first free session to your first 30 days of paid learning, you are completely protected."
       ctaHref={`/funnel/signup?source=ad_women_${intent}`}
       ctaLabel="Book Your Free Class"
       accentColor="purple"
