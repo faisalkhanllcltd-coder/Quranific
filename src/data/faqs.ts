@@ -10,7 +10,6 @@ export const faqs: Record<string, FAQ[]> = {
       question: 'How much does it cost?',
       answer:
         'From $40/month depending on session length and how often your child meets their teacher. Full pricing is transparent — no hidden fees.',
-      link: { text: 'See full pricing →', href: '/tuition-fee' },
     },
     {
       question: 'What if I have more than one child?',
