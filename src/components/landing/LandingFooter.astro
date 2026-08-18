@@ -1,32 +1,50 @@
 ---
-// src/components/landing/LandingFooter.astro
+// LandingFooter.astro
 const year = new Date().getFullYear();
 ---
 
-<footer class="bg-emerald-950 border-t border-emerald-900/50 py-8 px-6">
+<footer class="bg-emerald-950 border-t border-emerald-900/50 py-10 px-6">
   <div
-    class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-emerald-500/40 text-xs font-medium"
+    class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 text-emerald-400/70 text-xs font-medium"
   >
-    <p>&copy; {year} Quranific. All rights reserved.</p>
-    <div class="flex items-center gap-6">
+    <p class="flex-shrink-0">&copy; {year} Quranific. All rights reserved.</p>
+    <nav class="flex flex-wrap items-center justify-center lg:justify-end gap-x-6 gap-y-3">
       <a
         href="/privacy"
         target="_blank"
         rel="noopener noreferrer"
-        class="hover:text-emerald-500/80 transition-colors">Privacy Policy</a
+        class="hover:text-emerald-300 transition-colors">Privacy Policy</a
       >
       <a
         href="/terms"
         target="_blank"
         rel="noopener noreferrer"
-        class="hover:text-emerald-500/80 transition-colors">Terms of Service</a
+        class="hover:text-emerald-300 transition-colors">Terms of Service</a
       >
       <a
-        href="/contact"
+        href="/refund"
         target="_blank"
         rel="noopener noreferrer"
-        class="hover:text-emerald-500/80 transition-colors">Contact</a
+        class="hover:text-emerald-300 transition-colors">Refund Policy</a
       >
-    </div>
+      <a
+        href="/cookies"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-emerald-300 transition-colors">Cookie Policy</a
+      >
+      <a
+        href="/impressum"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-emerald-300 transition-colors">Impressum</a
+      >
+      <a
+        href="/safeguarding"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-emerald-300 transition-colors">Safeguarding</a
+      >
+    </nav>
   </div>
 </footer>
