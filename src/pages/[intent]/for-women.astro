@@ -9,7 +9,9 @@ import LandingPreview from '../../components/landing/LandingPreview.astro';
 import LandingTrust from '../../components/landing/LandingTrust.astro';
 import LandingOnboarding from '../../components/landing/LandingOnboarding.astro';
 import LandingTestimonials from '../../components/landing/LandingTestimonials.astro';
-import LandingGuarantee from '../../components/landing/LandingGuarantee.astro';
+import LandingGuarantee, {
+  type GuaranteeCard,
+} from '../../components/landing/LandingGuarantee.astro';
 import LandingFAQ from '../../components/landing/LandingFAQ.astro';
 import LandingFinalCTA from '../../components/landing/LandingFinalCTA.astro';
 import StickyMobileCTA from '../../components/landing/StickyMobileCTA.astro';
@@ -92,6 +94,24 @@ const trustPoints = [
   'Learn comfortably and securely from home',
   'Reschedule classes easily when life gets busy',
   'Empathetic teachers who understand your schedule',
+];
+
+const womenGuaranteeCards: GuaranteeCard[] = [
+  {
+    title: 'Free first class',
+    description:
+      'No card required. No commitment. We match you with the right teacher before you pay a cent.',
+  },
+  {
+    title: '30-day refund',
+    description:
+      'Not satisfied in your first 30 days after the trial ends? Get a full refund with one email. No forms, no chasing.',
+  },
+  {
+    title: 'Make-up guarantee',
+    description:
+      'Missed a session? It gets made up, guaranteed. There are no lock-in contracts. Cancel anytime.',
+  },
 ];
 
 const onboardingSteps = [
@@ -269,6 +289,7 @@ const jsonLd = {
       eyebrow="OUR GUARANTEE"
       headline="We carry all the risk. You carry none."
       body="Your peace of mind is built into our platform. From your first free session to your first 30 days of paid learning, you are completely protected."
+      cards={womenGuaranteeCards}
       ctaHref={`/funnel/signup?source=ad_women_${intent}`}
       ctaLabel="Book Your Free Class"
       accentColor="purple"
