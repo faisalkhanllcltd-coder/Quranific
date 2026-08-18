@@ -7,9 +7,9 @@ export type FAQ = {
 export const faqs: Record<string, FAQ[]> = {
   landingKids: [
     {
-      question: 'How much does it cost?',
+      question: 'Do I need to know Arabic to help my child practice?',
       answer:
-        'From $40/month depending on session length and how often your child meets their teacher. Full pricing is transparent — no hidden fees.',
+        'Not at all. Our methodology is designed so the teacher handles 100% of the academic heavy lifting during the session. You do not need to be a fluent reader, and there is no "homework" for parents to supervise.',
     },
     {
       question: 'What if I have more than one child?',

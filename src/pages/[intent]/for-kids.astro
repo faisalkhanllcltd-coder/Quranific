@@ -10,6 +10,7 @@ import LandingTrust from '../../components/landing/LandingTrust.astro';
 import LandingOnboarding from '../../components/landing/LandingOnboarding.astro';
 import LandingTestimonials from '../../components/landing/LandingTestimonials.astro';
 import LandingGuarantee from '../../components/landing/LandingGuarantee.astro';
+import LandingPricing from '../../components/landing/LandingPricing.astro';
 import LandingFAQ from '../../components/landing/LandingFAQ.astro';
 import LandingFinalCTA from '../../components/landing/LandingFinalCTA.astro';
 import StickyMobileCTA from '../../components/landing/StickyMobileCTA.astro';
@@ -258,7 +259,10 @@ const jsonLd = {
       accentColor="emerald"
     />
 
-    <!-- § 10 FAQ -->
+    <!-- § 10 PRICING CALCULATOR -->
+    <LandingPricing />
+
+    <!-- § 11 FAQ -->
     <LandingFAQ items={faqItems} />
 
     <!-- § 11 FINAL CTA -->
