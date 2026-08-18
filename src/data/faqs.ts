@@ -1,6 +1,33 @@
-export type FAQ = { question: string; answer: string };
+export type FAQ = {
+  question: string;
+  answer: string;
+  link?: { text: string; href: string };
+};
 
 export const faqs: Record<string, FAQ[]> = {
+  landingKids: [
+    {
+      question: 'How much does it cost?',
+      answer:
+        'From $40/month depending on session length and how often your child meets their teacher. Full pricing is transparent — no hidden fees.',
+      link: { text: 'See full pricing →', href: '/tuition-fee' },
+    },
+    {
+      question: 'What if I have more than one child?',
+      answer:
+        "Sibling discounts apply automatically: 10% off your second child, 20% off your third. No need to ask — it's applied at checkout.",
+    },
+    {
+      question: "What if the schedule doesn't fit?",
+      answer:
+        'Classes run 24/7 across time zones. You set the frequency, and you can adjust it any time — no penalty, no process.',
+    },
+    {
+      question: 'What happens if we wait?',
+      answer:
+        "Nothing happens to us. But the earlier a child starts building a real relationship with Tajweed, the more natural it becomes. Patterns formed young are patterns that last. The free trial costs nothing to find out if now's the right time.",
+    },
+  ],
   home: [
     {
       question: 'How exactly do the online classes work?',

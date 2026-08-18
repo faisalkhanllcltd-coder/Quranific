@@ -14,36 +14,53 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<section class="quranific-section bg-white border-b border-emerald-50">
-  <div class="quranific-container">
-    <div class="max-w-3xl mb-10">
-      <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">
-        Common Questions
-      </p>
-      <h2 class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
-        Answered honestly.
-      </h2>
-    </div>
+<section class="py-16 md:py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-6 md:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <!-- Left Column: Sticky Anchor (CRO optimized) -->
+      <div class="lg:col-span-4 lg:sticky lg:top-32 flex flex-col items-start">
+        <span class="text-emerald-500 font-bold tracking-widest text-sm uppercase mb-3 block"
+          >COMMON QUESTIONS</span
+        >
+        <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6 text-balance">
+          Answered honestly.
+        </h2>
+        <p class="text-slate-500 text-lg">
+          Have a question we didn't cover? <a
+            href="/contact"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-emerald-600 font-semibold hover:text-emerald-700 hover:underline transition-colors"
+            >Contact our support team.</a
+          >
+        </p>
+      </div>
 
-    <dl class="max-w-3xl divide-y divide-emerald-100">
-      {
-        items.map(({ q, a, link }) => (
-          <div class="py-7">
-            <dt class="font-bold text-emerald-950 text-lg mb-2">{q}</dt>
-            <dd class="text-emerald-800/70 leading-relaxed text-base">
-              {a}
-              {link && (
-                <a
-                  href={link.href}
-                  class="ml-1 text-emerald-600 font-semibold underline underline-offset-2 hover:text-emerald-700 transition-colors"
-                >
-                  {link.text}
-                </a>
-              )}
-            </dd>
-          </div>
-        ))
-      }
-    </dl>
+      <!-- Right Column: The Open Grid FAQ (CRO optimized) -->
+      <div class="lg:col-span-8">
+        <dl class="flex flex-col space-y-8 divide-y divide-slate-100">
+          {
+            items.map((item) => (
+              <div class="pt-8 first:pt-0 flex flex-col items-start">
+                <dt class="text-xl md:text-2xl font-bold text-slate-900 mb-4">{item.q}</dt>
+                <dd class="text-lg text-slate-600 leading-relaxed">
+                  {item.a}
+                  {item.link && (
+                    <a
+                      href={item.link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-block mt-3 text-emerald-600 font-bold hover:text-emerald-700 hover:underline transition-colors"
+                    >
+                      {item.link.text}
+                    </a>
+                  )}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
   </div>
 </section>
