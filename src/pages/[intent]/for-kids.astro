@@ -12,7 +12,8 @@ import LandingTestimonials from '../../components/landing/LandingTestimonials.as
 import LandingGuarantee from '../../components/landing/LandingGuarantee.astro';
 import LandingPricing from '../../components/landing/LandingPricing.astro';
 import LandingFAQ from '../../components/landing/LandingFAQ.astro';
-import LandingFinalCTA from '../../components/landing/LandingFinalCTA.astro';
+import LandingCTA from '../../components/landing/LandingCTA.astro';
+import LandingFooter from '../../components/landing/LandingFooter.astro';
 import StickyMobileCTA from '../../components/landing/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { TESTIMONIALS_DATA } from '../../constants/testimonials';
@@ -265,15 +266,14 @@ const jsonLd = {
     <!-- § 11 FAQ -->
     <LandingFAQ items={faqItems} />
 
-    <!-- § 11 FINAL CTA -->
-    <LandingFinalCTA
-      headline="One free class. No card. No risk."
-      subhead="A vetted teacher matched to your child. A full-month guarantee if you continue. That's what's waiting on the other side of one click."
+    <!-- § 12 FINAL CTA -->
+    <LandingCTA
       ctaHref={`/funnel/signup?source=ad_kids_${intent}`}
       ctaLabel="Book Your Child's Free Class"
-      showWhatsapp={false}
-      accent="emerald"
     />
+
+    <!-- § 13 COMPLIANCE FOOTER -->
+    <LandingFooter />
 
     <!-- Footer Overlap Spacer (Mobile) -->
     <div class="h-28 md:hidden" aria-hidden="true"></div>

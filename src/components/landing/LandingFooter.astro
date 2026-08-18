@@ -1,0 +1,32 @@
+---
+// src/components/landing/LandingFooter.astro
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-emerald-950 border-t border-emerald-900/50 py-8 px-6">
+  <div
+    class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-emerald-500/40 text-xs font-medium"
+  >
+    <p>&copy; {year} Quranific. All rights reserved.</p>
+    <div class="flex items-center gap-6">
+      <a
+        href="/privacy"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-emerald-500/80 transition-colors">Privacy Policy</a
+      >
+      <a
+        href="/terms"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-emerald-500/80 transition-colors">Terms of Service</a
+      >
+      <a
+        href="/contact"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-emerald-500/80 transition-colors">Contact</a
+      >
+    </div>
+  </div>
+</footer>
