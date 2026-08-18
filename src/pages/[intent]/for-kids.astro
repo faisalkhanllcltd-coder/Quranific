@@ -15,6 +15,7 @@ import LandingFinalCTA from '../../components/landing/LandingFinalCTA.astro';
 import StickyMobileCTA from '../../components/landing/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { TESTIMONIALS_DATA } from '../../constants/testimonials';
+import { faqs } from '../../data/faqs';
 
 export const prerender = true;
 
@@ -111,25 +112,11 @@ const onboardingSteps = [
   },
 ];
 
-const faqItems = [
-  {
-    q: 'How much does it cost?',
-    a: 'From $40/month depending on session length and how often your child meets their teacher. Full pricing is transparent — no hidden fees.',
-    link: { text: 'See full pricing →', href: '/tuition-fee' },
-  },
-  {
-    q: 'What if I have more than one child?',
-    a: "Sibling discounts apply automatically: 10% off your second child, 20% off your third. No need to ask — it's applied at checkout.",
-  },
-  {
-    q: "What if the schedule doesn't fit?",
-    a: 'Classes run 24/7 across time zones. You set the frequency, and you can adjust it any time — no penalty, no process.',
-  },
-  {
-    q: 'What happens if we wait?',
-    a: "Nothing happens to us. But the earlier a child starts building a real relationship with Tajweed, the more natural it becomes. Patterns formed young are patterns that last. The free trial costs nothing to find out if now's the right time.",
-  },
-];
+const faqItems = (faqs.landingKids || []).map((item) => ({
+  q: item.question,
+  a: item.answer,
+  link: item.link,
+}));
 
 const jsonLd = {
   '@context': 'https://schema.org',
