@@ -221,27 +221,23 @@ const jsonLd = {
 
     <!-- § 5 LOOK INSIDE / PREVIEW -->
     <LandingPreview
-      eyebrow="The Look Inside"
+      eyebrow="Inside the Virtual Classroom"
       headline="A 100% secure sisters-only learning space."
-      body="Clean, professional, and a 100% secure sisters-only learning space."
-      theme="light"
-      layoutVariant="stacked"
+      body="Learn comfortably from home with a qualified female Ustadha in a completely private, 1-on-1 setting designed for sisters."
+      theme="dark"
+      layoutVariant="50-50"
     >
       <div
         slot="media"
-        class="max-w-3xl bg-slate-100 border border-slate-200 aspect-video rounded-2xl flex flex-col items-center justify-center gap-3 mb-4 shadow-sm"
+        class="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white/5"
       >
-        <div class="w-14 h-14 rounded-full bg-slate-200 flex items-center justify-center">
-          <svg
-            class="w-6 h-6 text-slate-400"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path d="M8 5v14l11-7z"></path>
-          </svg>
-        </div>
-        <p class="text-slate-400 text-sm font-medium">Session preview coming soon</p>
+        <img
+          src="/images/app.quranific-quran-classes-for-kids.webp"
+          alt="Real class session preview"
+          class="w-full h-auto object-cover transform transition-transform hover:scale-[1.02] duration-700 ease-out"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
     </LandingPreview>
 

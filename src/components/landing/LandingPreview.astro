@@ -3,16 +3,16 @@
 
 interface Props {
   eyebrow?: string;
-  headline: string;
+  headline?: string;
   body?: string;
   theme?: 'dark' | 'light';
   layoutVariant?: '50-50' | 'stacked';
 }
 
 const {
-  eyebrow = 'Real Session Preview',
-  headline,
-  body,
+  eyebrow = 'Inside the Virtual Classroom',
+  headline = 'It’s just your child, their teacher, and the Quran.',
+  body = 'Watch your child settle into class peacefully, not frustrated by disconnected virtual rooms, but stepping into a thoughtful learning environment where they feel completely supported.',
   theme = 'dark',
   layoutVariant = '50-50',
 } = Astro.props;
@@ -24,7 +24,7 @@ const sectionBg =
 
 const eyebrowColor = theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600';
 const headlineColor = theme === 'dark' ? 'text-white' : 'text-emerald-950';
-const bodyColor = theme === 'dark' ? 'text-emerald-300/70' : 'text-slate-400';
+const bodyColor = theme === 'dark' ? 'text-emerald-50/80' : 'text-slate-600';
 ---
 
 <section class={`quranific-section ${sectionBg}`}>
@@ -32,40 +32,42 @@ const bodyColor = theme === 'dark' ? 'text-emerald-300/70' : 'text-slate-400';
     {
       layoutVariant === '50-50' ? (
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div>
-            <p class={`text-xs font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>
+          <div class="flex flex-col justify-center">
+            <p class={`text-sm font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>
               {eyebrow}
             </p>
             <h2
-              class={`font-serif text-2xl md:text-3xl lg:text-4xl font-black leading-tight mb-4 ${headlineColor}`}
+              class={`font-serif text-2xl md:text-3xl lg:text-4xl font-black leading-tight mb-4 text-balance ${headlineColor}`}
             >
               {headline}
             </h2>
             {body && (
-              <p class={`text-sm md:text-base italic max-w-prose ${bodyColor}`} set:html={body} />
+              <p class={`text-lg leading-relaxed max-w-prose ${bodyColor}`} set:html={body} />
             )}
           </div>
 
-          <div>
+          <div class="flex items-center justify-center w-full">
             <slot name="media" />
           </div>
         </div>
       ) : (
         <div>
           <div class="max-w-3xl mb-8">
-            <p class={`text-xs font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>
+            <p class={`text-sm font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>
               {eyebrow}
             </p>
-            <h2 class={`font-serif text-2xl md:text-3xl font-black leading-tight ${headlineColor}`}>
+            <h2
+              class={`font-serif text-2xl md:text-3xl font-black leading-tight text-balance ${headlineColor}`}
+            >
               {headline}
             </h2>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-6">
             <slot name="media" />
           </div>
 
-          {body && <p class={`text-sm italic max-w-3xl ${bodyColor}`} set:html={body} />}
+          {body && <p class={`text-lg max-w-3xl leading-relaxed ${bodyColor}`} set:html={body} />}
         </div>
       )
     }
