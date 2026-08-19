@@ -7,6 +7,8 @@ interface Props {
   body?: string;
   theme?: 'dark' | 'light';
   layoutVariant?: '50-50' | 'stacked' | 'reversed';
+  ctaLabel?: string;
+  ctaHref?: string;
 }
 
 const {
@@ -15,6 +17,8 @@ const {
   body = 'Watch your child settle into class peacefully, not frustrated by disconnected virtual rooms, but stepping into a thoughtful learning environment where they feel completely supported.',
   theme = 'dark',
   layoutVariant = '50-50',
+  ctaLabel,
+  ctaHref,
 } = Astro.props;
 
 const sectionBg =
@@ -46,6 +50,16 @@ const bodyColor = theme === 'dark' ? 'text-emerald-50/80' : 'text-slate-600';
             {body && (
               <p class={`text-lg leading-relaxed max-w-prose ${bodyColor}`} set:html={body} />
             )}
+            {ctaLabel && ctaHref && (
+              <div class="mt-8">
+                <a
+                  href={ctaHref}
+                  class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-300 bg-orange-500 rounded-full hover:bg-orange-600 hover:shadow-xl hover:shadow-orange-500/30 hover:-translate-y-1"
+                >
+                  {ctaLabel}
+                </a>
+              </div>
+            )}
           </div>
 
           <div
@@ -72,6 +86,16 @@ const bodyColor = theme === 'dark' ? 'text-emerald-50/80' : 'text-slate-600';
           </div>
 
           {body && <p class={`text-lg max-w-3xl leading-relaxed ${bodyColor}`} set:html={body} />}
+          {ctaLabel && ctaHref && (
+            <div class="mt-8">
+              <a
+                href={ctaHref}
+                class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-300 bg-orange-500 rounded-full hover:bg-orange-600 hover:shadow-xl hover:shadow-orange-500/30 hover:-translate-y-1"
+              >
+                {ctaLabel}
+              </a>
+            </div>
+          )}
         </div>
       )
     }
