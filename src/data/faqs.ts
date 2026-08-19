@@ -4,29 +4,79 @@ export type FAQ = {
   link?: { text: string; href: string };
 };
 
+export const landingKids: FAQ[] = [
+  {
+    question: 'Do I need to know Arabic to help my child practice?',
+    answer:
+      'Not at all. Our methodology is designed so the teacher handles 100% of the academic heavy lifting during the session. You do not need to be a fluent reader, and there is no "homework" for parents to supervise.',
+  },
+  {
+    question: 'What if I have more than one child?',
+    answer:
+      "Sibling discounts apply automatically: 10% off your second child, 20% off your third. No need to ask — it's applied at checkout.",
+  },
+  {
+    question: "What if the schedule doesn't fit?",
+    answer:
+      'Classes run 24/7 across time zones. You set the frequency, and you can adjust it any time — no penalty, no process.',
+  },
+  {
+    question: 'What happens if we wait?',
+    answer:
+      "Nothing happens to us. But the earlier a child starts building a real relationship with Tajweed, the more natural it becomes. Patterns formed young are patterns that last. The free trial costs nothing to find out if now's the right time.",
+  },
+];
+
+export const landingAdults: FAQ[] = [
+  {
+    question: "Am I too old to start, or what if I don't know Arabic?",
+    answer:
+      'You are never too old. A large portion of our adult students start from the very beginning (the Noorani Qaida). You do not need to know Arabic — our teachers specialise in guiding beginners step-by-step in English.',
+  },
+  {
+    question: 'How much does it cost?',
+    answer:
+      'From $40/month depending on session length and frequency. Full pricing is transparent — no hidden fees.',
+  },
+  {
+    question: 'Can I request a specific gender for my teacher?',
+    answer:
+      'Absolutely. We offer strict male-to-male and female-to-female matching for absolute comfort and privacy.',
+  },
+  {
+    question: 'What if my schedule changes every week?',
+    answer:
+      'Classes run 24/7 across time zones. You can easily adjust your schedule or reschedule individual sessions when work or family commitments come up.',
+  },
+];
+
+export const landingWomen: FAQ[] = [
+  {
+    question: 'Is it guaranteed I will have a female teacher?',
+    answer:
+      'Yes. This programme is strictly female-to-female. You will only ever be matched with a vetted, qualified Ustadha, ensuring a 100% secure and private environment.',
+  },
+  {
+    question: 'What if I am a complete beginner?',
+    answer:
+      'A large portion of our students start from the very beginning (the Noorani Qaida). You do not need to know Arabic — our Ustadhas specialise in guiding beginners step-by-step in English.',
+  },
+  {
+    question: 'What if my baby cries or I need to pause class?',
+    answer:
+      'We understand the realities of motherhood and busy lives. Our environment is empathetic and flexible. You can pause, step away, or reschedule easily.',
+  },
+  {
+    question: 'How much does it cost?',
+    answer:
+      'From $40/month depending on session length and frequency. Full pricing is transparent — no hidden fees.',
+  },
+];
+
 export const faqs: Record<string, FAQ[]> = {
-  landingKids: [
-    {
-      question: 'Do I need to know Arabic to help my child practice?',
-      answer:
-        'Not at all. Our methodology is designed so the teacher handles 100% of the academic heavy lifting during the session. You do not need to be a fluent reader, and there is no "homework" for parents to supervise.',
-    },
-    {
-      question: 'What if I have more than one child?',
-      answer:
-        "Sibling discounts apply automatically: 10% off your second child, 20% off your third. No need to ask — it's applied at checkout.",
-    },
-    {
-      question: "What if the schedule doesn't fit?",
-      answer:
-        'Classes run 24/7 across time zones. You set the frequency, and you can adjust it any time — no penalty, no process.',
-    },
-    {
-      question: 'What happens if we wait?',
-      answer:
-        "Nothing happens to us. But the earlier a child starts building a real relationship with Tajweed, the more natural it becomes. Patterns formed young are patterns that last. The free trial costs nothing to find out if now's the right time.",
-    },
-  ],
+  landingKids,
+  landingAdults,
+  landingWomen,
   home: [
     {
       question: 'How exactly do the online classes work?',

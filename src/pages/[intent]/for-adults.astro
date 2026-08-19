@@ -18,6 +18,7 @@ import LandingFooter from '../../components/landing/LandingFooter.astro';
 import StickyMobileCTA from '../../components/landing/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { TESTIMONIALS_DATA } from '../../constants/testimonials';
+import { landingAdults } from '../../data/faqs';
 
 export const prerender = true;
 
@@ -129,26 +130,6 @@ const onboardingSteps = [
     n: '3',
     title: 'Experience a real lesson.',
     body: "See exactly how the teaching style fits you. If it's not a perfect match, we will assign a different teacher — or we part ways with no hard feelings.",
-  },
-];
-
-const faqItems = [
-  {
-    q: "Am I too old to start, or what if I don't know Arabic?",
-    a: 'You are never too old. A large portion of our adult students start from the very beginning (the Noorani Qaida). You do not need to know Arabic — our teachers specialise in guiding beginners step-by-step in English.',
-  },
-  {
-    q: 'How much does it cost?',
-    a: 'From $40/month depending on session length and frequency. Full pricing is transparent — no hidden fees.',
-    link: { text: 'See full pricing →', href: '/tuition-fee' },
-  },
-  {
-    q: 'Can I request a specific gender for my teacher?',
-    a: 'Absolutely. We offer strict male-to-male and female-to-female matching for absolute comfort and privacy.',
-  },
-  {
-    q: 'What if my schedule changes every week?',
-    a: 'Classes run 24/7 across time zones. You can easily adjust your schedule or reschedule individual sessions when work or family commitments come up.',
   },
 ];
 
@@ -296,7 +277,7 @@ const jsonLd = {
     />
 
     <!-- § 10 FAQ -->
-    <LandingFAQ items={faqItems} />
+    <LandingFAQ items={landingAdults} />
 
     <!-- § 11 FINAL CTA -->
     <LandingCTA

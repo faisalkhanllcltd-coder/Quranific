@@ -18,6 +18,7 @@ import LandingFooter from '../../components/landing/LandingFooter.astro';
 import StickyMobileCTA from '../../components/landing/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { TESTIMONIALS_DATA } from '../../constants/testimonials';
+import { landingWomen } from '../../data/faqs';
 
 export const prerender = true;
 
@@ -130,26 +131,6 @@ const onboardingSteps = [
     n: '3',
     title: 'Experience a real lesson.',
     body: "See exactly how the teaching style fits you. If it's not a perfect match, we will assign a different teacher — or we part ways with no hard feelings.",
-  },
-];
-
-const faqItems = [
-  {
-    q: 'Is it guaranteed I will have a female teacher?',
-    a: 'Yes. This programme is strictly female-to-female. You will only ever be matched with a vetted, qualified Ustadha, ensuring a 100% secure and private environment.',
-  },
-  {
-    q: 'What if I am a complete beginner?',
-    a: 'A large portion of our students start from the very beginning (the Noorani Qaida). You do not need to know Arabic — our Ustadhas specialise in guiding beginners step-by-step in English.',
-  },
-  {
-    q: 'What if my baby cries or I need to pause class?',
-    a: 'We understand the realities of motherhood and busy lives. Our environment is empathetic and flexible. You can pause, step away, or reschedule easily.',
-  },
-  {
-    q: 'How much does it cost?',
-    a: 'From $40/month depending on session length and frequency. Full pricing is transparent — no hidden fees.',
-    link: { text: 'See full pricing →', href: '/tuition-fee' },
   },
 ];
 
@@ -298,7 +279,7 @@ const jsonLd = {
     />
 
     <!-- § 10 FAQ -->
-    <LandingFAQ items={faqItems} />
+    <LandingFAQ items={landingWomen} />
 
     <!-- § 11 FINAL CTA -->
     <LandingCTA
