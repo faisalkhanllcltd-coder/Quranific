@@ -13,7 +13,8 @@ import LandingGuarantee, {
   type GuaranteeCard,
 } from '../../components/landing/LandingGuarantee.astro';
 import LandingFAQ from '../../components/landing/LandingFAQ.astro';
-import LandingFinalCTA from '../../components/landing/LandingFinalCTA.astro';
+import LandingCTA from '../../components/landing/LandingCTA.astro';
+import LandingFooter from '../../components/landing/LandingFooter.astro';
 import StickyMobileCTA from '../../components/landing/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { TESTIMONIALS_DATA } from '../../constants/testimonials';
@@ -299,14 +300,15 @@ const jsonLd = {
     <LandingFAQ items={faqItems} />
 
     <!-- § 11 FINAL CTA -->
-    <LandingFinalCTA
-      headline="One free class.<br />No card. No risk."
-      subhead="A professional Ustadha matched to your goals. A full-month guarantee if you continue. That's what's waiting on the other side of one click."
+    <LandingCTA
+      headline="Your first class is completely free."
+      subhead="No credit card. No commitment. No risk.<br class='hidden md:block' />Just 30 minutes to see if it's the right fit for you."
       ctaHref={`/funnel/signup?source=ad_women_${intent}`}
       ctaLabel="Book Your Free Class"
-      showWhatsapp={true}
-      accent="purple"
     />
+
+    <!-- § 12 COMPLIANCE FOOTER -->
+    <LandingFooter />
 
     <!-- Footer Overlap Spacer (Mobile) -->
     <div class="h-28 md:hidden" aria-hidden="true"></div>

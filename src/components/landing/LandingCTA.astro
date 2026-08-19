@@ -1,19 +1,19 @@
 ---
-// src/components/landing/LandingCTA.astro
-interface Props {
+// LandingCTA.astro
+export interface Props {
   eyebrow?: string;
   headline?: string;
   subhead?: string;
-  ctaHref?: string;
   ctaLabel?: string;
+  ctaHref?: string;
 }
 
 const {
   eyebrow = 'START TODAY',
   headline = "Your child's first class is completely free.",
-  subhead = 'No credit card. No commitment. No risk.<br class="hidden md:block" /> Just 30 minutes to see if it\'s the right fit for your family.',
-  ctaHref = '/booking',
+  subhead = 'No credit card. No commitment. No risk.<br class="hidden md:block" />Just 30 minutes to see if it\'s the right fit for your family.',
   ctaLabel = "Book Your Child's Free Class",
+  ctaHref = '/booking',
 } = Astro.props;
 ---
 
