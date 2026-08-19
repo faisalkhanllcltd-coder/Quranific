@@ -6,7 +6,7 @@ interface Props {
   headline?: string;
   body?: string;
   theme?: 'dark' | 'light';
-  layoutVariant?: '50-50' | 'stacked';
+  layoutVariant?: '50-50' | 'stacked' | 'reversed';
 }
 
 const {
@@ -30,9 +30,11 @@ const bodyColor = theme === 'dark' ? 'text-emerald-50/80' : 'text-slate-600';
 <section class={`quranific-section ${sectionBg}`}>
   <div class="quranific-container">
     {
-      layoutVariant === '50-50' ? (
+      layoutVariant === '50-50' || layoutVariant === 'reversed' ? (
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div class="flex flex-col justify-center">
+          <div
+            class={`flex flex-col justify-center ${layoutVariant === 'reversed' ? 'lg:order-last' : ''}`}
+          >
             <p class={`text-sm font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>
               {eyebrow}
             </p>
@@ -46,7 +48,9 @@ const bodyColor = theme === 'dark' ? 'text-emerald-50/80' : 'text-slate-600';
             )}
           </div>
 
-          <div class="flex items-center justify-center w-full">
+          <div
+            class={`flex items-center justify-center w-full ${layoutVariant === 'reversed' ? 'lg:order-first' : ''}`}
+          >
             <slot name="media" />
           </div>
         </div>
