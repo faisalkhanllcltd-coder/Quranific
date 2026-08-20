@@ -43,14 +43,26 @@ const { intent, h1, subhead } = Astro.props;
     </header>
 
     <div
-      class="grid lg:grid-cols-[1fr_380px] gap-12 xl:gap-20 items-center pb-16 sm:pb-20 lg:pb-24"
+      class="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-center pb-16 sm:pb-20 lg:pb-24"
     >
       <!-- Left: headline + CTAs -->
       <div>
         <div
-          class="inline-flex items-center px-3.5 py-1 rounded-full text-sm font-semibold bg-emerald-500/15 text-emerald-300 ring-1 ring-inset ring-emerald-500/30 mb-6"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-900/50 border border-emerald-700/50 shadow-sm mb-6"
         >
-          Professional 1-on-1 Tutoring
+          <svg
+            class="w-3.5 h-3.5 text-gold-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            aria-hidden="true"
+          >
+            <path
+              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+            ></path>
+          </svg>
+          <span class="text-xs font-bold text-emerald-50 tracking-wide"
+            >Trusted by professionals in the UK, US, and UAE</span
+          >
         </div>
 
         <!-- Dynamic H1 per intent -->
@@ -68,7 +80,7 @@ const { intent, h1, subhead } = Astro.props;
         </p>
 
         <!-- CTAs: Hero = variant="gold" per funnel mapping -->
-        <div class="flex flex-col sm:flex-row gap-3 mb-8">
+        <div class="flex flex-col sm:flex-row gap-3">
           <Button
             href={`/funnel/signup?source=ad_adults_${intent}`}
             data-track-cta
@@ -79,92 +91,37 @@ const { intent, h1, subhead } = Astro.props;
           </Button>
         </div>
 
-        <!-- Edge UI Trust Pills (Dark Theme - Premium Emerald Glass) -->
-        <ul
-          class="grid grid-cols-2 lg:flex lg:flex-wrap lg:justify-start gap-2 md:gap-2.5 mt-6 w-full"
-        >
-          <li
-            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-emerald-900/60 text-emerald-100 border border-emerald-700/50 shadow-xs w-full justify-center lg:w-auto lg:justify-start"
-          >
-            <!-- SVG: Smile / Judgment-free -->
+        <!-- Clean Friction Killers -->
+        <div class="mt-5 flex flex-wrap items-center gap-4 text-sm font-medium text-emerald-100/80">
+          <span class="flex items-center gap-1.5">
             <svg
-              class="w-3.5 h-3.5 text-emerald-400 shrink-0"
+              class="w-4 h-4 text-emerald-400"
               fill="none"
-              stroke="currentColor"
               viewBox="0 0 24 24"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              stroke="currentColor"
+              stroke-width="2"
             >
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-              <line x1="9" x2="9.01" y1="9" y2="9"></line>
-              <line x1="15" x2="15.01" y1="9" y2="9"></line>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
             </svg>
-            Judgment-free
-          </li>
-          <li
-            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-emerald-900/60 text-emerald-100 border border-emerald-700/50 shadow-xs w-full justify-center lg:w-auto lg:justify-start"
-          >
-            <!-- SVG: Calendar -->
+            No credit card required
+          </span>
+          <span class="flex items-center gap-1.5">
             <svg
-              class="w-3.5 h-3.5 text-emerald-400 shrink-0"
+              class="w-4 h-4 text-emerald-400"
               fill="none"
-              stroke="currentColor"
               viewBox="0 0 24 24"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
-              <line x1="16" x2="16" y1="2" y2="6"></line>
-              <line x1="8" x2="8" y1="2" y2="6"></line>
-              <line x1="3" x2="21" y1="10" y2="10"></line>
-            </svg>
-            Flexible scheduling
-          </li>
-          <li
-            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-emerald-900/60 text-emerald-100 border border-emerald-700/50 shadow-xs w-full justify-center lg:w-auto lg:justify-start"
-          >
-            <!-- SVG: Shield Check -->
-            <svg
-              class="w-3.5 h-3.5 text-emerald-400 shrink-0"
-              fill="none"
               stroke="currentColor"
-              viewBox="0 0 24 24"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              stroke-width="2"
             >
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              <path d="m9 12 2 2 4-4"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
             </svg>
-            Full-month guarantee
-          </li>
-          <li
-            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-emerald-900/60 text-emerald-100 border border-emerald-700/50 shadow-xs w-full justify-center lg:w-auto lg:justify-start"
-          >
-            <!-- SVG: User Check -->
-            <svg
-              class="w-3.5 h-3.5 text-emerald-400 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <polyline points="16 11 18 13 22 9"></polyline>
-            </svg>
-            Male &amp; Female Hafiz
-          </li>
-        </ul>
+            100% Free Trial
+          </span>
+        </div>
       </div>
 
-      <!-- Right: floating credential card (desktop) -->
-      <div class="hidden lg:block">
+      <!-- Right: feature credential card -->
+      <div class="w-full mt-12 lg:mt-0">
         <div class="bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-8">
           <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-5">
             Why professionals choose us
@@ -196,14 +153,6 @@ const { intent, h1, subhead } = Astro.props;
               ))
             }
           </ul>
-          <div class="mt-6 pt-6 border-t border-emerald-700/40">
-            <p class="text-sm font-semibold text-white">
-              Trusted by working professionals worldwide
-            </p>
-            <p class="text-emerald-50 text-xs mt-1">
-              Enrolled adults from the UK, USA, UAE &amp; beyond
-            </p>
-          </div>
         </div>
       </div>
     </div>
