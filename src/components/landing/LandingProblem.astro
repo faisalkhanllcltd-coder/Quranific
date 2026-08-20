@@ -4,17 +4,19 @@ import Button from '../ui/Button.astro';
 
 interface Props {
   eyebrow?: string;
+  eyebrowClass?: string;
   headline: string;
   body: string;
   painPoints: {
     title: string;
-    text: string;
+    text?: string;
+    description?: string;
   }[];
   ctaLabel?: string;
   ctaHref?: string;
 }
 
-const { eyebrow, headline, body, painPoints, ctaLabel, ctaHref } = Astro.props;
+const { eyebrow, eyebrowClass, headline, body, painPoints, ctaLabel, ctaHref } = Astro.props;
 ---
 
 <section class="quranific-section bg-white border-b border-emerald-50">
@@ -24,7 +26,14 @@ const { eyebrow, headline, body, painPoints, ctaLabel, ctaHref } = Astro.props;
     >
       {
         eyebrow && (
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">{eyebrow}</p>
+          <p
+            class:list={[
+              'text-xs font-bold uppercase tracking-widest mb-4',
+              eyebrowClass || 'text-emerald-600',
+            ]}
+          >
+            {eyebrow}
+          </p>
         )
       }
       <h2
@@ -56,7 +65,7 @@ const { eyebrow, headline, body, painPoints, ctaLabel, ctaHref } = Astro.props;
               </svg>
             </div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">{point.title}</h3>
-            <p class="text-sm text-gray-600 leading-relaxed">{point.text}</p>
+            <p class="text-sm text-gray-600 leading-relaxed">{point.text || point.description}</p>
           </div>
         ))
       }
