@@ -2,37 +2,59 @@
 // src/components/ui/Button.astro
 import type { HTMLAttributes } from 'astro/types';
 
-// Accepts all standard <a> and <button> attributes (target, rel, aria-label, etc.)
 interface Props extends HTMLAttributes<'button'>, Omit<HTMLAttributes<'a'>, 'type'> {
   href?: string;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'white';
+  variant?: 'emerald' | 'gold' | 'whatsapp' | 'white';
+  fullWidthOnMobile?: boolean;
 }
 
-const { href, variant = 'primary', class: className, type = 'button', ...rest } = Astro.props;
+const {
+  href,
+  variant = 'emerald',
+  class: className,
+  type = 'button',
+  fullWidthOnMobile = false,
+  ...rest
+} = Astro.props;
 
+// Extracted exact colors mapped strictly to global.css brand variables
 const variants = {
-  primary: "bg-emerald-700 text-white hover:bg-emerald-800 shadow-md hover:shadow-emerald-900/20",
-  secondary: "bg-amber-500 text-white hover:bg-amber-400 shadow-md hover:shadow-amber-500/20",
-  ghost: "bg-transparent text-emerald-950 border-2 border-emerald-100 hover:border-emerald-200 hover:bg-emerald-50",
-  white: "bg-white text-emerald-950 hover:bg-emerald-50 shadow-md"
+  // Primary on light backgrounds
+  emerald:
+    'bg-emerald-700 text-white hover:bg-emerald-800 shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/20 hover:-translate-y-0.5',
+
+  // Primary on dark/emerald backgrounds (Replaced 'orange' with Brand Gold)
+  gold: 'bg-gold-500 text-white hover:bg-gold-600 shadow-lg shadow-gold-500/10 hover:shadow-gold-500/30 hover:-translate-y-0.5',
+
+  // WhatsApp ghost button (Transparent, 1px emerald border for dark backgrounds)
+  whatsapp:
+    'bg-transparent text-white border border-emerald-400/60 hover:bg-emerald-800/40 hover:-translate-y-0.5',
+
+  // Secondary on light backgrounds (1px emerald border)
+  white:
+    'bg-white text-emerald-950 border border-emerald-200/80 hover:border-emerald-300 hover:bg-emerald-50/50 hover:-translate-y-0.5',
 };
 
-const baseStyle = "inline-flex justify-center items-center px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 active:scale-95 text-center min-h-[44px] flex items-center justify-center";
+// Extracted exact structural DNA from HomeHero CTAs
+const baseStyle =
+  'inline-flex justify-center items-center px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 active:scale-95 min-h-[44px]';
+
+// Optional layout wrapper to mimic HomeHero mobile responsiveness without breaking global usage
+const widthStyle = fullWidthOnMobile ? 'w-full sm:w-auto' : '';
 ---
-{href ? (
-  <a 
-    href={href} 
-    class:list={[baseStyle, variants[variant], className]} 
-    {...rest}
-  >
-    <slot />
-  </a>
-) : (
-  <button 
-    type={type as "button" | "submit" | "reset"} 
-    class:list={[baseStyle, variants[variant], className]} 
-    {...rest}
-  >
-    <slot />
-  </button>
-)}
+
+{
+  href ? (
+    <a href={href} class:list={[baseStyle, widthStyle, variants[variant], className]} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button
+      type={type as 'button' | 'submit' | 'reset'}
+      class:list={[baseStyle, widthStyle, variants[variant], className]}
+      {...rest}
+    >
+      <slot />
+    </button>
+  )
+}

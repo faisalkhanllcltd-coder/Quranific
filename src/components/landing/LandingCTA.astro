@@ -1,5 +1,7 @@
 ---
 // LandingCTA.astro
+import Button from '../ui/Button.astro';
+
 export interface Props {
   eyebrow?: string;
   headline?: string;
@@ -31,12 +33,9 @@ const {
 
     <p class="text-xl text-emerald-50/80 mb-10 text-balance leading-relaxed" set:html={subhead} />
 
-    <a
-      href={ctaHref}
-      class="inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-white transition-all duration-300 bg-orange-500 rounded-full hover:bg-orange-600 hover:shadow-xl hover:shadow-orange-500/30 hover:-translate-y-1"
-    >
+    <Button href={ctaHref} variant="orange">
       {ctaLabel}
-    </a>
+    </Button>
 
     <!-- The Shield of Trust -->
     <div

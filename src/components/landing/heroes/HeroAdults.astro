@@ -4,12 +4,12 @@ import Button from '../../ui/Button.astro';
 import { SITE } from '../../../constants/site';
 
 interface Props {
-  intent: string;
+  intent?: string;
   h1: string;
   subhead: string;
 }
 
-const { intent, h1, subhead } = Astro.props;
+const { h1, subhead } = Astro.props;
 ---
 
 <section class="relative overflow-hidden bg-emerald-950">
@@ -68,27 +68,24 @@ const { intent, h1, subhead } = Astro.props;
           {subhead}
         </p>
 
-        <!-- CTAs: Hero = variant="primary" per top-funnel mapping -->
+        <!-- CTAs: Hero = variant="orange" / "whatsapp" with fullWidthOnMobile -->
         <div class="flex flex-col sm:flex-row gap-3 mb-8">
           <Button
-            href={`/funnel/signup?source=ad_adults_${intent}`}
+            href="/booking?source=adults_hero"
             data-track-cta
-            variant="primary"
-            class="px-8 py-4 text-base font-bold shadow-sm"
+            variant="orange"
+            fullWidthOnMobile
           >
             Book Your Free Class
           </Button>
-          <a
+          <Button
             href={SITE.whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            class="bg-emerald-50 text-emerald-950 px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            variant="whatsapp"
+            fullWidthOnMobile
           >
-            <div
-              class="absolute inset-0 bg-emerald-600/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"
-            >
-            </div>
-            <div class="relative z-10 flex items-center gap-2">
+            <div class="flex items-center gap-2">
               <svg
                 class="w-5 h-5 shrink-0 text-[#25D366]"
                 fill="currentColor"
@@ -101,7 +98,7 @@ const { intent, h1, subhead } = Astro.props;
               </svg>
               Chat on WhatsApp
             </div>
-          </a>
+          </Button>
         </div>
 
         <!-- Edge UI Trust Pills (Dark Theme - Premium Emerald Glass) -->
@@ -126,7 +123,7 @@ const { intent, h1, subhead } = Astro.props;
               <line x1="9" x2="9.01" y1="9" y2="9"></line>
               <line x1="15" x2="15.01" y1="9" y2="9"></line>
             </svg>
-            Judgment-free
+            No credit card required
           </li>
           <li
             class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-emerald-900/60 text-emerald-100 border border-emerald-700/50 shadow-xs w-full justify-center lg:w-auto lg:justify-start"
@@ -146,7 +143,7 @@ const { intent, h1, subhead } = Astro.props;
               <line x1="8" x2="8" y1="2" y2="6"></line>
               <line x1="3" x2="21" y1="10" y2="10"></line>
             </svg>
-            Flexible scheduling
+            Verified Scholars
           </li>
           <li
             class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-emerald-900/60 text-emerald-100 border border-emerald-700/50 shadow-xs w-full justify-center lg:w-auto lg:justify-start"
@@ -164,7 +161,7 @@ const { intent, h1, subhead } = Astro.props;
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
               <path d="m9 12 2 2 4-4"></path>
             </svg>
-            Full-month guarantee
+            Secure Portal
           </li>
           <li
             class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-emerald-900/60 text-emerald-100 border border-emerald-700/50 shadow-xs w-full justify-center lg:w-auto lg:justify-start"
@@ -183,7 +180,7 @@ const { intent, h1, subhead } = Astro.props;
               <circle cx="9" cy="7" r="4"></circle>
               <polyline points="16 11 18 13 22 9"></polyline>
             </svg>
-            Male &amp; Female Hafiz
+            Cancel anytime
           </li>
         </ul>
       </div>

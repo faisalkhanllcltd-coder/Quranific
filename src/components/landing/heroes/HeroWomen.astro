@@ -3,12 +3,12 @@
 import Button from '../../ui/Button.astro';
 
 interface Props {
-  intent: string;
+  intent?: string;
   h1: string;
   subhead: string;
 }
 
-const { intent, h1, subhead } = Astro.props;
+const { h1, subhead } = Astro.props;
 ---
 
 <section class="relative overflow-hidden bg-emerald-950">
@@ -73,27 +73,24 @@ const { intent, h1, subhead } = Astro.props;
           {subhead}
         </p>
 
-        <!-- CTAs: Hero = variant="primary" per top-funnel mapping -->
+        <!-- CTAs: Hero = variant="orange" / "whatsapp" with fullWidthOnMobile -->
         <div class="flex flex-col sm:flex-row gap-3 mb-8">
           <Button
-            href={`/funnel/signup?source=ad_women_${intent}`}
+            href="/booking?source=women_hero"
             data-track-cta
-            variant="primary"
-            class="px-8 py-4 text-base font-bold shadow-sm"
+            variant="orange"
+            fullWidthOnMobile
           >
             Book Your Free Class
           </Button>
-          <a
+          <Button
             href="https://wa.me/447477382348?text=Hello! I'm interested in Quran classes for sisters."
-            class="bg-emerald-50 text-emerald-950 px-6 py-3 rounded-lg font-semibold flex items-center gap-2 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
             target="_blank"
             rel="noopener noreferrer"
+            variant="whatsapp"
+            fullWidthOnMobile
           >
-            <div
-              class="absolute inset-0 bg-white/60 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"
-            >
-            </div>
-            <div class="relative z-10 flex items-center gap-2">
+            <div class="flex items-center gap-2">
               <svg
                 class="w-5 h-5 text-emerald-600"
                 viewBox="0 0 24 24"
@@ -106,7 +103,7 @@ const { intent, h1, subhead } = Astro.props;
               </svg>
               Chat on WhatsApp
             </div>
-          </a>
+          </Button>
         </div>
 
         <!-- Edge UI Trust Pills (Dark Theme - Sisters Warm Purple Glass) -->
@@ -130,7 +127,7 @@ const { intent, h1, subhead } = Astro.props;
               <circle cx="9" cy="7" r="4"></circle>
               <polyline points="16 11 18 13 22 9"></polyline>
             </svg>
-            100% Female Ustadhas
+            No credit card required
           </li>
           <li
             class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-purple-950/60 text-purple-100 border border-purple-700/40 shadow-xs w-full justify-center lg:w-auto lg:justify-start"
@@ -148,7 +145,7 @@ const { intent, h1, subhead } = Astro.props;
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
-            Strict Privacy
+            Verified Female Tutors
           </li>
           <li
             class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-purple-950/60 text-purple-100 border border-purple-700/40 shadow-xs w-full justify-center lg:w-auto lg:justify-start"
@@ -168,7 +165,7 @@ const { intent, h1, subhead } = Astro.props;
               <line x1="8" x2="8" y1="2" y2="6"></line>
               <line x1="3" x2="21" y1="10" y2="10"></line>
             </svg>
-            Flexible scheduling
+            Secure & Private
           </li>
           <li
             class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-semibold bg-purple-950/60 text-purple-100 border border-purple-700/40 shadow-xs w-full justify-center lg:w-auto lg:justify-start"
@@ -186,7 +183,7 @@ const { intent, h1, subhead } = Astro.props;
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
               <path d="m9 12 2 2 4-4"></path>
             </svg>
-            Full-month guarantee
+            Cancel anytime
           </li>
         </ul>
       </div>
