@@ -19,7 +19,9 @@ const { eyebrow, headline, body, painPoints, ctaLabel, ctaHref } = Astro.props;
 
 <section class="quranific-section bg-white border-b border-emerald-50">
   <div class="quranific-container">
-    <div class="max-w-3xl mx-auto text-center flex flex-col items-center mb-12">
+    <div
+      class="max-w-3xl mx-auto text-left md:text-center flex flex-col items-start md:items-center mb-12"
+    >
       {
         eyebrow && (
           <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-4">{eyebrow}</p>
