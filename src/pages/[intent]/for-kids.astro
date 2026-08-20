@@ -32,10 +32,11 @@ type Intent = 'quran-classes' | 'quran-teacher';
 // 90/10 Split: dynamic hero copy per intent, everything else static
 const intentCopy: Record<
   Intent,
-  { h1: string; subhead: string; seoTitle: string; seoDesc: string }
+  { h1: string; highlightWord: string; subhead: string; seoTitle: string; seoDesc: string }
 > = {
   'quran-classes': {
-    h1: 'A Quran Class Your Child Actually Looks Forward To',
+    h1: 'The Quran class your child ',
+    highlightWord: 'actually looks forward to.',
     subhead:
       "1-on-1 online classes for kids, taught by vetted teachers who know how to hold a child's attention. First class free.",
     seoTitle: 'Online Quran Classes for Kids | 1-on-1, Vetted Teachers | Quranific',
@@ -43,7 +44,8 @@ const intentCopy: Record<
       '1-on-1 online Quran classes for kids with vetted, patient teachers. Tajweed, Qaida, and Hifz. First class free — no card required.',
   },
   'quran-teacher': {
-    h1: 'Find a Quran Teacher Your Child Actually Connects With',
+    h1: 'Find a Quran teacher your child ',
+    highlightWord: 'actually connects with.',
     subhead:
       'Every teacher passes a 4-stage vetting process before meeting your child. Match with the right one, risk-free, starting with a free first class.',
     seoTitle: 'Find a Quran Teacher for Kids | Vetted, 1-on-1, Online | Quranific',
@@ -139,7 +141,12 @@ const jsonLd = {
 
   <div class="bg-cream-50 antialiased">
     <!-- § 1 HERO -->
-    <HeroKids intent={intent} h1={copy.h1} subhead={copy.subhead} />
+    <HeroKids
+      intent={intent}
+      h1={copy.h1}
+      highlightWord={copy.highlightWord}
+      subhead={copy.subhead}
+    />
 
     <!-- § 2 PROBLEM -->
     <LandingProblem

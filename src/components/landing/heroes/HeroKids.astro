@@ -3,12 +3,13 @@
 import Button from '../../ui/Button.astro';
 
 interface Props {
-  intent: string;
+  intent: 'quran-classes' | 'quran-teacher';
   h1: string;
+  highlightWord?: string;
   subhead: string;
 }
 
-const { intent, h1, subhead } = Astro.props;
+const { intent, h1, highlightWord, subhead } = Astro.props;
 ---
 
 <section class="relative overflow-hidden border-b border-emerald-100">
@@ -53,9 +54,16 @@ const { intent, h1, subhead } = Astro.props;
 
         <!-- Dynamic H1 -->
         <h1
-          class="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-emerald-950 leading-[1.06] tracking-tight mb-5"
+          class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5 leading-[1.15] text-emerald-950 text-balance"
         >
           {h1}
+          {
+            highlightWord && (
+              <span class="bg-gradient-to-r from-emerald-600 to-gold-500 bg-clip-text text-transparent">
+                {highlightWord}
+              </span>
+            )
+          }
         </h1>
 
         <!-- Dynamic Subhead -->
@@ -73,7 +81,7 @@ const { intent, h1, subhead } = Astro.props;
             variant="emerald"
             fullWidthOnMobile
           >
-            Start Free Trial
+            Book Your Child's Free Class
           </Button>
         </div>
 
