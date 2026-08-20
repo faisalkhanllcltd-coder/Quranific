@@ -11,9 +11,26 @@ interface FaqItem {
 
 interface Props {
   items: FaqItem[];
+  eyebrow?: string;
+  headline?: string;
+  accent?: 'emerald' | 'purple';
 }
 
-const { items } = Astro.props;
+const {
+  items,
+  eyebrow = 'COMMON QUESTIONS',
+  headline = 'Clear answers.',
+  accent = 'emerald',
+} = Astro.props;
+
+const isPurple = accent === 'purple';
+const eyebrowColor = isPurple ? 'text-purple-600' : 'text-emerald-600';
+const headlineColor = isPurple ? 'text-purple-950' : 'text-slate-900';
+const descriptionColor = isPurple ? 'text-purple-900/80' : 'text-slate-500';
+const linkColor = isPurple
+  ? 'text-purple-700 hover:text-purple-900'
+  : 'text-emerald-600 hover:text-emerald-700';
+const questionColor = isPurple ? 'text-purple-950' : 'text-slate-900';
 ---
 
 <section class="py-16 md:py-24 bg-white">
@@ -21,18 +38,18 @@ const { items } = Astro.props;
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
       <!-- Left Column: Sticky Anchor (CRO optimized) -->
       <div class="lg:col-span-4 lg:sticky lg:top-32 flex flex-col items-start">
-        <span class="text-emerald-500 font-bold tracking-widest text-sm uppercase mb-3 block"
-          >COMMON QUESTIONS</span
-        >
-        <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6 text-balance">
-          Clear answers.
+        <span class:list={['font-bold tracking-widest text-sm uppercase mb-3 block', eyebrowColor]}>
+          {eyebrow}
+        </span>
+        <h2 class:list={['text-4xl md:text-5xl font-bold mb-6 text-balance', headlineColor]}>
+          {headline}
         </h2>
-        <p class="text-slate-500 text-lg">
+        <p class:list={['text-lg leading-relaxed', descriptionColor]}>
           Have a question we didn't cover? <a
             href="/contact"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-emerald-600 font-semibold hover:text-emerald-700 hover:underline transition-colors"
+            class:list={['font-semibold hover:underline transition-colors', linkColor]}
             >Contact our support team.</a
           >
         </p>
@@ -44,7 +61,7 @@ const { items } = Astro.props;
           {
             items.map((item) => (
               <div class="pt-8 first:pt-0 flex flex-col items-start">
-                <dt class="text-xl md:text-2xl font-bold text-slate-900 mb-4">
+                <dt class:list={['text-xl md:text-2xl font-bold mb-4', questionColor]}>
                   {item.q || item.question}
                 </dt>
                 <dd class="text-lg text-slate-600 leading-relaxed">
@@ -54,7 +71,10 @@ const { items } = Astro.props;
                       href={item.link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="inline-block mt-3 text-emerald-600 font-bold hover:text-emerald-700 hover:underline transition-colors"
+                      class:list={[
+                        'inline-block mt-3 font-bold hover:underline transition-colors',
+                        linkColor,
+                      ]}
                     >
                       {item.link.text}
                     </a>
