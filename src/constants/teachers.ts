@@ -6,7 +6,7 @@ export const TEACHERS_LIST = [
     specialty: 'Hifz & Advanced Tajweed',
     experience: '6 Years',
     avatar: '/images/tutors/tutor-1.jpg',
-    languages: ['English', 'Arabic', 'Urdu']
+    languages: ['English', 'Arabic', 'Urdu'],
   },
   {
     id: '2',
@@ -14,7 +14,7 @@ export const TEACHERS_LIST = [
     specialty: 'Noorani Qaida & Children',
     experience: '3 Years',
     avatar: '/images/tutors/tutor-2.jpg',
-    languages: ['English', 'Arabic']
+    languages: ['English', 'Arabic'],
   },
   {
     id: '3',
@@ -22,6 +22,6 @@ export const TEACHERS_LIST = [
     specialty: 'Arabic Language & Tafseer',
     experience: '5 Years',
     avatar: '/images/tutors/tutor-3.jpg',
-    languages: ['English', 'Arabic']
-  }
+    languages: ['English', 'Arabic'],
+  },
 ];

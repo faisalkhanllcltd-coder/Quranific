@@ -18,7 +18,7 @@ Sitemap: ${SITE.url}/sitemap-index.xml
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       // Edge Caching: Cloudflare caches this globally for 24 hours
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400'
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
     },
   });
 };

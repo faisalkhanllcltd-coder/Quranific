@@ -9,16 +9,17 @@ interface Props extends HTMLAttributes<'span'> {
 const { variant = 'emerald', class: className, ...rest } = Astro.props;
 
 const variants = {
-  emerald: "bg-emerald-50 text-emerald-700 border-emerald-100",
-  amber: "bg-amber-50 text-amber-700 border-amber-200/60",
-  white: "bg-white text-emerald-950 border-emerald-100 shadow-sm"
+  emerald: 'bg-emerald-50 text-emerald-700 border-emerald-100',
+  amber: 'bg-amber-50 text-amber-700 border-amber-200/60',
+  white: 'bg-white text-emerald-950 border-emerald-100 shadow-sm',
 };
 ---
-<span 
+
+<span
   class:list={[
-    "inline-flex items-center gap-1.5 px-3 py-1 text-[10px] sm:text-xs font-black tracking-widest uppercase rounded-full border",
+    'inline-flex items-center gap-1.5 px-3 py-1 text-[10px] sm:text-xs font-black tracking-widest uppercase rounded-full border',
     variants[variant],
-    className
+    className,
   ]}
   {...rest}
 >

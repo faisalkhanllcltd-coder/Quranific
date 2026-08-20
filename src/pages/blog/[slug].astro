@@ -9,12 +9,12 @@ import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  
+
   if (!posts || posts.length === 0) {
     return [];
   }
-  
-  return posts.map(post => ({
+
+  return posts.map((post) => ({
     // CRITICAL FIX: Fallback to post.id to prevent Astro 5/6 routing crashes
     params: { slug: post.id },
     props: { post },
@@ -28,72 +28,97 @@ const pubDate = post.data.pubDate;
 const formattedDate = new Date(pubDate).toLocaleDateString('en-US', {
   month: 'long',
   day: 'numeric',
-  year: 'numeric'
+  year: 'numeric',
 });
 
 // Dynamic Article SEO Schema: Fortified for Google Discover integration
 const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": post.data.title,
-  "description": post.data.description,
-  "datePublished": pubDate,
-  "image": post.data.heroImage ? [new URL(post.data.heroImage, Astro.site).toString()] : undefined,
-  "author": {
-    "@type": "Person",
-    "name": post.data.author || "Quranific Editorial"
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: pubDate,
+  image: post.data.heroImage ? [new URL(post.data.heroImage, Astro.site).toString()] : undefined,
+  author: {
+    '@type': 'Person',
+    name: post.data.author || 'Quranific Editorial',
   },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Quranific"
-  }
+  publisher: {
+    '@type': 'Organization',
+    name: 'Quranific',
+  },
 };
 ---
 
 <Base title={`${post.data.title} | Quranific Blog`} description={post.data.description}>
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
-  
+
   <Header />
 
-  <main class="min-h-screen bg-cream-50 pt-32 pb-24 lg:pt-40 lg:pb-32 selection:bg-emerald-200 selection:text-emerald-950 overflow-hidden">
+  <main
+    class="min-h-screen bg-cream-50 pt-32 pb-24 lg:pt-40 lg:pb-32 selection:bg-emerald-200 selection:text-emerald-950 overflow-hidden"
+  >
     <article class="max-w-3xl mx-auto px-4 sm:px-6 relative z-10">
-      
-      <header class="mb-12 lg:mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <header
+        class="mb-12 lg:mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-700"
+      >
         <div class="flex items-center justify-center gap-3 mb-6">
-          <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest">{formattedDate}</span>
+          <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest"
+            >{formattedDate}</span
+          >
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-200" aria-hidden="true"></span>
-          <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest">Article</span>
+          <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest"
+            >Article</span
+          >
         </div>
-        
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-emerald-950 mb-8 tracking-tighter leading-[1.15] text-balance">
+
+        <h1
+          class="text-4xl md:text-5xl lg:text-6xl font-black text-emerald-950 mb-8 tracking-tighter leading-[1.15] text-balance"
+        >
           {post.data.title}
         </h1>
-        
+
         <div class="flex items-center justify-center gap-3">
-          <div class="w-12 h-12 rounded-full bg-emerald-100 border-2 border-white shadow-sm flex items-center justify-center text-emerald-800 font-bold text-lg" aria-hidden="true">
+          <div
+            class="w-12 h-12 rounded-full bg-emerald-100 border-2 border-white shadow-sm flex items-center justify-center text-emerald-800 font-bold text-lg"
+            aria-hidden="true"
+          >
             {(post.data.author || 'Q').charAt(0)}
           </div>
           <div class="text-left">
-            <p class="font-bold text-emerald-950 text-sm leading-tight">{post.data.author || 'Quranific Editorial'}</p>
+            <p class="font-bold text-emerald-950 text-sm leading-tight">
+              {post.data.author || 'Quranific Editorial'}
+            </p>
             <p class="text-xs text-emerald-700 font-medium">Author</p>
           </div>
         </div>
       </header>
 
-      {post.data.heroImage && (
-        <div class="w-full aspect-[16/9] bg-emerald-50 rounded-3xl mb-12 overflow-hidden border border-emerald-100 shadow-sm animate-in fade-in duration-1000">
-          <img src={post.data.heroImage} alt={post.data.title} width="800" height="450" class="w-full h-full object-cover" loading="eager" />
-        </div>
-      )}
+      {
+        post.data.heroImage && (
+          <div class="w-full aspect-[16/9] bg-emerald-50 rounded-3xl mb-12 overflow-hidden border border-emerald-100 shadow-sm animate-in fade-in duration-1000">
+            <img
+              src={post.data.heroImage}
+              alt={post.data.title}
+              width="800"
+              height="450"
+              class="w-full h-full object-cover"
+              loading="eager"
+            />
+          </div>
+        )
+      }
 
-      <Section height={800} class="quranific-prose animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+      <Section
+        height={800}
+        class="quranific-prose animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150"
+      >
         <Content />
       </Section>
 
       <div class="mt-16 pt-10 border-t border-emerald-100 flex justify-center">
         <Button href="/blog" variant="ghost">← Back to all articles</Button>
       </div>
-
     </article>
   </main>
 
@@ -141,7 +166,8 @@ const jsonLd = {
     padding-left: 1.5rem;
     margin-bottom: 2rem;
   }
-  .quranific-prose ul > li, .quranific-prose ol > li {
+  .quranific-prose ul > li,
+  .quranific-prose ol > li {
     margin-top: 0.75rem;
     padding-left: 0.5rem;
   }

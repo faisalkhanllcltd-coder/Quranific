@@ -8,9 +8,10 @@ type Props = ComponentProps<typeof Base>;
 
 const props = Astro.props;
 ---
+
 <Base {...props} robots="noindex, nofollow">
   <slot name="head" slot="head" />
-  
+
   <main class="min-h-screen flex flex-col w-full relative">
     <slot />
   </main>

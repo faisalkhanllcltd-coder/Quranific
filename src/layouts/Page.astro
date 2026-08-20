@@ -10,14 +10,15 @@ type Props = ComponentProps<typeof Base>;
 
 const props = Astro.props;
 ---
+
 <Base {...props}>
   <slot name="head" slot="head" />
-  
+
   <Header />
-  
+
   <main class="flex-grow w-full relative">
     <slot />
   </main>
-  
+
   <Footer />
 </Base>

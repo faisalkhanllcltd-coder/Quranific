@@ -24,7 +24,7 @@ WhatsApp: ${SITE.whatsappNumber}
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       // Edge Caching: 24-hour global cache
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400'
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
     },
   });
 };

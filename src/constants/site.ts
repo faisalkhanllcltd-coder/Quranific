@@ -3,7 +3,8 @@
 export const SITE = {
   name: 'Quranific',
   title: 'Quranific | The Quran Class Your Child Will Actually Love',
-  description: 'No crowded mosque classes. No harsh methods. Just a gentle, qualified teacher, one child, and 30 minutes that might change everything.',
+  description:
+    'No crowded mosque classes. No harsh methods. Just a gentle, qualified teacher, one child, and 30 minutes that might change everything.',
   url: 'https://quranific.com',
   themeColor: '#047857',
   defaultImage: '/images/og/default.webp', // Optimized for Edge CDN delivery
@@ -29,7 +30,7 @@ export const SITE = {
     highlight: '1 Month Free',
     suffix: 'Quran Classes!',
     linkText: 'Claim Offer &rarr;',
-    linkUrl: '/funnel/signup'
+    linkUrl: '/funnel/signup',
   },
 
   // Synced with all actual mailto links across the platform
@@ -38,7 +39,7 @@ export const SITE = {
     scholarships: 'scholarships@quranific.com',
     careers: 'careers@quranific.com',
     partners: 'partners@quranific.com',
-    privacy: 'privacy@quranific.com'
+    privacy: 'privacy@quranific.com',
   },
 
   social: {
@@ -48,24 +49,30 @@ export const SITE = {
     pinterest: 'https://pinterest.com/quranific',
     tiktok: 'https://www.tiktok.com/@quranific.com',
     x: 'https://x.com/quranific_',
-    whatsapp: 'https://wa.me/message/FF4LDK3JR2GPN1'
+    whatsapp: 'https://wa.me/message/FF4LDK3JR2GPN1',
   },
 
   stats: [
     { number: '22', symbol: '', label: 'Countries' },
     { number: '3,000+', symbol: '', label: 'Students' },
     { number: '94%', symbol: '', label: 'Retention' },
-    { number: '4.9', symbol: '', label: 'Rating' }
+    { number: '4.9', symbol: '', label: 'Rating' },
   ],
 
   trustCountries: [
-    { flag: '🇺🇸', name: 'USA' }, { flag: '🇬🇧', name: 'United Kingdom' },
-    { flag: '🇨🇦', name: 'Canada' }, { flag: '🇦🇺', name: 'Australia' },
-    { flag: '🇦🇪', name: 'UAE' }, { flag: '🇸🇦', name: 'Saudi Arabia' },
-    { flag: '🇶🇦', name: 'Qatar' }, { flag: '🇩🇪', name: 'Germany' },
-    { flag: '🇳🇱', name: 'Netherlands' }, { flag: '🇸🇬', name: 'Singapore' },
-    { flag: '🇮🇹', name: 'Italy' }, { flag: '🇧🇭', name: 'Bahrain' }
-  ]
+    { flag: '🇺🇸', name: 'USA' },
+    { flag: '🇬🇧', name: 'United Kingdom' },
+    { flag: '🇨🇦', name: 'Canada' },
+    { flag: '🇦🇺', name: 'Australia' },
+    { flag: '🇦🇪', name: 'UAE' },
+    { flag: '🇸🇦', name: 'Saudi Arabia' },
+    { flag: '🇶🇦', name: 'Qatar' },
+    { flag: '🇩🇪', name: 'Germany' },
+    { flag: '🇳🇱', name: 'Netherlands' },
+    { flag: '🇸🇬', name: 'Singapore' },
+    { flag: '🇮🇹', name: 'Italy' },
+    { flag: '🇧🇭', name: 'Bahrain' },
+  ],
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -82,14 +89,14 @@ export const MAIN_NAVIGATION: ReadonlyArray<NavItem> = [
   { label: 'Home', href: '/' },
   { label: 'Courses', href: '/courses' },
   { label: 'Tuition & Fee', href: '/tuition-fee' },
-  { label: 'FAQ', href: '/faq' }
+  { label: 'FAQ', href: '/faq' },
 ];
 
 export const MOBILE_NAVIGATION: ReadonlyArray<NavItem> = [
   { label: 'Home', href: '/' },
   { label: 'Courses', href: '/courses' },
   { label: 'Tuition & Fee', href: '/tuition-fee' },
-  { label: 'FAQ', href: '/faq' }
+  { label: 'FAQ', href: '/faq' },
 ];
 
 export const FOOTER_NAVIGATION = {
@@ -97,25 +104,25 @@ export const FOOTER_NAVIGATION = {
     { label: 'About Us', href: '/about' },
     { label: 'Careers', href: '/careers' },
     { label: 'Partners', href: '/partners' },
-    { label: 'Contact', href: '/contact' }
+    { label: 'Contact', href: '/contact' },
   ],
   learn: [
     { label: 'Courses', href: '/courses' },
     { label: 'How It Works', href: '/how-it-works' },
     { label: 'Expert Teachers', href: '/teachers' },
     { label: 'Tuition & Fee', href: '/tuition-fee' },
-    { label: 'Blog', href: '/blog' }
+    { label: 'Blog', href: '/blog' },
   ],
   trust: [
     { label: 'Testimonials', href: '/testimonials' },
     { label: 'Student Portals', href: '/portals' },
-    { label: 'Safeguarding', href: '/safeguarding' }
+    { label: 'Safeguarding', href: '/safeguarding' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/legal/privacy' },
     { label: 'Terms of Service', href: '/legal/terms' },
     { label: 'Refund Policy', href: '/legal/refund' },
     { label: 'Cookie Policy', href: '/legal/cookies' },
-    { label: 'Impressum', href: '/legal/impressum' }
-  ]
+    { label: 'Impressum', href: '/legal/impressum' },
+  ],
 } as const;

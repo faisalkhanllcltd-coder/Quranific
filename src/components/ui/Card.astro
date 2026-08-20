@@ -8,11 +8,13 @@ interface Props extends HTMLAttributes<'div'> {
 
 const { class: className, hover = false, ...rest } = Astro.props;
 ---
-<div 
+
+<div
   class:list={[
-    "bg-white border border-emerald-100 rounded-3xl p-6 md:p-8 shadow-sm",
-    hover && "hover:shadow-xl hover:shadow-emerald-900/5 hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 ease-out",
-    className
+    'bg-white border border-emerald-100 rounded-3xl p-6 md:p-8 shadow-sm',
+    hover &&
+      'hover:shadow-xl hover:shadow-emerald-900/5 hover:-translate-y-1 hover:border-emerald-200 transition-all duration-300 ease-out',
+    className,
   ]}
   {...rest}
 >

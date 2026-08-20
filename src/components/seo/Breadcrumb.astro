@@ -89,17 +89,28 @@ const segments = items
       <a href="/" class="hover:text-emerald-950 transition-colors">Home</a>
     </li>
 
-    {segments.map(({ href, label, isLast }) => (
-      <li class="flex items-center space-x-2">
-        <svg class="w-4 h-4 text-emerald-200" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-          <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
-        </svg>
-        {isLast ? (
-          <span class="text-emerald-950 font-bold" aria-current="page">{label}</span>
-        ) : (
-          <a href={href} class="hover:text-emerald-950 transition-colors">{label}</a>
-        )}
-      </li>
-    ))}
+    {
+      segments.map(({ href, label, isLast }) => (
+        <li class="flex items-center space-x-2">
+          <svg
+            class="w-4 h-4 text-emerald-200"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            aria-hidden="true"
+          >
+            <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" />
+          </svg>
+          {isLast ? (
+            <span class="text-emerald-950 font-bold" aria-current="page">
+              {label}
+            </span>
+          ) : (
+            <a href={href} class="hover:text-emerald-950 transition-colors">
+              {label}
+            </a>
+          )}
+        </li>
+      ))
+    }
   </ol>
 </nav>

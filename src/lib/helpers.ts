@@ -15,38 +15,38 @@ export const COUNTRIES = [
   { code: 'IN', name: 'India', flag: '🇮🇳' },
   { code: 'AE', name: 'UAE', flag: '🇦🇪' },
   { code: 'SA', name: 'Saudi Arabia', flag: '🇸🇦' },
-  { code: 'Other', name: 'Other', flag: '🌍' }
+  { code: 'Other', name: 'Other', flag: '🌍' },
 ];
 
 export const GENDERS = [
   { value: 'Male', label: 'Male' },
-  { value: 'Female', label: 'Female' }
+  { value: 'Female', label: 'Female' },
 ];
 
 export const LEVELS = [
   { value: 'Beginner', label: 'Beginner' },
   { value: 'Intermediate', label: 'Intermediate' },
-  { value: 'Advanced', label: 'Advanced' }
+  { value: 'Advanced', label: 'Advanced' },
 ];
 
 export const SCHEDULES = [
   { value: 'Morning', label: 'Morning' },
   { value: 'Afternoon', label: 'Afternoon' },
   { value: 'Evening', label: 'Evening' },
-  { value: 'Night', label: 'Night' }
+  { value: 'Night', label: 'Night' },
 ];
 
 export const DAYS = [
   { value: '2 Days', label: '2 Days' },
   { value: '3 Days', label: '3 Days' },
   { value: '4 Days', label: '4 Days' },
-  { value: '5 Days', label: '5 Days' }
+  { value: '5 Days', label: '5 Days' },
 ];
 
 // ==========================================
 // 2. BROWSER SESSION MANAGEMENT
 // ==========================================
-// The client only manages the storage of the token. 
+// The client only manages the storage of the token.
 // It NEVER encodes or decodes the payload. That is the server's job.
 
 export function saveSessionToken(token: string): void {
@@ -57,7 +57,7 @@ export function saveSessionToken(token: string): void {
 
 export function getSessionToken(urlParam?: string | null): string | null {
   if (typeof window === 'undefined') return null;
-  
+
   // 110% Architecture: Read from URL param FIRST (survives Instagram/FB in-app browsers)
   const token = urlParam || sessionStorage.getItem('q_reg');
   return token || null;
@@ -78,6 +78,6 @@ export function generateWhatsAppLink(prefilledMessage: string, customNumber?: st
   // Remove spaces, pluses, and dashes from the phone number for a clean URL
   const cleanNumber = targetNumber.replace(/[\s+-]/g, '');
   const encodedMessage = encodeURIComponent(prefilledMessage);
-  
+
   return `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
 }
