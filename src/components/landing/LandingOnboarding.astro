@@ -1,5 +1,6 @@
 ---
 // src/components/landing/LandingOnboarding.astro
+import Button from '../ui/Button.astro';
 
 interface Step {
   n?: string;
@@ -41,9 +42,8 @@ const eyebrowColor =
       : 'text-emerald-600';
 const headlineColor = theme === 'dark' ? 'text-white' : 'text-emerald-950';
 
-const ctaButtonClasses = isPurple
-  ? 'inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-purple-600 hover:bg-purple-700 active:bg-purple-800 rounded-full shadow-lg shadow-purple-900/20 hover:shadow-purple-900/30 transition-all duration-200 transform hover:-translate-y-0.5'
-  : 'inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-full shadow-lg shadow-emerald-900/20 hover:shadow-emerald-900/30 transition-all duration-200 transform hover:-translate-y-0.5';
+// Dark background → gold CTA; light background → emerald CTA
+const ctaVariant = theme === 'dark' ? 'gold' : 'emerald';
 
 const card3Border = isPurple
   ? 'border-purple-200 bg-purple-50/80'
@@ -85,9 +85,9 @@ const card3StepColor = isPurple ? 'text-purple-600' : 'text-emerald-600';
     </ol>
 
     <div class="mt-12 md:mt-16 flex justify-center w-full">
-      <a href={ctaHref} class={ctaButtonClasses}>
+      <Button href={ctaHref} variant={ctaVariant} data-track-cta>
         {ctaText}
-      </a>
+      </Button>
     </div>
   </div>
 </section>
