@@ -27,7 +27,10 @@ const {
 } = Astro.props;
 
 const isPurple = accent === 'purple';
-const eyebrowColor = isPurple ? 'text-purple-500' : 'text-emerald-500';
+const eyebrowColor = isPurple ? 'text-purple-700' : 'text-emerald-500';
+const headlineColor = isPurple ? 'text-purple-950' : 'text-slate-900';
+const bodyColor = isPurple ? 'text-purple-900/80' : 'text-slate-600';
+const listTextColor = isPurple ? 'text-purple-950' : 'text-slate-700';
 const iconContainerBg = isPurple
   ? 'bg-purple-50 text-purple-600'
   : 'bg-emerald-50 text-emerald-600';
@@ -43,11 +46,15 @@ const paragraphs = Array.isArray(body) ? body : [body];
         <span class={`font-bold tracking-widest text-sm uppercase mb-3 block ${eyebrowColor}`}>
           {eyebrow}
         </span>
-        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6 text-balance">
+        <h2 class:list={['text-3xl md:text-4xl font-bold mb-6 text-balance', headlineColor]}>
           {headline}
         </h2>
         <div class="space-y-4">
-          {paragraphs.map((p) => <p class="text-slate-600 text-lg leading-relaxed" set:html={p} />)}
+          {
+            paragraphs.map((p) => (
+              <p class:list={['text-lg leading-relaxed', bodyColor]} set:html={p} />
+            ))
+          }
         </div>
 
         {
@@ -81,7 +88,7 @@ const paragraphs = Array.isArray(body) ? body : [body];
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <p class="text-slate-700 text-base md:text-lg leading-relaxed">{point}</p>
+              <p class:list={['text-base md:text-lg leading-relaxed', listTextColor]}>{point}</p>
             </div>
           ))
         }
