@@ -16,6 +16,8 @@ const { eyebrow, headline, body, painPoints, ctaLabel, ctaHref, accent = 'emeral
 
 const isPurple = accent === 'purple';
 const eyebrowColor = isPurple ? 'text-purple-700' : 'text-emerald-600';
+const sectionHeadlineColor = isPurple ? 'text-purple-950' : 'text-emerald-950';
+const sectionBodyColor = isPurple ? 'text-purple-900/80' : 'text-emerald-800/80';
 const iconBgColor = isPurple ? 'bg-purple-50' : 'bg-emerald-50';
 const iconTextColor = isPurple ? 'text-purple-600' : 'text-emerald-500';
 const titleColor = isPurple ? 'text-purple-950' : 'text-emerald-950';
@@ -23,6 +25,7 @@ const descColor = isPurple ? 'text-purple-900/80' : 'text-emerald-800/80';
 const btnBorderColor = isPurple ? 'border-purple-200' : 'border-emerald-200';
 const btnTextColor = isPurple ? 'text-purple-700' : 'text-emerald-700';
 const btnHoverColor = isPurple ? 'hover:bg-purple-50' : 'hover:bg-emerald-50';
+const btnHoverBorderColor = isPurple ? 'hover:border-purple-300' : 'hover:border-emerald-300';
 ---
 
 <section class="quranific-section bg-white border-b border-emerald-50">
@@ -38,12 +41,15 @@ const btnHoverColor = isPurple ? 'hover:bg-purple-50' : 'hover:bg-emerald-50';
         )
       }
       <h2
-        class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-[1.1] mb-6 text-balance"
+        class:list={[
+          'font-serif text-3xl md:text-4xl font-black leading-[1.1] mb-6 text-balance',
+          sectionHeadlineColor,
+        ]}
       >
         {headline}
       </h2>
       <p
-        class="text-lg text-emerald-900/75 leading-relaxed max-w-2xl mx-auto text-balance"
+        class:list={['text-lg leading-relaxed max-w-2xl mx-auto text-balance', sectionBodyColor]}
         set:html={body}
       />
     </div>
@@ -86,7 +92,7 @@ const btnHoverColor = isPurple ? 'hover:bg-purple-50' : 'hover:bg-emerald-50';
           <Button
             href={ctaHref}
             variant="white"
-            class:list={[btnBorderColor, btnTextColor, btnHoverColor]}
+            class:list={[btnBorderColor, btnTextColor, btnHoverColor, btnHoverBorderColor]}
           >
             {ctaLabel}
           </Button>
