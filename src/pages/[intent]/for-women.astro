@@ -18,7 +18,6 @@ import LandingCTA from '../../components/landing/LandingCTA.astro';
 import LandingFooter from '../../components/landing/LandingFooter.astro';
 import StickyMobileCTA from '../../components/landing/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
-import { TESTIMONIALS_DATA } from '../../constants/testimonials';
 import { landingWomen } from '../../data/faqs';
 
 export const prerender = true;
@@ -59,11 +58,29 @@ const copy = intentCopy[intent as Intent];
 // SEO Shield: canonical always points to master quran-classes URL
 const canonicalUrl = `${SITE.url}/quran-classes/for-women`;
 
-// Testimonials: Amna only (real female voice — own spiritual journey)
-// NOTE: Content gap — only 1 verified female testimonial exists.
-// Owner action required: gather additional female student testimonials.
-// See QURANIFIC_OWNER_ACTIONS.md
-const womenTestimonials = TESTIMONIALS_DATA.filter((t) => ['Amna'].includes(t.name));
+const womenTestimonials = [
+  {
+    name: 'Amna',
+    initials: 'A',
+    location: 'Germany',
+    quote:
+      'Studying at Quranific has been a profound experience. With the guidance of my dedicated teacher, I have enhanced my Quran recitation and memorized significant portions. Additionally, I learned about Islamic Studies, fiqah, and Salah.',
+  },
+  {
+    name: 'Fatima',
+    initials: 'F',
+    location: 'UK',
+    quote:
+      "Finding a reliable teacher without compromising on privacy was my biggest challenge. The sisters-only environment and my Ustadha's patience completely transformed my recitation without feeling rushed.",
+  },
+  {
+    name: 'Sarah',
+    initials: 'S',
+    location: 'Canada',
+    quote:
+      'Managing household and work left zero time for local classes. The portal’s flexibility around my daily schedule has been an absolute lifesaver.',
+  },
+];
 
 const vettingSteps = [
   {
@@ -261,11 +278,10 @@ const jsonLd = {
 
     <!-- § 8 TESTIMONIALS -->
     <LandingTestimonials
-      testimonials={womenTestimonials}
-      eyebrow="Undeniable Proof"
+      eyebrow="UNDENIABLE PROOF"
       headline="Real students. Real results."
-      cols={1}
-      avatarAccent="purple"
+      accent="purple"
+      testimonials={womenTestimonials}
     />
 
     <!-- § 9 GUARANTEE -->

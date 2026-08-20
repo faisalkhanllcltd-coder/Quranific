@@ -1,56 +1,64 @@
 ---
 // src/components/landing/LandingTestimonials.astro
-// Renders landing-page testimonial cards from TESTIMONIALS_DATA shape.
-// Accepts a pre-filtered array — filtering stays page-level.
 
 interface Testimonial {
   name: string;
   initials: string;
-  content: string;
-  locationAndRole: string;
-  enrollmentTime: string;
+  quote?: string;
+  content?: string;
+  location?: string;
+  locationAndRole?: string;
+  enrollmentTime?: string;
   theme?: 'light' | 'dark';
 }
 
 interface Props {
-  testimonials: Testimonial[];
   eyebrow?: string;
   headline?: string;
-  /** Grid column variant: 1 | 2 | 3 */
+  testimonials: Testimonial[];
   cols?: 1 | 2 | 3;
-  /** Avatar accent for light-theme cards. 'emerald' (kids/adults) or 'purple' (women) */
+  accent?: 'emerald' | 'purple';
   avatarAccent?: 'emerald' | 'purple';
 }
 
 const {
+  eyebrow = 'UNDENIABLE PROOF',
+  headline = 'Real students. Real results.',
   testimonials,
-  eyebrow = 'Real Families, Real Results',
-  headline = "Don't take our word for it.",
   cols = 3,
+  accent,
   avatarAccent = 'emerald',
 } = Astro.props;
 
-const isPurple = avatarAccent === 'purple';
+const effectiveAccent = accent || avatarAccent;
+const isPurple = effectiveAccent === 'purple';
 const eyebrowColor = isPurple ? 'text-purple-600' : 'text-emerald-600';
-const quoteMarkColor = isPurple ? 'text-purple-500/10' : 'text-emerald-500/10';
-const avatarBgColor = isPurple ? 'bg-purple-50 text-purple-900' : 'bg-emerald-50 text-emerald-900';
+const headlineColor = isPurple ? 'text-purple-950' : 'text-emerald-950';
+const quoteIconColor = isPurple ? 'text-purple-100' : 'text-emerald-100';
+const avatarBgColor = isPurple ? 'bg-purple-50' : 'bg-emerald-50';
+const avatarTextColor = isPurple ? 'text-purple-700' : 'text-emerald-700';
+const nameColor = isPurple ? 'text-purple-950' : 'text-emerald-950';
+const disclaimerColor = isPurple ? 'text-purple-900/40' : 'text-gray-400';
 
 const gridClass =
   cols === 1
     ? 'max-w-xl mx-auto'
     : cols === 2
       ? 'grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-4xl mx-auto'
-      : 'grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch';
+      : 'grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch';
 ---
 
 <section class="quranific-section bg-white border-b border-emerald-50">
   <div class="quranific-container">
     <div class="max-w-3xl mx-auto text-center flex flex-col items-center mb-12 md:mb-16">
-      <p class={`text-xs font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>
+      <p class:list={['text-sm font-bold tracking-widest uppercase mb-4', eyebrowColor]}>
         {eyebrow}
       </p>
       <h2
-        class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight text-balance"
+        class:list={[
+          'font-serif text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-6 text-balance',
+          headlineColor,
+        ]}
       >
         {headline}
       </h2>
@@ -59,27 +67,35 @@ const gridClass =
     <div class={gridClass}>
       {
         testimonials.map((t) => (
-          <div class="relative bg-white rounded-3xl p-8 md:p-10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col h-full group">
+          <div class="relative bg-white rounded-3xl p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col h-full group">
             <div
-              class={`absolute -top-6 -left-2 text-[10rem] font-serif ${quoteMarkColor} leading-none select-none z-0 transition-transform duration-700 group-hover:scale-110`}
+              class:list={[
+                'absolute -top-6 -left-2 text-[10rem] font-serif leading-none select-none z-0 transition-transform duration-700 group-hover:scale-110',
+                quoteIconColor,
+              ]}
               aria-hidden="true"
             >
               &ldquo;
             </div>
             <p
-              class="relative z-10 text-slate-600 text-lg leading-relaxed flex-grow mb-8"
-              set:html={t.content}
+              class="relative z-10 text-slate-600 text-base md:text-lg leading-relaxed flex-grow mb-8"
+              set:html={t.quote || t.content}
             />
             <div class="relative z-10 flex items-center gap-4 mt-auto">
               <div
-                class={`w-12 h-12 rounded-full ${avatarBgColor} flex items-center justify-center flex-shrink-0 font-bold text-sm`}
+                class:list={[
+                  'w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-sm',
+                  avatarBgColor,
+                  avatarTextColor,
+                ]}
               >
                 {t.initials}
               </div>
               <div>
-                <h4 class="font-bold text-slate-900">{t.name}</h4>
+                <h4 class:list={['font-bold', nameColor]}>{t.name}</h4>
                 <p class="text-sm text-slate-500">
-                  {t.locationAndRole} · {t.enrollmentTime}
+                  {t.location || t.locationAndRole}
+                  {t.enrollmentTime ? ` · ${t.enrollmentTime}` : ''}
                 </p>
               </div>
             </div>
@@ -88,7 +104,9 @@ const gridClass =
       }
     </div>
 
-    <p class="mt-8 text-xs text-emerald-700/40 max-w-2xl leading-relaxed">
+    <p
+      class:list={['mt-12 text-xs leading-relaxed max-w-2xl mx-auto text-center', disclaimerColor]}
+    >
       Results may vary. All reviews are verified against active student accounts. No compensation
       was provided.
     </p>
