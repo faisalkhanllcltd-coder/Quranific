@@ -1,6 +1,5 @@
 ---
 // src/components/landing/LandingOutcome.astro
-import Button from '../ui/Button.astro';
 
 interface Props {
   eyebrow?: string;
@@ -9,8 +8,6 @@ interface Props {
   body: string[];
   theme?: 'dark' | 'light';
   accent?: 'emerald' | 'purple';
-  ctaLabel?: string;
-  ctaHref?: string;
 }
 
 const {
@@ -20,8 +17,6 @@ const {
   body,
   theme = 'dark',
   accent = 'emerald',
-  ctaLabel,
-  ctaHref,
 } = Astro.props;
 
 const isDark = theme === 'dark';
@@ -77,42 +72,6 @@ const headlineColor = isDark ? 'text-white' : 'text-emerald-950';
                 }
                 set:html={body[1]}
               />
-            </div>
-          )
-        }
-
-        {
-          ctaLabel && ctaHref && (
-            <div class="mt-8">
-              <Button href={ctaHref} variant="primary">
-                {ctaLabel}
-              </Button>
-              <div class="mt-4 flex flex-wrap items-center gap-4 text-sm font-medium text-emerald-100/80">
-                <span class="flex items-center gap-1.5">
-                  <svg
-                    class={`w-4 h-4 ${isPurple ? 'text-purple-400' : 'text-emerald-400'}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  No credit card required
-                </span>
-                <span class="flex items-center gap-1.5">
-                  <svg
-                    class={`w-4 h-4 ${isPurple ? 'text-purple-400' : 'text-emerald-400'}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  100% Free Trial
-                </span>
-              </div>
             </div>
           )
         }
