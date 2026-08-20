@@ -2,37 +2,68 @@
 // src/components/ui/Button.astro
 import type { HTMLAttributes } from 'astro/types';
 
-// Accepts all standard <a> and <button> attributes (target, rel, aria-label, etc.)
 interface Props extends HTMLAttributes<'button'>, Omit<HTMLAttributes<'a'>, 'type'> {
   href?: string;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'white';
+  variant?:
+    | 'emerald'
+    | 'gold'
+    | 'whatsapp'
+    | 'white'
+    | 'primary'
+    | 'secondary'
+    | 'ghost'
+    | 'green'
+    | 'orange';
+  fullWidthOnMobile?: boolean;
 }
 
-const { href, variant = 'primary', class: className, type = 'button', ...rest } = Astro.props;
+const {
+  href,
+  variant = 'emerald',
+  class: className,
+  type = 'button',
+  fullWidthOnMobile = false,
+  ...rest
+} = Astro.props;
 
-const variants = {
-  primary: "bg-emerald-700 text-white hover:bg-emerald-800 shadow-md hover:shadow-emerald-900/20",
-  secondary: "bg-amber-500 text-white hover:bg-amber-400 shadow-md hover:shadow-amber-500/20",
-  ghost: "bg-transparent text-emerald-950 border-2 border-emerald-100 hover:border-emerald-200 hover:bg-emerald-50",
-  white: "bg-white text-emerald-950 hover:bg-emerald-50 shadow-md"
+const variants: Record<string, string> = {
+  emerald:
+    'bg-emerald-700 text-white hover:bg-emerald-800 shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/20 hover:-translate-y-0.5',
+  gold: 'bg-gold-500 text-white hover:bg-gold-600 shadow-lg shadow-gold-500/10 hover:shadow-gold-500/30 hover:-translate-y-0.5',
+  whatsapp:
+    'bg-transparent text-white border border-emerald-400/60 hover:bg-emerald-800/40 hover:-translate-y-0.5',
+  white:
+    'bg-white text-emerald-950 border border-emerald-200/80 hover:border-emerald-300 hover:bg-emerald-50/50 hover:-translate-y-0.5',
+  // Legacy aliases
+  primary:
+    'bg-emerald-700 text-white hover:bg-emerald-800 shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/20 hover:-translate-y-0.5',
+  secondary:
+    'bg-gold-500 text-white hover:bg-gold-600 shadow-lg shadow-gold-500/10 hover:shadow-gold-500/30 hover:-translate-y-0.5',
+  ghost:
+    'bg-transparent text-emerald-950 border-2 border-emerald-100 hover:border-emerald-200 hover:bg-emerald-50',
+  green:
+    'bg-emerald-700 text-white hover:bg-emerald-800 shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/20 hover:-translate-y-0.5',
+  orange:
+    'bg-gold-500 text-white hover:bg-gold-600 shadow-lg shadow-gold-500/10 hover:shadow-gold-500/30 hover:-translate-y-0.5',
 };
 
-const baseStyle = "inline-flex justify-center items-center px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 active:scale-95 text-center min-h-[44px] flex items-center justify-center";
+const baseStyle =
+  'inline-flex justify-center items-center px-6 py-3 text-sm font-semibold rounded-lg transition-all duration-300 active:scale-95 min-h-[44px]';
+const widthStyle = fullWidthOnMobile ? 'w-full sm:w-auto' : '';
 ---
-{href ? (
-  <a 
-    href={href} 
-    class:list={[baseStyle, variants[variant], className]} 
-    {...rest}
-  >
-    <slot />
-  </a>
-) : (
-  <button 
-    type={type as "button" | "submit" | "reset"} 
-    class:list={[baseStyle, variants[variant], className]} 
-    {...rest}
-  >
-    <slot />
-  </button>
-)}
+
+{
+  href ? (
+    <a href={href} class:list={[baseStyle, widthStyle, variants[variant], className]} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button
+      type={type as 'button' | 'submit' | 'reset'}
+      class:list={[baseStyle, widthStyle, variants[variant], className]}
+      {...rest}
+    >
+      <slot />
+    </button>
+  )
+}

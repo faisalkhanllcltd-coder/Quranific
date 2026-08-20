@@ -1,5 +1,6 @@
 ---
 // src/components/landing/LandingGuarantee.astro
+import Button from '../ui/Button.astro';
 
 export interface GuaranteeCard {
   title?: string;
@@ -71,12 +72,9 @@ const cardsToRender = cards || defaultCards;
         </h2>
         <p class="text-emerald-50/80 text-lg leading-relaxed mb-8" set:html={bodyText} />
         <!-- Standardized Sitewide CTA -->
-        <a
-          href={ctaHref}
-          class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-orange-500 border border-transparent rounded-full hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/30"
-        >
+        <Button href={ctaHref} variant="gold">
           {ctaLabel}
-        </a>
+        </Button>
       </div>
 
       <!-- Right Column (Premium Glassmorphism Trust Stack) -->

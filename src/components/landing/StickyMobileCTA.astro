@@ -1,5 +1,6 @@
 ---
 // src/components/landing/StickyMobileCTA.astro
+import Button from '../ui/Button.astro';
 
 interface Props {
   signupHref: string;
@@ -30,13 +31,9 @@ const { signupHref, whatsappHref } = Astro.props;
       </svg>
     </a>
 
-    <!-- PRIMARY: Sign Up (Exactly 44px tall, pill shape, text-sm) -->
-    <a
-      href={signupHref}
-      data-track-cta
-      class="flex-1 inline-flex justify-center items-center h-11 px-5 text-sm font-semibold tracking-wide rounded-full bg-emerald-600 text-white hover:bg-emerald-500 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
-    >
+    <!-- PRIMARY: Sign Up -->
+    <Button href={signupHref} data-track-cta variant="emerald" class="flex-1">
       Book Free Class
-    </a>
+    </Button>
   </div>
 </div>

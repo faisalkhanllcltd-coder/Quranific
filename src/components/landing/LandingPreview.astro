@@ -1,5 +1,6 @@
 ---
 // src/components/landing/LandingPreview.astro
+import Button from '../ui/Button.astro';
 
 interface Props {
   eyebrow?: string;
@@ -29,6 +30,8 @@ const sectionBg =
 const eyebrowColor = theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600';
 const headlineColor = theme === 'dark' ? 'text-white' : 'text-emerald-950';
 const bodyColor = theme === 'dark' ? 'text-emerald-50/80' : 'text-slate-600';
+
+const ctaVariant = theme === 'dark' ? 'gold' : 'emerald';
 ---
 
 <section class={`quranific-section ${sectionBg}`}>
@@ -52,12 +55,9 @@ const bodyColor = theme === 'dark' ? 'text-emerald-50/80' : 'text-slate-600';
             )}
             {ctaLabel && ctaHref && (
               <div class="mt-8">
-                <a
-                  href={ctaHref}
-                  class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-300 bg-orange-500 rounded-full hover:bg-orange-600 hover:shadow-xl hover:shadow-orange-500/30 hover:-translate-y-1"
-                >
+                <Button href={ctaHref} variant={ctaVariant}>
                   {ctaLabel}
-                </a>
+                </Button>
               </div>
             )}
           </div>
@@ -88,12 +88,9 @@ const bodyColor = theme === 'dark' ? 'text-emerald-50/80' : 'text-slate-600';
           {body && <p class={`text-lg max-w-3xl leading-relaxed ${bodyColor}`} set:html={body} />}
           {ctaLabel && ctaHref && (
             <div class="mt-8">
-              <a
-                href={ctaHref}
-                class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-300 bg-orange-500 rounded-full hover:bg-orange-600 hover:shadow-xl hover:shadow-orange-500/30 hover:-translate-y-1"
-              >
+              <Button href={ctaHref} variant={ctaVariant}>
                 {ctaLabel}
-              </a>
+              </Button>
             </div>
           )}
         </div>
