@@ -35,7 +35,7 @@ const { intent, h1, subhead } = Astro.props;
     <header class="mb-14 md:mb-20 flex items-center justify-between">
       <a
         href="/"
-        class="inline-flex items-center hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 rounded-lg"
+        class="inline-flex items-center hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-lg"
       >
         <img
           src="/images/quranific-logo-gold.svg"
@@ -132,9 +132,9 @@ const { intent, h1, subhead } = Astro.props;
           class="w-full bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-6 lg:p-12 flex flex-col justify-center"
         >
           <div class="flex items-center gap-2 mb-8">
-            <div class="w-8 h-8 rounded-full bg-purple-800/60 flex items-center justify-center">
+            <div class="w-8 h-8 rounded-full bg-emerald-900/50 flex items-center justify-center">
               <svg
-                class="w-4 h-4 text-purple-300"
+                class="w-4 h-4 text-emerald-300"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -147,7 +147,7 @@ const { intent, h1, subhead } = Astro.props;
                   d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
               </svg>
             </div>
-            <p class="text-xs font-bold uppercase tracking-widest text-purple-300">
+            <p class="text-xs font-bold uppercase tracking-widest text-emerald-300">
               Privacy Guaranteed
             </p>
           </div>
@@ -172,7 +172,7 @@ const { intent, h1, subhead } = Astro.props;
                 },
               ].map(({ icon, text }) => (
                 <li class="flex items-start gap-3.5 text-base sm:text-lg text-emerald-100 font-medium leading-relaxed">
-                  <span class="text-purple-300 mt-1 shrink-0" set:html={icon} />
+                  <span class="text-emerald-300 mt-1 shrink-0" set:html={icon} />
                   <span>{text}</span>
                 </li>
               ))
