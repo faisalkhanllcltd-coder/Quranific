@@ -7,16 +7,24 @@ interface Props {
   eyebrowClass?: string;
   headline: string;
   body: string;
-  painPoints: {
-    title: string;
-    text?: string;
-    description?: string;
-  }[];
+  painPoints: Array<{ title: string; description?: string; text?: string }>;
   ctaLabel?: string;
   ctaHref?: string;
+  iconBgClass?: string;
+  iconTextClass?: string;
 }
 
-const { eyebrow, eyebrowClass, headline, body, painPoints, ctaLabel, ctaHref } = Astro.props;
+const {
+  eyebrow,
+  eyebrowClass,
+  headline,
+  body,
+  painPoints,
+  ctaLabel,
+  ctaHref,
+  iconBgClass,
+  iconTextClass,
+} = Astro.props;
 ---
 
 <section class="quranific-section bg-white border-b border-emerald-50">
@@ -51,10 +59,16 @@ const { eyebrow, eyebrowClass, headline, body, painPoints, ctaLabel, ctaHref } =
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
       {
         painPoints.map((point) => (
-          <div class="relative flex flex-col p-6 rounded-2xl bg-white border border-emerald-100/80 shadow-xs transition-all hover:shadow-sm hover:border-emerald-200">
-            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-50/80 mb-4 shrink-0">
+          <div class="relative flex flex-col p-8 rounded-2xl bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)]">
+            <div
+              class:list={[
+                'w-12 h-12 rounded-full flex items-center justify-center mb-6 shrink-0',
+                iconBgClass || 'bg-emerald-50',
+                iconTextClass || 'text-emerald-500',
+              ]}
+            >
               <svg
-                class="w-5 h-5 text-emerald-800/40"
+                class="w-5 h-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
