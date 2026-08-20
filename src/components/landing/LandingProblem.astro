@@ -4,27 +4,25 @@ import Button from '../ui/Button.astro';
 
 interface Props {
   eyebrow?: string;
-  eyebrowClass?: string;
   headline: string;
   body: string;
   painPoints: Array<{ title: string; description?: string; text?: string }>;
   ctaLabel?: string;
   ctaHref?: string;
-  iconBgClass?: string;
-  iconTextClass?: string;
+  accent?: 'emerald' | 'purple';
 }
 
-const {
-  eyebrow,
-  eyebrowClass,
-  headline,
-  body,
-  painPoints,
-  ctaLabel,
-  ctaHref,
-  iconBgClass,
-  iconTextClass,
-} = Astro.props;
+const { eyebrow, headline, body, painPoints, ctaLabel, ctaHref, accent = 'emerald' } = Astro.props;
+
+const isPurple = accent === 'purple';
+const eyebrowColor = isPurple ? 'text-purple-700' : 'text-emerald-600';
+const iconBgColor = isPurple ? 'bg-purple-50' : 'bg-emerald-50';
+const iconTextColor = isPurple ? 'text-purple-600' : 'text-emerald-500';
+const titleColor = isPurple ? 'text-purple-950' : 'text-emerald-950';
+const descColor = isPurple ? 'text-purple-900/80' : 'text-emerald-800/80';
+const btnBorderColor = isPurple ? 'border-purple-200' : 'border-emerald-200';
+const btnTextColor = isPurple ? 'text-purple-700' : 'text-emerald-700';
+const btnHoverColor = isPurple ? 'hover:bg-purple-50' : 'hover:bg-emerald-50';
 ---
 
 <section class="quranific-section bg-white border-b border-emerald-50">
@@ -34,12 +32,7 @@ const {
     >
       {
         eyebrow && (
-          <p
-            class:list={[
-              'text-xs font-bold uppercase tracking-widest mb-4',
-              eyebrowClass || 'text-emerald-600',
-            ]}
-          >
+          <p class:list={['text-xs font-bold uppercase tracking-widest mb-4', eyebrowColor]}>
             {eyebrow}
           </p>
         )
@@ -63,8 +56,8 @@ const {
             <div
               class:list={[
                 'w-12 h-12 rounded-full flex items-center justify-center mb-6 shrink-0',
-                iconBgClass || 'bg-emerald-50',
-                iconTextClass || 'text-emerald-500',
+                iconBgColor,
+                iconTextColor,
               ]}
             >
               <svg
@@ -78,8 +71,10 @@ const {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">{point.title}</h3>
-            <p class="text-sm text-gray-600 leading-relaxed">{point.text || point.description}</p>
+            <h3 class:list={['text-lg font-bold mb-2', titleColor]}>{point.title}</h3>
+            <p class:list={['text-sm leading-relaxed', descColor]}>
+              {point.text || point.description}
+            </p>
           </div>
         ))
       }
@@ -88,7 +83,11 @@ const {
     {
       ctaLabel && ctaHref && (
         <div class="mt-12 flex justify-center">
-          <Button href={ctaHref} variant="white">
+          <Button
+            href={ctaHref}
+            variant="white"
+            class:list={[btnBorderColor, btnTextColor, btnHoverColor]}
+          >
             {ctaLabel}
           </Button>
         </div>
