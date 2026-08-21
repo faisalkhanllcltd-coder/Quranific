@@ -11,42 +11,42 @@ const {
 
 <dismiss-note class="block max-w-4xl mx-auto w-full">
   <div
-    class="bg-emerald-50 border border-emerald-200/70 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm text-left"
+    class="relative bg-emerald-50 border border-emerald-200/70 rounded-xl p-3 sm:p-4 pr-10 sm:pr-12 flex items-start gap-3 shadow-sm text-left"
   >
-    <div class="flex items-start sm:items-center gap-3 text-sm font-medium text-emerald-900/80">
+    <svg
+      class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+
+    <p class="text-sm font-medium text-emerald-900/80 leading-relaxed">
+      <strong class="text-emerald-950">Good to know:</strong>
+      {text}
+    </p>
+
+    <button
+      class="close-note-btn absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 text-emerald-900/40 hover:text-emerald-900 transition-colors rounded-lg hover:bg-emerald-100/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 active:scale-95"
+      aria-label="Dismiss note"
+    >
       <svg
-        class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5 sm:mt-0"
+        class="w-4 h-4"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
-        stroke-width="2"
+        stroke-width="2.5"
         aria-hidden="true"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
-      <p><strong class="text-emerald-950">Good to know:</strong> {text}</p>
-    </div>
-
-    <div class="flex items-center self-end sm:self-auto shrink-0 mt-2 sm:mt-0">
-      <button
-        class="close-note-btn shrink-0 p-1 text-emerald-900/40 hover:text-emerald-900 transition-colors rounded-lg hover:bg-emerald-100/50"
-        aria-label="Dismiss note"
-      >
-        <svg
-          class="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2.5"
-          aria-hidden="true"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-    </div>
+    </button>
   </div>
 </dismiss-note>
 
