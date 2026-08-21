@@ -12,9 +12,9 @@ import CourseCard from './CourseCard.astro';
   aria-label="Available courses"
 >
   {
-    courses.map((course) => (
+    courses.map((course, index) => (
       <div class="course-wrapper" data-category={course.category}>
-        <CourseCard course={course} />
+        <CourseCard course={course} isPriority={index < 2} />
       </div>
     ))
   }
