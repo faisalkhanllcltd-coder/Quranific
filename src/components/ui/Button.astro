@@ -4,51 +4,37 @@ import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<'button'>, Omit<HTMLAttributes<'a'>, 'type'> {
   href?: string;
-  variant?:
-    | 'emerald'
-    | 'gold'
-    | 'whatsapp'
-    | 'white'
-    | 'primary'
-    | 'secondary'
-    | 'ghost'
-    | 'green'
-    | 'orange';
+  variant?: 'primary' | 'primaryDark' | 'ghost' | 'ghostDark';
   fullWidthOnMobile?: boolean;
 }
 
 const {
   href,
-  variant = 'emerald',
+  variant = 'primary',
   class: className,
   type = 'button',
   fullWidthOnMobile = false,
   ...rest
 } = Astro.props;
 
+// primary     — green fill, white text. Use on LIGHT sections (cream/white bg).
+// primaryDark — gold fill, white text. Use on DARK sections (emerald-950 bg).
+// ghost       — transparent, thin emerald border/text. Use on LIGHT sections.
+// ghostDark   — transparent, thin white border/text. Use on DARK sections —
+//               this covers WhatsApp links too; the label/icon carries the
+//               meaning, a second variant would just be a duplicate style.
 const variants: Record<string, string> = {
-  emerald:
-    'bg-emerald-700 text-white hover:bg-emerald-800 shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/20 hover:-translate-y-0.5',
-  gold: 'bg-gold-500 text-white hover:bg-gold-600 shadow-lg shadow-gold-500/10 hover:shadow-gold-500/30 hover:-translate-y-0.5',
-  whatsapp:
-    'bg-transparent text-white border border-emerald-400/60 hover:bg-emerald-800/40 hover:-translate-y-0.5',
-  white:
-    'bg-white text-emerald-950 border border-emerald-200/80 hover:border-emerald-300 hover:bg-emerald-50/50 hover:-translate-y-0.5',
-  // Legacy aliases
-  primary:
-    'bg-emerald-700 text-white hover:bg-emerald-800 shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/20 hover:-translate-y-0.5',
-  secondary:
-    'bg-gold-500 text-white hover:bg-gold-600 shadow-lg shadow-gold-500/10 hover:shadow-gold-500/30 hover:-translate-y-0.5',
+  primary: 'bg-emerald-700 text-white hover:bg-emerald-800',
+  primaryDark: 'bg-gold-500 text-white hover:bg-gold-600',
   ghost:
-    'bg-transparent text-emerald-950 border-2 border-emerald-100 hover:border-emerald-200 hover:bg-emerald-50',
-  green:
-    'bg-emerald-700 text-white hover:bg-emerald-800 shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/20 hover:-translate-y-0.5',
-  orange:
-    'bg-gold-500 text-white hover:bg-gold-600 shadow-lg shadow-gold-500/10 hover:shadow-gold-500/30 hover:-translate-y-0.5',
+    'bg-transparent text-emerald-950 border border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300',
+  ghostDark:
+    'bg-transparent text-white border border-white/30 hover:bg-white/10 hover:border-white/50',
 };
 
 const baseStyle =
-  'inline-flex justify-center items-center px-6 py-3 text-sm font-semibold rounded-lg transition-all duration-300 active:scale-95 min-h-[44px]';
+  'inline-flex items-center justify-center px-4 py-2 text-sm font-semibold rounded-lg transition-colors duration-200 active:scale-95 min-h-[44px]';
+
 const widthStyle = fullWidthOnMobile ? 'w-full sm:w-auto' : '';
 ---
 

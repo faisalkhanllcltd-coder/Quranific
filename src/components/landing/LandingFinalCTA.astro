@@ -52,7 +52,7 @@ const eyebrowColor = accent === 'purple' ? 'text-purple-300' : 'text-emerald-400
       </p>
 
       <div class:list={['flex gap-4', showWhatsapp ? 'flex-col sm:flex-row' : '']}>
-        <Button href={ctaHref} data-track-cta variant="gold">
+        <Button href={ctaHref} data-track-cta variant="primaryDark">
           {ctaLabel}
         </Button>
 
@@ -62,7 +62,7 @@ const eyebrowColor = accent === 'purple' ? 'text-purple-300' : 'text-emerald-400
               href={SITE.whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              variant="whatsapp"
+              variant="ghostDark"
             >
               Ask a question first
             </Button>

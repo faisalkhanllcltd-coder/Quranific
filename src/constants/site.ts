@@ -89,6 +89,7 @@ export const MAIN_NAVIGATION: ReadonlyArray<NavItem> = [
   { label: 'Home', href: '/' },
   { label: 'Courses', href: '/courses' },
   { label: 'Tuition & Fee', href: '/tuition-fee' },
+  { label: 'Teachers', href: '/teachers' },
   { label: 'FAQ', href: '/faq' },
 ];
 
@@ -96,6 +97,7 @@ export const MOBILE_NAVIGATION: ReadonlyArray<NavItem> = [
   { label: 'Home', href: '/' },
   { label: 'Courses', href: '/courses' },
   { label: 'Tuition & Fee', href: '/tuition-fee' },
+  { label: 'Teachers', href: '/teachers' },
   { label: 'FAQ', href: '/faq' },
 ];
 

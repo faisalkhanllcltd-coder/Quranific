@@ -67,7 +67,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
 
 <header
   id="main-header"
-  class="sticky top-0 z-50 w-full transition-all duration-300 ease-out h-[88px] bg-transparent border-b border-transparent"
+  class="sticky top-0 z-50 w-full transition-all duration-300 ease-out h-[72px] bg-transparent border-b border-transparent"
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-full">
     <a
@@ -77,12 +77,12 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
       <img
         src="/images/quranific-logo-green.svg"
         alt="Quranific — Home"
-        width="160"
-        height="40"
+        width="128"
+        height="32"
         fetchpriority="high"
         loading="eager"
         decoding="async"
-        class="h-9 md:h-10 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+        class="h-7 md:h-8 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
       />
     </a>
 
@@ -179,21 +179,21 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
         header.classList.remove('-translate-y-full');
 
         if (currentScrollY > triggerPoint) {
-          header.classList.remove('h-[88px]', 'bg-transparent', 'border-transparent');
+          header.classList.remove('h-[72px]', 'bg-transparent', 'border-transparent');
           header.classList.add(
-            'h-[64px]',
-            'bg-white/90',
-            'backdrop-blur-2xl',
-            'border-emerald-100',
+            'h-[60px]',
+            'bg-white/60',
+            'backdrop-blur-md',
+            'border-emerald-100/50',
             'shadow-sm'
           );
         } else {
-          header.classList.add('h-[88px]', 'bg-transparent', 'border-transparent');
+          header.classList.add('h-[72px]', 'bg-transparent', 'border-transparent');
           header.classList.remove(
-            'h-[64px]',
-            'bg-white/90',
-            'backdrop-blur-2xl',
-            'border-emerald-100',
+            'h-[60px]',
+            'bg-white/60',
+            'backdrop-blur-md',
+            'border-emerald-100/50',
             'shadow-sm'
           );
         }

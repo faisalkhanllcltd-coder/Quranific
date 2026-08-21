@@ -1706,7 +1706,8 @@ const Check = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
                   reports on request
                 </div>
               </div>
-              <Button href="/funnel/signup" variant="secondary" class="w-full">Choose Growth</Button
+              <Button href="/funnel/signup" variant="primaryDark" class="w-full"
+                >Choose Growth</Button
               >
             </div>
           </div>
@@ -1746,17 +1747,22 @@ const Check = `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" str
         </p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-          <Button href="/funnel/signup" variant="white" class="w-full sm:w-auto px-10 py-5 text-lg">
+          <Button
+            href="/funnel/signup"
+            variant="primaryDark"
+            class="w-full sm:w-auto px-10 py-5 text-lg"
+          >
             Book Your Free Class
           </Button>
-          <a
+          <Button
             href={`https://wa.me/${SITE.whatsappNumber.replace(/\D/g, '')}`}
             target="_blank"
             rel="noopener"
-            class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-10 py-5 bg-transparent border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white font-bold rounded-xl transition-[color,background-color,border-color,box-shadow,opacity,transform] text-lg"
+            variant="ghostDark"
+            class="w-full sm:w-auto px-10 text-lg"
           >
             Still have questions?
-          </a>
+          </Button>
         </div>
         <p class="text-sm font-medium text-emerald-100/80">
           First class free · Full refund in month 1 · Cancel anytime
