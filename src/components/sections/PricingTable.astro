@@ -28,23 +28,6 @@
         All plans include 1-on-1 private sessions, on-demand progress reports, and our 1-Month
         Fee-Back Guarantee. No hidden fees.
       </p>
-
-      <div class="flex items-center justify-center gap-4">
-        <span class="text-sm font-bold text-emerald-950" id="label-monthly">Pay Monthly</span>
-        <label class="relative inline-flex items-center cursor-pointer">
-          <input type="checkbox" id="pricing-toggle" class="sr-only peer" />
-          <div
-            class="w-14 h-7 bg-emerald-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-[color,background-color,border-color,box-shadow,opacity,transform] peer-checked:bg-emerald-700 shadow-inner"
-          >
-          </div>
-        </label>
-        <span class="text-sm font-bold text-emerald-600/60 transition-colors" id="label-quarterly"
-          >Pay Quarterly <span
-            class="text-xs text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full ml-1 font-black"
-            >SAVE 10%</span
-          ></span
-        >
-      </div>
     </div>
 
     <div
@@ -59,20 +42,8 @@
         </p>
 
         <div class="mb-6">
-          <span
-            class="text-4xl font-black text-emerald-950 price-display"
-            data-monthly="$49"
-            data-quarterly="$44"
-          >
-            $49
-          </span>
-          <span
-            class="text-sm font-bold text-emerald-600/60 billing-text"
-            data-monthly="/month"
-            data-quarterly="/mo, billed quarterly"
-          >
-            /month
-          </span>
+          <span class="text-4xl font-black text-emerald-950"> $49 </span>
+          <span class="text-sm font-bold text-emerald-600/60"> /month </span>
         </div>
 
         <a
@@ -130,20 +101,8 @@
         </p>
 
         <div class="mb-6">
-          <span
-            class="text-4xl font-black text-white price-display"
-            data-monthly="$69"
-            data-quarterly="$62"
-          >
-            $69
-          </span>
-          <span
-            class="text-sm font-bold text-emerald-100/50 billing-text"
-            data-monthly="/month"
-            data-quarterly="/mo, billed quarterly"
-          >
-            /month
-          </span>
+          <span class="text-4xl font-black text-white"> $69 </span>
+          <span class="text-sm font-bold text-emerald-100/50"> /month </span>
         </div>
 
         <a
@@ -195,20 +154,8 @@
         </p>
 
         <div class="mb-6">
-          <span
-            class="text-4xl font-black text-emerald-950 price-display"
-            data-monthly="$115"
-            data-quarterly="$103"
-          >
-            $115
-          </span>
-          <span
-            class="text-sm font-bold text-emerald-600/60 billing-text"
-            data-monthly="/month"
-            data-quarterly="/mo, billed quarterly"
-          >
-            /month
-          </span>
+          <span class="text-4xl font-black text-emerald-950"> $115 </span>
+          <span class="text-sm font-bold text-emerald-600/60"> /month </span>
         </div>
 
         <a
@@ -263,38 +210,3 @@
     </div>
   </div>
 </section>
-
-<script>
-  const toggle = document.getElementById('pricing-toggle') as HTMLInputElement;
-  const labelMonthly = document.getElementById('label-monthly');
-  const labelQuarterly = document.getElementById('label-quarterly');
-  const priceDisplays = document.querySelectorAll('.price-display');
-  const billingTexts = document.querySelectorAll('.billing-text');
-
-  if (toggle) {
-    toggle.addEventListener('change', (e) => {
-      const isQuarterly = (e.target as HTMLInputElement).checked;
-
-      // Update Label Colors
-      if (isQuarterly) {
-        labelMonthly?.classList.replace('text-emerald-950', 'text-emerald-600/60');
-        labelQuarterly?.classList.replace('text-emerald-600/60', 'text-emerald-950');
-      } else {
-        labelMonthly?.classList.replace('text-emerald-600/60', 'text-emerald-950');
-        labelQuarterly?.classList.replace('text-emerald-950', 'text-emerald-600/60');
-      }
-
-      // Update Prices instantly based on HTML data-attributes
-      priceDisplays.forEach((display) => {
-        const el = display as HTMLElement;
-        el.textContent = isQuarterly ? el.dataset.quarterly || '' : el.dataset.monthly || '';
-      });
-
-      // Update Billing Text instantly
-      billingTexts.forEach((text) => {
-        const el = text as HTMLElement;
-        el.textContent = isQuarterly ? el.dataset.quarterly || '' : el.dataset.monthly || '';
-      });
-    });
-  }
-</script>

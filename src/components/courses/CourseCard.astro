@@ -8,17 +8,8 @@ interface Props {
 }
 const { course, isPriority = false } = Astro.props;
 
-// VIBRANT EDTECH UI: Eye-catching, premium jewel tones.
-const slugGradients: Record<string, string> = {
-  'basic-qaida': 'from-emerald-600 to-teal-500',
-  'quran-reading-with-tajweed': 'from-blue-600 to-cyan-600',
-  'quran-memorization': 'from-indigo-600 to-violet-600',
-  'advanced-tajweed-ijazah': 'from-fuchsia-700 to-pink-600',
-  'arabic-language': 'from-orange-600 to-amber-500',
-  'quran-translation-with-tafsir': 'from-rose-700 to-rose-500',
-};
-
-const gradient = slugGradients[course.slug] || 'from-emerald-600 to-teal-500';
+// UNIFIED EDGE UI: Absolute consistency. Zero visual noise.
+const gradient = 'from-emerald-800 to-emerald-600';
 
 // Dynamic routing for optimized background images
 const imageSrc = `/images/${course.slug}.webp`;

@@ -32,17 +32,8 @@ if (FX_RATES) {
 // Prepare Related Courses
 const relatedCourses = courses.filter((c) => course.relatedSlugs?.includes(c.slug));
 
-// VIBRANT EDTECH UI 6-Color Suite Mapping
-const slugGradients: Record<string, string> = {
-  'basic-qaida': 'from-emerald-600 to-teal-500',
-  'quran-reading-with-tajweed': 'from-blue-600 to-cyan-600',
-  'quran-memorization': 'from-indigo-600 to-violet-600',
-  'advanced-tajweed-ijazah': 'from-fuchsia-700 to-pink-600',
-  'arabic-language': 'from-orange-600 to-amber-500',
-  'quran-translation-with-tafsir': 'from-rose-700 to-rose-500',
-};
-
-const gradient = slugGradients[course.slug] || 'from-emerald-600 to-teal-500';
+// UNIFIED EDGE UI: Absolute consistency across the platform
+const gradient = 'from-emerald-800 to-emerald-600';
 
 // Dynamic routing for optimized background image
 const imageSrc = `/images/${course.slug}.webp`;
@@ -76,9 +67,9 @@ const schema = {
 <Page description={course.shortDesc} title={`${course.title} | Quranific`}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <!-- DYNAMIC HERO SECTION (Vibrant Overlay Engine) -->
+  <!-- DYNAMIC HERO SECTION (Unified Emerald Overlay Engine) -->
   <section
-    class="relative bg-black pt-6 pb-12 md:pt-12 md:pb-16 overflow-hidden w-full max-w-[100vw]"
+    class="relative bg-slate-950 pt-6 pb-12 md:pt-12 md:pb-16 overflow-hidden w-full max-w-[100vw]"
   >
     <!-- DYNAMIC BACKGROUND IMAGE LAYER -->
     <div class={`absolute inset-0 z-0 bg-gradient-to-br ${gradient}`}>
@@ -86,14 +77,16 @@ const schema = {
         src={imageSrc}
         onerror={`this.onerror=null;this.src='${testFallback}';`}
         alt=""
-        class="w-full h-full object-cover object-center grayscale mix-blend-overlay opacity-50"
+        class="w-full h-full object-cover object-center grayscale mix-blend-overlay opacity-25"
         aria-hidden="true"
         loading="eager"
         fetchpriority="high"
         decoding="sync"
       />
-      <!-- Pure Black Cinematic Guardrail - Clean shadow that doesn't muddy vibrant colors -->
-      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
+      <!-- Slate Cinematic Guardrail - 80% bottom, 40% middle to perfect text contrast -->
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-transparent"
+      >
       </div>
     </div>
 

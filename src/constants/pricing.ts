@@ -61,9 +61,3 @@ export const CURRENCY_META: CurrencyMeta[] = [
   { code: 'AUD', symbol: 'A$', label: 'Australia (AUD A$)' },
   { code: 'SAR', symbol: '﷼', label: 'Saudi Arabia (SAR)' },
 ];
-
-export const BILLING_DISCOUNTS = {
-  monthly: 0,
-  sixMonth: 0.05,
-  annual: 0.15,
-} as const;
