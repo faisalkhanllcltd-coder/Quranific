@@ -36,7 +36,6 @@ export const SITE = {
   // Synced with all actual mailto links across the platform
   emails: {
     support: 'hello@quranific.com',
-    scholarships: 'scholarships@quranific.com',
     careers: 'careers@quranific.com',
     partners: 'partners@quranific.com',
     privacy: 'privacy@quranific.com',
