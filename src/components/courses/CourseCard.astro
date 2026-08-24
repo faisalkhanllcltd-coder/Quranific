@@ -14,13 +14,26 @@ const gradient = 'from-emerald-800 to-emerald-600';
 // Dynamic routing for optimized background images
 const imageSrc = `/images/${course.slug}.webp`;
 const testFallback = '/images/basic-qaida.webp';
+
+// Dynamic prefix mapping to eliminate repetitive "Best for" copy
+const getPrefix = (slug: string) => {
+  if (slug === 'basic-qaida') return 'Perfect for';
+  if (slug === 'quran-reading-with-tajweed') return 'Ideal for';
+  if (slug === 'quran-memorization') return 'Recommended for';
+  if (slug === 'advanced-tajweed-ijazah') return 'Designed for';
+  if (slug === 'quran-translation-with-tafsir') return 'Great for';
+  if (slug === 'arabic-language') return 'Tailored for';
+  return 'Ideal for';
+};
 ---
 
 <div
   class="bg-white border border-emerald-100 rounded-3xl overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 hover:border-emerald-300 transition-all duration-300 group"
 >
   <!-- Coloured header banner with Image Overlay Engine -->
-  <div class={`bg-gradient-to-br ${gradient} p-8 text-white relative overflow-hidden`}>
+  <div
+    class={`bg-gradient-to-br ${gradient} p-6 sm:p-7 text-white relative overflow-hidden h-36 flex flex-col justify-between`}
+  >
     <!-- BACKGROUND IMAGE LAYER -->
     <div class="absolute inset-0 z-0">
       <img
@@ -39,53 +52,65 @@ const testFallback = '/images/basic-qaida.webp';
     </div>
 
     <!-- FOREGROUND CONTENT -->
-    <div class="flex justify-between items-start mb-6 relative z-10">
-      <span
-        class="bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full backdrop-blur-sm shadow-sm"
-      >
-        {course.level}
-      </span>
+    <div class="flex justify-between items-start gap-2 relative z-10 w-full overflow-hidden">
+      {
+        course.bestFor ? (
+          <span class="bg-gold-50/95 border border-gold-200 text-gold-700 text-[8px] sm:text-[9px] uppercase tracking-wide px-2.5 py-1 rounded-full shadow-sm whitespace-nowrap overflow-hidden text-ellipsis flex-shrink">
+            <span class="font-medium opacity-90">{getPrefix(course.slug)}:</span>{' '}
+            <span class="font-bold">{course.bestFor}</span>
+          </span>
+        ) : (
+          <span class="bg-gold-50/95 border border-gold-200 text-gold-700 text-[8px] sm:text-[9px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full shadow-sm whitespace-nowrap flex-shrink-0">
+            {course.level}
+          </span>
+        )
+      }
       {
         course.highlight && (
-          <span class="bg-white text-emerald-950 text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">
+          <span class="bg-white text-emerald-950 text-[9px] font-bold px-2.5 py-1 rounded-full shadow-sm whitespace-nowrap flex-shrink-0">
             {course.highlight}
           </span>
         )
       }
     </div>
-
-    <!-- Title and Description -->
-    <h3 class="font-serif text-3xl font-bold mb-2 relative z-10 drop-shadow-md leading-tight">
-      {course.title}
-    </h3>
-    <p class="text-[14px] text-white/90 font-medium relative z-10 drop-shadow-sm leading-relaxed">
-      {course.shortDesc}
-    </p>
   </div>
 
-  <!-- Body (Features) -->
-  <div class="p-7 pb-8 flex-1 flex flex-col relative z-10 bg-white">
-    <ul class="space-y-3 flex-1">
-      {
-        course.features.map((f) => (
-          <li class="flex items-start gap-3 text-[13px] font-medium text-emerald-900/80">
-            <div class="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 mt-0.5">
+  <!-- Middle Content Body (Edge UI) -->
+  <div class="p-5 sm:p-6 flex-grow flex flex-col bg-white">
+    <h3 class="text-xl font-bold text-emerald-950 mb-1 leading-tight">
+      {course.title}
+    </h3>
+
+    {
+      course.cardHook && (
+        <p class="text-[13px] font-bold text-gold-600 mb-2.5 tracking-wide">{course.cardHook}</p>
+      )
+    }
+
+    <p class="text-sm text-emerald-800/80 leading-relaxed mb-4">
+      {course.cardDesc || course.shortDesc}
+    </p>
+
+    {
+      course.cardOutcomes && course.cardOutcomes.length > 0 && (
+        <ul class="mb-6 space-y-2 flex-grow">
+          {course.cardOutcomes.map((outcome) => (
+            <li class="flex items-start text-[13px] text-emerald-900/90 leading-snug font-medium">
               <svg
-                class="w-3 h-3"
+                class="w-4 h-4 text-emerald-500 mr-2 flex-shrink-0 mt-0.5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                stroke-width="3"
-                aria-hidden="true"
+                stroke-width="2.5"
               >
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
               </svg>
-            </div>
-            <span set:html={f} />
-          </li>
-        ))
-      }
-    </ul>
+              <span>{outcome}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </div>
 
   <!-- Edge-to-Edge CTA Stack -->
