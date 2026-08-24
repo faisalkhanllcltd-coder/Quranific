@@ -5,16 +5,28 @@
   "description": "Online Quran Academy",
   "author": "Faisal Khan (Quranific LTD)",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "wrangler pages dev ./dist",
+    "clean": "rimraf dist .astro node_modules/.vite",
     "check": "astro check",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
     "deploy": "npm run build && wrangler pages deploy ./dist",
+    "test": "npm run test:e2e",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:update-snapshots": "playwright test --update-snapshots",
     "test:e2e:report": "playwright show-report",
+    "test:e2e:ci": "playwright install --with-deps && playwright test",
     "prepare": "husky"
   },
   "dependencies": {
@@ -48,6 +60,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-svelte": "^3.3.3",
+    "rimraf": "^5.0.5",
     "svelte-eslint-parser": "^1.6.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.58.1",
