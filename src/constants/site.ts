@@ -103,13 +103,11 @@ export const MOBILE_NAVIGATION: ReadonlyArray<NavItem> = [
 export const FOOTER_NAVIGATION = {
   academy: [
     { label: 'About Us', href: '/about' },
-    { label: 'Careers', href: '/careers' },
     { label: 'Partners', href: '/partners' },
     { label: 'Contact', href: '/contact' },
   ],
   learn: [
     { label: 'Courses', href: '/courses' },
-    { label: 'How It Works', href: '/how-it-works' },
     { label: 'Expert Teachers', href: '/teachers' },
     { label: 'Tuition & Fee', href: '/tuition-fee' },
     { label: 'Blog', href: '/blog' },
