@@ -64,16 +64,14 @@
   let courseNote = $state('');
 
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
-  function getBasePrice(s: string): number {
+  let basePrice = $derived.by(() => {
     const rate = liveRates?.[currency];
     if (['USD', 'AED', 'SAR'].includes(currency) || typeof rate !== 'number') {
-      return (PRICING as PricingTier)?.[currency]?.[dur]?.[s] ?? 0;
+      return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
     }
-    const usdBase = (PRICING as PricingTier)?.['USD']?.[dur]?.[s] ?? 0;
+    const usdBase = (PRICING as PricingTier)?.['USD']?.[dur]?.[sess] ?? 0;
     return Math.round(usdBase * rate);
-  }
-
-  let basePrice = $derived(getBasePrice(sess));
+  });
   let finalPrice = $derived(basePrice);
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);
   let sessPerMonth = $derived(parseInt(sess) * 4);
@@ -98,6 +96,8 @@
 </script>
 
 <div
+  id="pricing-calculator"
+  data-testid="pricing-calculator"
   class="bg-white rounded-3xl shadow-xl {cardShadow} border {cardBorder} p-6 sm:p-8 w-full min-w-0"
 >
   <h3 class="text-xl font-bold {titleColor} mb-1">Calculate your monthly fee</h3>
@@ -238,7 +238,10 @@
 
       <div class="pt-4 border-t {resultDivider} flex flex-col items-start text-left">
         <span class="text-[15px] font-bold {resultFeeLabel} mb-1">Monthly fee</span>
-        <div class="font-serif text-3xl font-bold {resultFeeVal} leading-none">
+        <div
+          data-testid="monthly-fee"
+          class="font-serif text-3xl font-bold {resultFeeVal} leading-none"
+        >
           {sym}{finalPrice}<span class="text-sm font-medium {resultFeeSub}">/mo</span>
         </div>
       </div>
