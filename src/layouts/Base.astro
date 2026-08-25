@@ -169,21 +169,30 @@ const baseSchema = {
 
     <slot name="head" />
 
-    <!-- Google Analytics (GA4) - Offloaded to Web Worker via Partytown -->
-    <script
-      type="text/partytown"
-      src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
-      is:inline></script>
+    <!-- Google Tag Manager (Partytown) -->
     <script type="text/partytown" is:inline>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        const f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-5CJMMJ29');
+    </script>
+
+    <!-- SPA Router Analytics Transponder -->
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
-
-      function gtag() {
-        // eslint-disable-next-line prefer-rest-params
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-
-      gtag('config', 'G-XXXXXXXXXX');
+      document.addEventListener('astro:page-load', () => {
+        window.dataLayer.push({
+          event: 'virtual_page_view',
+          page_path: window.location.pathname,
+          page_title: document.title,
+        });
+      });
     </script>
 
     {
@@ -210,6 +219,16 @@ const baseSchema = {
     class="bg-[#fefdf9] font-sans text-emerald-950 antialiased selection:bg-emerald-200 selection:text-emerald-950 flex flex-col min-h-screen"
     style="padding-bottom: env(safe-area-inset-bottom);"
   >
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5CJMMJ29"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"></iframe></noscript
+    >
+    <!-- End Google Tag Manager (noscript) -->
+
     <a
       href="#main-content"
       class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-emerald-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-br-lg"
