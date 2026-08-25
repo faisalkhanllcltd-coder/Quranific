@@ -1,0 +1,115 @@
+---
+// src/pages/courses/_components/CourseBentoFacts.astro
+import type { Course } from '../../../constants/courses';
+
+interface Props {
+  course: Course;
+}
+
+const { course } = Astro.props;
+---
+
+<!-- BENTO QUICK FACTS (Overlaps the Hero) -->
+<section class="relative z-20 -mt-10 md:-mt-12 px-4 sm:px-6 max-w-5xl mx-auto mb-16">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+    <!-- Age Group -->
+    <div
+      class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-emerald-100 flex flex-col xl:flex-row xl:items-center gap-3 xl:gap-4 hover:-translate-y-1 transition-transform duration-300"
+    >
+      <div
+        class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+          ></path>
+        </svg>
+      </div>
+      <div>
+        <p
+          class="text-[10px] sm:text-[11px] uppercase tracking-widest text-emerald-900/50 font-bold mb-0.5"
+        >
+          Age Group
+        </p>
+        <p class="text-sm sm:text-[15px] font-bold text-emerald-950">{course.ageRange}</p>
+      </div>
+    </div>
+
+    <!-- Pacing -->
+    <div
+      class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-emerald-100 flex flex-col xl:flex-row xl:items-center gap-3 xl:gap-4 hover:-translate-y-1 transition-transform duration-300"
+    >
+      <div
+        class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <div>
+        <p
+          class="text-[10px] sm:text-[11px] uppercase tracking-widest text-emerald-900/50 font-bold mb-0.5"
+        >
+          Pacing
+        </p>
+        <p class="text-sm sm:text-[15px] font-bold text-emerald-950">{course.duration}</p>
+      </div>
+    </div>
+
+    <!-- Group Size -->
+    <div
+      class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-emerald-100 flex flex-col xl:flex-row xl:items-center gap-3 xl:gap-4 hover:-translate-y-1 transition-transform duration-300"
+    >
+      <div
+        class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
+      </div>
+      <div>
+        <p
+          class="text-[10px] sm:text-[11px] uppercase tracking-widest text-emerald-900/50 font-bold mb-0.5"
+        >
+          Group Size
+        </p>
+        <p class="text-sm sm:text-[15px] font-bold text-emerald-950">{course.groupSize}</p>
+      </div>
+    </div>
+
+    <!-- Language -->
+    <div
+      class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-emerald-100 flex flex-col xl:flex-row xl:items-center gap-3 xl:gap-4 hover:-translate-y-1 transition-transform duration-300"
+    >
+      <div
+        class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+          ></path>
+        </svg>
+      </div>
+      <div>
+        <p
+          class="text-[10px] sm:text-[11px] uppercase tracking-widest text-emerald-900/50 font-bold mb-0.5"
+        >
+          Language
+        </p>
+        <p class="text-sm sm:text-[15px] font-bold text-emerald-950">
+          {course.instructionLanguage.join(' / ')}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

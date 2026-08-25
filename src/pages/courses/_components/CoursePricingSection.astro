@@ -1,0 +1,36 @@
+---
+// src/pages/courses/_components/CoursePricingSection.astro
+import PricingCalculator from '../../../components/blocks/PricingCalculator.svelte';
+import type { Course } from '../../../constants/courses';
+
+interface Props {
+  course: Course;
+}
+
+const { course } = Astro.props;
+---
+
+<!-- PRICING ISLAND -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+      <!-- Left Side: Sticky Title & Value Prop -->
+      <div class="lg:col-span-5 lg:sticky lg:top-32 text-left">
+        <h2
+          id={`calc-heading-${course.slug}`}
+          class="text-3xl md:text-4xl font-bold text-emerald-950 mb-4 leading-tight text-balance"
+        >
+          Calculate Your Monthly Fee
+        </h2>
+        <p class="text-emerald-800/80 text-lg mb-8 text-balance">
+          Transparent pricing. No contracts. Cancel anytime.
+        </p>
+      </div>
+
+      <!-- Right Side: The Calculator Component -->
+      <div class="lg:col-span-7 w-full">
+        <PricingCalculator client:visible />
+      </div>
+    </div>
+  </div>
+</section>

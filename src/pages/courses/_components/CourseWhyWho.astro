@@ -1,0 +1,162 @@
+---
+// src/pages/courses/_components/CourseWhyWho.astro
+import type { Course } from '../../../constants/courses';
+
+interface Props {
+  course: Course;
+}
+
+const { course } = Astro.props;
+---
+
+<!-- RICH CONTENT: WHY & WHO -->
+<section class="py-12 md:py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-8 md:gap-12 items-stretch">
+    <!-- Why This Course? Box -->
+    <div
+      class="bg-cream-50 rounded-3xl p-8 border border-emerald-100 flex flex-col justify-between"
+    >
+      <div>
+        <!-- Outcome Standalone Highlight Statement -->
+        {
+          course.outcome && (
+            <div class="text-lg font-bold text-emerald-800 bg-emerald-100/60 p-5 rounded-2xl mb-8 border border-emerald-200 shadow-sm leading-snug">
+              <span class="block text-[11px] font-bold text-emerald-900/50 uppercase tracking-widest mb-1.5">
+                Target Outcome
+              </span>
+              {course.outcome}
+            </div>
+          )
+        }
+
+        <h2 class="text-2xl font-bold text-emerald-950 mb-4">Why This Course?</h2>
+        <p class="text-emerald-800/80 leading-relaxed text-[15px] md:text-base">
+          {course.whyThisCourse}
+        </p>
+      </div>
+
+      <!-- Integrated Testimonial Quote -->
+      {
+        course.quote && (
+          <div class="mt-8 pt-6 border-t border-emerald-200/60 relative">
+            <svg
+              class="absolute top-4 left-0 w-8 h-8 text-emerald-900/5 -translate-y-1/2 -translate-x-2"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+            </svg>
+            <blockquote class="relative z-10 text-[15px] md:text-base text-emerald-900 font-medium italic leading-relaxed">
+              "{course.quote}"
+            </blockquote>
+            {course.quoteAuthor && (
+              <p class="text-[11px] uppercase tracking-wider font-bold text-emerald-700 mt-3">
+                — {course.quoteAuthor}
+              </p>
+            )}
+          </div>
+        )
+      }
+    </div>
+
+    <!-- Who is it for? Box -->
+    <div class="bg-emerald-950 text-white rounded-3xl p-8 shadow-lg flex flex-col justify-between">
+      <div>
+        <h2 class="text-2xl font-bold mb-4">Who is it for?</h2>
+        <p class="text-emerald-100/80 leading-relaxed mb-8 text-[15px] md:text-base">
+          {course.whoItsFor}
+        </p>
+
+        {
+          course.idealFor && course.idealFor.length > 0 ? (
+            <>
+              <div class="mb-8">
+                <h3 class="text-[11px] font-bold uppercase tracking-widest text-emerald-400 mb-4">
+                  Ideal For
+                </h3>
+                <ul class="space-y-3">
+                  {course.idealFor.map((item: string) => (
+                    <li class="flex items-start text-sm sm:text-[15px] text-emerald-50">
+                      <svg
+                        class="w-5 h-5 text-emerald-400 mr-3 flex-shrink-0 mt-0.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        aria-hidden="true"
+                      >
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {course.notFor && course.notFor.length > 0 && (
+                <div class="pt-6 border-t border-emerald-900/60">
+                  <h3 class="text-[11px] font-bold uppercase tracking-widest text-amber-400 mb-4">
+                    Not For
+                  </h3>
+                  <ul class="space-y-3">
+                    {course.notFor.map((item) => (
+                      <li class="flex items-start text-sm sm:text-[15px] text-emerald-100/80">
+                        <svg
+                          class="w-5 h-5 text-amber-400 mr-3 flex-shrink-0 mt-0.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                        <span>
+                          {item.text}{' '}
+                          {item.linkText && item.linkUrl && (
+                            <a
+                              href={item.linkUrl}
+                              class="text-amber-400 hover:text-amber-300 font-bold underline underline-offset-4 transition-colors ml-1"
+                            >
+                              {item.linkText} →
+                            </a>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </>
+          ) : (
+            <div>
+              <h3 class="text-lg font-bold mt-8 mb-4 text-emerald-300">Prerequisites</h3>
+              <ul class="space-y-3">
+                {course.prerequisites?.map((req: string) => (
+                  <li class="flex items-start text-sm sm:text-[15px] text-emerald-100/80">
+                    <svg
+                      class="w-5 h-5 text-emerald-400 mr-3 flex-shrink-0 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      aria-hidden="true"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>{req}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>

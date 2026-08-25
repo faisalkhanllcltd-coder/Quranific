@@ -1,0 +1,90 @@
+---
+// src/pages/faq/_components/FaqTabs.astro
+import Section from '../../../components/ui/Section.astro';
+import FAQAccordion from '../../../components/blocks/FAQAccordion.astro';
+import { faqs } from '../../../data/faqs';
+
+const tabCategories = [
+  { id: 'home', label: 'Top Questions' },
+  { id: 'pricing', label: 'Pricing & Refunds' },
+  { id: 'courses', label: 'Curriculum' },
+  { id: 'teachers', label: 'Our Teachers' },
+  { id: 'safeguarding', label: 'Safety & Privacy' },
+  { id: 'technical', label: 'Technical' },
+  { id: 'general', label: 'General' },
+];
+---
+
+<Section height={800} class="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+  {/* TAB BUTTONS */}
+  <div class="flex overflow-x-auto gap-2 no-scrollbar mb-8 pb-2">
+    {
+      tabCategories.map((category) => (
+        <button
+          data-tab-target={category.id}
+          class={`whitespace-nowrap px-6 py-2.5 rounded-full font-semibold text-sm transition-colors border ${
+            category.id === 'home'
+              ? 'bg-emerald-600 text-white border-emerald-600'
+              : 'bg-white text-emerald-900 border-emerald-200 hover:bg-emerald-50'
+          }`}
+        >
+          {category.label}
+        </button>
+      ))
+    }
+  </div>
+
+  {/* TAB PANELS */}
+  <div>
+    {
+      tabCategories.map((category) => (
+        <div data-tab-panel={category.id} class={category.id === 'home' ? 'block' : 'hidden'}>
+          <FAQAccordion hideLeftColumn={true} questions={faqs[category.id] || []} />
+        </div>
+      ))
+    }
+  </div>
+</Section>
+
+<script is:inline>
+  // Lightweight Tab Switching Logic
+  document.addEventListener('astro:page-load', () => {
+    const tabs = document.querySelectorAll('[data-tab-target]');
+    const panels = document.querySelectorAll('[data-tab-panel]');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const targetId = tab.getAttribute('data-tab-target');
+
+        // Reset all tabs to inactive state
+        tabs.forEach((t) => {
+          t.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-600');
+          t.classList.add(
+            'bg-white',
+            'text-emerald-900',
+            'border-emerald-200',
+            'hover:bg-emerald-50'
+          );
+        });
+
+        // Set clicked tab to active state
+        tab.classList.remove(
+          'bg-white',
+          'text-emerald-900',
+          'border-emerald-200',
+          'hover:bg-emerald-50'
+        );
+        tab.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
+
+        // Hide all panels
+        panels.forEach((p) => p.classList.add('hidden'));
+
+        // Show the target panel
+        const targetPanel = document.querySelector(`[data-tab-panel="${targetId}"]`);
+        if (targetPanel) {
+          targetPanel.classList.remove('hidden');
+        }
+      });
+    });
+  });
+</script>

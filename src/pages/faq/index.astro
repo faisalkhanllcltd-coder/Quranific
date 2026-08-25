@@ -1,0 +1,57 @@
+---
+export const prerender = true;
+
+// src/pages/faq/index.astro
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+
+import FaqHero from './_components/FaqHero.astro';
+import FaqTabs from './_components/FaqTabs.astro';
+import FaqSupportCard from './_components/FaqSupportCard.astro';
+
+import { faqs } from '../../data/faqs';
+
+// --- 110% SEO: DYNAMIC GOOGLE FAQ SCHEMA ---
+// This automatically transforms your array into Google's required Rich Snippet format.
+const allFaqs = Object.values(faqs).flat();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: allFaqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer.replace(/<[^>]*>?/gm, ''), // Strips HTML tags just for the schema
+    },
+  })),
+};
+---
+
+<Base
+  title="Frequently Asked Questions | Quranific"
+  description="Got questions about learning the Quran online? Find answers about our tutors, pricing, scheduling, and our 1-month money-back guarantee."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+
+  <Header />
+
+  <main
+    class="min-h-screen bg-gradient-to-b from-cream-50 to-white selection:bg-emerald-200 selection:text-emerald-950 overflow-hidden pb-12 md:pb-24 lg:pb-32"
+  >
+    <div
+      class="absolute top-0 right-1/4 w-[800px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+      <FaqHero />
+      <FaqTabs />
+      <FaqSupportCard />
+    </div>
+  </main>
+
+  <Footer />
+</Base>
