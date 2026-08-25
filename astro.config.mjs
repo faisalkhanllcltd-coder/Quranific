@@ -28,8 +28,8 @@ export default defineConfig({
     sitemap({
       // Exclude API routes, funnel, old ad paths, and paid lander routes
       filter: (page) =>
-        !['/api/', '/funnel/', '/ads/', '/for-kids', '/for-adults', '/for-women'].some((path) =>
-          page.includes(path)
+        !['/api/', '/getting-started/', '/ads/', '/for-kids', '/for-adults', '/for-women'].some(
+          (path) => page.includes(path)
         ),
     }),
 

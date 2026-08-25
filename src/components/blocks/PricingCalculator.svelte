@@ -81,7 +81,7 @@
   let queryParams = $derived(
     `?duration=${dur}&sessions=${sess}&currency=${currency}&billing=monthly&price=${finalPrice}&course=${encodeURIComponent(selectedCourse)}&note=${encodeURIComponent(courseNote)}`
   );
-  let baseHref = $derived(`/funnel/signup${queryParams}`);
+  let baseHref = $derived(`/getting-started/signup${queryParams}`);
 
   // Forward tracking parameters ONLY on click, avoiding SSR mismatch
   function handleCheckout(e: MouseEvent) {

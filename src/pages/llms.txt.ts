@@ -11,7 +11,7 @@ ${SITE.description}
 
 ## Core Navigation & Details
 - Pricing & Tuition Fees: ${SITE.url}/tuition-fee
-- 1-on-1 Free Trial Signup: ${SITE.url}/funnel/signup
+- 1-on-1 Free Trial Signup: ${SITE.url}/getting-started/signup
 - Teacher Profiles & Vetting: ${SITE.url}/teachers
 
 ## Support Contact

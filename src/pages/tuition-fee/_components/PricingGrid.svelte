@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PRICING, CURRENCY_META } from '../../constants/pricing';
+  import { PRICING, CURRENCY_META } from '../../../constants/pricing';
 
   // Build symbol lookup from the imported CURRENCY_META array
   const CURRENCY_SYMBOLS: Record<string, string> = Object.fromEntries(
@@ -19,7 +19,7 @@
 
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);
   let checkoutUrl = $derived(
-    `/funnel/signup?sessions=${selectedPlan}x&duration=${dur}&billing=monthly&currency=${currency}`
+    `/getting-started/signup?sessions=${selectedPlan}x&duration=${dur}&billing=monthly&currency=${currency}`
   );
 
   // STEP 1 — Single computation path. Every displayed number derives from
