@@ -1,0 +1,57 @@
+---
+// src/pages/about/_components/AboutMission.astro
+import Section from '../../../components/ui/Section.astro';
+---
+
+<Section
+  height={400}
+  class="py-12 md:py-24 lg:py-32 bg-emerald-950 relative overflow-hidden text-center"
+>
+  <div
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/5 rounded-full pointer-events-none"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-white/10 rounded-full pointer-events-none"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
+    <span class="text-xs font-bold tracking-[0.2em] uppercase text-amber-500 block mb-8"
+      >Our Mission</span
+    >
+
+    <p
+      class="font-serif text-4xl sm:text-5xl lg:text-6xl font-medium italic text-white leading-tight lg:leading-tight tracking-tight mb-16 text-balance mx-auto"
+    >
+      To make every Muslim child in the world grow up with a <strong
+        class="text-amber-400 not-italic font-bold">genuine love for the Quran</strong
+      >, not a fear of it.
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-3 lg:gap-4">
+      <div
+        class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm"
+      >
+        <span class="text-lg" aria-hidden="true">🧠</span> Empathy-led teaching
+      </div>
+      <div
+        class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm"
+      >
+        <span class="text-lg" aria-hidden="true">🛡️</span> Zero financial risk
+      </div>
+      <div
+        class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm"
+      >
+        <span class="text-lg" aria-hidden="true">📊</span> Full transparency
+      </div>
+      <div
+        class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-50 backdrop-blur-sm"
+      >
+        <span class="text-lg" aria-hidden="true">🤝</span> Lifelong relationship
+      </div>
+    </div>
+  </div>
+</Section>

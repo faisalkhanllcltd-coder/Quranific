@@ -1,0 +1,136 @@
+---
+// src/pages/about/_components/AboutOriginStory.astro
+import Section from '../../../components/ui/Section.astro';
+---
+
+<Section height={800} class="py-10 md:py-20 lg:py-32 bg-white border-y border-emerald-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-24 items-start">
+      <div class="lg:sticky lg:top-32">
+        <div
+          class="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
+        >
+          <span aria-hidden="true">🌙</span> Founded 2021
+        </div>
+        <h2
+          class="text-4xl lg:text-5xl font-bold text-emerald-950 tracking-tight mb-6 leading-tight"
+        >
+          How Quranific <br /><em class="font-serif italic text-emerald-700 font-medium"
+            >came to exist.</em
+          >
+        </h2>
+        <p class="text-lg text-emerald-900/80 font-medium leading-relaxed max-w-md">
+          Not a pitch deck. Not a market opportunity. A personal failure that turned into a promise,
+          and then into a platform used by thousands of families across the world.
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        <div
+          class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 lg:p-10 hover:border-emerald-200 transition-colors group"
+        >
+          <div class="flex gap-6 items-start">
+            <div
+              class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl shrink-0 group-hover:bg-emerald-700 group-hover:text-white transition-colors duration-300"
+              aria-hidden="true"
+            >
+              😔
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-emerald-950 mb-3">The problem was personal</h3>
+              <p class="text-[15px] text-emerald-900/80 leading-relaxed font-medium">
+                Omar grew up in Karachi in a household where Quran recitation was daily. When he
+                moved to London for work and started a family, that rhythm broke. The local mosque
+                was overcrowded. The teachers, though well-intentioned, used methods that made his
+                son anxious. After one session where his child cried the entire way home, <strong
+                  class="text-emerald-950"
+                  >Omar stopped sending him and told himself he'd find something better.</strong
+                > Three years passed. Nothing changed. His son was seven.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 lg:p-10 hover:border-emerald-200 transition-colors group"
+        >
+          <div class="flex gap-6 items-start">
+            <div
+              class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl shrink-0 group-hover:bg-emerald-700 group-hover:text-white transition-colors duration-300"
+              aria-hidden="true"
+            >
+              🔍
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-emerald-950 mb-3">
+                The research revealed a broken market
+              </h3>
+              <p class="text-[15px] text-emerald-900/80 leading-relaxed font-medium">
+                When Omar finally looked for online alternatives in 2020, he found platforms that
+                were either cheap with inconsistent quality, or expensive with no accountability. <strong
+                  class="text-emerald-950"
+                  >Every platform treated the Quran like a subject to pass, not a relationship to
+                  build.</strong
+                > Teacher turnover was constant. Progress reporting was nonexistent. He interviewed 40
+                families. Every single one described the exact same frustration.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 lg:p-10 hover:border-emerald-200 transition-colors group"
+        >
+          <div class="flex gap-6 items-start">
+            <div
+              class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl shrink-0 group-hover:bg-emerald-700 group-hover:text-white transition-colors duration-300"
+              aria-hidden="true"
+            >
+              🛠️
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-emerald-950 mb-3">
+                Built from the parent's chair, not the CEO's desk
+              </h3>
+              <p class="text-[15px] text-emerald-900/80 leading-relaxed font-medium">
+                Quranific was designed by sitting in the problem, not above it. Every feature (the <strong
+                  class="text-emerald-950">make-up class guarantee</strong
+                >, the <strong class="text-emerald-950">on-demand progress report</strong>, the <strong
+                  class="text-emerald-950">dedicated single teacher</strong
+                >) came from a real gap that a real parent identified. The first 50 families were
+                enrolled personally by Omar. He sat in on sessions. He read every feedback note. He
+                still does.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 lg:p-10 hover:border-emerald-200 transition-colors group"
+        >
+          <div class="flex gap-6 items-start">
+            <div
+              class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl shrink-0 group-hover:bg-emerald-700 group-hover:text-white transition-colors duration-300"
+              aria-hidden="true"
+            >
+              🌍
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-emerald-950 mb-3">
+                What started as one family became thousands
+              </h3>
+              <p class="text-[15px] text-emerald-900/80 leading-relaxed font-medium">
+                The growth was entirely word of mouth. No advertising for the first 18 months: just
+                parents sharing with other parents in WhatsApp groups across London, Houston, Dubai,
+                and Toronto. <strong class="text-emerald-950"
+                  >Within two years, Quranific was serving families in 22 countries.</strong
+                > The insight was simple: every Muslim diaspora parent carries the same quiet guilt. We
+                just decided to finally take it off their hands.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>

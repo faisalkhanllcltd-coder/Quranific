@@ -1,0 +1,132 @@
+---
+// src/pages/about/_components/AboutGrowth.astro
+import Section from '../../../components/ui/Section.astro';
+---
+
+<Section height={500} class="py-10 md:py-20 lg:py-32 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-center">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-emerald-100 border border-emerald-100 rounded-3xl overflow-hidden shadow-sm"
+      >
+        <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors">
+          <div class="font-serif text-lg lg:text-xl font-bold text-emerald-700 mb-2 leading-tight">
+            Trusted by families<br />across the UK, US, and UAE
+          </div>
+          <div class="text-sm font-semibold text-emerald-900/70 uppercase tracking-wide">
+            Families enrolled
+          </div>
+        </div>
+        <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors">
+          <div class="font-serif text-4xl lg:text-5xl font-bold text-emerald-700 mb-2">22</div>
+          <div class="text-sm font-semibold text-emerald-900/70 uppercase tracking-wide">
+            Countries
+          </div>
+        </div>
+        <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors">
+          <div class="font-serif text-4xl lg:text-5xl font-bold text-emerald-700 mb-2">
+            94<span class="text-3xl text-amber-500">%</span>
+          </div>
+          <div class="text-sm font-semibold text-emerald-900/70 uppercase tracking-wide">
+            Retention (mo 1)
+          </div>
+        </div>
+        <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors">
+          <div class="font-serif text-4xl lg:text-5xl font-bold text-emerald-700 mb-2">
+            4.9<span class="text-3xl text-amber-500">★</span>
+          </div>
+          <div class="text-sm font-semibold text-emerald-900/70 uppercase tracking-wide">
+            Average rating
+          </div>
+        </div>
+        <div class="bg-cream-50 p-8 text-center hover:bg-white transition-colors">
+          <div class="font-serif text-4xl lg:text-5xl font-bold text-emerald-700 mb-2">48</div>
+          <div class="text-sm font-semibold text-emerald-900/70 uppercase tracking-wide">
+            Active teachers
+          </div>
+        </div>
+        <div
+          class="bg-cream-50 p-8 text-center hover:bg-white transition-colors relative overflow-hidden"
+        >
+          <div class="absolute inset-0 bg-amber-50 opacity-50 pointer-events-none"></div>
+          <div class="font-serif text-4xl lg:text-5xl font-bold text-amber-700 mb-2 relative z-10">
+            0
+          </div>
+          <div class="text-sm font-bold text-amber-600 uppercase tracking-wide relative z-10">
+            Ads ever run
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3"
+          >Our Growth</span
+        >
+        <h2 class="text-4xl font-bold text-emerald-950 mb-6 tracking-tight leading-tight">
+          Built without <br /><em class="font-serif italic text-emerald-700 font-medium"
+            >a single advertisement.</em
+          >
+        </h2>
+        <p class="text-lg text-emerald-900/80 font-medium mb-10">
+          Every family that found Quranific was sent by another family. That is the only metric we
+          truly care about: whether parents trust us enough to recommend us.
+        </p>
+
+        <div class="space-y-4">
+          <div
+            class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-5 hover:bg-emerald-50 hover:border-emerald-200 transition-colors"
+          >
+            <div
+              class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 shrink-0"
+            >
+              2021
+            </div>
+            <p class="text-[14px] font-medium text-emerald-800/80">
+              <strong class="text-emerald-950">Quranific founded.</strong> First 12 families enrolled
+              personally by the founder.
+            </p>
+          </div>
+          <div
+            class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-5 hover:bg-emerald-50 hover:border-emerald-200 transition-colors"
+          >
+            <div
+              class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 shrink-0"
+            >
+              2022
+            </div>
+            <p class="text-[14px] font-medium text-emerald-800/80">
+              <strong class="text-emerald-950">500 families.</strong> First international expansion: UAE,
+              Canada, Australia.
+            </p>
+          </div>
+          <div
+            class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-5 hover:bg-emerald-50 hover:border-emerald-200 transition-colors"
+          >
+            <div
+              class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 shrink-0"
+            >
+              2023
+            </div>
+            <p class="text-[14px] font-medium text-emerald-800/80">
+              <strong class="text-emerald-950">1,400 families.</strong> Teacher vetting formalised. Safeguarding
+              policy launched.
+            </p>
+          </div>
+          <div
+            class="bg-cream-50 border border-emerald-100 rounded-2xl p-5 flex items-start gap-5 hover:bg-emerald-50 hover:border-emerald-200 transition-colors"
+          >
+            <div
+              class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 shrink-0"
+            >
+              2024
+            </div>
+            <p class="text-[14px] font-medium text-emerald-800/80">
+              Trusted by families across the UK, US, and UAE. 22 countries. Adult learning launched.
+              Zero ad spend.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>

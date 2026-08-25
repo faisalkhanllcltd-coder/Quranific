@@ -1,0 +1,151 @@
+---
+// src/pages/about/_components/AboutPrinciples.astro
+import Section from '../../../components/ui/Section.astro';
+
+const Icons = {
+  heart: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>`,
+  eye: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`,
+  users: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`,
+  shieldCheck: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
+};
+---
+
+<Section height={800} class="py-10 md:py-20 lg:py-32 bg-cream-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-16 max-w-2xl">
+      <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3"
+        >What We Believe</span
+      >
+      <h2 class="text-4xl lg:text-5xl font-bold text-emerald-950 mb-6 tracking-tight leading-tight">
+        The principles behind <br /><em class="font-serif italic text-emerald-700 font-medium"
+          >every decision we make.</em
+        >
+      </h2>
+      <p class="text-lg text-emerald-900/80 font-medium">
+        These are not marketing words. They are the constraints we apply when we face hard choices
+        about how to build Quranific.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
+      <div
+        class="bg-white rounded-2xl border border-emerald-100 p-8 lg:p-10 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group"
+      >
+        <div
+          class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+          aria-hidden="true"
+        >
+        </div>
+        <div class="flex flex-col sm:flex-row gap-6 items-start">
+          <div
+            class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0"
+            set:html={Icons.heart}
+          />
+          <div>
+            <h3 class="text-xl font-bold text-emerald-950 mb-3">
+              A frightened child <em class="font-serif italic text-emerald-700 font-medium"
+                >cannot learn.</em
+              >
+            </h3>
+            <p class="text-[15px] text-emerald-900/80 font-medium leading-relaxed">
+              <strong class="text-emerald-950">Fear produces performance, not understanding.</strong
+              > We train every teacher to use positive reinforcement exclusively. The moment we receive
+              a complaint about a teacher raising their voice, that teacher is removed. No warnings. The
+              child's emotional safety is non-negotiable.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-2xl border border-emerald-100 p-8 lg:p-10 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group"
+      >
+        <div
+          class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+          aria-hidden="true"
+        >
+        </div>
+        <div class="flex flex-col sm:flex-row gap-6 items-start">
+          <div
+            class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0"
+            set:html={Icons.eye}
+          />
+          <div>
+            <h3 class="text-xl font-bold text-emerald-950 mb-3">
+              Parents deserve <em class="font-serif italic text-emerald-700 font-medium"
+                >full visibility.</em
+              >
+            </h3>
+            <p class="text-[15px] text-emerald-900/80 font-medium leading-relaxed">
+              The old model asked parents to trust and disappear. We reject that entirely. <strong
+                class="text-emerald-950"
+                >After every session, a progress note goes to the parent.</strong
+              > You can sit in on any class, any time, without notice. Transparency is not a feature:
+              it's the only way to earn your trust.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-2xl border border-emerald-100 p-8 lg:p-10 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group"
+      >
+        <div
+          class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+          aria-hidden="true"
+        >
+        </div>
+        <div class="flex flex-col sm:flex-row gap-6 items-start">
+          <div
+            class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0"
+            set:html={Icons.users}
+          />
+          <div>
+            <h3 class="text-xl font-bold text-emerald-950 mb-3">
+              The teacher relationship <em class="font-serif italic text-emerald-700 font-medium"
+                >is the product.</em
+              >
+            </h3>
+            <p class="text-[15px] text-emerald-900/80 font-medium leading-relaxed">
+              We could run larger classes. We could use rotating teachers to scale faster. We choose
+              not to, because <strong class="text-emerald-950"
+                >the bond between a child and their dedicated teacher is what makes Quranific
+                different.</strong
+              > That relationship turns obligation into love. We will never sacrifice it for growth.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-2xl border border-emerald-100 p-8 lg:p-10 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 relative overflow-hidden group"
+      >
+        <div
+          class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-700 to-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"
+          aria-hidden="true"
+        >
+        </div>
+        <div class="flex flex-col sm:flex-row gap-6 items-start">
+          <div
+            class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0"
+            set:html={Icons.shieldCheck}
+          />
+          <div>
+            <h3 class="text-xl font-bold text-emerald-950 mb-3">
+              Your money should follow <em class="font-serif italic text-emerald-700 font-medium"
+                >satisfaction.</em
+              >
+            </h3>
+            <p class="text-[15px] text-emerald-900/80 font-medium leading-relaxed">
+              The Quran is an amanah (a trust). <strong class="text-emerald-950"
+                >If you're not genuinely satisfied in your first paid month, we refund every penny
+                without question.</strong
+              > This is not a marketing tactic. It is a genuine belief that we have no right to keep money
+              from a family that didn't receive exactly what we promised.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>

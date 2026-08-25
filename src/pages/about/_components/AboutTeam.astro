@@ -1,0 +1,82 @@
+---
+// src/pages/about/_components/AboutTeam.astro
+import Section from '../../../components/ui/Section.astro';
+---
+
+<Section height={800} class="py-10 md:py-20 lg:py-32 bg-cream-50 border-t border-emerald-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 max-w-2xl mx-auto">
+      <span class="text-xs font-black tracking-widest uppercase text-emerald-700 block mb-3"
+        >The People Behind It</span
+      >
+      <h2 class="text-4xl font-bold text-emerald-950 mb-6 tracking-tight">
+        A small team with <br /><em class="font-serif italic text-emerald-700 font-medium"
+          >an unreasonably large mission.</em
+        >
+      </h2>
+      <p class="text-lg text-emerald-900/80 font-medium">
+        We are parents, educators, and technologists. Every person on this team either felt this
+        problem personally or has dedicated their career to solving it.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 mb-16">
+      <div
+        class="bg-white border border-emerald-100 rounded-3xl p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+      >
+        <div
+          class="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-500 flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner"
+          aria-hidden="true"
+        >
+          OF
+        </div>
+        <h3 class="text-xl font-bold text-emerald-950 mb-1">Faisal Khan</h3>
+        <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-4">
+          Founder & CEO
+        </div>
+        <p class="text-[14px] text-emerald-900/80 font-medium leading-relaxed">
+          Former product lead at an EdTech startup. Father of two. Built Quranific because he
+          couldn't find what his family needed. Reads every parent feedback note personally.
+        </p>
+      </div>
+
+      <div
+        class="bg-white border border-emerald-100 rounded-3xl p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+      >
+        <div
+          class="w-20 h-20 rounded-full bg-gradient-to-br from-purple-700 to-purple-500 flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner"
+          aria-hidden="true"
+        >
+          SA
+        </div>
+        <h3 class="text-xl font-bold text-emerald-950 mb-1">Sara Ahmed</h3>
+        <div class="text-xs font-bold text-purple-700 uppercase tracking-wider mb-4">
+          Head of Education
+        </div>
+        <p class="text-[14px] text-emerald-900/80 font-medium leading-relaxed">
+          Former primary school teacher turned Islamic education specialist. Holds an MA in
+          Educational Psychology. Designed Quranific's entire pedagogical framework.
+        </p>
+      </div>
+
+      <div
+        class="bg-white border border-emerald-100 rounded-3xl p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+      >
+        <div
+          class="w-20 h-20 rounded-full bg-gradient-to-br from-amber-600 to-amber-400 flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner"
+          aria-hidden="true"
+        >
+          KR
+        </div>
+        <h3 class="text-xl font-bold text-emerald-950 mb-1">Khaled Rashid</h3>
+        <div class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-4">
+          Head of Teachers
+        </div>
+        <p class="text-[14px] text-emerald-900/80 font-medium leading-relaxed">
+          Hafiz with 15 years of teaching experience across three countries. Personally conducts
+          every teacher vetting interview. Has approved fewer than 20% of applicants.
+        </p>
+      </div>
+    </div>
+  </div>
+</Section>

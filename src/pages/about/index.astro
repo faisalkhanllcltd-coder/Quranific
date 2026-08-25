@@ -1,0 +1,89 @@
+---
+export const prerender = true;
+
+// src/pages/about/index.astro
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+
+import AboutHero from './_components/AboutHero.astro';
+import AboutOriginStory from './_components/AboutOriginStory.astro';
+import AboutMission from './_components/AboutMission.astro';
+import AboutPrinciples from './_components/AboutPrinciples.astro';
+import AboutTeachers from './_components/AboutTeachers.astro';
+import AboutGrowth from './_components/AboutGrowth.astro';
+import AboutTeam from './_components/AboutTeam.astro';
+import AboutVision from './_components/AboutVision.astro';
+import AboutCta from './_components/AboutCta.astro';
+
+// Elite Edge SEO: Upgraded to AboutPage schema for Google E-E-A-T verification
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      name: 'Quranific',
+      url: 'https://quranific.com',
+      logo: 'https://quranific.com/logo.png',
+      description:
+        'Making Quran education accessible worldwide through live 1-on-1 online classes.',
+      foundingDate: '2021',
+      founder: {
+        '@type': 'Person',
+        name: 'Faisal Khan',
+      },
+    },
+    {
+      '@type': 'AboutPage',
+      name: 'About Quranific - Our Mission and Story',
+      description:
+        "Learn about Quranific's mission to make Quran education accessible worldwide through live online classes.",
+      publisher: {
+        '@id': 'https://quranific.com/#organization',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://quranific.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'About Us',
+          item: 'https://quranific.com/about',
+        },
+      ],
+    },
+  ],
+};
+---
+
+<Base
+  title="About Us - Quranific | Our Mission & Story"
+  description="Learn about Quranific's mission to make Quran education accessible worldwide through live 1-on-1 online classes."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+
+  <Header />
+
+  <main
+    class="font-sans bg-cream-50 selection:bg-emerald-100 selection:text-emerald-900 overflow-hidden"
+  >
+    <AboutHero />
+    <AboutOriginStory />
+    <AboutMission />
+    <AboutPrinciples />
+    <AboutTeachers />
+    <AboutGrowth />
+    <AboutTeam />
+    <AboutVision />
+    <AboutCta />
+  </main>
+
+  <Footer />
+</Base>
