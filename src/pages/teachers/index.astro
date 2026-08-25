@@ -1,0 +1,104 @@
+---
+export const prerender = true;
+
+// src/pages/teachers/index.astro
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+
+import TeachersHero from './_components/TeachersHero.astro';
+import TeachersIjazah from './_components/TeachersIjazah.astro';
+import TeachersVetting from './_components/TeachersVetting.astro';
+import TeachersGenderPrivacy from './_components/TeachersGenderPrivacy.astro';
+import TeachersFaculty from './_components/TeachersFaculty.astro';
+import TeachersCta from './_components/TeachersCta.astro';
+
+const TEACHERS = [
+  {
+    name: 'Ustadha Fatima M.',
+    gender: 'Female',
+    title: "Ijazah in Hafs 'an 'Asim",
+    experience: '8+ Years',
+    rating: '5.0',
+    students: '120+',
+    specialties: ['Child Psychology', 'Beginner Tajweed', "Women's Hifz"],
+    languages: ['English', 'Arabic'],
+    bio: 'Specializing in early childhood Islamic education, Ustadha Fatima uses interactive, gentle methods to make young learners fall in love with the Quran.',
+  },
+  {
+    name: 'Ustad Bilal A.',
+    gender: 'Male',
+    title: "Hafiz & Qari (Master's Degree)",
+    experience: '12+ Years',
+    rating: '4.9',
+    students: '300+',
+    specialties: ['Advanced Tajweed', "Qira'at", 'Adult Hifz'],
+    languages: ['English', 'Arabic', 'Urdu'],
+    bio: 'With over a decade of experience and deep academic roots, Ustad Bilal helps adult learners perfect their recitation and memorize with unbreakable retention.',
+  },
+  {
+    name: 'Ustadha Aisha R.',
+    gender: 'Female',
+    title: 'Certified Hafiza & Tajweed Expert',
+    experience: '5+ Years',
+    rating: '5.0',
+    students: '85+',
+    specialties: ['Female Only', 'Makharij Correction', 'Islamic Studies'],
+    languages: ['English', 'Urdu'],
+    bio: 'Known for her incredible patience and attention to detail, Ustadha Aisha provides a safe, comfortable, and highly effective learning environment for sisters.',
+  },
+  {
+    name: 'Ustad Omar T.',
+    gender: 'Male',
+    title: "Ijazah Holder in 3 Qira'at",
+    experience: '10+ Years',
+    rating: '4.9',
+    students: '250+',
+    specialties: ['Youth Mentorship', 'Intensive Hifz', 'Tafsir Basics'],
+    languages: ['English', 'Arabic'],
+    bio: 'Ustad Omar combines traditional rigor with modern relatable mentorship, making him a favorite among teenage students navigating their Quranic journey.',
+  },
+];
+
+// Elite Edge SEO: Upgraded AboutPage schema linking directly to instructors
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'Our Teachers - Quranific | Elite Quran Tutors',
+  description:
+    'Meet our highly vetted, Ijazah-certified Quran tutors. We offer dedicated male and female instructors specializing in Tajweed, Hifz, and child education.',
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: TEACHERS.map((t, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Person',
+        name: t.name,
+        jobTitle: t.title,
+        description: t.bio,
+      },
+    })),
+  },
+};
+---
+
+<Base
+  title="Our Teachers | Elite Certified Quran Tutors"
+  description="Learn from the top 1% of certified Quran scholars. Discover our rigorous vetting process and meet our dedicated male and female tutors."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+
+  <Header />
+
+  <main class="min-h-screen bg-cream-50 selection:bg-emerald-200 selection:text-emerald-950">
+    <TeachersHero />
+    <TeachersIjazah />
+    <TeachersVetting />
+    <TeachersGenderPrivacy />
+    <TeachersFaculty teachers={TEACHERS} />
+    <TeachersCta />
+  </main>
+
+  <Footer />
+</Base>

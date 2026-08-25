@@ -1,0 +1,47 @@
+---
+export const prerender = true;
+
+// src/pages/portals/index.astro
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+import PortalsGrid from './_components/PortalsGrid.astro';
+
+// Prevents search engines from indexing the routing hub, but allows following links
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Login Portals | Quranific',
+  description: 'Select your portal to log in to your Quranific dashboard.',
+  url: 'https://quranific.com/portals',
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'Quranific',
+    url: 'https://quranific.com',
+  },
+};
+---
+
+<Base
+  title="Login Portals | Quranific"
+  description="Select your portal to log in to your Quranific dashboard."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+  <meta name="robots" content="noindex, follow" slot="head" />
+
+  <Header />
+
+  <main
+    class="min-h-[85vh] bg-cream-50 pt-16 md:pt-32 pb-12 md:pb-24 flex items-center justify-center relative overflow-hidden selection:bg-emerald-200 selection:text-emerald-950"
+  >
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"
+      aria-hidden="true"
+    >
+    </div>
+
+    <PortalsGrid />
+  </main>
+
+  <Footer />
+</Base>

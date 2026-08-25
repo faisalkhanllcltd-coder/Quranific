@@ -1,0 +1,90 @@
+---
+// src/pages/testimonials/_components/TestimonialsGrid.astro
+import Section from '../../../components/ui/Section.astro';
+
+export interface TestimonialItem {
+  name: string;
+  role: string;
+  location: string;
+  text: string;
+  rating: number;
+}
+
+interface Props {
+  testimonials: TestimonialItem[];
+}
+
+const { testimonials } = Astro.props;
+
+const Icons = {
+  starMedium: `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>`,
+  check: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`,
+};
+---
+
+<Section
+  height={1200}
+  class="py-12 lg:py-24 px-4 sm:px-6 bg-emerald-50/50 border-t border-emerald-100/50"
+>
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl lg:text-4xl font-black text-emerald-950 mb-4 tracking-tight">
+        Real Words from Real Families
+      </h2>
+      <p class="text-lg text-emerald-700/80 font-medium">
+        Explore why families worldwide trust us for quality Quran education.
+      </p>
+    </div>
+
+    <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+      {
+        testimonials.map((testimonial) => (
+          <div class="break-inside-avoid bg-white p-8 rounded-3xl border border-emerald-100 shadow-sm hover:shadow-md transition-shadow relative group">
+            <div
+              class="absolute top-6 right-8 text-8xl font-serif text-emerald-50 leading-none select-none pointer-events-none group-hover:-translate-y-2 transition-transform duration-500"
+              aria-hidden="true"
+            >
+              "
+            </div>
+
+            <div class="relative z-10">
+              <div
+                class="flex mb-6 text-sm"
+                aria-label={`Rating: ${testimonial.rating} out of 5 stars`}
+              >
+                {[...Array(5)].map((_, i) => (
+                  <span
+                    class={i < testimonial.rating ? 'text-amber-400' : 'text-gray-300'}
+                    set:html={Icons.starMedium}
+                  />
+                ))}
+              </div>
+
+              <p class="text-emerald-900/80 text-base font-medium leading-relaxed mb-8">
+                "{testimonial.text}"
+              </p>
+
+              <div class="flex items-center gap-4 pt-6 border-t border-emerald-50">
+                <div
+                  class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-black text-lg shrink-0"
+                  aria-hidden="true"
+                >
+                  {testimonial.name[0]}
+                </div>
+                <div>
+                  <p class="font-bold text-emerald-950 text-base">{testimonial.name}</p>
+                  <div class="flex items-center gap-2 mt-0.5">
+                    <span class="text-emerald-500" set:html={Icons.check} />
+                    <p class="text-xs font-bold text-emerald-700/80 uppercase tracking-wider">
+                      {testimonial.role} • {testimonial.location}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Section>

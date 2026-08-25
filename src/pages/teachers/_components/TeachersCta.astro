@@ -1,0 +1,37 @@
+---
+// src/pages/teachers/_components/TeachersCta.astro
+import Section from '../../../components/ui/Section.astro';
+import Button from '../../../components/ui/Button.astro';
+
+const Icons = {
+  arrowRight: `<svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>`,
+};
+---
+
+<Section height={400} class="pb-12 md:pb-24 px-4 sm:px-6 relative z-10">
+  <div
+    class="max-w-4xl mx-auto bg-gradient-to-br from-emerald-800 to-emerald-950 rounded-3xl p-10 lg:p-16 text-center shadow-xl border border-emerald-800 relative overflow-hidden group"
+  >
+    <div
+      class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none transition-transform duration-700 group-hover:scale-110"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="relative z-10">
+      <h2 class="text-3xl lg:text-4xl font-black text-white mb-4 tracking-tight">
+        Find Your Perfect Match
+      </h2>
+      <p class="text-emerald-100/90 mb-10 text-lg max-w-xl mx-auto font-medium">
+        Tell us about your goals, schedule, and preferences. We will pair you with the ideal teacher
+        to start your journey.
+      </p>
+      <div class="flex justify-center">
+        <Button href="/getting-started/signup" variant="primaryDark" class="text-lg px-10 group">
+          Book Your Free Trial
+          <span set:html={Icons.arrowRight} aria-hidden="true" />
+        </Button>
+      </div>
+    </div>
+  </div>
+</Section>

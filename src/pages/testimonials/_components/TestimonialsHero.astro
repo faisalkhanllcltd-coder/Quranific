@@ -1,0 +1,55 @@
+---
+// src/pages/testimonials/_components/TestimonialsHero.astro
+const Icons = {
+  starSmall: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>`,
+};
+---
+
+<section class="pt-8 sm:pt-12 md:pt-16 pb-12 md:pb-16 lg:pb-20 px-4 sm:px-6 relative">
+  <div
+    class="absolute top-0 right-1/4 w-[600px] h-[600px] bg-amber-400/5 rounded-full blur-[120px] pointer-events-none"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div
+    class="max-w-4xl mx-auto text-center relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000"
+  >
+    <span
+      class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-800 text-xs font-bold tracking-widest uppercase rounded-full mb-8 border border-emerald-100 shadow-sm"
+    >
+      <span class="text-amber-500" set:html={Icons.starSmall} aria-hidden="true" />
+      Trusted Worldwide
+    </span>
+
+    <h1
+      class="text-5xl md:text-6xl lg:text-7xl font-black text-emerald-950 mb-6 tracking-tighter leading-[1.1] text-balance"
+    >
+      Don't just take <br /> our word for it.
+    </h1>
+
+    <p
+      class="text-lg lg:text-xl text-emerald-700/80 font-medium max-w-2xl mx-auto leading-relaxed text-balance mb-12"
+    >
+      Discover how families on every continent are building meaningful, lifelong connections with
+      the Holy Quran through our dedicated tutors.
+    </p>
+
+    <div class="flex flex-wrap justify-center gap-8 lg:gap-16">
+      <div class="text-center">
+        <div class="text-4xl font-black text-emerald-800 mb-1">4.9/5</div>
+        <div class="flex text-amber-400 justify-center mb-1 text-sm" aria-hidden="true"></div>
+        <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider">
+          Rated by parents
+        </div>
+      </div>
+      <div class="w-px h-16 bg-emerald-100 hidden sm:block" aria-hidden="true"></div>
+      <div class="text-center flex flex-col justify-center">
+        <div class="text-4xl font-black text-emerald-800 mb-1">3,000+</div>
+        <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider mt-2">
+          Students in 22 Countries
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

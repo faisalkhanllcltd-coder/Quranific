@@ -1,0 +1,100 @@
+---
+export const prerender = true;
+
+// src/pages/testimonials/index.astro
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+
+import TestimonialsHero from './_components/TestimonialsHero.astro';
+import TestimonialsVideoCard from './_components/TestimonialsVideoCard.astro';
+import TestimonialsGrid from './_components/TestimonialsGrid.astro';
+import TestimonialsCta from './_components/TestimonialsCta.astro';
+
+const TESTIMONIALS = [
+  {
+    name: 'Usama Meer',
+    role: 'Verified Parent & Student',
+    location: 'Saudi Arabia',
+    text: 'Two of my daughters are studying Quran with Quranific and we have great experience with them. Their customer support is extraordinary. They always work with you and resolve any issues. I myself am also learning Tajweed and translation through one of their awesome teachers. I recommended Quranific to many of my friends... It is kind of a service of our community now. Two thumbs up.',
+    rating: 5,
+  },
+  {
+    name: 'Amna',
+    role: 'Verified Adult Learner',
+    location: 'Germany',
+    text: 'Studying at Quranific has been a profound experience. With the guidance of my dedicated teacher, I have enhanced my Quran recitation and memorized significant portions. Additionally, I have learned about Islamic Studies, fiqah, and Salah. Memorizing various duas and prayers has improved my linguistic skills and spiritual practice. Overall, Quranific has greatly contributed to my personal and spiritual growth.',
+    rating: 5,
+  },
+  {
+    name: 'Saleem',
+    role: 'Verified Parent',
+    location: 'Pakistan',
+    text: "Our son has been making steady progress with his teacher. He has learnt to pray too alhamdulillah. The teacher also knows when to be firm with our son and when he needs to be gentle, really glad he understands our son's needs and helping him through the Qaida.",
+    rating: 5,
+  },
+  {
+    name: 'Omar & Fatima',
+    role: 'Verified Parents',
+    location: 'United Kingdom',
+    text: "We struggled to find a reliable local teacher who could accommodate our work schedules. Quranific's flexibility is a lifesaver. Our kids log in at 6 PM sharp, and their Ustadha is always there waiting with a smile. The progress in their Makharij (pronunciation) is remarkable.",
+    rating: 5,
+  },
+  {
+    name: 'Dr. Ahmed R.',
+    role: 'Verified Adult Learner',
+    location: 'United States',
+    text: "As a busy physician, my schedule is chaotic. My teacher at Quranific has been incredibly accommodating. I am finally memorizing Surah Al-Baqarah, something I thought I'd never have time for. The 1-on-1 focus means we don't waste a single minute of the session.",
+    rating: 5,
+  },
+  {
+    name: 'Zainab Ali',
+    role: 'Verified Parent',
+    location: 'Canada',
+    text: "My 7-year-old daughter was previously very shy and intimidated by Quran classes. Her female tutor at Quranific completely changed that. She uses interactive screen sharing and so much positive reinforcement. Now, my daughter reminds ME that it's time for her Quran class!",
+    rating: 5,
+  },
+];
+
+// Elite Edge SEO: Upgraded with Review array natively generated from testimonial data
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Quranific',
+  url: 'https://quranific.com',
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', reviewCount: '542' },
+  review: TESTIMONIALS.map((t) => ({
+    '@type': 'Review',
+    author: {
+      '@type': 'Person',
+      name: t.name,
+    },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: t.rating,
+      bestRating: '5',
+    },
+    reviewBody: t.text,
+  })),
+};
+---
+
+<Base
+  title="Testimonials | Success Stories from Quranific Students"
+  description="Read real stories and reviews from parents and students worldwide who have transformed their Quran reading and Tajweed with Quranific."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+
+  <Header />
+
+  <main
+    class="min-h-screen bg-cream-50 selection:bg-emerald-200 selection:text-emerald-950 overflow-hidden"
+  >
+    <TestimonialsHero />
+    <TestimonialsVideoCard />
+    <TestimonialsGrid testimonials={TESTIMONIALS} />
+    <TestimonialsCta />
+  </main>
+
+  <Footer />
+</Base>
