@@ -147,10 +147,6 @@
       "pages\\[intent]\\for-women.astro"
     ]
   },
-  "components\\landing\\LandingFinalCTA.astro": {
-    "count": 0,
-    "importingFiles": []
-  },
   "components\\landing\\LandingFooter.astro": {
     "count": 3,
     "importingFiles": [
@@ -239,18 +235,6 @@
       "pages\\[intent]\\for-women.astro"
     ]
   },
-  "components\\sections\\AdEntryPoints.astro": {
-    "count": 0,
-    "importingFiles": []
-  },
-  "components\\sections\\AdultCTA.astro": {
-    "count": 0,
-    "importingFiles": []
-  },
-  "components\\sections\\BlogGrid.astro": {
-    "count": 0,
-    "importingFiles": []
-  },
   "components\\sections\\CourseGrid.astro": {
     "count": 2,
     "importingFiles": ["components\\courses\\CourseGrid.astro", "pages\\courses\\index.astro"]
@@ -266,9 +250,8 @@
     ]
   },
   "components\\sections\\FinalCTA.astro": {
-    "count": 5,
+    "count": 4,
     "importingFiles": [
-      "components\\landing\\LandingFinalCTA.astro",
       "pages\\contact.astro",
       "pages\\courses\\index.astro",
       "pages\\courses\\[slug].astro",
@@ -284,20 +267,12 @@
     "importingFiles": ["pages\\index.astro"]
   },
   "components\\sections\\PageHero.astro": {
-    "count": 3,
-    "importingFiles": [
-      "components\\sections\\TuitionHero.astro",
-      "pages\\courses\\index.astro",
-      "pages\\tuition-fee.astro"
-    ]
+    "count": 2,
+    "importingFiles": ["pages\\courses\\index.astro", "pages\\tuition-fee.astro"]
   },
   "components\\sections\\PainPoints.astro": {
     "count": 1,
     "importingFiles": ["pages\\index.astro"]
-  },
-  "components\\sections\\PricingTable.astro": {
-    "count": 0,
-    "importingFiles": []
   },
   "components\\sections\\QuranificDifference.astro": {
     "count": 1,
@@ -307,25 +282,13 @@
     "count": 1,
     "importingFiles": ["pages\\tuition-fee.astro"]
   },
-  "components\\sections\\TeacherGrid.astro": {
-    "count": 0,
-    "importingFiles": []
-  },
   "components\\sections\\TestimonialGrid.astro": {
     "count": 1,
     "importingFiles": ["pages\\index.astro"]
   },
-  "components\\sections\\TuitionHero.astro": {
-    "count": 0,
-    "importingFiles": []
-  },
   "components\\sections\\TuitionPlans.astro": {
     "count": 1,
     "importingFiles": ["pages\\tuition-fee.astro"]
-  },
-  "components\\sections\\ValuePillars.astro": {
-    "count": 0,
-    "importingFiles": []
   },
   "components\\sections\\WhatsIncluded.astro": {
     "count": 1,
@@ -346,12 +309,8 @@
       "pages\\tuition-fee.astro"
     ]
   },
-  "components\\ui\\Badge.astro": {
-    "count": 0,
-    "importingFiles": []
-  },
   "components\\ui\\Button.astro": {
-    "count": 26,
+    "count": 24,
     "importingFiles": [
       "components\\contact\\SmartContactForm.astro",
       "components\\global\\Header.astro",
@@ -359,14 +318,12 @@
       "components\\landing\\heroes\\HeroKids.astro",
       "components\\landing\\heroes\\HeroWomen.astro",
       "components\\landing\\LandingCTA.astro",
-      "components\\landing\\LandingFinalCTA.astro",
       "components\\landing\\LandingGuarantee.astro",
       "components\\landing\\LandingOnboarding.astro",
       "components\\landing\\LandingPreview.astro",
       "components\\landing\\LandingProblem.astro",
       "components\\landing\\LandingTrust.astro",
       "components\\landing\\StickyMobileCTA.astro",
-      "components\\sections\\AdultCTA.astro",
       "components\\sections\\PageHero.astro",
       "components\\sections\\QuranificDifference.astro",
       "components\\sections\\SiblingDiscount.astro",
@@ -393,12 +350,11 @@
     "importingFiles": ["components\\sections\\TuitionPlans.astro", "pages\\courses\\index.astro"]
   },
   "components\\ui\\Section.astro": {
-    "count": 16,
+    "count": 15,
     "importingFiles": [
       "components\\contact\\AvailabilityTable.astro",
       "components\\contact\\ContactHero.astro",
       "components\\contact\\SmartContactForm.astro",
-      "components\\sections\\AdultCTA.astro",
       "components\\sections\\HowItWorks.astro",
       "components\\sections\\QuranificDifference.astro",
       "components\\sections\\SiblingDiscount.astro",
