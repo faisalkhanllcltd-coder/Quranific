@@ -91,6 +91,33 @@ const baseSchema = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <!-- Google Tag Manager -->
+    <script is:inline>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        const f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-5CJMMJ29');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <!-- SPA Router Analytics Transponder -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      document.addEventListener('astro:page-load', function () {
+        window.dataLayer.push({
+          event: 'virtual_page_view',
+          page_path: window.location.pathname,
+          page_title: document.title,
+        });
+      });
+    </script>
     <meta name="google-site-verification" content="OH8wACNBZwBOLjyKjNHeZwKNWZD8McISfhN9wpQu0aE" />
 
     <link rel="preload" as="font" type="font/woff2" href={interVarUrl} crossorigin="anonymous" />
@@ -168,32 +195,6 @@ const baseSchema = {
     <script type="application/ld+json" set:html={JSON.stringify(baseSchema)} is:inline />
 
     <slot name="head" />
-
-    <!-- Google Tag Manager -->
-    <script is:inline>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-        const f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', 'GTM-5CJMMJ29');
-    </script>
-
-    <!-- SPA Router Analytics Transponder -->
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      document.addEventListener('astro:page-load', () => {
-        window.dataLayer.push({
-          event: 'virtual_page_view',
-          page_path: window.location.pathname,
-          page_title: document.title,
-        });
-      });
-    </script>
 
     {
       !isSlow && (
