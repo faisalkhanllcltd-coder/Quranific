@@ -1,0 +1,43 @@
+---
+import Section from '../../../components/ui/Section.astro';
+import Button from '../../../components/ui/Button.astro';
+---
+
+<Section class="bg-emerald-950 text-emerald-50 py-16 md:py-24">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div
+      class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/50 text-emerald-200 text-xs font-bold uppercase tracking-wider mb-6"
+    >
+      <span aria-hidden="true">👨‍👩‍👧‍👦</span> Family Pricing
+    </div>
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6 tracking-tight">
+      Sibling Discounts
+    </h2>
+    <p class="text-lg md:text-xl text-emerald-100/80 mb-12 max-w-2xl mx-auto text-balance">
+      Each child still gets their own dedicated 1-on-1 teacher and schedule, but your family saves
+      more.
+    </p>
+
+    <div class="grid sm:grid-cols-2 gap-6 mb-12 max-w-2xl mx-auto text-left">
+      <div class="bg-emerald-900/40 border border-emerald-800/50 rounded-2xl p-6">
+        <div class="text-emerald-400 font-bold text-lg mb-2">2nd Child</div>
+        <div class="text-4xl font-black text-white mb-2">10% off</div>
+        <p class="text-emerald-100/70 text-sm">their monthly fee</p>
+      </div>
+      <div class="bg-emerald-900/40 border border-emerald-800/50 rounded-2xl p-6">
+        <div class="text-emerald-400 font-bold text-lg mb-2">3rd Child</div>
+        <div class="text-4xl font-black text-white mb-2">20% off</div>
+        <p class="text-emerald-100/70 text-sm">their monthly fee</p>
+      </div>
+    </div>
+
+    <div
+      class="bg-emerald-900/20 border border-emerald-800/30 rounded-xl p-5 mb-10 text-sm text-emerald-200/80 max-w-2xl mx-auto"
+    >
+      <strong>Example:</strong> If your second child's plan is $50/month, the sibling discount brings
+      it to $45/month automatically. Applied at checkout &mdash; no application, no code, no request.
+    </div>
+
+    <Button href="/getting-started/signup" variant="primaryDark"> Book Your Free Class </Button>
+  </div>
+</Section>

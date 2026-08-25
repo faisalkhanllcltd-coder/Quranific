@@ -30,7 +30,7 @@ export const SITE = {
     highlight: '1 Month Free',
     suffix: 'Quran Classes!',
     linkText: 'Claim Offer &rarr;',
-    linkUrl: '/funnel/signup',
+    linkUrl: '/getting-started/signup',
   },
 
   // Synced with all actual mailto links across the platform

@@ -3,15 +3,15 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
-import HomeHero from '../components/sections/HomeHero.astro';
-import TestimonialGrid from '../components/sections/TestimonialGrid.astro';
+import HomeHero from './_home-components/HomeHero.astro';
+import TestimonialGrid from './_home-components/TestimonialGrid.astro';
 import { testimonials } from '../data/testimonials';
-import FAQAccordion from '../components/sections/FAQAccordion.astro';
+import FAQAccordion from '../components/blocks/FAQAccordion.astro';
 import { faqs } from '../data/faqs';
-import FinalCTA from '../components/sections/FinalCTA.astro';
-import PainPoints from '../components/sections/PainPoints.astro';
-import QuranificDifference from '../components/sections/QuranificDifference.astro';
-import HowItWorks from '../components/sections/HowItWorks.astro';
+import FinalCTA from '../components/blocks/FinalCTA.astro';
+import PainPoints from './_home-components/PainPoints.astro';
+import QuranificDifference from './_home-components/QuranificDifference.astro';
+import HowItWorks from './_home-components/HowItWorks.astro';
 import { howTo } from '../data/howTo';
 
 import { SITE } from '../constants/site';
@@ -24,7 +24,7 @@ const PAGE_CONTENT = {
     subtitle:
       'No crowded mosque classes. No harsh methods. No guilt. Just a gentle, qualified teacher, one child, and 30 minutes that might change everything.',
     primaryCtaText: 'Book Your Free Class',
-    primaryCtaLink: '/funnel/signup',
+    primaryCtaLink: '/getting-started/signup',
   },
 };
 

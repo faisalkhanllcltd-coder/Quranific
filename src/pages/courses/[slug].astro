@@ -3,11 +3,11 @@ import { env } from 'cloudflare:workers';
 import { courses } from '../../constants/courses';
 import Page from '../../layouts/Page.astro';
 import Breadcrumb from '../../components/seo/Breadcrumb.astro';
-import PricingCalculator from '../../components/fees/PricingCalculator.svelte';
-import TeacherTeaserBanner from '../../components/courses/TeacherTeaserBanner.astro';
-import CoursesFAQ from '../../components/courses/CoursesFAQ.astro';
-import FAQAccordion from '../../components/sections/FAQAccordion.astro';
-import FinalCTA from '../../components/sections/FinalCTA.astro';
+import PricingCalculator from '../../components/blocks/PricingCalculator.svelte';
+import TeacherTeaserBanner from '../../components/blocks/TeacherTeaserBanner.astro';
+import CoursesFAQ from '../../components/blocks/CoursesFAQ.astro';
+import FAQAccordion from '../../components/blocks/FAQAccordion.astro';
+import FinalCTA from '../../components/blocks/FinalCTA.astro';
 import Button from '../../components/ui/Button.astro';
 
 const { slug } = Astro.params;

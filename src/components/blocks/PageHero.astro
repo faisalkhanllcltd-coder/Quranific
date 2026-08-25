@@ -1,0 +1,154 @@
+---
+// src/components/blocks/PageHero.astro
+// Shared page-level hero. Same visual language as HomeHero.astro.
+// Pure HTML/CSS. Zero JavaScript overhead.
+import Button from '../ui/Button.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  highlightWord?: string;
+  subtitle?: string;
+  primaryCtaText?: string;
+  primaryCtaLink?: string;
+  secondaryCtaText?: string;
+  secondaryCtaLink?: string;
+  bottomPadding?: boolean;
+}
+
+const {
+  eyebrow,
+  title,
+  highlightWord,
+  subtitle,
+  primaryCtaText = 'Book Your Free Class',
+  primaryCtaLink = '/getting-started/signup',
+  secondaryCtaText,
+  secondaryCtaLink,
+  bottomPadding = true,
+} = Astro.props;
+
+const hasVisual = Astro.slots.has('visual');
+---
+
+<section
+  class:list={[
+    'relative bg-cream-50 overflow-hidden selection:bg-emerald-200 selection:text-emerald-950 pt-8 md:pt-12 lg:pt-16',
+    bottomPadding ? 'pb-16 md:pb-24 lg:pb-32' : 'pb-4 md:pb-6 lg:pb-8',
+  ]}
+>
+  <!-- Background: dot-pattern (always visible, not gated) -->
+  <div
+    class="absolute inset-0 bg-[radial-gradient(#d1fae5_1px,transparent_1px)] [background-size:24px_24px] opacity-40"
+    aria-hidden="true"
+  >
+  </div>
+  <!-- Background: top gradient blob (always visible, not gated) -->
+  <div
+    class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-emerald-200/40 to-amber-200/40 blur-[100px] rounded-full pointer-events-none"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+    {
+      hasVisual ? (
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 items-start lg:items-center">
+          <div class="lg:col-span-7 pt-4 lg:pt-0 order-1 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+            {eyebrow && (
+              <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-emerald-200/60 text-emerald-800 text-[11px] font-bold uppercase tracking-widest rounded-full mb-8 shadow-sm">
+                {eyebrow}
+              </div>
+            )}
+
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5 leading-[1.15] text-emerald-950 text-balance max-w-3xl">
+              {title}
+              {highlightWord && (
+                <span class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-amber-500 bg-clip-text text-transparent">
+                  {highlightWord}
+                </span>
+              )}
+            </h1>
+
+            {subtitle && (
+              <p class="text-lg sm:text-xl text-emerald-800/80 mb-8 md:mb-10 leading-relaxed max-w-2xl font-medium text-balance">
+                {subtitle}
+              </p>
+            )}
+
+            <slot name="checklist" />
+
+            {(primaryCtaText || secondaryCtaText) && (
+              <div class="flex flex-col sm:flex-row gap-3 mt-6">
+                {primaryCtaText && (
+                  <Button href={primaryCtaLink} variant="primary" class="w-full sm:w-auto">
+                    {primaryCtaText}
+                  </Button>
+                )}
+                {secondaryCtaText && secondaryCtaLink && (
+                  <Button href={secondaryCtaLink} variant="ghost" class="w-full sm:w-auto">
+                    {secondaryCtaText}
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div class="flex lg:col-span-5 relative h-[280px] sm:h-[400px] lg:h-[500px] items-center justify-center order-2 mt-8 lg:mt-0">
+            <div
+              class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-emerald-700/15 blur-[120px] rounded-full pointer-events-none hidden md:block"
+              aria-hidden="true"
+            />
+            <div
+              class="absolute top-[30%] right-[10%] w-3/4 h-3/4 bg-amber-400/10 blur-[100px] rounded-full pointer-events-none hidden md:block"
+              aria-hidden="true"
+            />
+            <div class="relative z-10 w-[90%] lg:w-[95%] mx-auto flex items-center justify-center drop-shadow-2xl h-full">
+              <slot name="visual" />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="max-w-3xl mx-auto text-center animate-in fade-in slide-in-from-bottom-6 duration-1000 pt-4">
+          {eyebrow && (
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-emerald-200/60 text-emerald-800 text-[11px] font-bold uppercase tracking-widest rounded-full mb-8 shadow-sm">
+              {eyebrow}
+            </div>
+          )}
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5 leading-[1.15] text-emerald-950 text-balance">
+            {title}
+            {highlightWord && (
+              <span class="bg-gradient-to-r from-emerald-700 via-emerald-600 to-amber-500 bg-clip-text text-transparent">
+                {highlightWord}
+              </span>
+            )}
+          </h1>
+
+          {subtitle && (
+            <p class="text-lg sm:text-xl text-emerald-800/80 mb-8 md:mb-10 leading-relaxed font-medium text-balance">
+              {subtitle}
+            </p>
+          )}
+
+          <slot name="checklist" />
+
+          {(primaryCtaText || secondaryCtaText) && (
+            <div class="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
+              {primaryCtaText && (
+                <Button href={primaryCtaLink} variant="primary" class="w-full sm:w-auto">
+                  {primaryCtaText}
+                </Button>
+              )}
+              {secondaryCtaText && secondaryCtaLink && (
+                <Button href={secondaryCtaLink} variant="ghost" class="w-full sm:w-auto">
+                  {secondaryCtaText}
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      )
+    }
+  </div>
+</section>

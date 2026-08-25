@@ -1,0 +1,162 @@
+---
+// src/components/blocks/heroes/HeroAdults.astro
+import Button from '../../../components/ui/Button.astro';
+
+interface Props {
+  intent: string;
+  h1: string;
+  subhead: string;
+}
+
+const { intent, h1, subhead } = Astro.props;
+---
+
+<section class="relative overflow-hidden bg-emerald-950">
+  <!-- Subtle grid texture -->
+  <div
+    class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:48px_48px] pointer-events-none"
+    aria-hidden="true"
+  >
+  </div>
+  <!-- Glow -->
+  <div
+    class="absolute top-0 right-0 w-[600px] h-[400px] bg-emerald-600/10 blur-[150px] rounded-full pointer-events-none"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="quranific-container relative z-10 py-8">
+    <!-- Ad-lander header: logo only -->
+    <header class="mb-14 md:mb-20 flex items-center justify-between">
+      <a
+        href="/"
+        class="inline-flex items-center hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-lg"
+      >
+        <img
+          src="/images/quranific-logo-gold.svg"
+          alt="Quranific Logo"
+          class="h-8 md:h-9 w-auto object-contain"
+          loading="eager"
+          decoding="async"
+        />
+      </a>
+    </header>
+
+    <div
+      class="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-center pb-16 sm:pb-20 lg:pb-24"
+    >
+      <!-- Left: headline + CTAs -->
+      <div>
+        <div
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-900/50 border border-emerald-700/50 shadow-sm mb-6"
+        >
+          <svg
+            class="w-3.5 h-3.5 text-gold-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            aria-hidden="true"
+          >
+            <path
+              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+            ></path>
+          </svg>
+          <span class="text-xs font-bold text-emerald-50 tracking-wide"
+            >Trusted by professionals in the UK, US, and UAE</span
+          >
+        </div>
+
+        <!-- Dynamic H1 per intent -->
+        <h1
+          class="font-serif text-4xl sm:text-5xl lg:text-[3.5rem] font-black text-white leading-[1.06] tracking-tight mb-5"
+        >
+          {h1}
+        </h1>
+
+        <!-- Dynamic subhead per intent -->
+        <p
+          class="text-xl md:text-2xl text-emerald-100/70 font-medium leading-relaxed mb-8 max-w-xl"
+        >
+          {subhead}
+        </p>
+
+        <!-- CTAs: Hero = variant="gold" per funnel mapping -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <Button
+            href={`/funnel/signup?source=ad_adults_${intent}`}
+            data-track-cta
+            variant="primaryDark"
+            fullWidthOnMobile
+          >
+            Book Your Free Class
+          </Button>
+        </div>
+
+        <!-- Clean Friction Killers -->
+        <div class="mt-5 flex flex-wrap items-center gap-4 text-sm font-medium text-emerald-100/80">
+          <span class="flex items-center gap-1.5">
+            <svg
+              class="w-4 h-4 text-emerald-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+            </svg>
+            No credit card required
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg
+              class="w-4 h-4 text-emerald-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+            </svg>
+            100% Free Trial
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: feature credential card -->
+      <div class="w-full mt-12 lg:mt-0 h-full flex flex-col justify-center">
+        <div
+          class="w-full bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-6 lg:p-12 flex flex-col justify-center"
+        >
+          <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-8">
+            Why professionals choose us
+          </p>
+          <ul class="space-y-8">
+            {
+              [
+                {
+                  icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+                  text: '100% private — no group classes, no awkward reading aloud',
+                },
+                {
+                  icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+                  text: 'Schedule 24/7 — evenings, weekends, lunch breaks',
+                },
+                {
+                  icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>`,
+                  text: 'Reschedule any class directly from your portal',
+                },
+                {
+                  icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+                  text: 'Start from zero — no Arabic required',
+                },
+              ].map(({ icon, text }) => (
+                <li class="flex items-start gap-3.5 text-base sm:text-lg text-emerald-100 font-medium leading-relaxed">
+                  <span class="text-emerald-400 mt-1 shrink-0" set:html={icon} />
+                  <span>{text}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

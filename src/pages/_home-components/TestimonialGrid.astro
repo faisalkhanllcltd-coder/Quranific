@@ -1,0 +1,105 @@
+---
+// src/components/blocks/TestimonialGrid.astro
+import type { Testimonial } from '../../data/testimonials';
+interface Props {
+  testimonials: Testimonial[];
+}
+const { testimonials } = Astro.props;
+---
+
+<section
+  class="py-16 md:py-24 lg:py-32 bg-[#022c22]"
+  id="testimonials"
+  aria-labelledby="testimonials-heading"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 md:mb-16 max-w-3xl mx-auto">
+      <span class="text-xs font-black tracking-widest uppercase text-emerald-400 block mb-3"
+        >Real Families. Real Results.</span
+      >
+      <h2
+        id="testimonials-heading"
+        class="text-4xl lg:text-5xl font-semibold text-white mb-5 tracking-tight text-balance"
+      >
+        Don't take our word for it.
+      </h2>
+      <p class="text-lg text-emerald-100/80 font-medium text-balance">
+        These are unedited reviews from parents across our community.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 sm:gap-8 mb-16 lg:mb-20">
+      {
+        testimonials.map((review) => (
+          <blockquote class="bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col hover:bg-white/10 transition-colors duration-300 ease-out">
+            <div
+              class="text-amber-400 text-lg tracking-widest mb-6 drop-shadow-sm"
+              aria-hidden="true"
+            >
+              ★★★★★
+            </div>
+            <p class="font-serif text-lg sm:text-xl italic text-white/95 mb-8 flex-1 leading-relaxed text-balance">
+              "{review.quote}"
+            </p>
+            <footer class="flex items-center gap-4 pt-6 border-t border-white/10">
+              <div
+                class={`w-12 h-12 rounded-full ${review.avatarColor} flex items-center justify-center font-bold text-lg shrink-0`}
+                aria-hidden="true"
+              >
+                {review.initials}
+              </div>
+              <div>
+                <cite class="font-bold text-white text-sm not-italic">{review.name}</cite>
+                <div class="text-xs text-emerald-100/60 font-medium">{review.details}</div>
+              </div>
+            </footer>
+            <div class="mt-4 text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
+              Enrolled {review.enrolled}
+            </div>
+          </blockquote>
+        ))
+      }
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div
+        class="bg-emerald-950/40 border border-emerald-800/50 rounded-3xl p-6 sm:p-8 text-center backdrop-blur-sm"
+      >
+        <div class="font-serif text-base lg:text-lg font-semibold text-white mb-2 leading-tight">
+          Trusted by families<br />across the UK, US, and UAE
+        </div>
+        <div class="text-xs sm:text-sm font-medium text-emerald-100/60 uppercase tracking-widest">
+          Global community
+        </div>
+      </div>
+      <div
+        class="bg-emerald-950/40 border border-emerald-800/50 rounded-3xl p-6 sm:p-8 text-center backdrop-blur-sm"
+      >
+        <div class="font-serif text-4xl lg:text-5xl font-semibold text-white mb-2">22</div>
+        <div class="text-xs sm:text-sm font-medium text-emerald-100/60 uppercase tracking-widest">
+          Countries served
+        </div>
+      </div>
+      <div
+        class="bg-emerald-950/40 border border-emerald-800/50 rounded-3xl p-6 sm:p-8 text-center backdrop-blur-sm"
+      >
+        <div class="font-serif text-4xl lg:text-5xl font-semibold text-white mb-2">
+          94<span class="text-amber-400 text-3xl" aria-hidden="true">%</span>
+        </div>
+        <div class="text-xs sm:text-sm font-medium text-emerald-100/60 uppercase tracking-widest">
+          Retention (Mo 1)
+        </div>
+      </div>
+      <div
+        class="bg-emerald-950/40 border border-emerald-800/50 rounded-3xl p-6 sm:p-8 text-center backdrop-blur-sm"
+      >
+        <div class="font-serif text-4xl lg:text-5xl font-semibold text-white mb-2">
+          4.9<span class="text-amber-400 text-3xl" aria-hidden="true">★</span>
+        </div>
+        <div class="text-xs sm:text-sm font-medium text-emerald-100/60 uppercase tracking-widest">
+          Average rating
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

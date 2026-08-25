@@ -1,0 +1,48 @@
+---
+// src/components/blocks/LandingPricing.astro
+import PricingCalculator from '../blocks/PricingCalculator.svelte';
+
+interface Props {
+  eyebrow?: string;
+  headline?: string;
+  body?: string;
+  accent?: 'emerald' | 'purple';
+}
+
+const {
+  eyebrow = 'TRANSPARENT PRICING',
+  headline = 'See your exact cost in 30 seconds.',
+  body = 'Use the calculator to set your schedule. What you see is exactly what you pay. No hidden setup fees, and no long-term lock-ins.',
+  accent = 'emerald',
+} = Astro.props;
+
+const isPurple = accent === 'purple';
+const eyebrowColor = isPurple ? 'text-purple-600' : 'text-emerald-600';
+const headlineColor = isPurple ? 'text-purple-950' : 'text-emerald-950';
+const bodyColor = isPurple ? 'text-purple-900/80' : 'text-emerald-800/80';
+---
+
+<section class="py-16 md:py-24 bg-slate-50">
+  <div class="max-w-7xl mx-auto px-6 md:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <!-- Left Column: Sticky Context & Value Prop -->
+      <div class="lg:col-span-4 lg:sticky lg:top-32 flex flex-col items-start">
+        <span class:list={['font-bold tracking-widest text-sm uppercase mb-3 block', eyebrowColor]}>
+          {eyebrow}
+        </span>
+        <h2 class:list={['text-4xl md:text-5xl font-bold mb-6 text-balance', headlineColor]}>
+          {headline}
+        </h2>
+        <p class:list={['text-lg leading-relaxed', bodyColor]}>
+          {body}
+        </p>
+      </div>
+
+      <!-- Right Column: The Interactive Calculator -->
+      <div class="lg:col-span-8 w-full">
+        <!-- CRITICAL: client:visible is required to hydrate the Svelte component in Astro -->
+        <PricingCalculator client:visible accent={accent} />
+      </div>
+    </div>
+  </div>
+</section>

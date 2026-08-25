@@ -1,0 +1,105 @@
+---
+import { env } from 'cloudflare:workers';
+import Section from '../../components/ui/Section.astro';
+import PricingCalculator from '../../components/blocks/PricingCalculator.svelte';
+
+import { howTo } from '../../data/howTo';
+
+let liveRates: Record<string, number> | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const FX_RATES = (env as any)?.FX_RATES;
+if (FX_RATES) {
+  try {
+    const raw = await FX_RATES.get('LATEST_RATES');
+    if (raw) liveRates = JSON.parse(raw).rates;
+  } catch (e) {
+    console.error('KV FX fetch error:', e);
+  }
+}
+---
+
+<Section
+  height={800}
+  class="py-10 md:py-20 lg:py-32 bg-white border-b border-emerald-50"
+  id="how-it-works"
+  aria-labelledby="how-it-works-heading"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <div class="grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
+      <div class="min-w-0">
+        <div
+          class="inline-flex items-center justify-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] font-bold uppercase tracking-widest rounded-full mb-6"
+        >
+          Three Simple Steps
+        </div>
+        <h2
+          id="how-it-works-heading"
+          class="text-4xl lg:text-5xl font-semibold text-emerald-950 mb-6 tracking-tight leading-tight"
+        >
+          Starting is <br /><em class="text-emerald-700 not-italic">simpler than you think.</em>
+        </h2>
+        <p class="text-lg text-emerald-900/80 font-medium mb-12 max-w-lg">
+          From booking to first lesson in under 24 hours. No paperwork. No long commitments. No
+          anxiety.
+        </p>
+
+        <div class="space-y-10 relative" role="list">
+          <div
+            class="absolute left-[1.375rem] top-[3rem] bottom-[3rem] w-0.5 bg-gradient-to-b from-emerald-200 to-transparent hidden sm:block"
+            aria-hidden="true"
+          >
+          </div>
+
+          {
+            howTo.map((step, idx) => (
+              <div class="flex gap-6 relative z-10 group" role="listitem">
+                <div
+                  class="w-12 h-12 rounded-full border-2 border-emerald-200 bg-white text-emerald-700 font-bold flex items-center justify-center shrink-0 transition-colors duration-300 ease-in-out group-hover:bg-emerald-700 group-hover:text-white group-hover:border-emerald-700"
+                  aria-hidden="true"
+                >
+                  {idx + 1}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-bold text-xl text-emerald-950 mb-2">{step.name}</h3>
+                  <p class="text-[15px] font-medium text-emerald-800/80 leading-relaxed mb-3">
+                    {step.text}
+                  </p>
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-bold uppercase tracking-wider rounded-full">
+                    <svg
+                      class="w-3.5 h-3.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    {idx === 0 ? 'Getting Started' : idx === 1 ? 'Teacher Match' : 'First Class'}
+                  </span>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="w-full min-w-0 flex items-center justify-center">
+        <PricingCalculator client:visible liveRates={liveRates} />
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style is:global>
+  /* Override content-visibility: auto from .cv-section.
+     Svelte islands using client:visible rely on IntersectionObserver,
+     which breaks when the browser skips rendering via content-visibility: auto. */
+  #how-it-works {
+    content-visibility: visible !important;
+  }
+</style>

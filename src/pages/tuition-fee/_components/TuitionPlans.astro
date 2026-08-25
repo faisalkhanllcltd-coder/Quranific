@@ -1,0 +1,64 @@
+---
+import { env } from 'cloudflare:workers';
+import Section from '../../../components/ui/Section.astro';
+import PricingGrid from './PricingGrid.svelte';
+import Note from '../../../components/ui/Note.astro';
+
+const Icons = {
+  check: `<svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`,
+};
+
+const features = [
+  { title: 'First class always free', desc: 'No credit card required' },
+  { title: 'Full-month guarantee', desc: 'Refund if unsatisfied' },
+  { title: 'Make-up guarantee', desc: 'Every absence replaced' },
+  { title: 'Progress report', desc: 'Included in every plan' },
+];
+
+let liveRates: Record<string, number> | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const FX_RATES = (env as any)?.FX_RATES;
+if (FX_RATES) {
+  try {
+    const raw = await FX_RATES.get('LATEST_RATES');
+    if (raw) liveRates = JSON.parse(raw).rates;
+  } catch (e) {
+    console.error('KV FX fetch error:', e);
+  }
+}
+---
+
+<Section class="pb-12 md:pb-24 lg:pb-32 pt-8 md:pt-10 lg:pt-12" height={900} id="plans">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-8 md:mb-10">
+      <h2
+        class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-emerald-950 tracking-tight mb-8"
+      >
+        Choose your plan.
+      </h2>
+      <Note />
+    </div>
+
+    <PricingGrid client:load liveRates={liveRates} />
+
+    <!-- Edge-Pro 4-Column Features Grid -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 max-w-5xl mx-auto mt-6"
+    >
+      {
+        features.map((feature) => (
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-white border border-emerald-100/70 shadow-[0_2px_10px_-4px_rgba(4,120,87,0.1)] hover:border-emerald-300 hover:shadow-[0_4px_16px_-4px_rgba(4,120,87,0.15)] transition-all duration-300 text-left group">
+            <div
+              class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100/50 mt-0.5 group-hover:bg-emerald-100 group-hover:text-emerald-700 transition-colors duration-300"
+              set:html={Icons.check}
+            />
+            <div class="flex flex-col gap-0.5">
+              <span class="text-sm font-bold text-emerald-950">{feature.title}</span>
+              <span class="text-sm font-medium text-emerald-700/70">{feature.desc}</span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Section>

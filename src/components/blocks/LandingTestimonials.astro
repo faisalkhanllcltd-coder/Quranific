@@ -1,0 +1,114 @@
+---
+// src/components/blocks/LandingTestimonials.astro
+
+interface Testimonial {
+  name: string;
+  initials: string;
+  quote?: string;
+  content?: string;
+  location?: string;
+  locationAndRole?: string;
+  enrollmentTime?: string;
+  theme?: 'light' | 'dark';
+}
+
+interface Props {
+  eyebrow?: string;
+  headline?: string;
+  testimonials: Testimonial[];
+  cols?: 1 | 2 | 3;
+  accent?: 'emerald' | 'purple';
+  avatarAccent?: 'emerald' | 'purple';
+}
+
+const {
+  eyebrow = 'UNDENIABLE PROOF',
+  headline = 'Real students. Real results.',
+  testimonials,
+  cols = 3,
+  accent,
+  avatarAccent = 'emerald',
+} = Astro.props;
+
+const effectiveAccent = accent || avatarAccent;
+const isPurple = effectiveAccent === 'purple';
+const eyebrowColor = isPurple ? 'text-purple-600' : 'text-emerald-600';
+const headlineColor = isPurple ? 'text-purple-950' : 'text-emerald-950';
+const quoteIconColor = isPurple ? 'text-purple-100' : 'text-emerald-100';
+const avatarBgColor = isPurple ? 'bg-purple-50' : 'bg-emerald-50';
+const avatarTextColor = isPurple ? 'text-purple-700' : 'text-emerald-700';
+const nameColor = isPurple ? 'text-purple-950' : 'text-emerald-950';
+const disclaimerColor = isPurple ? 'text-purple-900/40' : 'text-gray-400';
+
+const gridClass =
+  cols === 1
+    ? 'max-w-xl mx-auto'
+    : cols === 2
+      ? 'grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-4xl mx-auto'
+      : 'grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch';
+---
+
+<section class="quranific-section bg-white border-b border-emerald-50">
+  <div class="quranific-container">
+    <div class="max-w-3xl mx-auto text-center flex flex-col items-center mb-12 md:mb-16">
+      <p class:list={['text-sm font-bold tracking-widest uppercase mb-4', eyebrowColor]}>
+        {eyebrow}
+      </p>
+      <h2
+        class:list={[
+          'font-serif text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-6 text-balance',
+          headlineColor,
+        ]}
+      >
+        {headline}
+      </h2>
+    </div>
+
+    <div class={gridClass}>
+      {
+        testimonials.map((t) => (
+          <div class="relative bg-white rounded-3xl p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col h-full group">
+            <div
+              class:list={[
+                'absolute -top-6 -left-2 text-[10rem] font-serif leading-none select-none z-0 transition-transform duration-700 group-hover:scale-110',
+                quoteIconColor,
+              ]}
+              aria-hidden="true"
+            >
+              &ldquo;
+            </div>
+            <p
+              class="relative z-10 text-slate-600 text-base md:text-lg leading-relaxed flex-grow mb-8"
+              set:html={t.quote || t.content}
+            />
+            <div class="relative z-10 flex items-center gap-4 mt-auto">
+              <div
+                class:list={[
+                  'w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-sm',
+                  avatarBgColor,
+                  avatarTextColor,
+                ]}
+              >
+                {t.initials}
+              </div>
+              <div>
+                <h4 class:list={['font-bold', nameColor]}>{t.name}</h4>
+                <p class="text-sm text-slate-500">
+                  {t.location || t.locationAndRole}
+                  {t.enrollmentTime ? ` · ${t.enrollmentTime}` : ''}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <p
+      class:list={['mt-12 text-xs leading-relaxed max-w-2xl mx-auto text-center', disclaimerColor]}
+    >
+      Results may vary. All reviews are verified against active student accounts. No compensation
+      was provided.
+    </p>
+  </div>
+</section>
