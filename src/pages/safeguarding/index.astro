@@ -1,0 +1,308 @@
+---
+export const prerender = true;
+
+// src/pages/safeguarding/index.astro
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+import { SITE } from '../../constants/site';
+
+const lastUpdated = 'March 25, 2026';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Child Safeguarding & Protection Policy - Quranific',
+  description:
+    'Our comprehensive child safeguarding and student protection framework. Details on our background checks, 1-on-1 session safety, parent drop-in rights, and zero-tolerance protocols.',
+  url: 'https://quranific.com/safeguarding',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Quranific',
+    url: 'https://quranific.com',
+  },
+};
+---
+
+<Base
+  title="Safeguarding Policy | Trust, Safety & Child Protection | Quranific"
+  description="How Quranific protects the safety, dignity, and wellbeing of children in our online learning environment. Comprehensive vetting, 1-on-1 session rules, and parent rights."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+
+  <Header />
+
+  <main
+    class="bg-cream-50 min-h-screen selection:bg-emerald-100 selection:text-emerald-900 font-sans pb-24 md:pb-32"
+  >
+    <!-- Header Hero -->
+    <div class="pt-8 sm:pt-12 md:pt-16 pb-12 px-4 sm:px-6 border-b border-emerald-100 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <span
+          class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest rounded-full mb-6"
+        >
+          Trust &amp; Child Safety
+        </span>
+        <h1
+          class="text-4xl md:text-5xl lg:text-6xl font-black text-emerald-950 tracking-tight mb-6"
+        >
+          Safeguarding &amp; Child Protection Policy
+        </h1>
+        <p class="text-lg text-emerald-800/80 font-medium leading-relaxed">
+          At Quranific, the safety, physical welfare, and psychological well-being of every
+          student—especially young children and vulnerable learners—is our absolute highest
+          priority. This policy sets out our mandatory standards, background verification protocols,
+          and classroom conduct rules.
+        </p>
+        <div class="mt-4 text-xs font-bold text-emerald-600/70 uppercase tracking-wider">
+          Last Updated: {lastUpdated} &nbsp;•&nbsp; Applicable Worldwide
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Policy Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-12 space-y-12">
+      <!-- Section 1 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-10 border border-emerald-100/80 shadow-sm">
+        <h2 class="text-2xl font-bold text-emerald-950 mb-4 flex items-center gap-3">
+          <span
+            class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 text-sm font-black flex items-center justify-center shrink-0"
+            >1</span
+          >
+          Purpose &amp; Scope
+        </h2>
+        <p class="text-emerald-900/80 leading-relaxed font-medium mb-4">
+          This Safeguarding Policy applies to all personnel engaged by Quranific, including
+          full-time scholars, contract tutors, administrative staff, academic coordinators, and
+          senior management. It covers all interactions occurring across our platform, virtual
+          classrooms, email correspondence, and official messaging channels.
+        </p>
+        <p class="text-emerald-900/80 leading-relaxed font-medium">
+          We operate under a <strong>Zero-Tolerance Principle</strong>: any action, behavior, or
+          communication that threatens the emotional, spiritual, or physical safety of a student
+          will result in immediate suspension, contract termination, and referral to relevant
+          international law enforcement agencies.
+        </p>
+      </section>
+
+      <!-- Section 2 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-10 border border-emerald-100/80 shadow-sm">
+        <h2 class="text-2xl font-bold text-emerald-950 mb-4 flex items-center gap-3">
+          <span
+            class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 text-sm font-black flex items-center justify-center shrink-0"
+            >2</span
+          >
+          Safer Recruitment &amp; Teacher Vetting
+        </h2>
+        <p class="text-emerald-900/80 leading-relaxed font-medium mb-4">
+          Before any instructor is granted access to students, they must successfully pass our
+          exhaustive 4-stage vetting pipeline:
+        </p>
+        <ul class="space-y-3 mb-6 text-emerald-900/80 text-sm sm:text-base font-medium">
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-600 font-bold mt-0.5">✓</span>
+            <span
+              ><strong>Identity &amp; Right-to-Work Verification:</strong> Government-issued photo ID
+              checks and legal residency verification.</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-600 font-bold mt-0.5">✓</span>
+            <span
+              ><strong>Criminal Background &amp; Police Clearance:</strong> Enhanced background and criminal
+              record disclosures (such as DBS / police clearances) renewed annually.</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-600 font-bold mt-0.5">✓</span>
+            <span
+              ><strong>Scholarly &amp; Ijazah Authentication:</strong> Direct verification of certificates
+              and Sanad (chains of recitation) with issuing institutions.</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-600 font-bold mt-0.5">✓</span>
+            <span
+              ><strong>Pedagogical &amp; Psychological Assessment:</strong> Live mock teaching evaluations
+              assessing patience, tone, child psychology, and professional conduct.</span
+            >
+          </li>
+        </ul>
+        <p class="text-emerald-900/80 leading-relaxed font-medium">
+          All tutors complete mandatory child protection training covering modern online safety,
+          recognizing signs of distress, and maintaining strict professional boundaries.
+        </p>
+      </section>
+
+      <!-- Section 3 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-10 border border-emerald-100/80 shadow-sm">
+        <h2 class="text-2xl font-bold text-emerald-950 mb-4 flex items-center gap-3">
+          <span
+            class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 text-sm font-black flex items-center justify-center shrink-0"
+            >3</span
+          >
+          Online Classroom Safety &amp; Code of Conduct
+        </h2>
+        <p class="text-emerald-900/80 leading-relaxed font-medium mb-4">
+          All virtual lessons are subject to strict operational guidelines to ensure absolute
+          transparency:
+        </p>
+        <div class="grid sm:grid-cols-2 gap-4 mb-6">
+          <div class="bg-cream-50 p-4 rounded-2xl border border-emerald-100">
+            <h4 class="font-bold text-emerald-950 text-sm mb-1">Encrypted 1-on-1 Links</h4>
+            <p class="text-xs text-emerald-900/70 font-medium">
+              Classes occur solely via our secure, end-to-end encrypted video infrastructure.
+            </p>
+          </div>
+          <div class="bg-cream-50 p-4 rounded-2xl border border-emerald-100">
+            <h4 class="font-bold text-emerald-950 text-sm mb-1">No Private Communication</h4>
+            <p class="text-xs text-emerald-900/70 font-medium">
+              Tutors are strictly forbidden from contacting students on personal social media or
+              phone numbers.
+            </p>
+          </div>
+          <div class="bg-cream-50 p-4 rounded-2xl border border-emerald-100">
+            <h4 class="font-bold text-emerald-950 text-sm mb-1">Modesty &amp; Professionalism</h4>
+            <p class="text-xs text-emerald-900/70 font-medium">
+              Both teachers and students must dress respectfully and conduct sessions in well-lit,
+              open home spaces.
+            </p>
+          </div>
+          <div class="bg-cream-50 p-4 rounded-2xl border border-emerald-100">
+            <h4 class="font-bold text-emerald-950 text-sm mb-1">No Unauthorized Recording</h4>
+            <p class="text-xs text-emerald-900/70 font-medium">
+              Lessons are never recorded without explicit, written parental consent.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-10 border border-emerald-100/80 shadow-sm">
+        <h2 class="text-2xl font-bold text-emerald-950 mb-4 flex items-center gap-3">
+          <span
+            class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 text-sm font-black flex items-center justify-center shrink-0"
+            >4</span
+          >
+          Parent Rights &amp; Unannounced Drop-Ins
+        </h2>
+        <p class="text-emerald-900/80 leading-relaxed font-medium mb-4">
+          We believe in total partnership with parents. Parents and legal guardians possess the
+          following unconditional rights:
+        </p>
+        <ul class="space-y-2 text-emerald-900/80 font-medium text-sm sm:text-base mb-4">
+          <li class="flex items-start gap-2">
+            <span class="text-emerald-600 font-bold">•</span>
+            <span
+              ><strong>Unannounced Drop-Ins:</strong> Parents may sit in, observe, or listen to any live
+              class at any time without advance warning. Teachers are trained to welcome parental presence.</span
+            >
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-emerald-600 font-bold">•</span>
+            <span
+              ><strong>Gender Preference:</strong> Families have the absolute freedom to request dedicated
+              female instructors for sisters and young children, or male instructors for brothers.</span
+            >
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-emerald-600 font-bold">•</span>
+            <span
+              ><strong>Instant Tutor Reassignment:</strong> If you or your child ever feel uncomfortable
+              for any reason, we will reassign a new teacher immediately, no questions asked.</span
+            >
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section 5 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-10 border border-emerald-100/80 shadow-sm">
+        <h2 class="text-2xl font-bold text-emerald-950 mb-4 flex items-center gap-3">
+          <span
+            class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 text-sm font-black flex items-center justify-center shrink-0"
+            >5</span
+          >
+          Designated Safeguarding Lead &amp; Reporting Protocol
+        </h2>
+        <p class="text-emerald-900/80 leading-relaxed font-medium mb-4">
+          Quranific has appointed a <strong>Designated Safeguarding Lead (DSL)</strong> who oversees child
+          protection compliance and handles any reported concerns with urgent, priority attention.
+        </p>
+        <div class="bg-emerald-950 text-white rounded-2xl p-6 mb-6">
+          <h4 class="font-bold text-lg text-emerald-300 mb-2">How to Report a Concern</h4>
+          <p class="text-sm text-emerald-100/80 leading-relaxed font-medium mb-4">
+            If you witness, suspect, or experience any inappropriate conduct, breach of boundaries,
+            or safety issue, contact our safeguarding team immediately:
+          </p>
+          <div class="space-y-1 text-sm font-mono">
+            <p>
+              <strong>Safeguarding Email:</strong>
+              <a href={`mailto:${SITE.emails.support}`} class="text-emerald-400 underline"
+                >{SITE.emails.support}</a>
+            </p>
+            <p><strong>Emergency Subject:</strong> [URGENT: SAFEGUARDING CONCERN]</p>
+          </div>
+        </div>
+        <p class="text-emerald-900/80 leading-relaxed text-sm font-medium">
+          All reports are logged, investigated immediately within 12 hours, and treated with
+          absolute confidentiality.
+        </p>
+      </section>
+
+      <!-- Section 6 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-10 border border-emerald-100/80 shadow-sm">
+        <h2 class="text-2xl font-bold text-emerald-950 mb-4 flex items-center gap-3">
+          <span
+            class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 text-sm font-black flex items-center justify-center shrink-0"
+            >6</span
+          >
+          Data Protection for Minors (COPPA &amp; GDPR-K)
+        </h2>
+        <p class="text-emerald-900/80 leading-relaxed font-medium mb-4">
+          We strictly adhere to the Children’s Online Privacy Protection Act (COPPA) and the UK/EU
+          General Data Protection Regulation regarding children’s data:
+        </p>
+        <ul class="space-y-2 text-emerald-900/80 font-medium text-sm sm:text-base">
+          <li class="flex items-start gap-2">
+            <span class="text-emerald-600 font-bold">•</span>
+            <span
+              >We never collect personal contact information directly from children under 16 without
+              verified parental consent.</span
+            >
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-emerald-600 font-bold">•</span>
+            <span
+              >Student progress logs and evaluation reports are accessible solely to the enrolled
+              parent and assigned teacher.</span
+            >
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-emerald-600 font-bold">•</span>
+            <span>We never sell, monetize, or share student data with third-party advertisers.</span
+            >
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section 7 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-10 border border-emerald-100/80 shadow-sm">
+        <h2 class="text-2xl font-bold text-emerald-950 mb-4 flex items-center gap-3">
+          <span
+            class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 text-sm font-black flex items-center justify-center shrink-0"
+            >7</span
+          >
+          Policy Review &amp; Continuous Improvement
+        </h2>
+        <p class="text-emerald-900/80 leading-relaxed font-medium">
+          This Safeguarding Policy is reviewed annually by our academic advisory board and legal
+          counsel. Updates are published directly on this page with an updated revision date. For
+          any questions or feedback regarding our child protection standards, please reach out via
+          our <a href="/contact" class="text-emerald-700 font-bold underline">Contact Support</a> page.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <Footer />
+</Base>
