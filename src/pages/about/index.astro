@@ -11,7 +11,6 @@ import AboutOriginStory from './_components/AboutOriginStory.astro';
 import AboutMission from './_components/AboutMission.astro';
 import AboutPrinciples from './_components/AboutPrinciples.astro';
 import AboutTeachers from './_components/AboutTeachers.astro';
-import AboutGrowth from './_components/AboutGrowth.astro';
 import AboutTeam from './_components/AboutTeam.astro';
 import AboutVision from './_components/AboutVision.astro';
 import FinalCTA from '../../components/blocks/FinalCTA.astro';
@@ -26,7 +25,7 @@ const jsonLd = {
       url: 'https://quranific.com',
       logo: 'https://quranific.com/logo.png',
       description:
-        'Making Quran education accessible worldwide through live 1-on-1 online classes.',
+        'A community of masters, not just teachers. Making authentic Quran education accessible worldwide through live 1-on-1 online classes.',
       foundingDate: '2021',
       founder: {
         '@type': 'Person',
@@ -35,9 +34,9 @@ const jsonLd = {
     },
     {
       '@type': 'AboutPage',
-      name: 'About Quranific - Our Mission and Story',
+      name: 'About Quranific - Our Story & Mission',
       description:
-        "Learn about Quranific's mission to make Quran education accessible worldwide through live online classes.",
+        "Here, every instructor is an academy unto themselves. Learn about Quranific's story, mission, and certified Ijazah-holding teachers.",
       publisher: {
         '@id': 'https://quranific.com/#organization',
       },
@@ -64,8 +63,8 @@ const jsonLd = {
 ---
 
 <Base
-  title="About Us - Quranific | Our Mission & Story"
-  description="Learn about Quranific's mission to make Quran education accessible worldwide through live 1-on-1 online classes."
+  title="About Us - Quranific | A Community of Masters, Not Just Teachers"
+  description="Here, every instructor is an academy unto themselves. Learn about Quranific's story, mission, and certified Ijazah-holding teachers."
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
 
@@ -79,7 +78,6 @@ const jsonLd = {
     <AboutMission />
     <AboutPrinciples />
     <AboutTeachers />
-    <AboutGrowth />
     <AboutTeam />
     <AboutVision />
     <FinalCTA />
