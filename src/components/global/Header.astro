@@ -65,61 +65,66 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
   )
 }
 
-<header
-  id="main-header"
-  class="sticky top-0 z-50 w-full transition-all duration-300 ease-out h-[72px] bg-transparent border-b border-transparent"
->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-full">
-    <a
-      href="/"
-      class="flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg"
-    >
-      <img
-        src="/images/quranific-logo-green.svg"
-        alt="Quranific — Home"
-        width="128"
-        height="32"
-        fetchpriority="high"
-        loading="eager"
-        decoding="async"
-        class="h-7 md:h-8 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
-      />
-    </a>
-
-    <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-8 h-full">
-      {
-        MAIN_NAVIGATION.map((item) => (
-          <a
-            href={item.href}
-            class="text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded relative flex items-center h-full"
-          >
-            {item.label}
-          </a>
-        ))
-      }
-    </nav>
-
-    <div class="hidden md:flex items-center gap-6">
+<!-- FIX: Outer wrapper locks the sticky document flow height so shrinking inner header doesn't jitter -->
+<div class="sticky top-0 z-50 w-full h-[72px]">
+  <header
+    id="main-header"
+    class="w-full transition-all duration-300 ease-out h-[72px] bg-transparent border-b border-transparent flex flex-col justify-center"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between w-full">
       <a
-        href={SITE.whatsappLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-sm font-bold text-emerald-700 hover:text-emerald-900 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded"
+        href="/"
+        class="flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg"
       >
-        <span class="hidden sm:inline">WhatsApp Support</span><span class="sm:hidden">Support</span>
+        <img
+          src="/images/quranific-logo-green.svg"
+          alt="Quranific — Home"
+          width="128"
+          height="32"
+          fetchpriority="high"
+          loading="eager"
+          decoding="async"
+          class="h-7 md:h-8 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+        />
       </a>
-      <Button href="/getting-started/signup" variant="primary" class="text-sm">
-        Book Your Free Class
-      </Button>
-    </div>
 
-    <MobileMenu />
-  </div>
-</header>
+      <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-8 h-full">
+        {
+          MAIN_NAVIGATION.map((item) => (
+            <a
+              href={item.href}
+              class="text-sm font-bold text-emerald-900 hover:text-emerald-600 transition-colors py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded relative flex items-center h-full"
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="hidden md:flex items-center gap-6">
+        <a
+          href={SITE.whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm font-bold text-emerald-700 hover:text-emerald-900 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded"
+        >
+          <span class="hidden sm:inline">WhatsApp Support</span><span class="sm:hidden"
+            >Support</span
+          >
+        </a>
+        <Button href="/getting-started/signup" variant="primary" class="text-sm">
+          Book Your Free Class
+        </Button>
+      </div>
+
+      <MobileMenu />
+    </div>
+  </header>
+</div>
 
 <script>
   // ---------------------------------------------------------------------------
-  // PROMO BAR LOGIC (Edge Standard)
+  // PROMO BAR LOGIC
   // ---------------------------------------------------------------------------
   function initPromoBar(): void {
     const promoBar = document.getElementById('promo-bar');
@@ -172,7 +177,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
         promoBar && promoBar.style.display !== 'none' ? promoBar.offsetHeight : 20;
 
       if (currentScrollY > localLastScrollY && currentScrollY > 100) {
-        // Scrolling DOWN
+        // Scrolling DOWN - hide header
         header.classList.add('-translate-y-full');
       } else {
         // Scrolling UP or at top
@@ -182,7 +187,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
           header.classList.remove('h-[72px]', 'bg-transparent', 'border-transparent');
           header.classList.add(
             'h-[60px]',
-            'bg-white/60',
+            'bg-white/95',
             'backdrop-blur-md',
             'border-emerald-100/50',
             'shadow-sm'
@@ -191,7 +196,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
           header.classList.add('h-[72px]', 'bg-transparent', 'border-transparent');
           header.classList.remove(
             'h-[60px]',
-            'bg-white/60',
+            'bg-white/95',
             'backdrop-blur-md',
             'border-emerald-100/50',
             'shadow-sm'
