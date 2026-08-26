@@ -6,7 +6,7 @@ import Base from '../../layouts/Base.astro';
 import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 
-import TeachersHero from './_components/TeachersHero.astro';
+import PageHero from '../../components/blocks/PageHero.astro';
 import TeachersIjazah from './_components/TeachersIjazah.astro';
 import TeachersVetting from './_components/TeachersVetting.astro';
 import TeachersGenderPrivacy from './_components/TeachersGenderPrivacy.astro';
@@ -92,7 +92,37 @@ const jsonLd = {
   <Header />
 
   <main class="min-h-screen bg-cream-50 selection:bg-emerald-200 selection:text-emerald-950">
-    <TeachersHero />
+    <PageHero
+      eyebrow="The Top 1% of Instructors"
+      title="Masters of the Word. "
+      highlightWord="Mentors for Life."
+      subtitle="We don't just hire tutors; we curate a global faculty of certified scholars, Hafiz, and Ijazah holders dedicated to passing down the authentic recitation of the Quran."
+    >
+      <Fragment slot="checklist">
+        <div class="flex flex-wrap justify-center gap-4 sm:gap-8 mt-6">
+          <div class="flex flex-col items-center">
+            <span class="text-3xl font-black text-emerald-800">100%</span>
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider"
+              >Background Checked</span
+            >
+          </div>
+          <div class="w-px h-12 bg-emerald-200 hidden sm:block" aria-hidden="true"></div>
+          <div class="flex flex-col items-center">
+            <span class="text-3xl font-black text-emerald-800">24/7</span>
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider"
+              >Quality Assurance</span
+            >
+          </div>
+          <div class="w-px h-12 bg-emerald-200 hidden sm:block" aria-hidden="true"></div>
+          <div class="flex flex-col items-center">
+            <span class="text-3xl font-black text-emerald-800">Rigorous</span>
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider"
+              >Vetting Process</span
+            >
+          </div>
+        </div>
+      </Fragment>
+    </PageHero>
     <TeachersIjazah />
     <TeachersVetting />
     <TeachersGenderPrivacy />

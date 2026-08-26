@@ -6,7 +6,7 @@ import Base from '../../layouts/Base.astro';
 import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 
-import FaqHero from './_components/FaqHero.astro';
+import PageHero from '../../components/blocks/PageHero.astro';
 import FaqTabs from './_components/FaqTabs.astro';
 import FaqSupportCard from './_components/FaqSupportCard.astro';
 
@@ -46,8 +46,16 @@ const jsonLd = {
     >
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-      <FaqHero />
+    <PageHero
+      eyebrow="Support Center"
+      title="Got Questions? "
+      highlightWord="We've Got Answers."
+      subtitle="Everything you need to know about starting your Quranic journey, our elite tutors, and how our platform works."
+      primaryCtaText=""
+      bottomPadding={false}
+    />
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 pt-10">
       <FaqTabs />
       <FaqSupportCard />
     </div>
