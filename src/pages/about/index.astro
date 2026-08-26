@@ -70,9 +70,8 @@ const jsonLd = {
 
   <Header />
 
-  <main
-    class="font-sans bg-cream-50 selection:bg-emerald-100 selection:text-emerald-900 overflow-hidden"
-  >
+  <!-- FIX: Removed overflow-hidden to prevent breaking sticky layouts and scroll mechanics -->
+  <main class="font-sans bg-cream-50 selection:bg-emerald-100 selection:text-emerald-900">
     <AboutHero />
     <AboutOriginStory />
     <AboutMission />

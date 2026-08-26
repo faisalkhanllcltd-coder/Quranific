@@ -3,10 +3,7 @@
 import Section from '../../../components/ui/Section.astro';
 ---
 
-<Section
-  height={600}
-  class="relative pt-8 sm:pt-12 md:pt-16 pb-10 md:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-8"
->
+<Section class="relative pt-8 sm:pt-12 md:pt-16 pb-10 md:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-8">
   <div
     class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none"
   >
@@ -17,7 +14,7 @@ import Section from '../../../components/ui/Section.astro';
   </div>
 
   <div
-    class="max-w-7xl mx-auto grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-center relative z-10"
+    class="max-w-7xl mx-auto grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center relative z-10"
   >
     <div class="max-w-2xl">
       <div
@@ -59,7 +56,7 @@ import Section from '../../../components/ui/Section.astro';
       </div>
     </div>
 
-    <div class="bg-emerald-950 rounded-3xl p-8 sm:p-10 lg:p-12 relative overflow-hidden shadow-2xl">
+    <div class="bg-emerald-950 rounded-3xl p-6 sm:p-8 lg:p-10 relative overflow-hidden shadow-2xl">
       <div
         class="absolute bottom-[-10%] right-[-10%] w-[200px] h-[200px] bg-white/5 rounded-full blur-xl pointer-events-none"
       >
@@ -70,32 +67,32 @@ import Section from '../../../components/ui/Section.astro';
       </div>
 
       <div
-        class="font-serif text-[80px] leading-[0.5] text-white/10 mb-4 font-black"
+        class="font-serif text-[60px] leading-[0.5] text-white/10 mb-2 font-black"
         aria-hidden="true"
       >
         "
       </div>
       <p
-        class="font-serif text-xl sm:text-2xl italic text-white/95 leading-relaxed mb-8 relative z-10"
+        class="font-serif text-lg sm:text-xl italic text-white/95 leading-relaxed mb-6 relative z-10"
       >
-        "I spent years formally training as an Islamic scholar, proofreading complex classical texts
+        I spent years formally training as an Islamic scholar, proofreading complex classical texts
         in Hadith, Fiqh, and Tafsir. But as my career in software engineering grew, I noticed a
         massive disconnect in how the Quran was being taught online. Families abroad were looking
         for authentic teachers, but the platforms connecting them were chaotic. Local classes were
         overcrowded, and online options were plagued by dropped calls, rotating tutors, and zero
         accountability. I didn't want to just complain about the standard of online Islamic
-        education. I wanted to build the infrastructure to fix it."
+        education. I wanted to build the infrastructure to fix it.
       </p>
 
-      <div class="flex items-center gap-4 relative z-10 pt-6 border-t border-white/10">
+      <div class="flex items-center gap-4 relative z-10 pt-5 border-t border-white/10">
         <div
-          class="w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-serif text-2xl text-white font-bold shrink-0"
+          class="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-serif text-xl text-white font-bold shrink-0"
         >
           ف
         </div>
         <div>
-          <div class="font-bold text-white text-lg">Faisal Khan</div>
-          <div class="text-sm text-emerald-100/70 font-medium">Founder & CEO, Quranific</div>
+          <div class="font-bold text-white text-base">Faisal Khan</div>
+          <div class="text-xs text-emerald-100/70 font-medium">Founder & CEO, Quranific</div>
         </div>
       </div>
     </div>
