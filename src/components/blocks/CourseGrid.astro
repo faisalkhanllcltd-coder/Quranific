@@ -7,13 +7,13 @@ import CourseCard from './CourseCard.astro';
 ---
 
 <div
-  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-6 md:gap-y-8 lg:gap-8"
   id="course-cards-container"
   aria-label="Available courses"
 >
   {
     courses.map((course, index) => (
-      <div class="course-wrapper" data-category={course.category}>
+      <div class="course-wrapper h-full" data-category={course.category}>
         <CourseCard course={course} isPriority={index < 2} />
       </div>
     ))

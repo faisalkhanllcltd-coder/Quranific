@@ -9,9 +9,6 @@ interface Props {
 }
 const { course, isPriority = false } = Astro.props;
 
-// UNIFIED EDGE UI: Absolute consistency. Zero visual noise.
-const gradient = 'from-emerald-800 to-emerald-600';
-
 // Dynamic routing for optimized background images
 const imageSrc = `/images/${course.slug}.webp`;
 const testFallback = '/images/basic-qaida.webp';
@@ -28,56 +25,48 @@ const getPrefix = (slug: string) => {
 };
 ---
 
+<!-- FIX: Removed the buggy mb-16 margin. The parent CourseGrid now controls the spacing perfectly. -->
 <div
-  class="bg-white border border-emerald-100 rounded-3xl overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 hover:border-emerald-300 transition-all duration-300 group"
+  class="bg-white border border-emerald-100 rounded-3xl overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 hover:border-emerald-300 transition-all duration-300 group h-full shadow-sm"
 >
-  <!-- Coloured header banner with Image Overlay Engine -->
-  <div
-    class={`bg-gradient-to-br ${gradient} p-6 sm:p-7 text-white relative overflow-hidden h-36 flex flex-col justify-between`}
-  >
-    <!-- BACKGROUND IMAGE LAYER -->
-    <div class="absolute inset-0 z-0">
-      <img
-        src={imageSrc}
-        onerror={`this.onerror=null;this.src='${testFallback}';`}
-        alt=""
-        class="w-full h-full object-cover object-center grayscale mix-blend-overlay opacity-40 group-hover:scale-105 transition-transform duration-700 ease-out"
-        aria-hidden="true"
-        loading={isPriority ? 'eager' : 'lazy'}
-        fetchpriority={isPriority ? 'high' : 'auto'}
-        decoding={isPriority ? 'sync' : 'async'}
-      />
-      <!-- Pure Black Guardrail for clean text contrast -->
-      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-      </div>
-    </div>
-
-    <!-- FOREGROUND CONTENT -->
-    <div class="flex justify-between items-start gap-2 relative z-10 w-full overflow-hidden">
-      {
-        course.bestFor ? (
-          <MicroTag class="bg-gold-50/95 border border-gold-200 text-gold-700 shadow-sm whitespace-nowrap overflow-hidden text-ellipsis flex-shrink">
-            <span class="font-medium opacity-90">{getPrefix(course.slug)}:</span>{' '}
-            <span class="font-bold">{course.bestFor}</span>
-          </MicroTag>
-        ) : (
-          <MicroTag class="bg-gold-50/95 border border-gold-200 text-gold-700 shadow-sm whitespace-nowrap flex-shrink-0">
-            {course.level}
-          </MicroTag>
-        )
-      }
-      {
-        course.highlight && (
-          <span class="bg-white text-emerald-950 text-[9px] font-bold px-2.5 py-1 rounded-full shadow-sm whitespace-nowrap flex-shrink-0">
-            {course.highlight}
-          </span>
-        )
-      }
+  <!-- IMAGE BANNER: Text removed, heavy black gradients and CSS filters stripped for 100% image clarity -->
+  <div class="relative overflow-hidden h-48 sm:h-52 bg-emerald-50 shrink-0">
+    <img
+      src={imageSrc}
+      onerror={`this.onerror=null;this.src='${testFallback}';`}
+      alt=""
+      class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+      aria-hidden="true"
+      loading={isPriority ? 'eager' : 'lazy'}
+      fetchpriority={isPriority ? 'high' : 'auto'}
+      decoding={isPriority ? 'sync' : 'async'}
+    />
+    <!-- Subtle inner shadow to frame the image cleanly against the white card -->
+    <div
+      class="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)] pointer-events-none"
+      aria-hidden="true"
+    >
     </div>
   </div>
 
   <!-- Middle Content Body (Edge UI) -->
   <div class="p-5 sm:p-6 flex-grow flex flex-col bg-white">
+    <!-- Badge moved from image overlay to directly above the title -->
+    <div class="flex items-center gap-2 mb-4">
+      {
+        course.bestFor ? (
+          <MicroTag class="bg-gold-50/95 border border-emerald-200/50 text-gold-700 shadow-sm whitespace-nowrap overflow-hidden text-ellipsis flex-shrink">
+            <span class="font-medium opacity-90">{getPrefix(course.slug)}:</span>{' '}
+            <span class="font-bold">{course.bestFor}</span>
+          </MicroTag>
+        ) : (
+          <MicroTag class="bg-gold-50/95 border border-emerald-200/50 text-gold-700 shadow-sm whitespace-nowrap flex-shrink-0">
+            {course.level}
+          </MicroTag>
+        )
+      }
+    </div>
+
     <h3 class="text-xl font-bold text-emerald-950 mb-1 leading-tight">
       {course.title}
     </h3>
@@ -115,7 +104,7 @@ const getPrefix = (slug: string) => {
   </div>
 
   <!-- Edge-to-Edge CTA Stack -->
-  <div class="mt-auto flex flex-col border-t border-emerald-50 relative z-10 bg-white">
+  <div class="mt-auto flex flex-col border-t border-emerald-50 relative z-10 bg-white shrink-0">
     <a
       href={`/getting-started/signup?course=${course.slug}`}
       class="w-full flex items-center justify-center py-4 bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-bold transition-colors"
