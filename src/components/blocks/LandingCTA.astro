@@ -1,6 +1,7 @@
 ---
 // LandingCTA.astro
 import Button from '../ui/Button.astro';
+import EyebrowText from '../ui/EyebrowText.astro';
 
 export interface Props {
   eyebrow?: string;
@@ -23,9 +24,7 @@ const {
   class="bg-emerald-950 py-20 md:py-32 relative overflow-hidden flex flex-col items-center text-center px-6"
 >
   <div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
-    <span class="text-emerald-500 font-bold tracking-widest text-sm uppercase mb-4 block"
-      >{eyebrow}</span
-    >
+    <EyebrowText class="text-emerald-500 mb-4">{eyebrow}</EyebrowText>
 
     <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance">
       <Fragment set:html={headline} />

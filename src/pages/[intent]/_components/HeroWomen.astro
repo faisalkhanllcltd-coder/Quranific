@@ -1,6 +1,7 @@
 ---
 // src/components/blocks/heroes/HeroWomen.astro
 import Button from '../../../components/ui/Button.astro';
+import EyebrowText from '../../../components/ui/EyebrowText.astro';
 
 interface Props {
   intent: string;
@@ -147,9 +148,7 @@ const { intent, h1, subhead } = Astro.props;
                   d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
               </svg>
             </div>
-            <p class="text-xs font-bold uppercase tracking-widest text-emerald-300">
-              Privacy Guaranteed
-            </p>
+            <EyebrowText class="text-emerald-300"> Privacy Guaranteed </EyebrowText>
           </div>
           <ul class="space-y-8">
             {

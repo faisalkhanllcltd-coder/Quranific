@@ -1,6 +1,7 @@
 ---
 // src/components/blocks/FinalCTA.astro
 import { SITE } from '../../constants/site';
+import EyebrowBadge from '../ui/EyebrowBadge.astro';
 
 interface Props {
   eyebrow?: string;
@@ -31,9 +32,9 @@ const {
   <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
     {
       eyebrow && (
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 text-white text-xs font-bold uppercase tracking-widest rounded-full mb-8 backdrop-blur-sm">
+        <EyebrowBadge class="bg-white/10 border border-white/20 text-white mb-8 backdrop-blur-sm">
           {eyebrow}
-        </div>
+        </EyebrowBadge>
       )
     }
 

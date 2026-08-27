@@ -1,6 +1,8 @@
 ---
 // src/components/blocks/LandingVetting.astro
 
+import EyebrowText from '../ui/EyebrowText.astro';
+
 interface VettingStep {
   n?: string;
   title: string;
@@ -64,9 +66,9 @@ const calloutBodyColor = isDarkCallout
 <section class="quranific-section bg-white border-b border-emerald-50">
   <div class="quranific-container">
     <div class="max-w-3xl mx-auto text-center flex flex-col items-center mb-12">
-      <p class={`text-xs font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>
+      <EyebrowText class={`mb-4 ${eyebrowColor}`}>
         {eyebrow}
-      </p>
+      </EyebrowText>
       <h2
         class="font-serif text-3xl md:text-4xl font-black text-emerald-950 leading-tight text-balance"
       >

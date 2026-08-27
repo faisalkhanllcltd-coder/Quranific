@@ -3,6 +3,7 @@
 import Section from '../../components/ui/Section.astro';
 import Button from '../../components/ui/Button.astro';
 import { SITE } from '../../constants/site';
+import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
 
 const CheckIcon = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
 const XIcon = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`;
@@ -15,11 +16,9 @@ const XIcon = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="curr
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-16 max-w-3xl mx-auto">
-      <div
-        class="inline-flex items-center justify-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] font-bold uppercase tracking-widest rounded-full mb-6"
-      >
+      <EyebrowBadge class="bg-emerald-50 border border-emerald-100 text-emerald-700 mb-6">
         The Quranific Difference
-      </div>
+      </EyebrowBadge>
       <h2
         id="difference-heading"
         class="text-4xl lg:text-5xl font-semibold text-emerald-950 mb-6 tracking-tight"

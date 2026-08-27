@@ -1,0 +1,16 @@
+---
+// src/components/ui/MicroTag.astro
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<span
+  class:list={[
+    'inline-flex items-center px-2 py-0.5 text-[8px] sm:text-[9px] font-bold uppercase tracking-wider rounded-[3px]',
+    className,
+  ]}
+>
+  <slot />
+</span>

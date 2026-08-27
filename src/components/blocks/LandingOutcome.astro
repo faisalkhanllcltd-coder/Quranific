@@ -1,6 +1,8 @@
 ---
 // src/components/blocks/LandingOutcome.astro
 
+import EyebrowText from '../ui/EyebrowText.astro';
+
 interface Props {
   eyebrow?: string;
   eyebrowClass?: string;
@@ -31,9 +33,9 @@ const headlineColor = isDark ? 'text-white' : 'text-emerald-950';
   <div class="quranific-container">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
       <div>
-        <p class={`text-xs font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>
+        <EyebrowText class={`mb-4 ${eyebrowColor}`}>
           {eyebrow}
-        </p>
+        </EyebrowText>
         <h2
           class={`font-serif text-3xl md:text-4xl font-black leading-[1.1] mb-6 ${headlineColor}`}
         >

@@ -1,6 +1,7 @@
 ---
 // src/components/blocks/CourseCard.astro
 import type { Course } from '../../constants/courses';
+import MicroTag from '../ui/MicroTag.astro';
 
 interface Props {
   course: Course;
@@ -55,14 +56,14 @@ const getPrefix = (slug: string) => {
     <div class="flex justify-between items-start gap-2 relative z-10 w-full overflow-hidden">
       {
         course.bestFor ? (
-          <span class="bg-gold-50/95 border border-gold-200 text-gold-700 text-[8px] sm:text-[9px] uppercase tracking-wide px-2.5 py-1 rounded-full shadow-sm whitespace-nowrap overflow-hidden text-ellipsis flex-shrink">
+          <MicroTag class="bg-gold-50/95 border border-gold-200 text-gold-700 shadow-sm whitespace-nowrap overflow-hidden text-ellipsis flex-shrink">
             <span class="font-medium opacity-90">{getPrefix(course.slug)}:</span>{' '}
             <span class="font-bold">{course.bestFor}</span>
-          </span>
+          </MicroTag>
         ) : (
-          <span class="bg-gold-50/95 border border-gold-200 text-gold-700 text-[8px] sm:text-[9px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full shadow-sm whitespace-nowrap flex-shrink-0">
+          <MicroTag class="bg-gold-50/95 border border-gold-200 text-gold-700 shadow-sm whitespace-nowrap flex-shrink-0">
             {course.level}
-          </span>
+          </MicroTag>
         )
       }
       {

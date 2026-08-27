@@ -1,4 +1,6 @@
 ---
+import EyebrowBadge from '../ui/EyebrowBadge.astro';
+
 interface Props {
   questions: { question: string; answer: string }[];
   eyebrow?: string;
@@ -30,9 +32,9 @@ const {
       {
         !hideLeftColumn && (
           <div class="self-start lg:sticky lg:top-32">
-            <div class="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-widest rounded-full mb-6">
+            <EyebrowBadge class="bg-emerald-50 border border-emerald-100 text-emerald-800 mb-6">
               {eyebrow}
-            </div>
+            </EyebrowBadge>
             <h2 class="text-4xl lg:text-5xl font-black text-emerald-950 mb-5 tracking-tight leading-tight text-balance">
               {title}{' '}
               <>

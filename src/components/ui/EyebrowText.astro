@@ -1,0 +1,16 @@
+---
+// src/components/ui/EyebrowText.astro
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<span
+  class:list={[
+    'block text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.2em]',
+    className,
+  ]}
+>
+  <slot />
+</span>

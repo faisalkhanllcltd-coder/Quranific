@@ -5,6 +5,7 @@ export const prerender = true;
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
+import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
 
 const lastUpdated = 'March 25, 2026';
 
@@ -34,11 +35,9 @@ const jsonLd = {
       class="pt-8 md:pt-12 pb-10 lg:pt-14 lg:pb-14 px-4 sm:px-6 border-b border-emerald-100 bg-white"
     >
       <div class="quranific-container">
-        <span
-          class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest rounded-full mb-6"
-        >
-          Billing & Enrollment
-        </span>
+        <EyebrowBadge class="bg-emerald-50 border border-emerald-100 text-emerald-700 mb-6">
+          Billing &amp; Enrollment
+        </EyebrowBadge>
         <h1
           class="text-4xl md:text-5xl lg:text-6xl font-black text-emerald-950 tracking-tight mb-6"
         >

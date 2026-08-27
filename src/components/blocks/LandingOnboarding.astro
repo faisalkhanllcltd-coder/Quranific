@@ -1,6 +1,7 @@
 ---
 // src/components/blocks/LandingOnboarding.astro
 import Button from '../ui/Button.astro';
+import EyebrowText from '../ui/EyebrowText.astro';
 
 interface Step {
   n?: string;
@@ -53,7 +54,7 @@ const card3StepColor = isPurple ? 'text-purple-600' : 'text-emerald-600';
 <section class={`quranific-section ${sectionBg}`}>
   <div class="quranific-container">
     <div class="max-w-3xl mx-auto text-center flex flex-col items-center mb-12 md:mb-16">
-      <p class={`text-xs font-bold uppercase tracking-widest mb-4 ${eyebrowColor}`}>{eyebrow}</p>
+      <EyebrowText class={`mb-4 ${eyebrowColor}`}>{eyebrow}</EyebrowText>
       <h2
         class={`font-serif text-3xl md:text-4xl font-black leading-tight text-balance ${headlineColor}`}
       >

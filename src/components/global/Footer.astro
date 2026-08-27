@@ -2,6 +2,7 @@
 // src/components/global/Footer.astro
 // Global Footer — static HTML/CSS, edge-cacheable, minimal JS (newsletter only).
 import { SITE, FOOTER_NAVIGATION } from '../../constants/site';
+import EyebrowText from '../ui/EyebrowText.astro';
 
 const currentYear = new Date().getFullYear();
 
@@ -48,7 +49,7 @@ const SOCIAL_ICONS: Record<string, string> = {
 
 const linkClass =
   'text-emerald-300/55 hover:text-white transition-colors duration-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm';
-const headingClass = 'text-emerald-500 font-semibold tracking-[0.2em] uppercase text-[11px] mb-5';
+const headingClass = 'text-emerald-500 mb-5';
 ---
 
 <footer class="relative bg-emerald-ink pt-20 pb-10 overflow-hidden">
@@ -114,7 +115,7 @@ const headingClass = 'text-emerald-500 font-semibold tracking-[0.2em] uppercase 
       </div>
 
       <div>
-        <h3 class={headingClass}>Academy</h3>
+        <EyebrowText class={headingClass}>Academy</EyebrowText>
         <ul class="space-y-3.5">
           {
             FOOTER_NAVIGATION.academy.map((link) => (
@@ -129,7 +130,7 @@ const headingClass = 'text-emerald-500 font-semibold tracking-[0.2em] uppercase 
       </div>
 
       <div>
-        <h3 class={headingClass}>Learn</h3>
+        <EyebrowText class={headingClass}>Learn</EyebrowText>
         <ul class="space-y-3.5">
           {
             FOOTER_NAVIGATION.learn.map((link) => (
@@ -144,7 +145,7 @@ const headingClass = 'text-emerald-500 font-semibold tracking-[0.2em] uppercase 
       </div>
 
       <div>
-        <h3 class={headingClass}>Trust</h3>
+        <EyebrowText class={headingClass}>Trust</EyebrowText>
         <ul class="space-y-3.5">
           {
             FOOTER_NAVIGATION.trust.map((link) => (
@@ -159,7 +160,7 @@ const headingClass = 'text-emerald-500 font-semibold tracking-[0.2em] uppercase 
       </div>
 
       <div>
-        <h3 class={headingClass}>Legal</h3>
+        <EyebrowText class={headingClass}>Legal</EyebrowText>
         <ul class="space-y-3.5">
           {
             FOOTER_NAVIGATION.legal.map((link) => (

@@ -3,6 +3,8 @@
 // Full-width CTA banner linking to /teachers. No hardcoded teacher profiles — just
 // trust signals and a single strong call-to-action.
 
+import EyebrowBadge from '../ui/EyebrowBadge.astro';
+
 interface Props {
   hideCta?: boolean;
 }
@@ -37,11 +39,9 @@ const vettingSteps = [
     <div class="grid lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
       <!-- Left: copy block -->
       <div>
-        <span
-          class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-900/60 border border-emerald-800 text-emerald-300 text-[11px] font-bold uppercase tracking-widest rounded-full mb-6"
-        >
+        <EyebrowBadge class="bg-emerald-900/60 border border-emerald-800 text-emerald-300 mb-6">
           Your Teachers
-        </span>
+        </EyebrowBadge>
 
         <h2
           id="teacher-teaser-heading"

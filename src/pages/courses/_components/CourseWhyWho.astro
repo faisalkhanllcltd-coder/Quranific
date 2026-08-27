@@ -2,6 +2,8 @@
 // src/pages/courses/_components/CourseWhyWho.astro
 import type { Course } from '../../../constants/courses';
 
+import EyebrowText from '../../../components/ui/EyebrowText.astro';
+
 interface Props {
   course: Course;
 }
@@ -21,9 +23,7 @@ const { course } = Astro.props;
         {
           course.outcome && (
             <div class="text-lg font-bold text-emerald-800 bg-emerald-100/60 p-5 rounded-2xl mb-8 border border-emerald-200 shadow-sm leading-snug">
-              <span class="block text-[11px] font-bold text-emerald-900/50 uppercase tracking-widest mb-1.5">
-                Target Outcome
-              </span>
+              <EyebrowText class="text-emerald-900/50 mb-1.5">Target Outcome</EyebrowText>
               {course.outcome}
             </div>
           )
@@ -72,9 +72,7 @@ const { course } = Astro.props;
           course.idealFor && course.idealFor.length > 0 ? (
             <>
               <div class="mb-8">
-                <h3 class="text-[11px] font-bold uppercase tracking-widest text-emerald-400 mb-4">
-                  Ideal For
-                </h3>
+                <EyebrowText class="text-emerald-400 mb-4">Ideal For</EyebrowText>
                 <ul class="space-y-3">
                   {course.idealFor.map((item: string) => (
                     <li class="flex items-start text-sm sm:text-[15px] text-emerald-50">
@@ -96,9 +94,7 @@ const { course } = Astro.props;
 
               {course.notFor && course.notFor.length > 0 && (
                 <div class="pt-6 border-t border-emerald-900/60">
-                  <h3 class="text-[11px] font-bold uppercase tracking-widest text-amber-400 mb-4">
-                    Not For
-                  </h3>
+                  <EyebrowText class="text-amber-400 mb-4">Not For</EyebrowText>
                   <ul class="space-y-3">
                     {course.notFor.map((item) => (
                       <li class="flex items-start text-sm sm:text-[15px] text-emerald-100/80">

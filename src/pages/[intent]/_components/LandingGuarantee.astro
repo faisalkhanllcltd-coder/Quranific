@@ -1,6 +1,7 @@
 ---
 // src/components/blocks/LandingGuarantee.astro
 import Button from '../../../components/ui/Button.astro';
+import EyebrowText from '../../../components/ui/EyebrowText.astro';
 
 export interface GuaranteeCard {
   title?: string;
@@ -64,9 +65,9 @@ const cardsToRender = cards || defaultCards;
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
       <!-- Left Column (Copy & CTA) -->
       <div class="flex flex-col items-start">
-        <span class={`font-bold tracking-widest text-sm uppercase mb-3 block ${eyebrowColor}`}>
+        <EyebrowText class={`mb-3 ${eyebrowColor}`}>
           {eyebrow}
-        </span>
+        </EyebrowText>
         <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 text-balance">
           <Fragment set:html={headline} />
         </h2>

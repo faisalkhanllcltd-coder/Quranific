@@ -1,6 +1,7 @@
 ---
 // src/components/blocks/LandingPricing.astro
 import PricingCalculator from '../blocks/PricingCalculator.svelte';
+import EyebrowText from '../ui/EyebrowText.astro';
 
 interface Props {
   eyebrow?: string;
@@ -27,9 +28,9 @@ const bodyColor = isPurple ? 'text-purple-900/80' : 'text-emerald-800/80';
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
       <!-- Left Column: Sticky Context & Value Prop -->
       <div class="lg:col-span-4 lg:sticky lg:top-32 flex flex-col items-start">
-        <span class:list={['font-bold tracking-widest text-sm uppercase mb-3 block', eyebrowColor]}>
+        <EyebrowText class:list={['mb-3', eyebrowColor]}>
           {eyebrow}
-        </span>
+        </EyebrowText>
         <h2 class:list={['text-4xl md:text-5xl font-bold mb-6 text-balance', headlineColor]}>
           {headline}
         </h2>

@@ -1,6 +1,7 @@
 ---
 // src/pages/about/_components/AboutOriginStory.astro
 import Section from '../../../components/ui/Section.astro';
+import EyebrowBadge from '../../../components/ui/EyebrowBadge.astro';
 ---
 
 <Section class="py-10 md:py-20 lg:py-32 bg-white border-y border-emerald-100">
@@ -9,11 +10,9 @@ import Section from '../../../components/ui/Section.astro';
     <div class="grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-24">
       <!-- Added sticky positioning and self-start -->
       <div class="max-w-xl lg:sticky lg:top-32 self-start">
-        <div
-          class="inline-flex items-center bg-amber-50 border border-amber-200 text-amber-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
-        >
+        <EyebrowBadge class="bg-amber-50 border border-amber-200 text-amber-700 mb-6">
           Founded 2021
-        </div>
+        </EyebrowBadge>
         <h2
           class="text-4xl lg:text-5xl font-bold text-emerald-950 tracking-tight mb-6 leading-tight"
         >

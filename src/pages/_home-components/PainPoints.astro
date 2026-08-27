@@ -1,5 +1,6 @@
 ---
 // src/components/blocks/PainPoints.astro
+import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
 ---
 
 <section class="py-10 md:py-20 lg:py-32 bg-emerald-950 relative" aria-labelledby="pain-heading">
@@ -17,11 +18,11 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <div class="grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-20 items-start relative">
       <div class="self-start lg:sticky lg:top-32">
-        <div
-          class="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 text-emerald-300 text-[11px] font-bold uppercase tracking-widest rounded-full mb-6 backdrop-blur-sm"
+        <EyebrowBadge
+          class="bg-white/5 border border-white/10 text-emerald-300 mb-6 backdrop-blur-sm"
         >
           You are not alone
-        </div>
+        </EyebrowBadge>
         <h2
           id="pain-heading"
           class="text-4xl lg:text-5xl lg:leading-tight font-medium text-white mb-6 tracking-tight"

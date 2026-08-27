@@ -1,6 +1,8 @@
 ---
 // src/pages/testimonials/_components/TestimonialsVideoCard.astro
 import Section from '../../../components/ui/Section.astro';
+import EyebrowBadge from '../../../components/ui/EyebrowBadge.astro';
+import EyebrowText from '../../../components/ui/EyebrowText.astro';
 
 const Icons = {
   play: `<svg class="w-10 h-10 lg:w-12 lg:h-12 text-white ml-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>`,
@@ -35,16 +37,15 @@ const Icons = {
         >
           <span set:html={Icons.play} />
         </div>
-        <p class="text-white font-bold mt-6 tracking-widest uppercase text-sm drop-shadow-md">
+        <EyebrowText class="text-white mt-6 drop-shadow-md">
           Watch The Parent Experience
-        </p>
+        </EyebrowText>
       </div>
 
       <div class="absolute top-6 left-6 lg:top-8 lg:left-8 flex gap-3">
-        <span
-          class="bg-amber-400 text-emerald-950 text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-md shadow-sm"
-          >Featured Story</span
-        >
+        <EyebrowBadge class="bg-amber-400 text-emerald-950 shadow-sm !rounded-md">
+          Featured Story
+        </EyebrowBadge>
       </div>
       <div class="absolute bottom-6 left-6 lg:bottom-8 lg:left-8">
         <h3 class="text-white font-bold text-xl lg:text-2xl drop-shadow-md">

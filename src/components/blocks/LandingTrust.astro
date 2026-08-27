@@ -1,6 +1,7 @@
 ---
 // src/components/blocks/LandingTrust.astro
 import Button from '../ui/Button.astro';
+import EyebrowText from '../ui/EyebrowText.astro';
 
 interface Props {
   eyebrow?: string;
@@ -43,9 +44,9 @@ const paragraphs = Array.isArray(body) ? body : [body];
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
       <!-- Text column -->
       <div class:list={[reversed ? 'order-1 md:order-2' : '']}>
-        <span class={`font-bold tracking-widest text-sm uppercase mb-3 block ${eyebrowColor}`}>
+        <EyebrowText class={`mb-3 ${eyebrowColor}`}>
           {eyebrow}
-        </span>
+        </EyebrowText>
         <h2 class:list={['text-3xl md:text-4xl font-bold mb-6 text-balance', headlineColor]}>
           {headline}
         </h2>

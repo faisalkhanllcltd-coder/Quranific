@@ -1,6 +1,8 @@
 ---
 // src/components/blocks/LandingTestimonials.astro
 
+import EyebrowText from '../ui/EyebrowText.astro';
+
 interface Testimonial {
   name: string;
   initials: string;
@@ -51,9 +53,9 @@ const gridClass =
 <section class="quranific-section bg-white border-b border-emerald-50">
   <div class="quranific-container">
     <div class="max-w-3xl mx-auto text-center flex flex-col items-center mb-12 md:mb-16">
-      <p class:list={['text-sm font-bold tracking-widest uppercase mb-4', eyebrowColor]}>
+      <EyebrowText class:list={['mb-4', eyebrowColor]}>
         {eyebrow}
-      </p>
+      </EyebrowText>
       <h2
         class:list={[
           'font-serif text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-6 text-balance',

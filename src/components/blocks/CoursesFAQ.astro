@@ -4,6 +4,7 @@
 // Data from faqs.courses in src/data/faqs.ts.
 // Uses the same <details>/<summary> pattern as FAQAccordion.astro for consistency.
 import { faqs } from '../../data/faqs';
+import EyebrowBadge from '../ui/EyebrowBadge.astro';
 
 const questions = faqs.courses;
 ---
@@ -17,11 +18,9 @@ const questions = faqs.courses;
     <div class="grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-20 items-start">
       <!-- Left: section header + guarantee card (sticky on desktop) -->
       <div class="self-start lg:sticky lg:top-32">
-        <div
-          class="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-widest rounded-full mb-6"
-        >
+        <EyebrowBadge class="bg-emerald-50 border border-emerald-100 text-emerald-800 mb-6">
           Course Questions
-        </div>
+        </EyebrowBadge>
 
         <h2
           id="courses-faq-heading"

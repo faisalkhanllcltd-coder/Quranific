@@ -1,6 +1,7 @@
 ---
 // src/components/blocks/heroes/HeroAdults.astro
 import Button from '../../../components/ui/Button.astro';
+import EyebrowText from '../../../components/ui/EyebrowText.astro';
 
 interface Props {
   intent: string;
@@ -125,9 +126,7 @@ const { intent, h1, subhead } = Astro.props;
         <div
           class="w-full bg-white/5 border border-white/10 backdrop-blur-md shadow-xl rounded-2xl p-6 lg:p-12 flex flex-col justify-center"
         >
-          <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-8">
-            Why professionals choose us
-          </p>
+          <EyebrowText class="text-emerald-400 mb-8"> Why professionals choose us </EyebrowText>
           <ul class="space-y-8">
             {
               [
