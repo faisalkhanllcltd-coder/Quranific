@@ -71,7 +71,6 @@ const jsonLd = {
 
   <Header />
 
-  <!-- FIX: Removed overflow-hidden to prevent breaking sticky layouts and scroll mechanics -->
   <main class="font-sans bg-cream-50 selection:bg-emerald-100 selection:text-emerald-900">
     <PageHero
       eyebrow="Our Story"
@@ -87,7 +86,7 @@ const jsonLd = {
               Trusted by families
             </div>
             <EyebrowText class="text-emerald-900/60 leading-relaxed">
-              across the UK, US, UAE, Saudi Arabia, Qatar, Canada, Australia, Europe, and Singapore.
+              across the UK, US, and UAE.
             </EyebrowText>
           </div>
           <div>
@@ -98,45 +97,59 @@ const jsonLd = {
       </Fragment>
 
       <Fragment slot="visual">
+        <!-- Kept mt-10 so it doesn't crush the navigation -->
         <div
-          class="bg-emerald-950 rounded-3xl p-6 sm:p-8 lg:p-10 relative overflow-hidden shadow-2xl w-full"
+          class="bg-emerald-950 rounded-[2rem] p-8 sm:p-10 relative overflow-hidden shadow-2xl w-full max-w-[500px] mx-auto lg:ml-auto mt-10 lg:mt-0 mb-8 lg:mb-0"
         >
           <div
-            class="absolute bottom-[-10%] right-[-10%] w-[200px] h-[200px] bg-white/5 rounded-full blur-xl pointer-events-none"
+            class="absolute bottom-[-10%] right-[-10%] w-[200px] h-[200px] bg-white/5 rounded-full blur-2xl pointer-events-none"
           >
           </div>
           <div
-            class="absolute top-[-5%] left-[-5%] w-[120px] h-[120px] bg-amber-500/10 rounded-full blur-xl pointer-events-none"
+            class="absolute top-[-5%] left-[-5%] w-[120px] h-[120px] bg-gold-500/10 rounded-full blur-2xl pointer-events-none"
           >
           </div>
 
+          <!-- Styled Quote Mark -->
           <div
-            class="font-serif text-[60px] leading-[0.5] text-white/10 mb-2 font-black"
+            class="font-serif text-[80px] leading-[0.5] text-emerald-500/20 mb-6 font-black"
             aria-hidden="true"
           >
             "
           </div>
-          <p
-            class="font-serif text-lg sm:text-xl italic text-white/95 leading-relaxed mb-6 relative z-10"
-          >
-            I spent years formally training as an Islamic scholar, proofreading complex classical
-            texts in Hadith, Fiqh, and Tafsir. But as my career in software engineering grew, I
-            noticed a massive disconnect in how the Quran was being taught online. Families abroad
-            were looking for authentic teachers, but the platforms connecting them were chaotic.
-            Local classes were overcrowded, and online options were plagued by dropped calls,
-            rotating tutors, and zero accountability. I didn't want to just complain about the
-            standard of online Islamic education. I wanted to build the infrastructure to fix it.
-          </p>
 
-          <div class="flex items-center gap-4 relative z-10 pt-5 border-t border-white/10">
+          <!-- FIX: 22px on mobile, 14px on desktop -->
+          <div
+            class="font-serif text-[22px] lg:text-[14px] italic text-white/95 leading-relaxed relative z-10 space-y-4 mb-8"
+          >
+            <p>
+              I spent years formally training as an Islamic scholar, proofreading complex classical
+              texts in Hadith, Fiqh, and Tafsir. But as my career in software engineering grew, I
+              noticed a massive disconnect in how the Quran was being taught online.
+            </p>
+            <p class="text-white/80">
+              Families abroad were looking for authentic teachers, but the platforms connecting them
+              were chaotic. Local classes were overcrowded, and online options were plagued by
+              dropped calls, rotating tutors, and zero accountability. I didn't want to just
+              complain about the standard of online Islamic education. I wanted to build the
+              infrastructure to fix it.
+            </p>
+          </div>
+
+          <!-- Refined Author Footer -->
+          <div class="flex items-center gap-4 relative z-10 pt-6 border-t border-emerald-800/50">
             <div
-              class="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-serif text-xl text-white font-bold shrink-0"
+              class="w-12 h-12 rounded-full bg-emerald-900 border border-emerald-700/50 flex items-center justify-center font-serif text-xl text-gold-400 font-bold shrink-0 shadow-inner"
             >
               ف
             </div>
             <div>
               <div class="font-bold text-white text-base">Faisal Khan</div>
-              <div class="text-xs text-emerald-100/70 font-medium">Founder & CEO, Quranific</div>
+              <div
+                class="text-[13px] text-emerald-300/70 font-medium uppercase tracking-wider mt-0.5"
+              >
+                Founder & CEO
+              </div>
             </div>
           </div>
         </div>

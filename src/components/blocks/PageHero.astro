@@ -112,8 +112,9 @@ const hasVisual = Astro.slots.has('visual');
             )}
           </div>
 
-          <div class="flex lg:col-span-5 relative h-[280px] sm:h-[400px] lg:h-[500px] items-center justify-center order-2 mt-8 lg:mt-0">
-            <div class="relative z-10 w-[90%] lg:w-[95%] mx-auto flex items-center justify-center drop-shadow-2xl h-full">
+          {/* FIX: Converted fixed h-[...] to h-auto with min-h-[...]. This allows dynamic content (like the About quote) to expand the grid instead of overflowing and crashing the layout. Removed h-full from the inner div for natural wrapping. */}
+          <div class="flex lg:col-span-5 relative h-auto min-h-[280px] sm:min-h-[400px] lg:min-h-[500px] items-center justify-center order-2 mt-8 lg:mt-0 py-4 lg:py-0">
+            <div class="relative z-10 w-[90%] lg:w-[95%] mx-auto flex items-center justify-center drop-shadow-2xl">
               <slot name="visual" />
             </div>
           </div>
