@@ -12,6 +12,7 @@ import TeachersVetting from './_components/TeachersVetting.astro';
 import TeachersGenderPrivacy from './_components/TeachersGenderPrivacy.astro';
 import TeachersFaculty from './_components/TeachersFaculty.astro';
 import TeachersCta from './_components/TeachersCta.astro';
+import EyebrowText from '../../components/ui/EyebrowText.astro';
 
 const TEACHERS = [
   {
@@ -102,23 +103,17 @@ const jsonLd = {
         <div class="flex flex-wrap justify-center gap-4 sm:gap-8 mt-6">
           <div class="flex flex-col items-center">
             <span class="text-3xl font-black text-emerald-800">100%</span>
-            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider"
-              >Background Checked</span
-            >
+            <EyebrowText class="text-emerald-600"> Background Checked </EyebrowText>
           </div>
           <div class="w-px h-12 bg-emerald-200 hidden sm:block" aria-hidden="true"></div>
           <div class="flex flex-col items-center">
             <span class="text-3xl font-black text-emerald-800">24/7</span>
-            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider"
-              >Quality Assurance</span
-            >
+            <EyebrowText class="text-emerald-600"> Quality Assurance </EyebrowText>
           </div>
           <div class="w-px h-12 bg-emerald-200 hidden sm:block" aria-hidden="true"></div>
           <div class="flex flex-col items-center">
             <span class="text-3xl font-black text-emerald-800">Rigorous</span>
-            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider"
-              >Vetting Process</span
-            >
+            <EyebrowText class="text-emerald-600"> Vetting Process </EyebrowText>
           </div>
         </div>
       </Fragment>

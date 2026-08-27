@@ -63,9 +63,9 @@ if (FX_RATES) {
                   <p class="text-[15px] font-medium text-emerald-800/80 leading-relaxed mb-3">
                     {step.text}
                   </p>
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-bold uppercase tracking-wider rounded-full">
+                  <EyebrowBadge class="bg-emerald-50 text-emerald-700">
                     <svg
-                      class="w-3.5 h-3.5"
+                      class="w-3.5 h-3.5 shrink-0"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -79,7 +79,7 @@ if (FX_RATES) {
                       />
                     </svg>
                     {idx === 0 ? 'Getting Started' : idx === 1 ? 'Teacher Match' : 'First Class'}
-                  </span>
+                  </EyebrowBadge>
                 </div>
               </div>
             ))

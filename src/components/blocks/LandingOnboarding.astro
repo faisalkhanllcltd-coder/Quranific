@@ -69,13 +69,13 @@ const card3StepColor = isPurple ? 'text-purple-600' : 'text-emerald-600';
           const cardClasses = isCard3
             ? `relative flex flex-col h-full p-6 md:p-8 rounded-2xl border ${card3Border} shadow-md`
             : 'relative flex flex-col h-full p-6 md:p-8 rounded-2xl border border-slate-100 bg-white shadow-sm';
-          const stepBadgeClasses = isCard3
-            ? `text-[10px] font-bold tracking-widest ${card3StepColor} uppercase mb-4 block`
-            : 'text-[10px] font-bold tracking-widest text-slate-500 uppercase mb-4 block';
+          const stepBadgeColor = isCard3 ? card3StepColor : 'text-slate-500';
 
           return (
             <li class={cardClasses}>
-              <span class={stepBadgeClasses}>Step {String(n || index + 1).padStart(2, '0')}</span>
+              <EyebrowText class={`mb-4 ${stepBadgeColor}`}>
+                Step {String(n || index + 1).padStart(2, '0')}
+              </EyebrowText>
               <h3 class="text-lg md:text-xl font-bold text-slate-900 mb-3">{title}</h3>
               <p class="text-slate-600 text-sm md:text-base leading-relaxed">{body}</p>
             </li>

@@ -10,6 +10,7 @@ import PageHero from '../../components/blocks/PageHero.astro';
 import TestimonialsVideoCard from './_components/TestimonialsVideoCard.astro';
 import TestimonialsGrid from './_components/TestimonialsGrid.astro';
 import TestimonialsCta from './_components/TestimonialsCta.astro';
+import EyebrowText from '../../components/ui/EyebrowText.astro';
 
 const TESTIMONIALS = [
   {
@@ -100,16 +101,12 @@ const jsonLd = {
         <div class="flex flex-wrap justify-center gap-8 lg:gap-16 mt-6">
           <div class="text-center">
             <div class="text-4xl font-black text-emerald-800 mb-1">4.9/5</div>
-            <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider">
-              Rated by parents
-            </div>
+            <EyebrowText class="text-emerald-600/70"> Rated by parents </EyebrowText>
           </div>
           <div class="w-px h-16 bg-emerald-100 hidden sm:block" aria-hidden="true"></div>
           <div class="text-center flex flex-col justify-center">
             <div class="text-4xl font-black text-emerald-800 mb-1">3,000+</div>
-            <div class="text-xs font-bold text-emerald-600/70 uppercase tracking-wider mt-2">
-              Students in 22 Countries
-            </div>
+            <EyebrowText class="text-emerald-600/70 mt-2"> Students in 22 Countries </EyebrowText>
           </div>
         </div>
       </Fragment>

@@ -1,6 +1,8 @@
 ---
 // src/pages/teachers/_components/TeachersFaculty.astro
 import Section from '../../../components/ui/Section.astro';
+import EyebrowBadge from '../../../components/ui/EyebrowBadge.astro';
+import EyebrowText from '../../../components/ui/EyebrowText.astro';
 
 export interface Teacher {
   name: string;
@@ -51,17 +53,15 @@ const Icons = {
                 <span set:html={Icons.star} aria-hidden="true" />
                 <span class="text-sm font-bold text-emerald-950">{teacher.rating}</span>
               </div>
-              <span class="text-xs text-emerald-700/70 font-bold uppercase tracking-wider">
-                {teacher.students} Students
-              </span>
+              <EyebrowText class="text-emerald-700/70">{teacher.students} Students</EyebrowText>
             </div>
 
             <div class="flex-1">
               <div class="flex flex-wrap items-center gap-2 mb-2">
                 <h3 class="text-2xl font-bold text-emerald-950">{teacher.name}</h3>
-                <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider rounded-md border border-emerald-100">
+                <EyebrowBadge class="bg-emerald-50 text-emerald-700 border border-emerald-100">
                   {teacher.gender} Tutor
-                </span>
+                </EyebrowBadge>
               </div>
 
               <p class="text-emerald-700 font-bold text-sm mb-4">
@@ -73,9 +73,7 @@ const Icons = {
 
               <div class="space-y-3">
                 <div class="flex items-start gap-2">
-                  <span class="text-xs font-bold text-emerald-950 uppercase tracking-wider w-20 shrink-0 pt-0.5">
-                    Focus:
-                  </span>
+                  <EyebrowText class="text-emerald-950 w-20 shrink-0 pt-0.5">Focus:</EyebrowText>
                   <div class="flex flex-wrap gap-2">
                     {teacher.specialties.map((spec) => (
                       <span class="bg-cream-50 border border-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
@@ -85,9 +83,7 @@ const Icons = {
                   </div>
                 </div>
                 <div class="flex items-start gap-2">
-                  <span class="text-xs font-bold text-emerald-950 uppercase tracking-wider w-20 shrink-0 pt-0.5">
-                    Speaks:
-                  </span>
+                  <EyebrowText class="text-emerald-950 w-20 shrink-0 pt-0.5">Speaks:</EyebrowText>
                   <div class="flex flex-wrap gap-2">
                     {teacher.languages.map((lang) => (
                       <span class="text-emerald-800/80 text-xs font-medium bg-white border border-emerald-50 px-2 py-0.5 rounded-md shadow-sm">

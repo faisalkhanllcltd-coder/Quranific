@@ -2,6 +2,7 @@
 // src/components/global/Header.astro
 import MobileMenu from './MobileMenu.astro';
 import Button from '../ui/Button.astro';
+import EyebrowText from '../ui/EyebrowText.astro';
 import { SITE, MAIN_NAVIGATION } from '../../constants/site';
 ---
 
@@ -38,7 +39,7 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
           href={SITE.announcement.linkUrl}
           class="inline-flex items-center text-emerald-300 hover:text-white underline decoration-emerald-500/40 hover:decoration-emerald-300 underline-offset-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-sm ml-1"
         >
-          <span set:html={SITE.announcement.linkText} class="font-bold uppercase tracking-wider" />
+          <EyebrowText class="inline" set:html={SITE.announcement.linkText} />
         </a>
       </div>
 

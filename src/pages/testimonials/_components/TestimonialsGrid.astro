@@ -1,6 +1,7 @@
 ---
 // src/pages/testimonials/_components/TestimonialsGrid.astro
 import Section from '../../../components/ui/Section.astro';
+import EyebrowText from '../../../components/ui/EyebrowText.astro';
 
 export interface TestimonialItem {
   name: string;
@@ -75,9 +76,9 @@ const Icons = {
                   <p class="font-bold text-emerald-950 text-base">{testimonial.name}</p>
                   <div class="flex items-center gap-2 mt-0.5">
                     <span class="text-emerald-500" set:html={Icons.check} />
-                    <p class="text-xs font-bold text-emerald-700/80 uppercase tracking-wider">
+                    <EyebrowText class="text-emerald-700/80">
                       {testimonial.role} • {testimonial.location}
-                    </p>
+                    </EyebrowText>
                   </div>
                 </div>
               </div>

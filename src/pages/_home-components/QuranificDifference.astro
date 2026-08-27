@@ -4,6 +4,7 @@ import Section from '../../components/ui/Section.astro';
 import Button from '../../components/ui/Button.astro';
 import { SITE } from '../../constants/site';
 import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
+import EyebrowText from '../../components/ui/EyebrowText.astro';
 
 const CheckIcon = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
 const XIcon = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`;
@@ -39,8 +40,8 @@ const XIcon = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="curr
             aria-hidden="true"
             set:html={XIcon}
           />
-          <h3 class="font-bold text-red-950 uppercase tracking-wide text-sm">
-            Traditional Academy
+          <h3>
+            <EyebrowText class="text-red-950"> Traditional Academy </EyebrowText>
           </h3>
         </div>
         <ul class="p-6 space-y-4" role="list">
@@ -163,8 +164,10 @@ const XIcon = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="curr
             aria-hidden="true"
             set:html={CheckIcon}
           />
-          <h3 class="font-bold text-emerald-950 uppercase tracking-wide text-sm">
-            {SITE.name}
+          <h3>
+            <EyebrowText class="text-emerald-950">
+              {SITE.name}
+            </EyebrowText>
           </h3>
         </div>
         <ul class="p-6 space-y-4" role="list">

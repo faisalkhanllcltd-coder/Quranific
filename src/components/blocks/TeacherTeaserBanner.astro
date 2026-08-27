@@ -4,6 +4,7 @@
 // trust signals and a single strong call-to-action.
 
 import EyebrowBadge from '../ui/EyebrowBadge.astro';
+import EyebrowText from '../ui/EyebrowText.astro'; // FIX: Imported missing primitive
 
 interface Props {
   hideCta?: boolean;
@@ -119,9 +120,8 @@ const vettingSteps = [
         >
           <div class="text-5xl mb-4" aria-hidden="true">📜</div>
           <div class="font-serif text-5xl font-bold text-white mb-1">100%</div>
-          <div class="text-sm font-bold text-emerald-300/70 uppercase tracking-widest mb-6">
-            Ijazah-Certified
-          </div>
+          <!-- FIX: Replaced raw div with EyebrowText primitive -->
+          <EyebrowText class="text-emerald-300/70 mb-6"> Ijazah-Certified </EyebrowText>
           <div class="w-full h-px bg-emerald-800 mb-6" aria-hidden="true"></div>
           <blockquote class="font-serif italic text-emerald-100/70 text-[14px] leading-relaxed">
             "We do not hire tutors. We select carriers of a living tradition."

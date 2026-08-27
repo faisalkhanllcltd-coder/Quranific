@@ -7,6 +7,7 @@ import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 import { SITE } from '../../constants/site';
 import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
+import EyebrowText from '../../components/ui/EyebrowText.astro';
 
 const lastUpdated = 'March 25, 2026';
 
@@ -53,9 +54,9 @@ const jsonLd = {
           priority. This policy sets out our mandatory standards, background verification protocols,
           and classroom conduct rules.
         </p>
-        <div class="mt-4 text-xs font-bold text-emerald-600/70 uppercase tracking-wider">
+        <EyebrowText class="mt-4 text-emerald-600/70">
           Last Updated: {lastUpdated} &nbsp;•&nbsp; Applicable Worldwide
-        </div>
+        </EyebrowText>
       </div>
     </div>
 

@@ -5,6 +5,7 @@ import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 import Section from '../../components/ui/Section.astro';
 import Button from '../../components/ui/Button.astro';
+import EyebrowText from '../../components/ui/EyebrowText.astro';
 import { getCollection, render } from 'astro:content';
 
 export const prerender = true;
@@ -65,13 +66,11 @@ const jsonLd = {
         class="mb-12 lg:mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-700"
       >
         <div class="flex items-center justify-center gap-3 mb-6">
-          <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest"
-            >{formattedDate}</span
-          >
+          <EyebrowText class="inline text-emerald-700/70">
+            {formattedDate}
+          </EyebrowText>
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-200" aria-hidden="true"></span>
-          <span class="text-sm font-bold text-emerald-700/70 uppercase tracking-widest"
-            >Article</span
-          >
+          <EyebrowText class="inline text-emerald-700/70"> Article </EyebrowText>
         </div>
 
         <h1

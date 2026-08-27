@@ -51,9 +51,7 @@ const { course } = Astro.props;
               "{course.quote}"
             </blockquote>
             {course.quoteAuthor && (
-              <p class="text-[11px] uppercase tracking-wider font-bold text-emerald-700 mt-3">
-                — {course.quoteAuthor}
-              </p>
+              <EyebrowText class="text-emerald-700 mt-3">— {course.quoteAuthor}</EyebrowText>
             )}
           </div>
         )

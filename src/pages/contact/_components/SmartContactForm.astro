@@ -32,9 +32,7 @@ const Icons = {
           exactly what we need to give you a useful answer.
         </p>
 
-        <div class="text-[11px] font-bold tracking-widest uppercase text-emerald-900/50 mb-3">
-          What's your question about?
-        </div>
+        <EyebrowText class="text-emerald-900/50 mb-3"> What's your question about? </EyebrowText>
         <div class="space-y-2.5 mb-10">
           <!-- E-3 FIX: Added aria-pressed to all topic buttons. JS updates them on click. -->
           <button
@@ -178,11 +176,11 @@ const Icons = {
           <form class="space-y-5" id="smart-form" action="/api/contact" method="POST" novalidate>
             <div class="grid sm:grid-cols-2 gap-5">
               <div>
-                <label
-                  for="fc-name"
-                  class="block text-xs font-bold uppercase tracking-wider text-emerald-900/60 mb-2"
-                  >Your Name <span class="text-amber-500">*</span></label
-                >
+                <label for="fc-name" class="block mb-2">
+                  <EyebrowText class="text-emerald-900/60">
+                    Your Name <span class="text-amber-500">*</span>
+                  </EyebrowText>
+                </label>
                 <input
                   type="text"
                   id="fc-name"
@@ -194,11 +192,11 @@ const Icons = {
                 />
               </div>
               <div>
-                <label
-                  for="fc-email"
-                  class="block text-xs font-bold uppercase tracking-wider text-emerald-900/60 mb-2"
-                  >Email Address <span class="text-amber-500">*</span></label
-                >
+                <label for="fc-email" class="block mb-2">
+                  <EyebrowText class="text-emerald-900/60">
+                    Email Address <span class="text-amber-500">*</span>
+                  </EyebrowText>
+                </label>
                 <input
                   type="email"
                   id="fc-email"
@@ -212,11 +210,9 @@ const Icons = {
             </div>
 
             <div>
-              <label
-                for="fc-whatsapp"
-                class="block text-xs font-bold uppercase tracking-wider text-emerald-900/60 mb-2"
-                >WhatsApp Number (Preferred)</label
-              >
+              <label for="fc-whatsapp" class="block mb-2">
+                <EyebrowText class="text-emerald-900/60"> WhatsApp Number (Preferred) </EyebrowText>
+              </label>
               <input
                 type="tel"
                 id="fc-whatsapp"
@@ -228,11 +224,11 @@ const Icons = {
             </div>
 
             <div id="dynamic-child-field">
-              <label
-                for="fc-level"
-                class="block text-xs font-bold uppercase tracking-wider text-emerald-900/60 mb-2"
-                >Child's age and current level</label
-              >
+              <label for="fc-level" class="block mb-2">
+                <EyebrowText class="text-emerald-900/60">
+                  Child's age and current level
+                </EyebrowText>
+              </label>
               <select
                 id="fc-level"
                 name="fc-level"
@@ -249,11 +245,11 @@ const Icons = {
             </div>
 
             <div>
-              <label
-                for="fc-message"
-                class="block text-xs font-bold uppercase tracking-wider text-emerald-900/60 mb-2"
-                >Your question or message <span class="text-amber-500">*</span></label
-              >
+              <label for="fc-message" class="block mb-2">
+                <EyebrowText class="text-emerald-900/60">
+                  Your question or message <span class="text-amber-500">*</span>
+                </EyebrowText>
+              </label>
               <textarea
                 id="fc-message"
                 name="fc-message"

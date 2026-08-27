@@ -52,9 +52,7 @@ const { testimonials } = Astro.props;
                 <div class="text-xs text-emerald-100/60 font-medium">{review.details}</div>
               </div>
             </footer>
-            <div class="mt-4 text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
-              Enrolled {review.enrolled}
-            </div>
+            <EyebrowText class="mt-4 text-emerald-400">Enrolled {review.enrolled}</EyebrowText>
           </blockquote>
         ))
       }
@@ -67,17 +65,13 @@ const { testimonials } = Astro.props;
         <div class="font-serif text-base lg:text-lg font-semibold text-white mb-2 leading-tight">
           Trusted by families<br />across the UK, US, and UAE
         </div>
-        <div class="text-xs sm:text-sm font-medium text-emerald-100/60 uppercase tracking-widest">
-          Global community
-        </div>
+        <EyebrowText class="text-emerald-100/60"> Global community </EyebrowText>
       </div>
       <div
         class="bg-emerald-950/40 border border-emerald-800/50 rounded-3xl p-6 sm:p-8 text-center backdrop-blur-sm"
       >
         <div class="font-serif text-4xl lg:text-5xl font-semibold text-white mb-2">22</div>
-        <div class="text-xs sm:text-sm font-medium text-emerald-100/60 uppercase tracking-widest">
-          Countries served
-        </div>
+        <EyebrowText class="text-emerald-100/60"> Countries served </EyebrowText>
       </div>
       <div
         class="bg-emerald-950/40 border border-emerald-800/50 rounded-3xl p-6 sm:p-8 text-center backdrop-blur-sm"
@@ -85,9 +79,7 @@ const { testimonials } = Astro.props;
         <div class="font-serif text-4xl lg:text-5xl font-semibold text-white mb-2">
           94<span class="text-amber-400 text-3xl" aria-hidden="true">%</span>
         </div>
-        <div class="text-xs sm:text-sm font-medium text-emerald-100/60 uppercase tracking-widest">
-          Retention (Mo 1)
-        </div>
+        <EyebrowText class="text-emerald-100/60"> Retention (Mo 1) </EyebrowText>
       </div>
       <div
         class="bg-emerald-950/40 border border-emerald-800/50 rounded-3xl p-6 sm:p-8 text-center backdrop-blur-sm"
@@ -95,9 +87,7 @@ const { testimonials } = Astro.props;
         <div class="font-serif text-4xl lg:text-5xl font-semibold text-white mb-2">
           4.9<span class="text-amber-400 text-3xl" aria-hidden="true">★</span>
         </div>
-        <div class="text-xs sm:text-sm font-medium text-emerald-100/60 uppercase tracking-widest">
-          Average rating
-        </div>
+        <EyebrowText class="text-emerald-100/60"> Average rating </EyebrowText>
       </div>
     </div>
   </div>

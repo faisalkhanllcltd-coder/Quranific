@@ -1,6 +1,7 @@
 ---
 // src/layouts/Funnel.astro
 import Base from './Base.astro';
+import EyebrowText from '../components/ui/EyebrowText.astro';
 import { testimonials } from '../data/testimonials';
 
 interface Props {
@@ -78,9 +79,9 @@ const { title, description = 'Complete your registration for Quranific.' } = Ast
           </p>
           <footer class="flex items-center gap-4 text-emerald-300/60">
             <div class="h-px bg-emerald-800 flex-grow" aria-hidden="true"></div>
-            <cite class="text-xs font-bold tracking-widest uppercase not-italic"
-              >Sahih Al-Bukhari</cite
-            >
+            <cite class="not-italic">
+              <EyebrowText class="inline">Sahih Al-Bukhari</EyebrowText>
+            </cite>
           </footer>
         </blockquote>
 

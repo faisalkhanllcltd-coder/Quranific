@@ -1,6 +1,7 @@
 ---
 // src/components/blocks/LandingVetting.astro
 
+import EyebrowBadge from '../ui/EyebrowBadge.astro';
 import EyebrowText from '../ui/EyebrowText.astro';
 
 interface VettingStep {
@@ -88,11 +89,9 @@ const calloutBodyColor = isDarkCallout
               >
                 <Fragment set:html={icon} />
               </div>
-              <span
-                class={`text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${stepBadgeColor}`}
-              >
+              <EyebrowBadge class={`border ${stepBadgeColor}`}>
                 Step {String(n || index + 1).padStart(2, '0')}
-              </span>
+              </EyebrowBadge>
             </div>
             <p class={`text-base font-bold mb-2 ${cardTitleColor}`}>{title}</p>
             <p class={`text-sm leading-relaxed ${cardBodyColor}`}>{body}</p>

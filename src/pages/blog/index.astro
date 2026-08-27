@@ -6,6 +6,8 @@ import Base from '../../layouts/Base.astro';
 import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 import Section from '../../components/ui/Section.astro';
+import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
+import EyebrowText from '../../components/ui/EyebrowText.astro';
 import { getCollection } from 'astro:content';
 
 // Safely fetch posts and sort by date.
@@ -105,9 +107,9 @@ const jsonLd = {
                   </div>
                   <div class="flex flex-col justify-center py-6 lg:pr-8">
                     <div class="flex items-center gap-3 mb-4">
-                      <span class="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold uppercase tracking-wider rounded-md">
+                      <EyebrowBadge class="bg-amber-50 border border-amber-200 text-amber-700">
                         Guide
-                      </span>
+                      </EyebrowBadge>
                       <span class="text-sm font-bold text-emerald-700/70">
                         {new Date(featuredPost.data.pubDate).toLocaleDateString('en-US', {
                           month: 'long',
@@ -162,13 +164,13 @@ const jsonLd = {
                       )}
                     </div>
                     <div class="flex-1 flex flex-col px-2">
-                      <div class="text-xs font-bold text-emerald-700/70 mb-3 uppercase tracking-wider">
+                      <EyebrowText class="text-emerald-700/70 mb-3">
                         {new Date(post.data.pubDate).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
                           year: 'numeric',
                         })}
-                      </div>
+                      </EyebrowText>
                       <h3 class="text-xl font-bold text-emerald-950 mb-3 group-hover:text-emerald-700 transition-colors leading-snug">
                         {post.data.title}
                       </h3>

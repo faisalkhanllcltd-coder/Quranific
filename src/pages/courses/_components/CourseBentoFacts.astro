@@ -1,6 +1,7 @@
 ---
 // src/pages/courses/_components/CourseBentoFacts.astro
 import type { Course } from '../../../constants/courses';
+import EyebrowText from '../../../components/ui/EyebrowText.astro';
 
 interface Props {
   course: Course;
@@ -28,11 +29,7 @@ const { course } = Astro.props;
         </svg>
       </div>
       <div>
-        <p
-          class="text-[10px] sm:text-[11px] uppercase tracking-widest text-emerald-900/50 font-bold mb-0.5"
-        >
-          Age Group
-        </p>
+        <EyebrowText class="text-emerald-900/50 mb-0.5"> Age Group </EyebrowText>
         <p class="text-sm sm:text-[15px] font-bold text-emerald-950">{course.ageRange}</p>
       </div>
     </div>
@@ -52,11 +49,7 @@ const { course } = Astro.props;
         </svg>
       </div>
       <div>
-        <p
-          class="text-[10px] sm:text-[11px] uppercase tracking-widest text-emerald-900/50 font-bold mb-0.5"
-        >
-          Pacing
-        </p>
+        <EyebrowText class="text-emerald-900/50 mb-0.5"> Pacing </EyebrowText>
         <p class="text-sm sm:text-[15px] font-bold text-emerald-950">{course.duration}</p>
       </div>
     </div>
@@ -76,11 +69,7 @@ const { course } = Astro.props;
         </svg>
       </div>
       <div>
-        <p
-          class="text-[10px] sm:text-[11px] uppercase tracking-widest text-emerald-900/50 font-bold mb-0.5"
-        >
-          Group Size
-        </p>
+        <EyebrowText class="text-emerald-900/50 mb-0.5"> Group Size </EyebrowText>
         <p class="text-sm sm:text-[15px] font-bold text-emerald-950">{course.groupSize}</p>
       </div>
     </div>
@@ -101,11 +90,7 @@ const { course } = Astro.props;
         </svg>
       </div>
       <div>
-        <p
-          class="text-[10px] sm:text-[11px] uppercase tracking-widest text-emerald-900/50 font-bold mb-0.5"
-        >
-          Language
-        </p>
+        <EyebrowText class="text-emerald-900/50 mb-0.5"> Language </EyebrowText>
         <p class="text-sm sm:text-[15px] font-bold text-emerald-950">
           {course.instructionLanguage.join(' / ')}
         </p>
