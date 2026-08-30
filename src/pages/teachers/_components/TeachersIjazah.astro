@@ -1,32 +1,80 @@
 ---
 // src/pages/teachers/_components/TeachersIjazah.astro
 import Section from '../../../components/ui/Section.astro';
-
-const Icons = {
-  ijazah: `<svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>`,
-};
+import EyebrowBadge from '../../../components/ui/EyebrowBadge.astro';
 ---
 
-<Section height={400} class="py-16 bg-white border-b border-emerald-50 px-4 sm:px-6">
-  <div
-    class="max-w-5xl mx-auto bg-emerald-50 rounded-3xl p-8 lg:p-12 border border-emerald-100 flex flex-col md:flex-row items-center gap-8 lg:gap-12"
-  >
-    <div
-      class="w-24 h-24 shrink-0 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center border-4 border-white shadow-sm"
-      aria-hidden="true"
-    >
-      <span set:html={Icons.ijazah} />
-    </div>
-    <div>
-      <h2 class="text-2xl font-bold text-emerald-950 mb-2">
-        The Gold Standard: What is an Ijazah?
+<Section class="py-16 lg:py-24 bg-white border-b border-emerald-50 px-4 sm:px-6 overflow-hidden">
+  <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+    <!-- Text Column (Stacks bottom on mobile, left on desktop) -->
+    <div class="order-2 lg:order-1 flex flex-col items-start max-w-xl">
+      <EyebrowBadge class="bg-amber-50 text-amber-700 border border-amber-200/60 mb-6">
+        The Gold Standard
+      </EyebrowBadge>
+
+      <h2
+        class="text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-950 mb-6 tracking-tight text-balance leading-[1.15]"
+      >
+        What is an Ijazah?
       </h2>
-      <p class="text-emerald-900/80 font-medium leading-relaxed">
+
+      <p class="text-lg text-emerald-900/80 font-medium leading-relaxed text-balance">
         Many of our teachers hold an <strong>Ijazah</strong>. This is the highest traditional
         certification in Quranic recitation, verifying that the teacher's recitation is flawless and
         connected through an unbroken chain of transmission directly back to the Prophet Muhammad
-        (ﷺ). When you learn with Quranific, you learn the authentic, preserved word of Allah.
+        (ﷺ).
       </p>
+
+      <div class="mt-8 pt-8 border-t border-emerald-100 w-full">
+        <p class="text-emerald-800 font-bold text-lg">
+          When you learn with Quranific, you learn the authentic, preserved word of Allah.
+        </p>
+      </div>
+    </div>
+
+    <!-- Visual Column (Stacks top on mobile, right on desktop) -->
+    <div class="order-1 lg:order-2 relative group w-full max-w-lg mx-auto lg:max-w-none lg:mx-0">
+      <!-- Ambient Glow Behind Image -->
+      <div
+        class="absolute inset-0 bg-gradient-to-tr from-amber-300/30 to-emerald-500/20 rounded-[2.5rem] blur-3xl transform group-hover:scale-105 transition-transform duration-700 ease-out -z-10"
+        aria-hidden="true"
+      >
+      </div>
+
+      <!-- Image Container -->
+      <div
+        class="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[4/3] rounded-[2rem] overflow-hidden border border-emerald-900/10 shadow-2xl bg-emerald-50"
+      >
+        <img
+          src="public/images/quran-ijazah.webp"
+          onerror="this.onerror=null;this.style.display='none';"
+          alt="Traditional Quranic Ijazah Certification"
+          class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+          loading="lazy"
+          decoding="async"
+        />
+        <!-- Inner framing shadow -->
+        <div
+          class="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)] pointer-events-none"
+          aria-hidden="true"
+        >
+        </div>
+      </div>
+
+      <!-- Floating Structural Badge -->
+      <div
+        class="absolute -bottom-6 -left-6 sm:-left-10 bg-white p-4 pr-6 rounded-2xl shadow-xl border border-emerald-50 hidden sm:flex items-center gap-4 z-10 hover:-translate-y-1 transition-transform duration-300"
+      >
+        <div
+          class="w-12 h-12 bg-emerald-950 text-amber-400 rounded-full flex items-center justify-center font-serif text-xl font-bold shadow-inner"
+        >
+          إجازة
+        </div>
+        <div>
+          <div class="text-sm font-black text-emerald-950 uppercase tracking-widest">Unbroken</div>
+          <div class="text-xs font-bold text-emerald-700/70">Chain of Transmission</div>
+        </div>
+      </div>
     </div>
   </div>
 </Section>

@@ -8,7 +8,7 @@ import CoursesFAQ from '../../components/blocks/CoursesFAQ.astro';
 import FAQAccordion from '../../components/blocks/FAQAccordion.astro';
 import FinalCTA from '../../components/blocks/FinalCTA.astro';
 
-import CourseHero from './_components/CourseHero.astro';
+import PageHero from '../../components/blocks/PageHero.astro';
 import CourseBentoFacts from './_components/CourseBentoFacts.astro';
 import CourseWhyWho from './_components/CourseWhyWho.astro';
 import CourseCurriculum from './_components/CourseCurriculum.astro';
@@ -30,6 +30,7 @@ if (!course) {
 }
 
 const imageSrc = `/images/${course.slug}.webp`;
+const testFallback = '/images/basic-qaida.webp';
 
 // Generate JSON-LD Schema
 const schema = {
@@ -59,16 +60,47 @@ const schema = {
 <Page description={course.shortDesc} title={`${course.title} | Quranific`} image={imageSrc}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <CourseHero course={course} />
+  <!-- layout="split" locks the grid to 50/50 text-to-image ratio -->
+  <PageHero
+    layout="split"
+    eyebrow={course.level || 'Online Course'}
+    title={course.title}
+    subtitle={course.shortDesc}
+    primaryCtaText="Book Free Trial Class"
+    primaryCtaLink={`/getting-started/signup?course=${course.slug}`}
+    secondaryCtaText="Calculate Monthly Fee"
+    secondaryCtaLink={`#calc-heading-${course.slug}`}
+  >
+    <Fragment slot="visual">
+      <!-- Edge UI Image Optimization: Dynamically shifts aspect ratios across breakpoints to prevent clipping while maximizing screen real estate -->
+      <div
+        class="relative w-full aspect-video sm:aspect-[4/3] lg:aspect-square rounded-[2rem] overflow-hidden shadow-2xl border border-emerald-100 bg-emerald-50 group"
+      >
+        <img
+          src={imageSrc}
+          onerror={`this.onerror=null;this.src='${testFallback}';`}
+          alt={`Learn ${course.title}`}
+          class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+          fetchpriority="high"
+          loading="eager"
+          decoding="sync"
+        />
+        <div
+          class="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)] pointer-events-none"
+          aria-hidden="true"
+        >
+        </div>
+      </div>
+    </Fragment>
+  </PageHero>
+
   <CourseBentoFacts course={course} />
   <CourseWhyWho course={course} />
   <CourseCurriculum course={course} />
   <CoursePricingSection course={course} />
 
-  <!-- TRUST (TEACHER) BANNER - Moved above FAQ, CTAs hidden via prop -->
   <TeacherTeaserBanner hideCta={true} />
 
-  <!-- FAQ SECTION (Course Specific or Global Fallback) -->
   {
     course.courseFaqs && course.courseFaqs.length > 0 ? (
       <FAQAccordion
