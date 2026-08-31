@@ -17,14 +17,14 @@ import Button from '../../components/ui/Button.astro';
 
 const TEACHERS = [
   {
-    name: 'Ustadha Fatima M.',
+    name: 'Ustadha Fatima S.',
     gender: 'Female',
-    title: "Ijazah in Hafs 'an 'Asim",
+    title: "Alimah, M.A. in Quranic Qira'at & Islamic Studies",
     experience: '8+ Years',
     rating: '5.0',
-    students: '120+',
+    students: '12 Active',
     specialties: ['Child Psychology', 'Beginner Tajweed', "Women's Hifz"],
-    languages: ['English', 'Arabic'],
+    languages: ['Arabic', 'English', 'Urdu'],
     bio: 'Specializing in early childhood Islamic education, Ustadha Fatima uses interactive, gentle methods to make young learners fall in love with the Quran.',
   },
   {
@@ -33,7 +33,7 @@ const TEACHERS = [
     title: "Hafiz & Qari (Master's Degree)",
     experience: '12+ Years',
     rating: '4.9',
-    students: '300+',
+    students: '14 Active',
     specialties: ['Advanced Tajweed', "Qira'at", 'Adult Hifz'],
     languages: ['English', 'Arabic', 'Urdu'],
     bio: 'With over a decade of experience and deep academic roots, Ustad Bilal helps adult learners perfect their recitation and memorize with unbreakable retention.',
@@ -44,7 +44,7 @@ const TEACHERS = [
     title: 'Certified Hafiza & Tajweed Expert',
     experience: '5+ Years',
     rating: '5.0',
-    students: '85+',
+    students: '10 Active',
     specialties: ['Female Only', 'Makharij Correction', 'Islamic Studies'],
     languages: ['English', 'Urdu'],
     bio: 'Known for her incredible patience and attention to detail, Ustadha Aisha provides a safe, comfortable, and highly effective learning environment for sisters.',
@@ -55,7 +55,7 @@ const TEACHERS = [
     title: "Ijazah Holder in 3 Qira'at",
     experience: '10+ Years',
     rating: '4.9',
-    students: '250+',
+    students: '15 Active',
     specialties: ['Youth Mentorship', 'Intensive Hifz', 'Tafsir Basics'],
     languages: ['English', 'Arabic'],
     bio: 'Ustad Omar combines traditional rigor with modern relatable mentorship, making him a favorite among teenage students navigating their Quranic journey.',
@@ -101,14 +101,26 @@ const jsonLd = {
       primaryCtaText=""
     >
       <Fragment slot="checklist">
-        <div class="flex justify-center mt-8 mb-12">
+        <!-- Dual Call-To-Action (Revenue vs Recruitment) -->
+        <div
+          class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mt-8 mb-12"
+        >
+          <!-- Primary CTA: Revenue/Students -->
           <Button
             href="/getting-started/signup"
             variant="primary"
-            class="w-full sm:w-auto px-10 py-4 text-lg shadow-lg hover:shadow-xl transition-all"
+            class="w-full sm:w-auto px-10 py-4 text-lg shadow-lg shadow-emerald-900/20 hover:shadow-xl transition-all"
           >
             Book Your Free Class
           </Button>
+
+          <!-- Secondary CTA: Recruitment/Scholars -->
+          <a
+            href="/teachers/apply"
+            class="w-full sm:w-auto px-10 py-4 text-lg font-bold text-emerald-800 bg-emerald-50/50 border-2 border-emerald-200 rounded-xl hover:bg-emerald-100 hover:border-emerald-300 transition-all text-center backdrop-blur-sm"
+          >
+            Join Our Faculty
+          </a>
         </div>
 
         <div

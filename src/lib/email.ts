@@ -329,3 +329,118 @@ export async function sendNewsletterWelcome(email: string, apiKey: string) {
     throw error;
   }
 }
+
+// ─── Task 2: Teacher Application Email Engine ────────────────────────────────
+
+export interface TeacherData {
+  ijazah: string;
+  alim: string;
+  experience: string;
+  english: string;
+  arabic: string;
+  fullName: string;
+  email: string;
+  whatsapp: string;
+  resumeLink: string;
+}
+
+export async function sendTeacherAdminNotification(
+  data: TeacherData,
+  apiKey: string,
+  adminEmail: string | undefined | null
+) {
+  if (!apiKey || apiKey === 're_123456789') return { success: true, mock: true };
+
+  const safeName = esc(String(data.fullName || 'Unknown'));
+  const safeEmail = esc(String(data.email || 'Unknown'));
+  const safeWhatsapp = esc(String(data.whatsapp || 'Unknown'));
+  const safeResume = esc(String(data.resumeLink || 'Unknown'));
+  const safeExp = esc(String(data.experience === 'over_1' ? '1+ Years' : 'Under 1 Year'));
+  const safeAlim = esc(String(data.alim || 'Unknown'));
+  const safeEnglish = esc(String(data.english || 'Unknown'));
+  const safeArabic = esc(String(data.arabic || 'Unknown'));
+
+  const finalAdminEmail = adminEmail || FALLBACK_ADMIN_EMAIL;
+
+  const html = `
+    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px;">
+      <h2 style="color: #065f46;">🎓 New Faculty Application: ${safeName}</h2>
+      <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <p style="margin: 0 0 8px 0;"><strong>Name:</strong> ${safeName}</p>
+        <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${safeEmail}</p>
+        <p style="margin: 0 0 8px 0;"><strong>WhatsApp:</strong> ${safeWhatsapp}</p>
+        <p style="margin: 0 0 8px 0;"><strong>Resume/CV:</strong> <a href="${safeResume}" style="color: #059669;">View Document</a></p>
+      </div>
+      <h3 style="color: #0f172a; border-bottom: 2px solid #d1fae5; padding-bottom: 6px;">📋 Qualifications</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Ijazah:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #059669; font-weight: bold;">Yes</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Alim/Alima:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; text-transform: capitalize;">${safeAlim}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Experience:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">${safeExp}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>English:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; text-transform: capitalize;">${safeEnglish}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;"><strong>Arabic:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; text-transform: capitalize;">${safeArabic}</td></tr>
+      </table>
+    </div>
+  `;
+
+  const text = `New Faculty Application: ${safeName}\nEmail: ${safeEmail}\nWhatsApp: ${safeWhatsapp}\nResume: ${safeResume}\nAlim/Alima: ${safeAlim}\nExperience: ${safeExp}`;
+
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'System <onboarding@quranific.com>',
+        to: finalAdminEmail,
+        subject: `🎓 New Teacher Application - ${safeName}`,
+        html,
+        text,
+      }),
+    });
+
+    if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+    return { success: true };
+  } catch (error) {
+    console.error('sendTeacherAdminNotification failed:', error);
+    throw error;
+  }
+}
+
+export async function sendTeacherAutoResponder(email: string, name: string, apiKey: string) {
+  if (!apiKey || apiKey === 're_123456789') return { success: true, mock: true };
+  const safeName = esc(name);
+
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Quranific Faculty <support@quranific.com>',
+        to: email,
+        reply_to: 'support@quranific.com',
+        subject: 'Application Received: Quranific Faculty',
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+            <h2>As-salamu alaykum, ${safeName}!</h2>
+            <p>Thank you for your interest in joining the Quranific faculty. We have successfully received your application and resume.</p>
+            <p>Our academic team will review your qualifications. If your profile matches our current openings, we will contact you via WhatsApp within the next 48 to 72 hours to schedule an initial interview.</p>
+            <br/>
+            <p>JazakAllah Khair,<br/>The Quranific Academic Team</p>
+          </div>
+        `,
+        text: `As-salamu alaykum, ${name}!\n\nThank you for your interest in joining the Quranific faculty. We have successfully received your application and resume.\n\nOur academic team will review your qualifications. If your profile matches our current openings, we will contact you via WhatsApp within the next 48 to 72 hours to schedule an initial interview.\n\nJazakAllah Khair,\nThe Quranific Academic Team`,
+      }),
+    });
+
+    if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+    return { success: true };
+  } catch (error) {
+    console.error('sendTeacherAutoResponder failed:', error);
+    throw error;
+  }
+}

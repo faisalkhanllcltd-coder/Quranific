@@ -1,0 +1,76 @@
+---
+export const prerender = true;
+
+// src/pages/teachers/apply.astro
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/global/Header.astro';
+import Footer from '../../components/global/Footer.astro';
+import PageHero from '../../components/blocks/PageHero.astro';
+
+// Mount the local Svelte island
+import TeacherApplicationForm from './_components/TeacherApplicationForm.svelte';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title: 'Elite Quran Tutor (Remote)',
+  description:
+    'Join the top 1% of certified Quran scholars. We are looking for Ijazah-holding tutors to teach students globally.',
+  identifier: {
+    '@type': 'PropertyValue',
+    name: 'Quranific',
+  },
+  hiringOrganization: {
+    '@type': 'Organization',
+    name: 'Quranific',
+    sameAs: 'https://quranific.com',
+  },
+  jobLocationType: 'TELECOMMUTE',
+  employmentType: 'CONTRACTOR',
+};
+---
+
+<Base
+  title="Apply to Teach | Quranific"
+  description="Join our global faculty of Ijazah-certified Quran scholars. Apply to become a Quranific tutor today."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+
+  <Header />
+
+  <main class="bg-cream-50 selection:bg-emerald-200 selection:text-emerald-950" id="apply-main">
+    <PageHero
+      layout="split"
+      eyebrow="Faculty Application"
+      title="Join the "
+      highlightWord="Top 1%."
+      subtitle="We maintain strict academic standards. Please complete the pre-qualification check to begin your application process. We review all submissions within 48 hours."
+      primaryCtaText=""
+    >
+      <Fragment slot="visual">
+        <div
+          class="bg-white/40 backdrop-blur-sm border border-emerald-100 rounded-[2rem] p-6 sm:p-8 lg:p-10 shadow-xl shadow-emerald-900/5 relative w-full max-w-xl mx-auto lg:mx-0 lg:ml-auto"
+        >
+          <!-- client:visible ensures 0 JS payload until the user scrolls to the form -->
+          <TeacherApplicationForm client:visible />
+        </div>
+      </Fragment>
+    </PageHero>
+  </main>
+
+  <Footer />
+</Base>
+
+<style is:global>
+  /* 
+   * Forces the left text column inside the split-layout PageHero to remain sticky 
+   * specifically on the Apply page, so it stays locked while the form scrolls.
+   */
+  @media (min-width: 1024px) {
+    #apply-main > section:first-of-type > div > div:first-child {
+      position: sticky;
+      top: 8rem;
+      align-self: start;
+    }
+  }
+</style>
