@@ -1,21 +1,21 @@
 # Consent Agent State
 
-Last updated: 2026-09-01T20:21:00+05:00
-Current phase: 1
-Last gate PASSED (verified, not claimed): 0
+Last updated: 2026-09-01T21:16:30+05:00
+Current phase: 7 (DONE)
+Last gate PASSED (verified, not claimed): 3 (HTML source order verified), 2 (19/19 unit tests pass), build (0 errors)
 Last gate IN PROGRESS: none
 Branch: feat/cookie-consent
 
 ## Phase status
 
-- [x] Phase 0 — Preflight
-- [ ] Phase 1 — Cache-safety decision
-- [ ] Phase 2 — Server bucketing
-- [ ] Phase 3 — Consent Mode snippet
-- [ ] Phase 4 — Client-side visibility (REQUIRED — routes ARE cached)
-- [ ] Phase 5 — Svelte banner
-- [ ] Phase 6 — Automated test
-- [ ] Phase 7 — Manual checklist output
+- [x] Phase 0 — Preflight (gate passed — cache=CACHED, regionCode=absent before this PR, GPC=absent before this PR, no conflicts)
+- [x] Phase 1 — Cache-safety decision (CACHED → server injects bucket only; banner visibility = client-side)
+- [x] Phase 2 — Server bucketing (19/19 unit tests pass; see tests/consent-unit.test.ts)
+- [x] Phase 3 — Consent Mode snippet (injected before GTM in Base.astro; verified in dist/client/index.html pos 1001 vs GTM pos 1716)
+- [x] Phase 4 — Client-side banner visibility (inline script in Base.astro body; uses consent-banner-hidden CSS utility)
+- [x] Phase 5 — Svelte banner (CookieBanner.svelte, client:idle, SSR-shelled, zero CLS)
+- [x] Phase 6 — Automated test written (tests/consent.spec.ts — Playwright; tests/consent-unit.test.ts — 19/19 PASS; Playwright requires dev server to run)
+- [x] Phase 7 — Manual checklist delivered (CONSENT_MANUAL_CHECKLIST.md)
 
 ## Key decisions locked in (do not re-litigate on resume)
 
