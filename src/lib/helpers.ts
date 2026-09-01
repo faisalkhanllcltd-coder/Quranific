@@ -6,17 +6,9 @@ import { SITE } from '../constants/site';
 // ==========================================
 // NOTE: "COURSES" is intentionally removed. We use src/data/courses.ts for the Single Source of Truth.
 
-export const COUNTRIES = [
-  { code: 'US', name: 'United States', flag: '🇺🇸' },
-  { code: 'UK', name: 'United Kingdom', flag: '🇬🇧' },
-  { code: 'CA', name: 'Canada', flag: '🇨🇦' },
-  { code: 'AU', name: 'Australia', flag: '🇦🇺' },
-  { code: 'PK', name: 'Pakistan', flag: '🇵🇰' },
-  { code: 'IN', name: 'India', flag: '🇮🇳' },
-  { code: 'AE', name: 'UAE', flag: '🇦🇪' },
-  { code: 'SA', name: 'Saudi Arabia', flag: '🇸🇦' },
-  { code: 'Other', name: 'Other', flag: '🌍' },
-];
+// ==========================================
+// 2. WHATSAPP ENGINE
+// ==========================================
 
 export const GENDERS = [
   { value: 'Male', label: 'Male' },
@@ -42,36 +34,6 @@ export const DAYS = [
   { value: '4 Days', label: '4 Days' },
   { value: '5 Days', label: '5 Days' },
 ];
-
-// ==========================================
-// 2. BROWSER SESSION MANAGEMENT
-// ==========================================
-// The client only manages the storage of the token.
-// It NEVER encodes or decodes the payload. That is the server's job.
-
-export function saveSessionToken(token: string): void {
-  if (typeof window !== 'undefined') {
-    sessionStorage.setItem('q_reg', token);
-  }
-}
-
-export function getSessionToken(urlParam?: string | null): string | null {
-  if (typeof window === 'undefined') return null;
-
-  // 110% Architecture: Read from URL param FIRST (survives Instagram/FB in-app browsers)
-  const token = urlParam || sessionStorage.getItem('q_reg');
-  return token || null;
-}
-
-export function clearSession(): void {
-  if (typeof window !== 'undefined') {
-    sessionStorage.removeItem('q_reg');
-  }
-}
-
-// ==========================================
-// 3. WHATSAPP ENGINE
-// ==========================================
 
 export function generateWhatsAppLink(prefilledMessage: string, customNumber?: string): string {
   const targetNumber = customNumber || SITE?.whatsappNumber || '1234567890';

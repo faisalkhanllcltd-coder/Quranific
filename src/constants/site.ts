@@ -7,7 +7,7 @@ export const SITE = {
     'No crowded mosque classes. No harsh methods. Just a gentle, qualified teacher, one child, and 30 minutes that might change everything.',
   url: 'https://quranific.com',
   themeColor: '#047857',
-  defaultImage: '/images/og/default.webp', // Optimized for Edge CDN delivery
+  defaultImage: '/images/og/default.png', // Optimized for Edge CDN delivery
   whatsappNumber: '923112112122',
   whatsappLink: 'https://wa.me/message/FF4LDK3JR2GPN1',
   email: 'admin@quranific.com',
@@ -103,7 +103,6 @@ export const MOBILE_NAVIGATION: ReadonlyArray<NavItem> = [
 export const FOOTER_NAVIGATION = {
   academy: [
     { label: 'About Us', href: '/about' },
-    { label: 'Partners', href: '/partners' },
     { label: 'Contact', href: '/contact' },
   ],
   learn: [
