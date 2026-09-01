@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 @import './fonts.css';
 @import './cv.css';
 
@@ -67,4 +68,9 @@ body {
 
 @utility quranific-input {
   @apply w-full px-4 py-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder:text-emerald-400/60;
+}
+
+/* Cookie consent banner — hidden by default, revealed by client-side script */
+@utility consent-banner-hidden {
+  display: none !important;
 }

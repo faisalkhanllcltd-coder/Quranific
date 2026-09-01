@@ -7,7 +7,7 @@ import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
 
-const lastUpdated = 'March 25, 2026';
+const lastUpdated = 'September 1, 2026';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -15,7 +15,7 @@ const jsonLd = {
   name: 'Cookie Policy - Quranific',
   description:
     'Learn how Quranific uses cookies and tracking technologies to improve your experience and manage global advertising.',
-  dateModified: '2026-03-25',
+  dateModified: '2026-09-01',
 };
 ---
 
@@ -30,7 +30,6 @@ const jsonLd = {
   <main
     class="bg-cream-50 min-h-screen selection:bg-emerald-100 selection:text-emerald-900 font-sans pb-32"
   >
-    <!-- FIX: Reduced massive padding to standard safe padding to sit flush under the header -->
     <div
       class="pt-8 md:pt-12 pb-10 lg:pt-14 lg:pb-14 px-4 sm:px-6 border-b border-emerald-100 bg-white"
     >
@@ -52,6 +51,7 @@ const jsonLd = {
     </div>
 
     <div class="quranific-container pt-16 space-y-20">
+      <!-- Section 1 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -64,12 +64,14 @@ const jsonLd = {
             <p class="text-emerald-900/80 font-medium leading-relaxed">
               Cookies are small text files downloaded to your device (computer, tablet, or
               smartphone) when you visit our website. They act as a memory for the website, allowing
-              us to recognize you when you return and ensuring the site functions properly securely.
+              us to recognize you when you return and ensuring the site functions properly and
+              securely.
             </p>
           </li>
         </ul>
       </section>
 
+      <!-- Section 2 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -114,6 +116,7 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section 3 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -139,13 +142,15 @@ const jsonLd = {
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">Payment Gateways</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
-              Secure payment processors (such as Stripe, Wise, and PayPal) may place essential
-              cookies to facilitate secure transactions and prevent fraud during checkout.
+              Our payment processors (such as 2Checkout, Payoneer, and Airwallex) may place
+              essential cookies to facilitate secure transactions and prevent fraud during the
+              invoicing process.
             </p>
           </li>
         </ul>
       </section>
 
+      <!-- Section 4 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -164,15 +169,16 @@ const jsonLd = {
             <strong class="block text-xl text-emerald-700 mb-2">Impact of Disabling Cookies</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
               Please note that disabling essential cookies may prevent you from logging into your
-              account, scheduling classes, or using core features of the Quranific platform.
+              account, booking classes, or paying invoices on the Quranific platform.
             </p>
           </li>
         </ul>
       </section>
 
+      <!-- Contact Section -->
       <section class="mt-16 pt-16 border-t border-emerald-100">
         <h2 class="text-3xl font-black text-emerald-950 mb-6 tracking-tight">
-          Contact Our Data Team
+          Contact Our Compliance Team
         </h2>
         <p class="text-lg text-emerald-900/80 font-medium mb-6">
           If you have any questions regarding our use of cookies or tracking technologies, please
@@ -195,9 +201,9 @@ const jsonLd = {
                 >
               </span>
               <a
-                href="mailto:privacy@quranific.com"
+                href="mailto:compliance@quranific.com"
                 class="font-bold text-xl text-emerald-950 hover:text-emerald-700 transition-colors"
-                >privacy@quranific.com</a
+                >compliance@quranific.com</a
               >
             </div>
             <div class="flex items-center gap-4">

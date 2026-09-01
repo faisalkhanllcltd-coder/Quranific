@@ -7,7 +7,7 @@ import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
 
-const lastUpdated = 'March 25, 2026';
+const lastUpdated = 'September 1, 2026';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -15,7 +15,7 @@ const jsonLd = {
   name: 'Privacy Policy - Quranific',
   description:
     "Read our comprehensive privacy policy. Learn how Quranific protects your data, ensures children's safety online, and complies with global privacy laws.",
-  dateModified: '2026-03-25',
+  dateModified: '2026-09-01',
 };
 ---
 
@@ -30,7 +30,6 @@ const jsonLd = {
   <main
     class="bg-cream-50 min-h-screen selection:bg-emerald-100 selection:text-emerald-900 font-sans pb-32"
   >
-    <!-- FIX: Reduced massive padding (pt-40) to standard safe padding (pt-16) -->
     <div
       class="pt-8 md:pt-12 pb-10 lg:pt-14 lg:pb-14 px-4 sm:px-6 border-b border-emerald-100 bg-white"
     >
@@ -45,13 +44,14 @@ const jsonLd = {
         </h1>
         <p class="text-lg text-emerald-700/80 font-medium max-w-3xl">
           At Quranific, we respect your privacy and are committed to protecting your personal data
-          in accordance with global standards, including GDPR, CCPA, and COPPA. <br />
+          in accordance with global standards, including GDPR, UK GDPR, CCPA, and COPPA. <br />
           <span class="text-sm mt-2 block opacity-70">Last Updated: {lastUpdated}</span>
         </p>
       </div>
     </div>
 
     <div class="quranific-container pt-16 space-y-20">
+      <!-- Section 1 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -72,7 +72,7 @@ const jsonLd = {
             <p class="text-emerald-900/80 font-medium leading-relaxed">
               We do not store your credit card or sensitive banking details on our servers. All
               financial transactions are processed securely by PCI-compliant third-party gateways
-              (e.g., Stripe, PayPal, Wise).
+              (e.g., 2Checkout, Payoneer, Airwallex).
             </p>
           </li>
           <li class="pl-4">
@@ -92,6 +92,7 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section 2 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -105,7 +106,7 @@ const jsonLd = {
             >
             <p class="text-emerald-900/80 font-medium leading-relaxed">
               Your data is used to schedule classes, connect you with appropriate teachers, manage
-              your portal, and send class reminders, progress reports, and technical updates.
+              your portal, and send class reminders, progress reports, and invoices.
             </p>
           </li>
           <li class="pl-4">
@@ -121,26 +122,29 @@ const jsonLd = {
             <strong class="block text-xl text-emerald-700 mb-2">Marketing & Advertising</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
               We may use adult users' data to provide tailored information about our services. You
-              may opt out at any time. We strictly do not use children's data for marketing
-              purposes.
+              may opt out at any time. <strong
+                >We strictly do not use children's data for marketing purposes.</strong
+              >
             </p>
           </li>
         </ul>
       </section>
 
+      <!-- Section 3 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
         >
-          Children's Privacy (COPPA)
+          Children's Privacy (COPPA & GDPR-K)
         </h2>
         <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">Verifiable Parental Consent</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
               For students under the age of 13 (or 16 in certain jurisdictions), we require
-              verifiable parental consent. Consent is typically verified through the financial
-              transaction required to begin paid classes.
+              verifiable parental consent. By executing the payment for the initial invoice via our
+              secure payment partners, the parent or legal guardian provides verifiable consent for
+              the collection of the minimal data required to conduct the student's classes.
             </p>
           </li>
           <li class="pl-4">
@@ -154,13 +158,14 @@ const jsonLd = {
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">Parental Rights</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
-              Parents have the absolute right to review, delete, or refuse further collection of
-              their child's data by contacting our privacy team.
+              Parents have the absolute right to review, correct, delete, or refuse further
+              collection of their child's data by contacting our compliance team.
             </p>
           </li>
         </ul>
       </section>
 
+      <!-- Section 4 (Restored) -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -172,25 +177,27 @@ const jsonLd = {
             <strong class="block text-xl text-emerald-700 mb-2">Advertising Trackers</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
               To reach new students globally, we utilize advertising platforms including Google Ads,
-              Meta, TikTok, Pinterest, and Microsoft Ads. These may collect usage data (like IP
-              addresses) to measure campaign effectiveness for adult users.
+              Meta, TikTok, and Pinterest. These may collect usage data (like IP addresses) to
+              measure campaign effectiveness for adult users.
             </p>
           </li>
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">Service Providers</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
               We share data strictly with operational partners bound by confidentiality, including
-              video conferencing tools (Zoom, Google Meet) and secure email/messaging platforms.
+              video conferencing tools (Zoom, Google Meet, Teams) and secure email/messaging
+              platforms.
             </p>
           </li>
         </ul>
       </section>
 
+      <!-- Section 5 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
         >
-          Data Protection & Security
+          Data Protection, Security & Retention
         </h2>
         <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
           <li class="pl-4">
@@ -208,9 +215,17 @@ const jsonLd = {
               their independent commercial use under any circumstances.
             </p>
           </li>
+          <li class="pl-4">
+            <strong class="block text-xl text-emerald-700 mb-2">Data Retention Policy</strong>
+            <p class="text-emerald-900/80 font-medium leading-relaxed">
+              We retain educational records for 12 months after an account becomes inactive, after
+              which personal identifying data is securely deleted unless required by law.
+            </p>
+          </li>
         </ul>
       </section>
 
+      <!-- Section 6 (Restored) -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -241,9 +256,10 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Contact Section -->
       <section class="mt-16 pt-16 border-t border-emerald-100">
         <h2 class="text-3xl font-black text-emerald-950 mb-6 tracking-tight">
-          Contact Our Privacy Team
+          Contact Our Compliance Team
         </h2>
         <p class="text-lg text-emerald-900/80 font-medium mb-6">
           If you have questions about this Privacy Policy, wish to exercise your data rights, or
@@ -266,9 +282,9 @@ const jsonLd = {
                 >
               </span>
               <a
-                href="mailto:privacy@quranific.com"
+                href="mailto:compliance@quranific.com"
                 class="font-bold text-xl text-emerald-950 hover:text-emerald-700 transition-colors"
-                >privacy@quranific.com</a
+                >compliance@quranific.com</a
               >
             </div>
             <div class="flex items-center gap-4">

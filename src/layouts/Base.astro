@@ -3,6 +3,9 @@
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import { SITE } from '../constants/site';
+import { getConsentDefaults } from '../lib/consent';
+import type { ConsentBucket } from '../lib/consent';
+import CookieBanner from '../components/blocks/CookieBanner.svelte';
 
 /* THE ELITE 3-FONT SYSTEM (Self-Hosted, Zero Latency) */
 import '@fontsource-variable/inter';
@@ -57,6 +60,13 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, siteBas
 // Read edge-detected connection speed from Cloudflare via Astro Locals safely
 const isSlow: boolean = Astro.locals?.isSlowConnection ?? false;
 
+// Consent Mode: read server-computed bucket from middleware locals.
+// Defaults to STRICT if somehow missing (fail-closed).
+const consentBucket: ConsentBucket = Astro.locals?.consentBucket ?? 'STRICT';
+const consentDefaults = getConsentDefaults(consentBucket);
+// Serialise for inline script injection
+const consentDefaultsJson = JSON.stringify(consentDefaults);
+
 // Global Base Entity Schema
 const baseSchema = {
   '@context': 'https://schema.org',
@@ -92,7 +102,24 @@ const baseSchema = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-    <!-- Google Tag Manager -->
+    <!-- Consent Mode v2 Default — must fire BEFORE GTM container loads.
+         Bucket (STRICT/MODERATE/NONE) is computed server-side per request.
+         Banner visibility is decided CLIENT-SIDE (routes are edge-cached, so
+         SSR cannot safely bake "show banner" into HTML — see CONSENT_AGENT_STATE.md).
+    -->
+    <script is:inline define:vars={{ consentDefaultsJson, consentBucket }}>
+      window.dataLayer = window.dataLayer || [];
+      // eslint-disable-next-line prefer-rest-params
+      function gtag() {
+        window.dataLayer.push(arguments);
+      }
+      // Apply server-computed defaults
+      gtag('consent', 'default', JSON.parse(consentDefaultsJson));
+      // Expose bucket for client-side banner logic
+      window.__consentBucket = consentBucket;
+    </script>
+
+    <!-- Google Tag Manager — runs AFTER consent defaults are set above -->
     <script is:inline>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
@@ -243,5 +270,50 @@ const baseSchema = {
         </div>
       )
     }
+
+    <!--
+      Cookie Banner SSR Shell.
+      Phase 4 — client-side visibility: the banner div is hidden by default via
+      the `consent-banner-hidden` class applied synchronously by the inline script
+      below. The Svelte component (client:idle) reveals it when:
+        a) cf_consent_v1 cookie is absent (first visit), AND
+        b) bucket is STRICT or MODERATE (NONE bucket → no banner needed)
+      This pattern avoids CLS and avoids serving personalised show/hide state
+      from cached HTML. NONE-bucket visitors never see the banner at all.
+    -->
+    <div
+      id="cookie-banner-root"
+      class="consent-banner-hidden"
+      aria-live="polite"
+      aria-label="Cookie consent"
+    >
+      <CookieBanner client:idle bucket={consentBucket} />
+    </div>
+
+    <!--
+      Phase 4 inline script: runs synchronously (no defer, no async) immediately
+      after the banner shell div. Reads cf_consent_v1 cookie without JS frameworks.
+      If cookie already set OR bucket is NONE → keep banner hidden.
+      If cookie absent AND bucket requires consent → un-hide banner for Svelte hydration.
+      No layout shift: the CSS class is already applied at server-render time.
+    -->
+    <script is:inline>
+      (function () {
+        const bucket = window.__consentBucket || 'STRICT';
+        // NONE bucket → no banner needed ever, leave hidden
+        if (bucket === 'NONE') return;
+
+        // Check for existing consent cookie
+        const hasCookie = document.cookie.split(';').some(function (c) {
+          return c.trim().startsWith('cf_consent_v1=');
+        });
+
+        if (!hasCookie) {
+          // Reveal the banner for hydration
+          const el = document.getElementById('cookie-banner-root');
+          if (el) el.classList.remove('consent-banner-hidden');
+        }
+      })();
+    </script>
   </body>
 </html>
