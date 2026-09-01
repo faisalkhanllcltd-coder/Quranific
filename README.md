@@ -1,408 +1,347 @@
-﻿# Quranific — Agent Onboarding README
+# Quranific — Engineering Architecture & Onboarding Guide
 
-> **For AI agents:** Read this file AND `Quranific-agent-constitution.md` before touching any code.
-> The constitution rules (especially 2a replace-never-append and 2b no-build-unless-asked) are
-> non-negotiable and apply to every task, however small.
-
----
-
-## 1. What This Project Is
-
-**Quranific** (`https://quranific.com`) is a live online Quran tutoring business targeting
-Muslim diaspora parents (30-55) in the UK, US, UAE, Canada, Australia, Singapore, and Saudi Arabia.
-The goal of the codebase is **qualified free-trial bookings and paid enrollments**.
-
-- One product: private 1-on-1 Quran sessions with an ijazah-certified teacher.
-- Frequency is the only variable (2x/3x/4x/5x per week).
-- Session duration: 30-minute or 40-minute.
-- Billing: Monthly / 6-month (-5%) / 12-month (-15%).
-- 8 supported currencies: USD, GBP, EUR, AED, SGD, CAD, AUD, SAR.
+> **Platform:** Edge-SSR & SSG Web Application  
+> **Production Target:** Cloudflare Pages & Cloudflare Workers (Workerd Edge Runtime)  
+> **Core Domain:** Private 1-on-1 Online Quran Tutoring Academy (`https://quranific.com`)
 
 ---
 
-## 2. Tech Stack
+## 1. Executive Summary & Architectural Overview
 
-| Layer          | Technology                                                               |
-| -------------- | ------------------------------------------------------------------------ |
-| Framework      | **Astro 6** (`output: server`) — SSR on Cloudflare edge                  |
-| UI components  | **Svelte 5** (Runes syntax) for interactive widgets                      |
-| Styling        | **Tailwind CSS v4** (Oxide engine, no config file)                       |
-| Hosting        | **Cloudflare Pages** + **Workers** (via `@astrojs/cloudflare`)           |
-| Email          | **Resend** API                                                           |
-| Bot protection | **Cloudflare Turnstile**                                                 |
-| Session tokens | **jose** — HS256 JWT, 15-min expiry, HttpOnly cookie                     |
-| KV store       | **Cloudflare KV** namespace `SESSION` — rate-limiting and idempotency    |
-| Typography     | Inter (variable), Merriweather (serif), Amiri (Arabic) via `@fontsource` |
-| Content        | **MDX** for blog posts                                                   |
-| Linting        | ESLint + Prettier (enforced via Husky v9 pre-commit hook)                |
-| Node           | v22 (`.nvmrc` / `.node-version`)                                         |
+**Quranific** is a high-performance, edge-rendered web application and multi-step student/teacher acquisition engine. The application serves global Muslim diaspora families (primarily in the UK, US, Canada, Australia, UAE, Saudi Arabia, and Singapore) seeking 1-on-1 Quranic education with verified, Ijazah-certified faculty.
+
+### Core Architectural Characteristics
+
+- **Hybrid SSR/SSG Edge Architecture:** Built on **Astro 7** with `@astrojs/cloudflare` in server output mode (`output: 'server'`). Marketing and content pages are statically prerendered (`export const prerender = true`) for global CDN latency minimization, while dynamic lead-capture endpoints and session verification routes execute on Cloudflare's Edge isolate network.
+- **Partial Hydration (Astro Islands):** 0 kB JavaScript baseline by default. Client-side JS is shipped only to interactive islands (e.g., pricing calculators, multi-step booking funnels, faculty application forms) using `client:load` or `client:visible`.
+- **Reactive UI Layer:** Built with **Svelte 5** leveraging native Runes syntax (`$state`, `$derived`, `$props`, `$bindable`) without legacy Svelte stores or external state management libraries.
+- **Modern CSS Engine:** Styled with **Tailwind CSS v4** via the `@tailwindcss/vite` plugin utilizing `@theme` design tokens and the Oxide compilation engine.
+- **Edge Security & Persistence:** Cloudflare Turnstile bot verification, distributed IP rate-limiting via Cloudflare KV (`SESSION`), signed HS256 JSON Web Tokens (`jose`) in `HttpOnly` cookies, strict Content Security Policy (CSP), and a dead-letter recovery queue for outbound email resiliency.
 
 ---
 
-## 3. Repository Layout
+## 2. Tech Stack Matrix
+
+| Layer / Subsystem       | Technology                                                | Version / Spec        | Purpose & Implementation Details                                                             |
+| :---------------------- | :-------------------------------------------------------- | :-------------------- | :------------------------------------------------------------------------------------------- |
+| **Framework**           | [Astro](https://astro.build/)                             | `^7.2.0`              | Core routing, SSG prerendering, HTML streaming, and Island architecture                      |
+| **Edge Runtime**        | [@astrojs/cloudflare](https://github.com/withastro/astro) | `^14.2.0`             | Cloudflare Pages/Workers adapter with Workerd platform proxy support                         |
+| **UI Components**       | [Svelte](https://svelte.dev/)                             | `^5.0.0`              | Client-side reactive islands utilizing Svelte 5 Runes                                        |
+| **Svelte Adapter**      | [@astrojs/svelte](https://github.com/withastro/astro)     | `^9.0.1`              | Svelte island compiler integration for Astro                                                 |
+| **Styling Engine**      | [Tailwind CSS](https://tailwindcss.com/)                  | `^4.0.0`              | Utility-first styling via `@tailwindcss/vite` and `@theme` tokens in `global.css`            |
+| **Type System**         | [TypeScript](https://www.typescriptlang.org/)             | `^5.9.3`              | Strict mode type checking extending `astro/tsconfigs/strict`                                 |
+| **Validation**          | [Zod](https://zod.dev/)                                   | `^4.4.3`              | Runtime schema validation for forms, environment variables, and content collections          |
+| **Token Cryptography**  | [jose](https://github.com/panva/jose)                     | `^6.2.1`              | Edge-compatible HS256 JWT signing and verification for multi-step funnel cookies             |
+| **Bot Mitigation**      | Cloudflare Turnstile                                      | Managed API           | Invisible/managed CAPTCHA alternative verified at the edge before lead processing            |
+| **Email Engine**        | Resend API                                                | REST API              | Custom edge fetch client (`src/lib/email.ts`) avoiding Node.js native dependencies           |
+| **Edge Storage**        | Cloudflare KV                                             | `SESSION` binding     | Distributed IP rate limiting (`RL:*`), submission idempotency, and dead-letter lead recovery |
+| **Cron Worker**         | Cloudflare Workers                                        | Cron Trigger          | Standalone worker in `alarm-worker/` triggering retry cycles (`0 * * * *`)                   |
+| **Icons**               | [lucide-svelte](https://lucide.dev/)                      | `^1.0.1`              | SVG iconography within Svelte components and raw SVG constants                               |
+| **Typography**          | Fontsource                                                | `^5.2.8`              | Self-hosted Inter Variable (`@fontsource-variable/inter`), Merriweather, and Amiri fonts     |
+| **Script Optimization** | [@astrojs/partytown](https://partytown.builder.io/)       | `^2.1.7`              | Web Worker offloading for third-party analytics (`dataLayer.push`)                           |
+| **SEO & Feeds**         | [@astrojs/sitemap](https://github.com/withastro/astro)    | `^3.7.1`              | Automated sitemap generator, RSS XML feed (`rss.xml.ts`), and LLM context (`llms.txt.ts`)    |
+| **Code Quality**        | ESLint & Prettier                                         | ESLint 10, Prettier 3 | Enforced with Husky (`^9.1.7`) and lint-staged (`^17.3.0`) pre-commit hooks                  |
+
+---
+
+## 3. Directory Layout & Architecture Map
 
 ```
 Quranific-live/
-├── src/
-│   ├── components/
-│   │   ├── funnel/          # SignupForm.svelte, CompleteForm.svelte (Svelte 5)
-│   │   ├── global/          # Header, Footer, Nav, Base layout wrapper
-│   │   ├── sections/        # Page-level reusable sections (see section 6)
-│   │   ├── seo/             # JSON-LD schemas, meta helpers
-│   │   └── ui/              # Atoms: Button, Section, Icons
-│   ├── constants/
-│   │   ├── pricing.ts       # SINGLE SOURCE OF TRUTH for all prices (see section 8)
-│   │   ├── site.ts          # SITE config, nav arrays, MAIN_NAVIGATION
-│   │   ├── courses.ts       # Course definitions
-│   │   ├── faqs.ts          # FAQ content
-│   │   ├── testimonials.ts  # Testimonial data
-│   │   └── teachers.ts      # Teacher profiles
-│   ├── layouts/             # Base.astro (the only root layout)
-│   ├── lib/
-│   │   └── schema.ts        # Zod validation schemas for all API routes
-│   ├── pages/
-│   │   ├── index.astro      # Home
-│   │   ├── tuition-fee.astro # Pricing page (largest file, ~1360 lines — see section 7)
-│   │   ├── about.astro
-│   │   ├── courses/         # Course detail pages
-│   │   ├── funnel/          # signup.astro, complete.astro, success.astro
-│   │   ├── api/             # Edge API routes (see section 9)
-│   │   ├── blog/            # MDX blog posts
-│   │   ├── legal/           # privacy, terms, refund, cookies, impressum
-│   │   └── ads/             # Ad landing pages
-│   ├── styles/              # Global CSS (Tailwind v4 directives, custom tokens)
-│   ├── content/             # Astro content collections (blog MDX)
-│   ├── content.config.ts    # Content collection schema
-│   ├── middleware.ts        # Security headers + edge caching + CF locals
-│   └── env.d.ts             # TypeScript env type declarations
-├── public/                  # Static assets (images, favicon, OG images)
-├── alarm-worker/            # Standalone Cloudflare Worker for scheduled tasks
-├── astro.config.mjs         # Astro + integrations config
-├── wrangler.toml            # Cloudflare Pages deployment config
-├── .env.example             # Required env vars — copy to .env for local dev
-├── Quranific-agent-constitution.md  # READ THIS FIRST every session
-├── QURANIFIC_OWNER_ACTIONS.md       # Owner-verified facts and pending to-dos
-├── AUDIT-LEDGER.md          # Security/architecture audit log
-├── RECONCILIATION.md        # Detailed bug-fix ledger from past audit sessions
-└── DEPLOYMENT.md            # Step-by-step deployment guide
+├── .dev.vars                     # Local Cloudflare workerd secrets (Wrangler simulation)
+├── .env.example                  # Environment blueprint for developers
+├── .github/                      # Repository configuration
+│   └── workflows/                # CI/CD workflow directory (currently empty)
+├── .husky/                       # Git commit hooks (pre-commit lint-staged)
+├── .node-version                 # Node.js engine pin (v22 / v20+)
+├── .nvmrc                        # NVM environment configuration
+├── .prettierrc                   # Code formatting rules
+├── alarm-worker/                 # Independent Cloudflare Cron Worker
+│   ├── src/
+│   │   └── index.ts              # Hourly scheduled trigger calling /api/internal/retry-queue
+│   └── wrangler.toml             # Alarm worker configuration (crons = ["0 * * * *"])
+├── astro.config.mjs              # Astro engine config (Cloudflare adapter, sitemap, Vite plugins)
+├── eslint.config.mjs             # Flat ESLint configuration (Astro, Svelte, TypeScript rules)
+├── package.json                  # Dependencies, scripts, and engine constraints
+├── public/                       # Unprocessed static assets (images, logos, favicon, OG cards)
+├── svelte.config.js              # Svelte 5 Vite preprocessor config
+├── tsconfig.json                 # Strict TypeScript configuration and path aliases
+├── wrangler.toml                 # Main Cloudflare Pages / Worker production config
+└── src/
+    ├── content.config.ts         # Astro content collections schema definition (Blog)
+    ├── env.d.ts                  # Ambient TypeScript declarations and Cloudflare Locals/Env
+    ├── middleware.ts             # Edge middleware: Security headers, Geo-IP locals, CDN caching
+    ├── components/
+    │   ├── blocks/               # Composite page sections (PageHero, CourseGrid, FAQAccordion)
+    │   │   └── PricingCalculator.svelte # Interactive tuition fee estimation island
+    │   ├── global/               # Global shell (Header.astro, Footer.astro, MobileMenu.astro)
+    │   ├── seo/                  # Structured data & navigation breadcrumbs (Breadcrumb.astro)
+    │   └── ui/                   # Atomic UI primitives (Button, Card, Section, EyebrowText)
+    ├── constants/                # Single source of truth constants
+    │   ├── courses.ts            # Detailed curriculum structures and course metadata
+    │   ├── faqs.ts               # Categorized FAQ data
+    │   ├── landing.ts            # Intent page landing page configurations
+    │   ├── navigation.ts         # Global header and footer navigation trees
+    │   ├── pricing.ts            # Matrix of currencies, frequency, durations, and base fees
+    │   ├── site.ts               # Global company metadata, contact info, and Turnstile site key
+    │   ├── teachers.ts           # Faculty profile declarations
+    │   └── testimonials.ts       # Social proof and student review arrays
+    ├── content/
+    │   └── blog/                 # Markdown / MDX blog articles
+    ├── data/                     # Schema-compatible structured JSON/TS datasets
+    │   ├── faqs.ts               # Structured FAQ records
+    │   ├── howTo.ts              # How-to schema data definitions
+    │   └── testimonials.ts       # Testimonial structured data
+    ├── layouts/                  # Base document layout wrappers
+    │   ├── Base.astro            # Primary HTML shell (SEO meta, fonts, JSON-LD, Partytown)
+    │   ├── Funnel.astro          # Focused conversion layout without distracting navigation
+    │   ├── Landing.astro         # High-conversion PPC landing page layout
+    │   └── Page.astro            # Standard informational page wrapper
+    ├── lib/                      # Shared business logic and edge utilities
+    │   ├── email.ts              # Edge-compatible Resend client (Transactional notifications)
+    │   ├── env.ts                # Zod-validated lazy environment configuration singleton
+    │   ├── helpers.ts            # Formatting, phone normalizers, and enum definitions
+    │   └── schema.ts             # Zod form validation schemas (Signup, Complete, Contact, etc.)
+    ├── styles/                   # Style architecture
+    │   ├── cv.css                # Print / curriculum styling rules
+    │   ├── fonts.css             # Local @font-face declarations
+    │   └── global.css            # Tailwind v4 import, @theme palette, and modern utility classes
+    └── pages/                    # File-based routing tree (SSG + Edge SSR)
+        ├── 404.astro             # Custom 404 Error page
+        ├── 500.astro             # Custom 500 Error page
+        ├── index.astro           # Homepage
+        ├── llms.txt.ts           # Markdown endpoint for LLM context ingestion
+        ├── robots.txt.ts         # Dynamic robots.txt generation
+        ├── rss.xml.ts            # Blog RSS feed generator
+        ├── safeguarding/         # Child safeguarding & protection policy
+        ├── [intent]/             # Dynamic semantic landing pages (/quran-classes/for-kids, etc.)
+        ├── about/                # About company, story, mission, and leadership
+        ├── blog/                 # Blog index and dynamic [slug].astro articles
+        ├── contact/              # Contact page with SmartContactForm.astro and SLA cards
+        ├── courses/              # Course directory and dynamic [slug].astro course pages
+        ├── faq/                  # Dedicated FAQ repository
+        ├── getting-started/      # Multi-step Student Registration Funnel
+        │   ├── signup.astro      # Step 1: Lead capture & attribution tracking
+        │   ├── complete.astro    # Step 2: Course preferences & scheduling
+        │   ├── success.astro     # Confirmation and WhatsApp onboarding guidance
+        │   └── _components/      # Collocated Svelte funnel islands (SignupForm, CompleteForm)
+        ├── portals/              # Authentication directory for Student & Teacher dashboards
+        ├── teachers/             # Faculty showcase & Teacher recruitment funnel
+        │   ├── index.astro       # Faculty showcase with dual revenue/recruitment CTAs
+        │   ├── apply.astro       # Teacher recruitment page with interactive pre-qualification island
+        │   └── _components/      # Collocated faculty cards and TeacherApplicationForm.svelte
+        ├── testimonials/         # Reviews and video testimonials
+        ├── tuition-fee/          # Pricing calculator page with PricingGrid.svelte
+        ├── legal/                # Compliance & policies (cookies, privacy, terms, refund, impressum)
+        └── api/                  # Edge API routes (SSR: export const prerender = false)
+            ├── register.ts       # POST: Funnel Step 1 lead ingestion + JWT issuance
+            ├── complete.ts       # POST/HEAD/GET: Funnel Step 2 submission & session validation
+            ├── contact.ts        # POST: General contact form handler with Turnstile
+            ├── newsletter.ts     # POST: Newsletter subscription handler
+            ├── apply-teacher.ts  # POST: Teacher pre-qualification application endpoint
+            └── internal/
+                └── retry-queue.ts # POST: Cron-authenticated Dead-Letter Queue processor
 ```
 
 ---
 
-## 4. Local Development
+## 4. UI Architecture & Svelte 5 Runes State Management
+
+### 4.1 Astro Islands Hydration Model
+
+Astro generates pure static HTML at build time. Dynamic client-side JavaScript is introduced strictly through Astro island directives:
+
+- `client:load`: Used on high-priority entry funnels where immediate interactivity is mandatory (`SignupForm.svelte`, `CompleteForm.svelte`).
+- `client:visible`: Used for below-the-fold or deferred interactive components (`PricingCalculator.svelte`, `TeacherApplicationForm.svelte`, `PricingGrid.svelte`).
+
+### 4.2 Svelte 5 Runes Implementation
+
+All interactive widgets leverage **Svelte 5 Runes** for state reactivity:
+
+- `$state(...)`: Manages form state, wizard step counters, loading indicators, and field errors.
+- `$derived(...)`: Dynamically calculates validation states, fee totals based on currency/frequency selections, and color tokens.
+- `$props()` & `$bindable()`: Handles typed component properties and bidirectional data flow across multi-step wizard islands (e.g., `TeacherStep1.svelte` and `TeacherStep2.svelte` binding to `TeacherApplicationForm.svelte`).
+
+```svelte
+<!-- Example from TeacherApplicationForm.svelte (Svelte 5 Runes) -->
+<script lang="ts">
+  import TeacherStep1 from './TeacherStep1.svelte';
+  import TeacherStep2 from './TeacherStep2.svelte';
+
+  let step = $state(1);
+  let isSubmitting = $state(false);
+  let form = $state({
+    ijazah: '',
+    alim: '',
+    experience: '',
+    english: '',
+    arabic: '',
+    fullName: '',
+    email: '',
+    whatsapp: '',
+    resumeLink: '',
+  });
+
+  function handleNext() {
+    if (form.ijazah === 'no' || form.experience === 'under_1' || form.english === 'no') {
+      step = 4; // Rejection state
+      return;
+    }
+    step = 2; // Passed pre-qualification
+  }
+</script>
+```
+
+---
+
+## 5. Conversion Funnel & Lead Attribution Flow
+
+The registration engine utilizes a two-step state machine engineered for high conversion and fault tolerance:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as Prospective Student
+    participant Browser as Client Island (SignupForm)
+    participant EdgeAPI as Cloudflare Edge (/api/register)
+    participant KV as Cloudflare KV (SESSION)
+    participant Resend as Resend API
+    participant Complete as Client Island (CompleteForm)
+
+    User->>Browser: Enters Name, Email, WhatsApp, Country
+    Browser->>EdgeAPI: POST /api/register (FormData + Turnstile + Ad Tracking)
+    EdgeAPI->>EdgeAPI: Verify Turnstile Token
+    EdgeAPI->>KV: Check & Increment IP Rate Limit (RL:REGISTER:<IP>)
+    EdgeAPI->>EdgeAPI: Sign HS256 JWT containing Lead ID & Attribution (15m expiry)
+    EdgeAPI->>Resend: Send Step 1 Partial Lead Notification
+    EdgeAPI-->>Browser: Set-Cookie: q_session=<JWT>; HttpOnly; Secure (200 OK)
+    Browser->>Complete: Navigate to /getting-started/complete
+    Complete->>EdgeAPI: HEAD /api/complete (Validate q_session cookie)
+    EdgeAPI-->>Complete: 200 OK (Session Active)
+    User->>Complete: Selects Course, Teacher Gender, Days & Schedule
+    Complete->>EdgeAPI: POST /api/complete (FormData)
+    EdgeAPI->>EdgeAPI: Verify & Decode q_session JWT
+    EdgeAPI->>KV: Check Idempotency Key (IDEM:COMPLETE:<LeadID>)
+    EdgeAPI->>Resend: Send Full Admin Notification & Student Welcome Email
+    alt Resend API Failure
+        EdgeAPI->>KV: Write to Dead-Letter Queue (FAILED_LEAD:<LeadID>)
+    end
+    EdgeAPI-->>Complete: 200 OK (Set-Cookie: q_session=; Max-Age=0)
+    Complete->>User: Redirect to /getting-started/success
+```
+
+### Attribution Tracking Parameters
+
+The application tracks ad sources and calculator context across session boundaries via `sessionStorage` (`q_track_*`) and passes them into the signed session JWT:
+
+- **Ad Attribution:** `fbclid`, `gclid`, `ttclid`, `utm_source`, `utm_campaign`, `utm_medium`, `utm_content`.
+- **Fee Calculator Context:** `enrollType`, `duration`, `sessions`, `currency`, `billing`, `price`, `course`, `note`.
+
+---
+
+## 6. Local Development Setup
+
+### 6.1 Prerequisites
+
+- **Node.js:** `v20.0.0` or higher (`v22.x` recommended, defined in `.nvmrc` and `.node-version`).
+- **Package Manager:** `npm` (v10+).
+
+### 6.2 Step-by-Step Installation
+
+1. **Clone the repository and install dependencies:**
+
+   ```bash
+   git clone https://github.com/faisalkhanllcltd-coder/Quranific.git
+   cd Quranific-live
+   npm install
+   ```
+
+2. **Configure Local Secrets:**
+   Create both `.env` (for Vite/Astro build tools) and `.dev.vars` (for Wrangler Cloudflare runtime simulation):
+
+   ```bash
+   cp .env.example .env
+   cp .env.example .dev.vars
+   ```
+
+   Fill in `.env` and `.dev.vars` with your testing credentials:
+
+   ```ini
+   RESEND_API_KEY="re_test_123456789"
+   TURNSTILE_SECRET_KEY="1x0000000000000000000000000000000AA"
+   TURNSTILE_SITE_KEY="1x0000000000000000000000000000000AA"
+   ADMIN_EMAIL="admin@quranific.com"
+   JWT_SECRET="local-development-secret-key-must-be-32-chars-long"
+   SITE="http://localhost:4321"
+   PROD=false
+   ```
+
+3. **Run the Development Server:**
+   ```bash
+   npm run dev
+   ```
+   The local dev server spins up at `http://localhost:4321` with hot module replacement (HMR) and Cloudflare Platform Proxy enabled.
+
+---
+
+## 7. Quality Assurance & Verification Scripts
+
+The codebase provides automated scripts defined in `package.json`:
 
 ```bash
-npm install
-cp .env.example .env        # Fill in secrets
-npm run dev                  # Hot-reload dev server with edge simulation
-npm run check                # Type-check only (no build)
-npm run build                # astro check + astro build
-npm run preview              # Preview ./dist via Wrangler locally
-npm run deploy               # npm run build + wrangler pages deploy
+# Execute Astro diagnostic checks across all Astro, TS, and Svelte files
+npm run check
+
+# Run strict TypeScript compilation check without emitting files
+npm run typecheck
+
+# Run ESLint static analysis across the codebase
+npm run lint
+
+# Run ESLint auto-fix
+npm run lint:fix
+
+# Format code with Prettier (enforcing Astro and Svelte plugins)
+npm run format
+
+# Run full production check and build bundle
+npm run build
+
+# Simulate edge production execution using local workerd isolate runtime
+npm run preview
+
+# Clean build artifacts and Vite caches
+npm run clean
 ```
 
-> **Rule 2b:** Never run build, lint, commit, or push unless the current prompt explicitly
-> requests it. The owner reviews changes before any deployment.
-
 ---
 
-## 5. Environment Variables
-
-All secrets live in `.env` (local) and Cloudflare Dashboard > Settings > Variables (production).
-
-| Variable                    | Required | Purpose                                       |
-| --------------------------- | -------- | --------------------------------------------- |
-| `RESEND_API_KEY`            | YES      | Send transactional emails via Resend          |
-| `JWT_SECRET`                | YES      | Sign/verify 15-min HS256 session JWTs         |
-| `TURNSTILE_SECRET_KEY`      | YES      | Server-side Turnstile bot challenge verify    |
-| `PUBLIC_TURNSTILE_SITE_KEY` | YES      | Client-side Turnstile widget (safe to expose) |
-
-The `SESSION` KV namespace binding is in `wrangler.toml` (ID: `14eab319d57e4c58b5f903bce3eb3931`).
-It must also be bound in the Cloudflare Dashboard for production.
-
-Dev-only vars live in `.dev.vars`.
-
----
-
-## 6. Page Inventory
-
-| Route              | File                    | Purpose                                    |
-| ------------------ | ----------------------- | ------------------------------------------ |
-| `/`                | `index.astro`           | Home                                       |
-| `/tuition-fee`     | `tuition-fee.astro`     | Full pricing page                          |
-| `/courses`         | `courses/`              | Course listing + detail pages              |
-| `/how-it-works`    | `how-it-works.astro`    | Process explainer                          |
-| `/about`           | `about.astro`           | Founder story, team, mission               |
-| `/teachers`        | `teachers.astro`        | Teacher profiles grid                      |
-| `/testimonials`    | `testimonials.astro`    | Parent reviews                             |
-| `/faq`             | `faq.astro`             | FAQ accordion                              |
-| `/contact`         | `contact.astro`         | Contact form                               |
-| `/blog`            | `blog/`                 | MDX blog posts                             |
-| `/partners`        | `partners.astro`        | Partner logos/info                         |
-| `/careers`         | `careers.astro`         | Job listings                               |
-| `/portals`         | `portals.astro`         | Student/parent portal links                |
-| `/safeguarding`    | `safeguarding.astro`    | Child safeguarding policy                  |
-| `/funnel/signup`   | `funnel/signup.astro`   | Step 1 of free-trial funnel                |
-| `/funnel/complete` | `funnel/complete.astro` | Step 2 — CompleteForm.svelte               |
-| `/funnel/success`  | `funnel/success.astro`  | Post-submission confirmation               |
-| `/legal/*`         | `legal/`                | Privacy, terms, refund, cookies, impressum |
-| `/ads/*`           | `ads/`                  | Ad-specific landing pages                  |
-| `/api/register`    | `api/register.ts`       | POST — funnel lead capture                 |
-| `/api/complete`    | `api/complete.ts`       | POST — schedule/detail submission          |
-| `/api/contact`     | `api/contact.ts`        | POST — contact form                        |
-| `/api/newsletter`  | `api/newsletter.ts`     | POST — newsletter subscribe                |
-
----
-
-## 7. The Tuition-Fee Page (`/tuition-fee`)
-
-This is the most complex page (~1360 lines). Read this section before touching it.
-
-### Page Sections (top to bottom)
-
-1. **PageHero** — badge: "Trusted by families across the UK, US, and UAE"
-2. **Trust strip** — 4 guarantee icons (full-month guarantee, make-up, no hidden fees, weekly reports)
-3. **Hero Fee Calculator** — 5-field widget (Who / Duration / Sessions / Currency / Billing)
-4. **Unified Rate Card** (`id="plans"`) — rebuilt pricing table (see below)
-5. **Family Discounts** — sibling discount explainer + interactive demo
-6. **Scholarship section** — need-based support explainer
-7. **FAQ accordion** — pricing FAQs
-8. **Final CTA**
-
-### Rate Card Architecture
-
-Controls (above the card):
-
-- Duration toggle: 30 min / 40 min (`id="plan-dur-btns"`)
-- Billing toggle: Monthly / 6 months -5% / 12 months -15% (`id="plan-billing-btns"`)
-- Currency select: 8 currencies (`id="plan-currency-select"`)
-
-Grid: `grid-cols-1 sm:grid-cols-4` — one column per frequency (2x/3x/4x/5x/week)
-
-The **5x/week column** has a thin amber top bar (`h-[3px] bg-amber-400`) and "Most families choose this" label.
-No tier names (Light/Standard/Plus/Hifz-Ready etc.) anywhere — they were removed.
-All 4 columns show the same product.
-
-Per-column DOM slots:
-
-- `plan-sym-{2,3,4,5}` — currency symbol
-- `plan-price-{2,3,4,5}` — discounted monthly price
-- `plan-per-{2,3,4,5}` — per-class rate: `approx {sym}{price/sessions_per_month} / class`
-- `plan-save-{2,3,4,5}` — savings badge (hidden when billing=monthly, shown otherwise)
-
-Unique value vs hero calculator: The rate card shows savings across **all 4 frequencies simultaneously**
-when 6-month or annual billing is selected. The hero calculator only shows one frequency at a time.
-
-### Script Architecture
-
-One `<script is:inline>` block at the bottom of the file. All JS fires on `astro:page-load`.
-
-| Section            | State       | Key function         |
-| ------------------ | ----------- | -------------------- |
-| Hero calculator    | `calcState` | `updateCalcResult()` |
-| Rate card          | `planState` | `updatePlanGrid()`   |
-| Sibling calculator | stateless   | inline click handler |
-
-`PRICING_DATA` is defined once and shared by both `updateCalcResult()` and `updatePlanGrid()`.
-It mirrors `src/constants/pricing.ts` exactly — no numbers duplicated differently.
-
-`BILLING_DISCOUNTS = { monthly: 0, sixMonth: 0.05, annual: 0.15 }` — same in script and pricing.ts.
-
----
-
-## 8. Pricing — Single Source of Truth
-
-**File:** `src/constants/pricing.ts`
-
-Structure: `PRICING[Currency][Duration][Sessions] = monthly_base_price_integer`
-
-```
-Currencies: USD | GBP | EUR | AED | SGD | CAD | AUD | SAR
-Durations:  '30' | '40'    (minutes)
-Sessions:   '2' | '3' | '4' | '5'    (per week)
-```
-
-Owner-verified exact values (last confirmed 2026-07-27):
-
-- USD, GBP, EUR, AED — type them directly if changing, do NOT recompute from exchange rates
-- SGD, CAD, AUD — computed at SGD@1.29, CAD@1.41, AUD@1.43; **refresh periodically**
-- SAR and AED are USD-pegged; do not need rate refreshing
-
-Billing discounts: Monthly=0%, 6-month=5%, 12-month=15%
-
-**Rule:** Any pricing change MUST update `pricing.ts` first.
-The fee page inline `PRICING_DATA` object MUST be manually synced to `pricing.ts`
-(it is a client-side copy because `pricing.ts` is server-only TypeScript).
-
----
-
-## 9. API Routes
-
-All routes are Cloudflare Workers edge functions (`prerender = false`).
-
-### POST /api/register (Step 1 — Free Trial Signup)
-
-1. IP rate-limit via KV (`RL:REGISTER:{ip}` — 60s lock)
-2. Zod validation (`signupSchema`)
-3. Honeypot field check (silent success for bots)
-4. Cloudflare Turnstile server-side verify
-5. Sign HS256 JWT (15-min expiry) with lead data
-6. Return JWT as `q_session` HttpOnly cookie (Secure, SameSite=Strict, Path=/funnel)
-
-### POST /api/complete (Step 2 — Scheduling)
-
-Reads JWT from cookie, verifies it, sends emails via Resend.
-Implements idempotency via KV (`IDEMPOTENCY:{jti}` key).
-
-### POST /api/contact
-
-Contact form submission → Resend email.
-
-### POST /api/newsletter
-
-Newsletter subscribe → Resend email.
-
----
-
-## 10. Conversion Funnel
-
-```
-Any CTA → /funnel/signup
-  SignupForm.svelte (Svelte 5 Runes)
-    Fields: name, email, whatsapp, country, source
-    Hidden: gclid, utm_source, utm_medium, utm_campaign, utm_content, utm_term
-    Turnstile widget
-    POST /api/register → q_session JWT cookie
-  → /funnel/complete
-    CompleteForm.svelte
-    Fields: preferred_days, preferred_time, age, gender_preference, notes
-    POST /api/complete → sends emails via Resend
-  → /funnel/success
-    WhatsApp link, booking confirmation
-```
-
-Attribution: URL query params (`gclid`, `utm_*`, `enrollType`, `duration`, `sessions`,
-`currency`, `billing`, `price`) are captured in hidden form fields and preserved through the funnel.
-All CTA links on `tuition-fee.astro` append calculator selections to `/funnel/signup`
-URL via `updateCalcCta()`.
-
----
-
-## 11. Component Conventions
-
-### Svelte 5 (Runes)
-
-- Use `$state()` and `$derived()` — NOT `let` + `$:` (that is Svelte 4 syntax)
-- Funnel components use `client:load` directive
-- No `client:*` on Astro components
-
-### Tailwind v4
-
-- No `tailwind.config.js` — configuration via CSS `@theme` blocks in `src/styles/`
-- Custom tokens: `cream-50`, `cream-100` etc. defined in global CSS
-
-### Icons
-
-- Inline SVG strings in shared `Icons` object in `src/components/ui/`
-- Usage: `set:html={Icons.check}` — not external SVG files
-
-### Section Components
-
-- `HomeHero.astro` — Home hero. The floating image's `animate-hero-float` is on an inner div;
-  `drop-shadow-2xl` is on the static outer wrapper. These are deliberately split to prevent
-  compositing conflicts (GPU layer promotion breaks CSS filter on animated elements).
-- `PageHero.astro` — Reusable inner-page hero. Props: `eyebrow?`, `title`, `highlightWord?`,
-  `subtitle?`, `cta?`
-- `PricingTable.astro` — Simple static pricing display for course detail pages.
-  NOT the dynamic tuition-fee calculator.
-
----
-
-## 12. Middleware
-
-`src/middleware.ts` runs on every request:
-
-1. Reads Cloudflare edge metadata (`cf.country`, `cf.city`, `cf.httpProtocol`) into `context.locals`
-2. Sets security headers: `X-Frame-Options: DENY`, HSTS, full `Content-Security-Policy`
-3. Caching: browsers get `no-cache`; Cloudflare edge gets `max-age=3600, stale-while-revalidate=86400`
-4. API routes (`/api/*`) are excluded from edge caching
-
----
-
-## 13. State Management Rules
-
-**No localStorage or sessionStorage.** All cross-page state uses URL query parameters.
-
-- `gclid`, `utm_*` — passed through every CTA href via `URLSearchParams`
-- Calculator selections — appended to `/funnel/signup` href by `updateCalcCta()`
-- Session data — HttpOnly JWT cookie (`q_session`), not accessible to JS
-
----
-
-## 14. Critical Rules for Any Agent
-
-1. **Read `Quranific-agent-constitution.md` first** — every session, every task.
-2. **Rule 2a — Replace, never append:** Every edit to an existing HTML element, config entry,
-   or script block must show a removal in the diff. Re-open the file after saving and confirm
-   no duplicate version exists before proceeding.
-3. **Rule 2b — No build/lint/commit/push** unless the prompt explicitly requests it for that pass.
-4. **Never fabricate facts:** No invented stats, testimonials, teacher names, or policy language.
-   Use `<!-- TODO(owner): confirm -->` for anything unverified.
-5. **Pricing is sacred:** Only change `pricing.ts` with owner-confirmed numbers.
-   When updating the fee page inline `PRICING_DATA`, always sync it to `pricing.ts` exactly.
-6. **One `<script is:inline>` per page** — never add a second one; append to the existing block.
-7. **Hover-safe button pattern:** When a button has a selected state with a background color,
-   strip `hover:text-{color}` from selected buttons so the text color does not become invisible.
-   The `selectCalcBtn()` and `selectPlanBtn()` functions in tuition-fee.astro implement this.
-8. **Attribution must carry through:** Any new CTA link to `/funnel/signup` must preserve existing
-   query params via `URLSearchParams` (see `updateCalcCta()` for the pattern).
-
----
-
-## 15. Pending Owner Actions
-
-See `QURANIFIC_OWNER_ACTIONS.md` for the full list. Key open items:
-
-| Item                                                                          | Status                         |
-| ----------------------------------------------------------------------------- | ------------------------------ |
-| GA4 + Google Ads conversion tracking in `Base.astro`                          | PENDING — no analytics yet     |
-| Refresh SGD/CAD/AUD exchange rates in `pricing.ts`                            | Periodic (last set 2026-07-27) |
-| Placeholder team bios in `about.astro`                                        | Unverified                     |
-| 4.9/5 rating and 50k+ students claims in `testimonials.astro`                 | Unverified                     |
-| 100% money-back guarantee wording                                             | Unverified                     |
-| WhatsApp parent support included in all plans                                 | Unverified                     |
-| Confirm scheduling the free trial "at your convenience" is operationally true | Unverified                     |
-
----
-
-## 16. Deployment
-
-See `DEPLOYMENT.md` for the full guide. Quick summary:
-
-```bash
-npm run build      # astro check + astro build → ./dist
-npm run deploy     # npm run build + wrangler pages deploy ./dist
-```
-
-- Production: `https://quranific.com` and `https://www.quranific.com`
-- Cloudflare project name: `quranific`
-- Custom domains in `wrangler.toml`
-- Smart placement enabled (`placement.mode = "smart"`) for lowest-latency edge routing
-
----
-
-## 17. Files That Must NOT Be Modified Without Owner Review
-
-| File                              | Reason                                                      |
-| --------------------------------- | ----------------------------------------------------------- |
-| `src/constants/pricing.ts`        | Owner-verified prices — confirm every change before editing |
-| `src/pages/legal/`                | Legal text requires human review                            |
-| `src/pages/api/register.ts`       | Security-critical lead capture and JWT issuance             |
-| `wrangler.toml`                   | Production infra config                                     |
-| `.env` / `.dev.vars`              | Secrets — never commit to git                               |
-| `Quranific-agent-constitution.md` | The law — not editable by agents                            |
-| `QURANIFIC_OWNER_ACTIONS.md`      | Owner source of truth — append only, never remove lines     |
-
----
-
-_README last updated: 2026-07-27. For full change history see `RECONCILIATION.md` and `AUDIT-LEDGER.md`._
+## 8. Routing & Page Directory Reference
+
+| Route Path                  | Type | Source File                                | Description                                                  |
+| :-------------------------- | :--- | :----------------------------------------- | :----------------------------------------------------------- |
+| `/`                         | SSG  | `src/pages/index.astro`                    | Main landing page and value proposition                      |
+| `/about`                    | SSG  | `src/pages/about/index.astro`              | Academy mission, story, and leadership                       |
+| `/courses`                  | SSG  | `src/pages/courses/index.astro`            | Complete curriculum index                                    |
+| `/courses/[slug]`           | SSG  | `src/pages/courses/[slug].astro`           | Dynamic course syllabus pages                                |
+| `/tuition-fee`              | SSG  | `src/pages/tuition-fee/index.astro`        | Interactive fee structure & sibling discounts                |
+| `/teachers`                 | SSG  | `src/pages/teachers/index.astro`           | Verified faculty showcase & dual action cards                |
+| `/teachers/apply`           | SSG  | `src/pages/teachers/apply.astro`           | Teacher faculty pre-qualification application funnel         |
+| `/testimonials`             | SSG  | `src/pages/testimonials/index.astro`       | Parent reviews, video testimonials, and ratings              |
+| `/faq`                      | SSG  | `src/pages/faq/index.astro`                | Categorized search and FAQ accordion                         |
+| `/contact`                  | SSG  | `src/pages/contact/index.astro`            | Contact form and channel response SLAs                       |
+| `/portals`                  | SSG  | `src/pages/portals/index.astro`            | Direct access to Student and Teacher dashboards              |
+| `/safeguarding`             | SSG  | `src/pages/safeguarding/index.astro`       | Child safety, background checking, and monitoring policy     |
+| `/getting-started/signup`   | SSG  | `src/pages/getting-started/signup.astro`   | Step 1 lead registration form                                |
+| `/getting-started/complete` | SSG  | `src/pages/getting-started/complete.astro` | Step 2 course preference and schedule selection              |
+| `/getting-started/success`  | SSG  | `src/pages/getting-started/success.astro`  | Registration complete confirmation screen                    |
+| `/quran-classes/[intent]`   | SSG  | `src/pages/[intent]/for-*.astro`           | Paid and organic search intent landers (kids, adults, women) |
+| `/legal/*`                  | SSG  | `src/pages/legal/*.astro`                  | Privacy, Terms, Cookies, Refund, Impressum policies          |
+| `/blog`                     | SSG  | `src/pages/blog/index.astro`               | Blog index                                                   |
+| `/blog/[slug]`              | SSG  | `src/pages/blog/[slug].astro`              | Blog article post template                                   |
+| `/api/register`             | SSR  | `src/pages/api/register.ts`                | Edge API: Step 1 lead registration                           |
+| `/api/complete`             | SSR  | `src/pages/api/complete.ts`                | Edge API: Step 2 registration completion                     |
+| `/api/contact`              | SSR  | `src/pages/api/contact.ts`                 | Edge API: Contact inquiry handler                            |
+| `/api/newsletter`           | SSR  | `src/pages/api/newsletter.ts`              | Edge API: Newsletter subscriber ingestion                    |
+| `/api/apply-teacher`        | SSR  | `src/pages/api/apply-teacher.ts`           | Edge API: Teacher job application intake                     |
+| `/api/internal/retry-queue` | SSR  | `src/pages/api/internal/retry-queue.ts`    | Edge API: Dead-letter queue recovery processor               |
