@@ -6,6 +6,30 @@
     CURRENCY_META.map((c) => [c.code, c.symbol])
   );
 
+  // KV failure armor — used when FX_RATES KV is unavailable or stale
+  const STATIC_FALLBACK_RATES: Record<string, number> = {
+    GBP: 0.78,
+    EUR: 0.92,
+    CAD: 1.36,
+    AUD: 1.52,
+    SGD: 1.34,
+    AED: 3.67,
+    SAR: 3.75,
+    PKR: 278.5,
+    USD: 1,
+  };
+
+  function getSafeRate(
+    cur: string,
+    liveRatesObj: Record<string, number> | null | undefined
+  ): number {
+    if (cur === 'USD') return 1;
+    if (liveRatesObj && typeof liveRatesObj[cur] === 'number') {
+      return liveRatesObj[cur];
+    }
+    return STATIC_FALLBACK_RATES[cur] ?? 1;
+  }
+
   interface Props {
     liveRates?: Record<string, number> | null;
   }
@@ -25,8 +49,8 @@
   // STEP 1 — Single computation path. Every displayed number derives from
   // displayedMonthly so a parent manually multiplying always gets the same total.
   function getBasePrice(sess: string): number {
-    const rate = liveRates?.[currency];
-    if (['USD', 'AED', 'SAR'].includes(currency) || typeof rate !== 'number') {
+    const rate = getSafeRate(currency, liveRates);
+    if (['USD', 'AED', 'SAR'].includes(currency)) {
       return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
     }
     const usdBase = (PRICING as PricingTier)?.['USD']?.[dur]?.[sess] ?? 0;

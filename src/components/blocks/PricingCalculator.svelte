@@ -7,6 +7,30 @@
     CURRENCY_META.map((c) => [c.code, c.symbol])
   );
 
+  // KV failure armor — used when FX_RATES KV is unavailable or stale
+  const STATIC_FALLBACK_RATES: Record<string, number> = {
+    GBP: 0.78,
+    EUR: 0.92,
+    CAD: 1.36,
+    AUD: 1.52,
+    SGD: 1.34,
+    AED: 3.67,
+    SAR: 3.75,
+    PKR: 278.5,
+    USD: 1,
+  };
+
+  function getSafeRate(
+    cur: string,
+    liveRatesObj: Record<string, number> | null | undefined
+  ): number {
+    if (cur === 'USD') return 1;
+    if (liveRatesObj && typeof liveRatesObj[cur] === 'number') {
+      return liveRatesObj[cur];
+    }
+    return STATIC_FALLBACK_RATES[cur] ?? 1;
+  }
+
   interface Props {
     liveRates?: Record<string, number> | null;
     accent?: 'emerald' | 'purple';
@@ -65,13 +89,14 @@
 
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
   let basePrice = $derived.by(() => {
-    const rate = liveRates?.[currency];
-    if (['USD', 'AED', 'SAR'].includes(currency) || typeof rate !== 'number') {
+    const rate = getSafeRate(currency, liveRates);
+    if (['USD', 'AED', 'SAR'].includes(currency)) {
       return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
     }
     const usdBase = (PRICING as PricingTier)?.['USD']?.[dur]?.[sess] ?? 0;
     return Math.round(usdBase * rate);
   });
+
   let finalPrice = $derived(basePrice);
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);
   let sessPerMonth = $derived(parseInt(sess) * 4);
