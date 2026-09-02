@@ -27,8 +27,26 @@ const SECURITY_HEADERS: Record<string, string> = {
 export const onRequest = defineMiddleware(async (context, next) => {
   const cf = (context.request as Request & { cf?: Record<string, unknown> }).cf;
 
-  const userCountry = (cf?.country as string) || 'Unknown';
-  const userRegionCode = (cf?.regionCode as string) || '';
+  // ─── DEV-ONLY: geo override via request headers ──────────────────────────
+  // Allows integration-testing the /api/consent-bucket endpoint with specific
+  // country/region values without a Cloudflare edge deployment.
+  // import.meta.env.DEV is a build-time constant — this entire block is
+  // dead code in production builds (tree-shaken by Vite).
+  // NEVER remove the DEV guard. NEVER add production fallback here.
+  let debugCountry: string | undefined;
+  let debugRegion: string | undefined;
+  if (import.meta.env.DEV) {
+    const hCountry = context.request.headers.get('X-Debug-Country');
+    const hRegion = context.request.headers.get('X-Debug-Region');
+    // Use sentinel '_MISSING_' to represent unknown/empty country — HTTP clients
+    // drop empty-value headers, so we need a non-empty placeholder.
+    if (hCountry !== null)
+      debugCountry = hCountry === '_MISSING_' ? '' : hCountry.toUpperCase().trim();
+    if (hRegion !== null) debugRegion = hRegion.toUpperCase().trim();
+  }
+
+  const userCountry = debugCountry ?? (cf?.country as string) ?? 'Unknown';
+  const userRegionCode = debugRegion ?? (cf?.regionCode as string) ?? '';
 
   // Sec-GPC: Global Privacy Control — a legally binding opt-out signal in CA/CO/CT/etc.
   // Read from request header. Treat '1' as present.
