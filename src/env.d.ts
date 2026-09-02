@@ -7,7 +7,10 @@ declare namespace App {
   interface Locals extends Runtime {
     userCountry: string;
     userCity: string;
+    userRegionCode: string;
     isSlowConnection?: boolean;
+    consentBucket: import('./lib/consent').ConsentBucket;
+    hasGPC: boolean;
   }
 }
 

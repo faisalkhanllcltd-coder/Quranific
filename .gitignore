@@ -24,3 +24,5 @@ playwright/.cache/
 
 # Editor
 .vscode/
+
+scratch/

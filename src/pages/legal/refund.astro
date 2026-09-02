@@ -7,7 +7,7 @@ import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
 
-const lastUpdated = 'March 25, 2026';
+const lastUpdated = 'September 1, 2026';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -15,13 +15,13 @@ const jsonLd = {
   name: 'Refund & Tuition Policy - Quranific',
   description:
     "Comprehensive details on Quranific's tuition billing, full-month satisfaction guarantee, make-up class rules, and holiday schedules.",
-  dateModified: '2026-03-25',
+  dateModified: '2026-09-01',
 };
 ---
 
 <Base
   title="Refund & Tuition Policy | Quranific"
-  description="Transparent, fair, and comprehensive billing policies. Learn about our satisfaction guarantee, make-up class rules, and subscription model."
+  description="Transparent, fair, and comprehensive billing policies. Learn about our satisfaction guarantee, make-up class rules, and manual invoice model."
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
 
@@ -30,7 +30,6 @@ const jsonLd = {
   <main
     class="bg-cream-50 min-h-screen selection:bg-emerald-100 selection:text-emerald-900 font-sans pb-32"
   >
-    <!-- FIX: Reduced massive padding to standard safe padding to sit flush under the header -->
     <div
       class="pt-8 md:pt-12 pb-10 lg:pt-14 lg:pb-14 px-4 sm:px-6 border-b border-emerald-100 bg-white"
     >
@@ -53,6 +52,7 @@ const jsonLd = {
     </div>
 
     <div class="quranific-container pt-16 space-y-20">
+      <!-- Section 1 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -61,23 +61,24 @@ const jsonLd = {
         </h2>
         <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
           <li class="pl-4">
-            <strong class="block text-xl text-emerald-700 mb-2">Monthly Subscription Model</strong>
+            <strong class="block text-xl text-emerald-700 mb-2">Monthly Billing Model</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
               To ensure consistency for our students and stability for our teachers, we operate on a
-              monthly subscription model, not a “pay-per-class” model.
+              flat monthly billing model, not a “pay-per-class” model. We utilize a manual invoicing
+              system where you will be sent a secure link to pay for your upcoming month of classes.
             </p>
           </li>
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">Advance Billing</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
-              Fees are charged monthly in advance. Your billing cycle begins on the date of your
-              first paid class and automatically renews on that same date each month.
+              Fees are billed monthly in advance. Your billing cycle begins on the date of your
+              first paid class.
             </p>
             <div
               class="mt-3 text-sm text-emerald-800 bg-emerald-50/50 p-4 rounded-r-lg border-l-2 border-emerald-700"
             >
               <strong class="text-emerald-950">Example:</strong> If your first paid class is on October
-              5th, your automatic monthly payment will be scheduled for the 5th of every following month.
+              5th, your invoice for the next cycle will be issued prior to November 5th.
             </div>
           </li>
           <li class="pl-4">
@@ -104,6 +105,7 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section 2 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -119,23 +121,18 @@ const jsonLd = {
             </p>
           </li>
           <li class="pl-4">
-            <strong class="block text-xl text-emerald-700 mb-2">The 7-Day Refund Guarantee</strong>
-
-            <p class="text-emerald-900/80 font-medium leading-relaxed">
-              If you decide to enroll, your first month’s fee is due. If you are not completely
-              satisfied during the first week (7 days) of paid enrollment, we offer a full, 100%
-              refund. No questions asked.
-            </p>
-            <div
-              class="mt-3 text-sm text-emerald-800 bg-emerald-50/50 p-4 rounded-r-lg border-l-2 border-emerald-700"
+            <strong class="block text-xl text-emerald-700 mb-2"
+              >First Month Satisfaction Guarantee</strong
             >
-              <strong class="text-emerald-950">Example:</strong> You pay your first tuition fee on Monday.
-              If you email us by the following Sunday to cancel, you receive every penny back immediately.
-            </div>
+            <p class="text-emerald-900/80 font-medium leading-relaxed">
+              If you enroll and are not genuinely satisfied during your first full paid month, you
+              are entitled to a full refund—no forms, no chasing, simply email us.
+            </p>
           </li>
         </ul>
       </section>
 
+      <!-- Section 3 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -144,11 +141,11 @@ const jsonLd = {
         </h2>
         <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
           <li class="pl-4">
-            <strong class="block text-xl text-emerald-700 mb-2">Mid-Month Cancellations</strong>
+            <strong class="block text-xl text-emerald-700 mb-2">Mid-Cycle Cancellations</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
-              If you choose to cancel mid-month after the first week guarantee has passed, your
-              enrollment will remain active until the end of that billing cycle. No refund will be
-              issued for the unused portion of the month.
+              If you choose to cancel your enrollment mid-cycle, you will retain access to your
+              scheduled sessions until the end of your currently paid month. We do not provide
+              pro-rated refunds for partially used months.
             </p>
             <div
               class="mt-3 text-sm text-emerald-800 bg-emerald-50/50 p-4 rounded-r-lg border-l-2 border-emerald-700"
@@ -157,13 +154,6 @@ const jsonLd = {
               You cancel on the 15th. You can still attend classes until the 30th, but you will not receive
               a 50% refund for the remainder of the month.
             </div>
-          </li>
-          <li class="pl-4">
-            <strong class="block text-xl text-emerald-700 mb-2">The "Forgot to Cancel" Rule</strong>
-            <p class="text-emerald-900/80 font-medium leading-relaxed">
-              Subscriptions renew automatically. It is your strict responsibility to cancel before
-              the renewal date. We do not issue refunds if you "forget" to cancel your subscription.
-            </p>
           </li>
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">Academy Cancellation</strong>
@@ -176,59 +166,56 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section 4 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
         >
-          Late Payments & Suspension
+          Missed Payments & Hardship
         </h2>
         <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
           <li class="pl-4">
-            <strong class="block text-xl text-emerald-700 mb-2">5-Day Grace Period</strong>
-
+            <strong class="block text-xl text-emerald-700 mb-2">Payment Reminders</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
-              If an automatic payment fails (e.g., due to an expired card or insufficient funds),
-              our system will attempt to process it over a 5-day grace period.
+              We do not immediately cancel a student's access if an invoice is missed. If an invoice
+              remains unpaid, we will send a reminder after 3 to 5 days.
+            </p>
+          </li>
+          <li class="pl-4">
+            <strong class="block text-xl text-emerald-700 mb-2">Financial Hardship Deferment</strong
+            >
+            <p class="text-emerald-900/80 font-medium leading-relaxed">
+              We encourage parents to communicate with us if they are facing financial difficulties;
+              we can arrange deferred payment plans for up to 3 months to ensure the student's
+              education is not interrupted.
             </p>
           </li>
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">Account Suspension</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
-              If payment is not secured by the end of the 5-day grace period, classes are
-              immediately suspended and your reserved time slot may be released to another family.
+              If the accumulated balance is not settled by the 4th month (or after the agreed
+              deferment period ends), classes will be suspended until the balance is cleared and
+              your reserved time slot may be released to another family.
             </p>
-            <div
-              class="mt-3 text-sm text-emerald-800 bg-emerald-50/50 p-4 rounded-r-lg border-l-2 border-emerald-700"
-            >
-              <strong class="text-emerald-950">Example:</strong> If your payment fails on the 1st, you
-              have until the 5th to update your card. On the 6th, your classes are paused and your teacher
-              may be reassigned.
-            </div>
           </li>
         </ul>
       </section>
 
+      <!-- Section 5 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
         >
-          Holidides & Fee Coverage
+          Holidays & Fee Coverage
         </h2>
         <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">Eid Holidays</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
-              There are no classes on the primary days of Eid-ul-Fitr and Eid-ul-Adha. These are
-              legally recognized paid holidays for our teachers. No refunds or make-up classes are
-              provided for sessions that fall on Eid holidays.
+              Quranific observes a 5-day closure for Eid (1 day before Eid, the 3 days of Eid, and 1
+              day after). These are considered paid administrative holidays. Classes that fall on
+              these days are not made up and are non-refundable.
             </p>
-            <div
-              class="mt-3 text-sm text-emerald-800 bg-emerald-50/50 p-4 rounded-r-lg border-l-2 border-emerald-700"
-            >
-              <strong class="text-emerald-950">Example:</strong> If you usually have class on a Wednesday,
-              and Eid falls on that Wednesday, the academy is closed. This class is not rescheduled or
-              refunded.
-            </div>
           </li>
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">Public Holidays</strong>
@@ -240,6 +227,7 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section 6 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -249,7 +237,6 @@ const jsonLd = {
         <ul class="space-y-6 pl-4 md:pl-8 border-l-2 border-emerald-50">
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">The 5-Hour Notice Rule</strong>
-
             <p class="text-emerald-900/80 font-medium leading-relaxed">
               If you cancel a session 5 hours or less before the session start time, you will <strong
                 >not</strong
@@ -272,7 +259,7 @@ const jsonLd = {
           <li class="pl-4">
             <strong class="block text-xl text-emerald-700 mb-2">Make-up Class Limit</strong>
             <p class="text-emerald-900/80 font-medium leading-relaxed">
-              Students are strictly limited to 5 make-up classes per month to ensure schedule
+              Students are strictly limited to 3 make-up classes per month to ensure schedule
               stability.
             </p>
           </li>
@@ -286,6 +273,7 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section 7 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -312,6 +300,7 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section 8 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -336,6 +325,7 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section 9 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -361,6 +351,7 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section 10 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -386,6 +377,7 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section 11 -->
       <section>
         <h2
           class="text-3xl md:text-4xl font-black text-emerald-950 mb-8 pb-4 border-b-2 border-emerald-100 tracking-tight"
@@ -405,6 +397,7 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Contact Section -->
       <section class="mt-16 pt-16 border-t border-emerald-100">
         <h2 class="text-3xl font-black text-emerald-950 mb-6 tracking-tight">
           How to Request a Refund, Pause, or Make-up Class
@@ -437,9 +430,9 @@ const jsonLd = {
                 >
               </span>
               <a
-                href="mailto:privacy@quranific.com"
+                href="mailto:support@quranific.com"
                 class="font-bold text-xl text-emerald-950 hover:text-emerald-700 transition-colors"
-                >privacy@quranific.com</a
+                >support@quranific.com</a
               >
             </div>
             <div class="flex items-center gap-4">

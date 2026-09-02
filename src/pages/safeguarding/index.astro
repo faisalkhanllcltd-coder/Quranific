@@ -5,11 +5,10 @@ export const prerender = true;
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
-import { SITE } from '../../constants/site';
 import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
 import EyebrowText from '../../components/ui/EyebrowText.astro';
 
-const lastUpdated = 'March 25, 2026';
+const lastUpdated = 'September 1, 2026';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -69,13 +68,13 @@ const jsonLd = {
             class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 text-sm font-black flex items-center justify-center shrink-0"
             >1</span
           >
-          Purpose &amp; Scope
+          Purpose, Scope &amp; Commitment
         </h2>
         <p class="text-emerald-900/80 leading-relaxed font-medium mb-4">
-          This Safeguarding Policy applies to all personnel engaged by Quranific, including
-          full-time scholars, contract tutors, administrative staff, academic coordinators, and
-          senior management. It covers all interactions occurring across our platform, virtual
-          classrooms, email correspondence, and official messaging channels.
+          Quranific exists to serve children and adults learning the Quran online. Child safety is
+          treated as non-negotiable, not a compliance formality. This Safeguarding Policy applies to
+          all personnel engaged by Quranific, including full-time scholars, contract tutors,
+          administrative staff, academic coordinators, and senior management.
         </p>
         <p class="text-emerald-900/80 leading-relaxed font-medium">
           We operate under a <strong>Zero-Tolerance Principle</strong>: any action, behavior, or
@@ -109,8 +108,8 @@ const jsonLd = {
           <li class="flex items-start gap-3">
             <span class="text-emerald-600 font-bold mt-0.5">✓</span>
             <span
-              ><strong>Criminal Background &amp; Police Clearance:</strong> Enhanced background and criminal
-              record disclosures (such as DBS / police clearances) renewed annually.</span
+              ><strong>Criminal Background &amp; Safeguarding Clearance:</strong> Enhanced background
+              and criminal record disclosures renewed annually, not just a one-time check.</span
             >
           </li>
           <li class="flex items-start gap-3">
@@ -141,37 +140,77 @@ const jsonLd = {
             class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 text-sm font-black flex items-center justify-center shrink-0"
             >3</span
           >
-          Online Classroom Safety &amp; Code of Conduct
+          Classroom Safety &amp; Professional Boundaries
         </h2>
-        <p class="text-emerald-900/80 leading-relaxed font-medium mb-4">
-          All virtual lessons are subject to strict operational guidelines to ensure absolute
-          transparency:
+        <p class="text-emerald-900/80 leading-relaxed font-medium mb-6">
+          All virtual lessons and communications are subject to strict operational guidelines to
+          ensure absolute transparency and safety.
         </p>
+
+        <!-- Professional Boundaries Addition -->
+        <div class="grid sm:grid-cols-2 gap-4 mb-8">
+          <div class="bg-red-50/50 p-5 rounded-2xl border border-red-100">
+            <h4 class="font-bold text-red-950 text-sm mb-3">Students and parents may not:</h4>
+            <ul class="space-y-2 text-sm text-red-900/80 font-medium">
+              <li class="flex items-start gap-2">
+                <span class="text-red-600 font-bold">•</span>
+                <span
+                  >Request or accept a teacher's personal phone number, email, or social media
+                  contact.</span
+                >
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-600 font-bold">•</span>
+                <span>Attempt to arrange lessons privately, outside the platform.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-red-50/50 p-5 rounded-2xl border border-red-100">
+            <h4 class="font-bold text-red-950 text-sm mb-3">Teachers may not:</h4>
+            <ul class="space-y-2 text-sm text-red-900/80 font-medium">
+              <li class="flex items-start gap-2">
+                <span class="text-red-600 font-bold">•</span>
+                <span
+                  >Request a student's or parent's personal contact information, home address, or
+                  financial details.</span
+                >
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-600 font-bold">•</span>
+                <span>Contact a student or family outside official channels.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
         <div class="grid sm:grid-cols-2 gap-4 mb-6">
           <div class="bg-cream-50 p-4 rounded-2xl border border-emerald-100">
             <h4 class="font-bold text-emerald-950 text-sm mb-1">Encrypted 1-on-1 Links</h4>
             <p class="text-xs text-emerald-900/70 font-medium">
-              Classes occur solely via our secure, end-to-end encrypted video infrastructure.
+              Classes occur solely via our secure, end-to-end encrypted video infrastructure (or
+              approved enterprise tools like Zoom, Google Meet, or Teams).
             </p>
           </div>
           <div class="bg-cream-50 p-4 rounded-2xl border border-emerald-100">
             <h4 class="font-bold text-emerald-950 text-sm mb-1">No Private Communication</h4>
             <p class="text-xs text-emerald-900/70 font-medium">
-              Tutors are strictly forbidden from contacting students on personal social media or
-              phone numbers.
+              All communication between students, parents, and teachers takes place exclusively
+              through official Quranific channels.
             </p>
           </div>
           <div class="bg-cream-50 p-4 rounded-2xl border border-emerald-100">
             <h4 class="font-bold text-emerald-950 text-sm mb-1">Modesty &amp; Professionalism</h4>
             <p class="text-xs text-emerald-900/70 font-medium">
               Both teachers and students must dress respectfully and conduct sessions in well-lit,
-              open home spaces.
+              open spaces.
             </p>
           </div>
           <div class="bg-cream-50 p-4 rounded-2xl border border-emerald-100">
             <h4 class="font-bold text-emerald-950 text-sm mb-1">No Unauthorized Recording</h4>
             <p class="text-xs text-emerald-900/70 font-medium">
-              Lessons are never recorded without explicit, written parental consent.
+              Recording of live lessons (audio, video, or screen capture) is strictly prohibited
+              without explicit written authorization.
             </p>
           </div>
         </div>
@@ -226,19 +265,23 @@ const jsonLd = {
         </h2>
         <p class="text-emerald-900/80 leading-relaxed font-medium mb-4">
           Quranific has appointed a <strong>Designated Safeguarding Lead (DSL)</strong> who oversees child
-          protection compliance and handles any reported concerns with urgent, priority attention.
+          protection compliance and handles any reported concerns with urgent, priority attention. If
+          anyone—a student, parent, or teacher—is asked to bypass these rules, they must decline the request,
+          keep a record of the communication, and report it immediately.
         </p>
         <div class="bg-emerald-950 text-white rounded-2xl p-6 mb-6">
           <h4 class="font-bold text-lg text-emerald-300 mb-2">How to Report a Concern</h4>
           <p class="text-sm text-emerald-100/80 leading-relaxed font-medium mb-4">
             If you witness, suspect, or experience any inappropriate conduct, breach of boundaries,
-            or safety issue, contact our safeguarding team immediately:
+            or safety issue, contact our compliance team immediately:
           </p>
           <div class="space-y-1 text-sm font-mono">
             <p>
               <strong>Safeguarding Email:</strong>
-              <a href={`mailto:${SITE.emails.support}`} class="text-emerald-400 underline"
-                >{SITE.emails.support}</a
+              <a
+                href="mailto:compliance@quranific.com"
+                class="text-emerald-400 underline hover:text-emerald-300"
+                >compliance@quranific.com</a
               >
             </p>
             <p><strong>Emergency Subject:</strong> [URGENT: SAFEGUARDING CONCERN]</p>
@@ -299,7 +342,9 @@ const jsonLd = {
           This Safeguarding Policy is reviewed annually by our academic advisory board and legal
           counsel. Updates are published directly on this page with an updated revision date. For
           any questions or feedback regarding our child protection standards, please reach out via
-          our <a href="/contact" class="text-emerald-700 font-bold underline">Contact Support</a> page.
+          our <a href="mailto:compliance@quranific.com" class="text-emerald-700 font-bold underline"
+            >compliance team</a
+          >.
         </p>
       </section>
     </div>
