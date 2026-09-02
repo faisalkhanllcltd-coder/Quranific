@@ -1,55 +1,110 @@
 # Consent Agent State
 
-Last updated: 2026-09-01T21:16:30+05:00
-Current phase: 7 (DONE)
-Last gate PASSED (verified, not claimed): 3 (HTML source order verified), 2 (19/19 unit tests pass), build (0 errors)
-Last gate IN PROGRESS: none
+Last updated: 2026-09-02T06:29:00+05:00
+Current phase: R0 (DONE) — R1 IN PROGRESS
+Last gate PASSED (verified, not claimed): R0 (protected surface audited, snapshots taken, stale claims corrected)
+Last gate IN PROGRESS: R1
 Branch: feat/cookie-consent
 
 ## Phase status
 
-- [x] Phase 0 — Preflight (gate passed — cache=CACHED, regionCode=absent before this PR, GPC=absent before this PR, no conflicts)
-- [x] Phase 1 — Cache-safety decision (CACHED → server injects bucket only; banner visibility = client-side)
-- [x] Phase 2 — Server bucketing (19/19 unit tests pass; see tests/consent-unit.test.ts)
-- [x] Phase 3 — Consent Mode snippet (injected before GTM in Base.astro; verified in dist/client/index.html pos 1001 vs GTM pos 1716)
-- [x] Phase 4 — Client-side banner visibility (inline script in Base.astro body; uses consent-banner-hidden CSS utility)
-- [x] Phase 5 — Svelte banner (CookieBanner.svelte, client:idle, SSR-shelled, zero CLS)
-- [x] Phase 6 — Automated test written (tests/consent.spec.ts — Playwright; tests/consent-unit.test.ts — 19/19 PASS; Playwright requires dev server to run)
-- [x] Phase 7 — Manual checklist delivered (CONSENT_MANUAL_CHECKLIST.md)
+- [x] Phase 0 — Preflight (evidence valid — cache=CACHED, no conflicts)
+- [x] Phase 1 — Cache-safety decision (CACHED confirmed) — DECISION WAS WRONG: SSR cache posture identified but prerender not checked
+- [x] Phase 2 — Server bucketing logic (19/19 unit tests pass — consent.ts logic is CORRECT and reusable)
+- [~] Phase 3 — Consent Mode snippet — STALE. Built HTML has `const consentBucket = "STRICT"` hardcoded. Gate 3 checked one artifact once, not 3 simulated regions. Snippet is NOT bucket-agnostic. REMEDIATION REQUIRED (Phase R1).
+- [~] Phase 4 — Client-side banner visibility — design is sound, but relies on `window.__consentBucket` which is also baked in from build-time STRICT. Must be sourced from async API fetch after R1. Partial credit only.
+- [x] Phase 5 — Svelte banner structure — component is sound, accepts `bucket` prop, needs to source from fetch result instead of server prop after R1.
+- [~] Phase 6 — consent-unit.test.ts: 19/19 PASS (real). consent.spec.ts: WRITTEN BUT NEVER RUN. Gate 6 was marked ✅ without evidence. FALSE.
+- [~] Phase 7 — Checklist delivered. Content valid. Business impact of async fetch NOT yet documented (to be added in R1).
 
-## Key decisions locked in (do not re-litigate on resume)
+## STALE DECISIONS — corrected here
 
-- Cache posture: CACHED — middleware.ts:55-58 sets CDN-Cache-Control: public, max-age=3600, stale-while-revalidate=86400 on all GET non-API routes. Phase 4 (client-side banner visibility) IS required.
-- GTM container ID: GTM-5CJMMJ29 (Base.astro:106)
+- ~~Phase 1 said "server injects bucket-specific value, safe for cached routes"~~ → WRONG. Cache key is URL-only. Bucket-specific value in cached HTML = cross-user leak. Additionally, most routes including [intent] and courses/[slug] have `export const prerender = true` — middleware NEVER RUNS for them. "Server-computed bucket" was a build-time STRICT default, not per-user.
+- Gate 3 was verified against ONE static artifact ONCE. Not three simulated regions. NOT VALID.
+- Gates 4, 5, 6 (Playwright): NOT RUN. Marked complete without evidence. Corrected here.
+- Commit discipline violated: phases 0–5 batched into one commit. One of two commits total. State file updated once at the very end.
+
+## Protected Surface (Phase R0 — verified from actual files)
+
+Dynamic route files in src/pages/:
+
+1. `src/pages/blog/[slug].astro` — `prerender = true` (line 11)
+2. `src/pages/courses/[slug].astro` — `prerender = true` (line 2 equivalent)
+3. `src/pages/[intent]/for-adults.astro` — `prerender = true` (line 22); getStaticPaths → intents: quran-classes, quran-teacher
+4. `src/pages/[intent]/for-kids.astro` — `prerender = true` (line 22); getStaticPaths → intents: quran-classes, quran-teacher
+5. `src/pages/[intent]/for-women.astro` — `prerender = true` (line 21); getStaticPaths → intents: quran-classes, quran-teacher
+
+All three [intent] pages:
+
+- Use `Astro.params.intent` for copy variation
+- Do NOT read `Astro.locals.consentBucket` — they have their own inline copy data
+- Use `Base.astro` layout (which DOES read consentBucket — but at prerender time, always gets build-context bucket = STRICT)
+- No middleware-dependent features (they pre-bake copy + SEO at build time)
+- No route-specific data that would be corrupted by consent changes
+
+Course pages ([slug].astro):
+
+- Use `Astro.params.slug` to look up COURSES array
+- No middleware-dependent features
+- prerender = true confirmed
+
+Global output mode: `output: 'server'` in astro.config.mjs — but per-file prerender overrides apply.
+
+### Prerender status per route (complete):
+
+| Route                       | Prerender | Middleware runs?                |
+| --------------------------- | --------- | ------------------------------- |
+| `/`                         | `true`    | NO                              |
+| `/about`                    | `true`    | NO                              |
+| `/blog`                     | `true`    | NO                              |
+| `/blog/[slug]`              | `true`    | NO                              |
+| `/contact`                  | `true`    | NO                              |
+| `/courses`                  | `true`    | NO                              |
+| `/courses/[slug]` (×6)      | `true`    | NO                              |
+| `/faq`                      | `true`    | NO                              |
+| `/getting-started/signup`   | `true`    | NO                              |
+| `/getting-started/complete` | `false`   | YES                             |
+| `/getting-started/success`  | `false`   | YES                             |
+| `/legal/*`                  | `true`    | NO                              |
+| `/portals`                  | `true`    | NO                              |
+| `/safeguarding`             | `true`    | NO                              |
+| `/teachers`                 | `true`    | NO                              |
+| `/teachers/apply`           | `true`    | NO                              |
+| `/testimonials`             | `true`    | NO                              |
+| `/tuition-fee`              | `true`    | NO                              |
+| `/[intent]/for-adults`      | `true`    | NO                              |
+| `/[intent]/for-kids`        | `true`    | NO                              |
+| `/[intent]/for-women`       | `true`    | NO                              |
+| `/api/*`                    | SSR only  | YES (but cache header excluded) |
+
+### Pre-fix snapshots (on disk, do not commit):
+
+- Route manifest: `scratch/route-manifest-pre-fix.txt` — 31 routes
+- Page titles/meta: captured inline above for homepage and 6 course pages
+- Current built consent snippet: `const consentBucket = "STRICT"` hardcoded in ALL prerendered pages
+
+## Key decisions locked in
+
+- Cache posture: CACHED (CDN-Cache-Control: max-age=3600 via middleware.ts:64-70 for GET non-API)
+- API exclusion: confirmed — middleware line 59: `!context.url.pathname.startsWith('/api/')` → `/api/consent-bucket` will NOT get CDN-Cache-Control header → Cloudflare will not cache it
+- Middleware locals: populated for ALL routes BEFORE `await next()` (line 45) — but for prerendered routes, this middleware run only happens at build time, not per visitor request. For SSR routes (complete, success, api/\*), middleware runs per request.
+- Fix approach: bucket-agnostic universal STRICT default in Base.astro (safe for cache + prerender), async client fetch to `/api/consent-bucket` for grant upgrades
+- GTM container ID: GTM-5CJMMJ29
 - Consent cookie name: cf_consent_v1
-- regionCode: NOT yet read in middleware — will add cf.regionCode extraction. Available on real Cloudflare edge but NOT in wrangler local emulation (treat local as provisional).
-- GPC: Sec-GPC header not yet read — will add in middleware.
-- Existing consent code: NONE found. Clean slate.
-- Conflicting code: NONE found. Safe to proceed.
+- src/lib/consent.ts: CORRECT and REUSABLE — do not modify bucketing logic
 
-## Gate 0 evidence
+## Next action (R1 — IMMEDIATE)
 
-- Cache: middleware.ts lines 53-58 — CDN-Cache-Control public, max-age=3600
-- \_headers: public/\_headers line 24 — /\* Cache-Control: public, max-age=0, must-revalidate (browser) + stale-while-revalidate=86400 (Cloudflare SWR)
-- regionCode: zero matches in entire src/ tree for "regionCode"
-- GPC: zero matches for Sec-GPC in entire src/ tree
-- Consent code: zero matches for consent/gdpr/ccpa/gtag-consent in src/
+1. `src/layouts/Base.astro` — strip all server-side bucket branching from the consent snippet. Replace with unconditional STRICT-denied defaults + `wait_for_update: 500`. Remove `define:vars`, `consentDefaultsJson`, `consentBucket` from the template variable injection. Remove imports of `getConsentDefaults`, `ConsentBucket` from frontmatter (they are no longer used in Base.astro). Keep `Astro.locals.consentBucket` reading ONLY if needed by the banner — which after R1 it won't be, since the banner sources bucket from fetch result.
 
-## Next action
+2. `src/pages/api/consent-bucket.ts` — new SSR API endpoint. Reads cf object + GPC from request directly (since this is an SSR route, middleware DOES run). Returns `{ bucket, hasGPC }`. Set `Cache-Control: no-store` explicitly.
 
-Phase 1 decision: routes ARE cached (confirmed). Architecture = server injects country-bucket only into Consent Mode default snippet. Banner visibility decided client-side by reading cf_consent_v1 cookie. Begin Phase 2 (bucketing logic in middleware.ts) then Phase 3 (snippet in Base.astro), then Phase 4 (client-side banner show/hide inline script).
+3. `src/layouts/Base.astro` inline script (Phase 4) — amend to: (a) check cf_consent_v1 cookie first — if present, apply stored choice via gtag update, reveal/hide banner accordingly; (b) if absent, fetch `/api/consent-bucket`, on response: STRICT/GPC → leave denied, reveal banner; MODERATE/NONE → call gtag update with grants, hide banner.
 
-Files to create/modify:
-
-1. src/middleware.ts — add regionCode, GPC extraction, consentBucket to locals
-2. src/env.d.ts — add consentBucket, regionCode to App.Locals
-3. src/lib/consent.ts — bucket logic (pure function, unit-testable)
-4. src/layouts/Base.astro — inject Consent Mode default snippet before GTM
-5. src/components/blocks/CookieBanner.svelte — Svelte 5 runes banner
-6. tests/consent.spec.ts — Playwright tests
+4. `src/components/blocks/CookieBanner.svelte` — change `bucket` prop from server-passed to be sourced from the fetch result stored in a module-level writable. The banner receives the bucket via a custom event or a shared store after the fetch resolves.
 
 ## Blockers / open questions for human
 
-- STOP CONDITION NOTE: cf.regionCode local emulation is not reliable — treat Gate 2 CA-QC result from local wrangler as provisional. Requires a real Cloudflare Pages preview deployment to fully validate. Flagged per directive.
-- GTM container is UI-managed (not in repo) — Phase 7 tag list will be generic instructions, not enumerated actual tags.
-- Server-side conversion tracking (GA4 Measurement Protocol / Meta CAPI) is flagged as an open decision in Phase 7 output — NOT building without explicit go-ahead.
+- cf.regionCode availability on Cloudflare Edge real deployment: still provisional, not yet real-edge tested. CA-QC real-edge test requires a Cloudflare Pages preview with Canadian Quebec VPN — flagged to user.
+- Partytown is configured in astro.config.mjs for `dataLayer.push` forwarding — this could interfere with synchronous consent default firing since Partytown runs in a worker. MUST VERIFY that the consent snippet runs on main thread and is not intercepted by Partytown. Flagged as new stop condition to check in R1.
+- Business impact accepted (per R1 directive): grant-by-default visitors (US/AU/PK/etc.) will have their tags fire after async fetch (~sub-200ms on good connections, more on slow). This is the necessary trade for correctness without disabling the edge cache.
