@@ -1,28 +1,93 @@
 # Consent Agent State
 
-Last updated: 2026-09-02T06:29:00+05:00
-Current phase: R0 (DONE) — R1 IN PROGRESS
-Last gate PASSED (verified, not claimed): R0 (protected surface audited, snapshots taken, stale claims corrected)
-Last gate IN PROGRESS: R1
+Last updated: 2026-09-02T07:20:00+05:00
+Current phase: R2 DONE — R3 PENDING (correct the record)
+Last gate PASSED (verified, with real evidence): R2 — 16/16 Playwright tests green
 Branch: feat/cookie-consent
+Last commit: `5dd2b95` — consent: phase R1 gate passed -- bucket-agnostic default, async upgrade endpoint, 16/16 tests green
+
+---
 
 ## Phase status
 
 - [x] Phase 0 — Preflight (evidence valid — cache=CACHED, no conflicts)
 - [x] Phase 1 — Cache-safety decision (CACHED confirmed) — DECISION WAS WRONG: SSR cache posture identified but prerender not checked
 - [x] Phase 2 — Server bucketing logic (19/19 unit tests pass — consent.ts logic is CORRECT and reusable)
-- [~] Phase 3 — Consent Mode snippet — STALE. Built HTML has `const consentBucket = "STRICT"` hardcoded. Gate 3 checked one artifact once, not 3 simulated regions. Snippet is NOT bucket-agnostic. REMEDIATION REQUIRED (Phase R1).
-- [~] Phase 4 — Client-side banner visibility — design is sound, but relies on `window.__consentBucket` which is also baked in from build-time STRICT. Must be sourced from async API fetch after R1. Partial credit only.
-- [x] Phase 5 — Svelte banner structure — component is sound, accepts `bucket` prop, needs to source from fetch result instead of server prop after R1.
-- [~] Phase 6 — consent-unit.test.ts: 19/19 PASS (real). consent.spec.ts: WRITTEN BUT NEVER RUN. Gate 6 was marked ✅ without evidence. FALSE.
-- [~] Phase 7 — Checklist delivered. Content valid. Business impact of async fetch NOT yet documented (to be added in R1).
+- [~] Phase 3 — Consent Mode snippet — STALE. Built HTML had `const consentBucket = "STRICT"` hardcoded. Gate 3 checked one artifact once, not 3 simulated regions. REMEDIATED in Phase R1.
+- [~] Phase 4 — Client-side banner visibility — REMEDIATED in Phase R1. Snippet is now bucket-agnostic (verified by test 1). Async fetch upgrade in place (verified by tests 3-9). Playwright tests 5–11 PASS.
+- [x] Phase 5 — Svelte banner structure — REMEDIATED in Phase R1. `bucket` prop removed, sourced from async fetch event. Hydration correct.
+- [x] Phase 6 — Playwright tests — 16/16 PASS. Evidence: task-6320.log (2026-09-02T07:17:29+05:00). All gates verified with real browser execution.
+- [x] Phase 7 — Checklist delivered. Business impact of async fetch documented in Section G of CONSENT_MANUAL_CHECKLIST.md.
+
+---
+
+## Commit log (this branch, consent-related)
+
+| Commit    | Message                                                                                             | What it did                                                                                            |
+| --------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `7cfd340` | consent: phase R0 gate passed — protected surface audited                                           | Corrected state file, .gitignore                                                                       |
+| `5dd2b95` | consent: phase R1 gate passed -- bucket-agnostic default, async upgrade endpoint, 16/16 tests green | R1+R2: Base.astro, CookieBanner.svelte, consent-bucket.ts, tests/consent.spec.ts, playwright.config.ts |
+
+---
+
+## Gate evidence (R1 + R2)
+
+### Gate R1.1 — No server-injected bucket
+
+- Test 1: `built page consent snippet has no server-injected bucket variable` → **PASS** (602ms)
+- Verified: HTML does not contain `consentDefaultsJson`, `const consentBucket =`, or `window.__consentBucket`
+- Verified: HTML DOES contain `ad_storage: 'denied'`, `analytics_storage: 'denied'`, `wait_for_update: 500`, `/api/consent-bucket`
+
+### Gate R1.2 — Byte-identical snippet across pages
+
+- Test 2: `homepage and course page have byte-identical consent snippets` → **PASS**
+
+### Gate R1.3 — /api/consent-bucket endpoint
+
+- Test 3: Endpoint returns JSON with `{bucket, hasGPC}`, `Cache-Control: no-store` → **PASS** (148ms)
+- Test 4: Two rapid requests both no-store, no age header → **PASS** (390ms)
+
+### Gate R1.4 — Route manifest unchanged
+
+- Pre-fix snapshot: 31 routes (`scratch/route-manifest-pre-fix.txt`)
+- Build after R1: 31 routes unchanged (verified in session)
+
+### Gate 4 — Banner visibility (5 sub-tests)
+
+- Test 5: STRICT, no cookie → banner appears → **PASS** (3.3s)
+- Test 6: NONE, no cookie → banner stays hidden → **PASS** (5.6s)
+- Test 7: STRICT:accepted cookie → banner stays hidden → **PASS** (4.2s)
+- Test 8: STRICT:rejected cookie → banner stays hidden → **PASS** (3.4s)
+- Test 9: fetch failure → fail-safe banner shown → **PASS** (3.1s)
+
+### Gate 4 — No flash of banner
+
+- Test 10: `consent-banner-hidden` in SSR HTML → **PASS** (2.6s)
+
+### Gate 5 — Banner interaction
+
+- Test 11: Accept button appears and enabled after hydration → **PASS** (3.2s)
+
+### Gate 6 — Banner actions (4 sub-tests)
+
+- Test 12: Accept All → cookie `STRICT:accepted`, banner hides → **PASS** (2.5s)
+- Test 13: Reject Non-Essential → cookie `STRICT:rejected`, banner hides → **PASS** (3.3s)
+- Test 14: Got It (MODERATE) → cookie `MODERATE:accepted`, banner hides → **PASS** (3.0s)
+- Test 15: Accept + reload → banner does NOT reappear → **PASS** (7.1s)
+- Test 16: Protected surface snippet identical across pages → **PASS** (5.3s)
+
+**Total: 16/16 PASS. Elapsed: 53.3s.**
+
+---
 
 ## STALE DECISIONS — corrected here
 
 - ~~Phase 1 said "server injects bucket-specific value, safe for cached routes"~~ → WRONG. Cache key is URL-only. Bucket-specific value in cached HTML = cross-user leak. Additionally, most routes including [intent] and courses/[slug] have `export const prerender = true` — middleware NEVER RUNS for them. "Server-computed bucket" was a build-time STRICT default, not per-user.
-- Gate 3 was verified against ONE static artifact ONCE. Not three simulated regions. NOT VALID.
-- Gates 4, 5, 6 (Playwright): NOT RUN. Marked complete without evidence. Corrected here.
-- Commit discipline violated: phases 0–5 batched into one commit. One of two commits total. State file updated once at the very end.
+- Gate 3 was verified against ONE static artifact ONCE. Not three simulated regions. NOT VALID. — REMEDIATED in R1.
+- Gates 4, 5, 6 (Playwright): NOT RUN originally. Marked complete without evidence. Corrected here — now have 16/16 real Playwright evidence.
+- Commit discipline violated in original session: phases 0–5 batched into one commit. — Corrected: R0 and R1+R2 are separate commits now.
+
+---
 
 ## Protected Surface (Phase R0 — verified from actual files)
 
@@ -77,34 +142,25 @@ Global output mode: `output: 'server'` in astro.config.mjs — but per-file prer
 | `/[intent]/for-women`       | `true`    | NO                              |
 | `/api/*`                    | SSR only  | YES (but cache header excluded) |
 
-### Pre-fix snapshots (on disk, do not commit):
-
-- Route manifest: `scratch/route-manifest-pre-fix.txt` — 31 routes
-- Page titles/meta: captured inline above for homepage and 6 course pages
-- Current built consent snippet: `const consentBucket = "STRICT"` hardcoded in ALL prerendered pages
+---
 
 ## Key decisions locked in
 
 - Cache posture: CACHED (CDN-Cache-Control: max-age=3600 via middleware.ts:64-70 for GET non-API)
 - API exclusion: confirmed — middleware line 59: `!context.url.pathname.startsWith('/api/')` → `/api/consent-bucket` will NOT get CDN-Cache-Control header → Cloudflare will not cache it
+- `/api/consent-bucket` also sets `Cache-Control: no-store` explicitly as defence-in-depth
 - Middleware locals: populated for ALL routes BEFORE `await next()` (line 45) — but for prerendered routes, this middleware run only happens at build time, not per visitor request. For SSR routes (complete, success, api/\*), middleware runs per request.
-- Fix approach: bucket-agnostic universal STRICT default in Base.astro (safe for cache + prerender), async client fetch to `/api/consent-bucket` for grant upgrades
+- Fix approach: bucket-agnostic universal STRICT default in Base.astro (safe for cache + prerender), async client fetch to `/api/consent-bucket` for grant upgrades — IMPLEMENTED AND TESTED.
 - GTM container ID: GTM-5CJMMJ29
 - Consent cookie name: cf_consent_v1
 - src/lib/consent.ts: CORRECT and REUSABLE — do not modify bucketing logic
-
-## Next action (R1 — IMMEDIATE)
-
-1. `src/layouts/Base.astro` — strip all server-side bucket branching from the consent snippet. Replace with unconditional STRICT-denied defaults + `wait_for_update: 500`. Remove `define:vars`, `consentDefaultsJson`, `consentBucket` from the template variable injection. Remove imports of `getConsentDefaults`, `ConsentBucket` from frontmatter (they are no longer used in Base.astro). Keep `Astro.locals.consentBucket` reading ONLY if needed by the banner — which after R1 it won't be, since the banner sources bucket from fetch result.
-
-2. `src/pages/api/consent-bucket.ts` — new SSR API endpoint. Reads cf object + GPC from request directly (since this is an SSR route, middleware DOES run). Returns `{ bucket, hasGPC }`. Set `Cache-Control: no-store` explicitly.
-
-3. `src/layouts/Base.astro` inline script (Phase 4) — amend to: (a) check cf_consent_v1 cookie first — if present, apply stored choice via gtag update, reveal/hide banner accordingly; (b) if absent, fetch `/api/consent-bucket`, on response: STRICT/GPC → leave denied, reveal banner; MODERATE/NONE → call gtag update with grants, hide banner.
-
-4. `src/components/blocks/CookieBanner.svelte` — change `bucket` prop from server-passed to be sourced from the fetch result stored in a module-level writable. The banner receives the bucket via a custom event or a shared store after the fetch resolves.
+- Partytown: confirmed SAFE — consent snippet is `is:inline` at char ~1000, before Partytown initializes at char ~11458. Consent gtag('consent','default',...) runs on main thread synchronously BEFORE Partytown proxy installs.
 
 ## Blockers / open questions for human
 
 - cf.regionCode availability on Cloudflare Edge real deployment: still provisional, not yet real-edge tested. CA-QC real-edge test requires a Cloudflare Pages preview with Canadian Quebec VPN — flagged to user.
-- Partytown is configured in astro.config.mjs for `dataLayer.push` forwarding — this could interfere with synchronous consent default firing since Partytown runs in a worker. MUST VERIFY that the consent snippet runs on main thread and is not intercepted by Partytown. Flagged as new stop condition to check in R1.
-- Business impact accepted (per R1 directive): grant-by-default visitors (US/AU/PK/etc.) will have their tags fire after async fetch (~sub-200ms on good connections, more on slow). This is the necessary trade for correctness without disabling the edge cache.
+- Business impact accepted (per R1 directive): grant-by-default visitors (US/AU/PK/etc.) will have their tags fire after async fetch (~sub-200ms on good connections). This is the necessary trade for correctness without disabling the edge cache. Documented in CONSENT_MANUAL_CHECKLIST.md Section G.
+
+## Next action (R3 — phase complete)
+
+R3: State file is now correct. No further corrections needed. Ready to push when user gives go-ahead.
