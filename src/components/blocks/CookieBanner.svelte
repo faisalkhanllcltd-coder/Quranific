@@ -1,13 +1,17 @@
 <script lang="ts">
   // src/components/blocks/CookieBanner.svelte
   // Svelte 5 runes syntax. Mounted with client:idle — non-critical path.
-  // SSR shell is rendered server-side (no client:only), so no CLS on hydration.
+  // Bucket is NOT passed as a server prop (would be baked into cached/prerendered HTML).
+  // Instead, the Phase 4 inline script dispatches a 'consent-bucket' CustomEvent on
+  // #cookie-banner-root after it resolves /api/consent-bucket asynchronously.
+  // This component listens for that event and updates its state accordingly.
   import type { ConsentBucket } from '../../lib/consent';
 
-  // ─── Props ────────────────────────────────────────────────────────────────
-  const { bucket }: { bucket: ConsentBucket } = $props();
-
   // ─── State ────────────────────────────────────────────────────────────────
+  // Start with STRICT as fallback — if event arrives, it overrides.
+  // If event never arrives (e.g. fetch failed), the STRICT banner copy is shown,
+  // which is the safe fallback.
+  let bucket = $state<ConsentBucket>('STRICT');
   let visible = $state(false);
   let showDetails = $state(false);
   let hydrated = $state(false);
@@ -15,14 +19,6 @@
   // ─── Cookie helpers ───────────────────────────────────────────────────────
   const COOKIE_NAME = 'cf_consent_v1';
   const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
-
-  function readConsentCookie(): string | null {
-    for (const part of document.cookie.split(';')) {
-      const [k, ...rest] = part.trim().split('=');
-      if (k === COOKIE_NAME) return rest.join('=');
-    }
-    return null;
-  }
 
   function writeConsentCookie(value: string): void {
     // SameSite=Lax: sent with top-level navigation, not blocked for cross-site
@@ -43,7 +39,7 @@
     }
   }
 
-  // ─── Consent grant/deny maps per bucket ──────────────────────────────────
+  // ─── Consent grant/deny maps ──────────────────────────────────────────────
   const GRANT_ALL: ConsentArg = {
     ad_storage: 'granted',
     ad_user_data: 'granted',
@@ -54,8 +50,7 @@
     security_storage: 'granted',
   };
 
-  // MODERATE: accept analytics but still deny ads (user hasn't explicitly opted in to ads)
-  const MODERATE_ACCEPT: ConsentArg = {
+  const GRANT_MODERATE: ConsentArg = {
     ad_storage: 'denied',
     ad_user_data: 'denied',
     ad_personalization: 'denied',
@@ -89,14 +84,8 @@
   }
 
   function acceptAnalyticsOnly(): void {
-    // Only available on STRICT banner (granular control)
     const update =
-      bucket === 'MODERATE'
-        ? MODERATE_ACCEPT
-        : {
-            ...DENY_ALL,
-            analytics_storage: 'granted',
-          };
+      bucket === 'MODERATE' ? GRANT_MODERATE : { ...DENY_ALL, analytics_storage: 'granted' };
     updateGtag(update);
     writeConsentCookie(`${bucket}:accepted`);
     visible = false;
@@ -105,12 +94,32 @@
   // ─── Lifecycle ───────────────────────────────────────────────────────────
   $effect(() => {
     hydrated = true;
-    // Only show if cookie is absent — the parent div is already revealed by
-    // the Phase 4 inline script; we just sync our internal visible state.
-    const existingCookie = readConsentCookie();
-    if (!existingCookie) {
+
+    const bannerRoot = document.getElementById('cookie-banner-root');
+    if (!bannerRoot) return;
+
+    // PATH A: inline script already resolved + stored bucket before we mounted
+    // (common with client:idle — inline script fires synchronously at page load,
+    //  Svelte hydrates later when browser is idle; we may have missed the event)
+    const w = window as Record<string, unknown>;
+    if (w.__resolvedBucket) {
+      bucket = w.__resolvedBucket as ConsentBucket;
       visible = true;
     }
+
+    // PATH B: component mounted before async fetch resolved — listen for event
+    function onBucketResolved(e: Event) {
+      const ce = e as CustomEvent<{ bucket: ConsentBucket }>;
+      if (ce.detail?.bucket) {
+        bucket = ce.detail.bucket;
+      }
+      visible = true;
+    }
+
+    bannerRoot.addEventListener('consent-bucket', onBucketResolved);
+    return () => {
+      bannerRoot.removeEventListener('consent-bucket', onBucketResolved);
+    };
   });
 </script>
 

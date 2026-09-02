@@ -2,9 +2,52 @@
 
 # For: Quranific Cookie Consent System
 
-# Date: 2026-09-01
+# Date: 2026-09-01 (Updated: 2026-09-02 — Phase R1 remediation)
 
 # Author: Consent Agent
+
+---
+
+## ⚠️ G. Architecture Change — Accepted Business Impact (Phase R1 Remediation)
+
+**This section documents an understood, intentional trade-off. It is not a bug.**
+
+### What changed and why
+
+The original implementation baked a server-computed country-bucket value into the cached
+HTML (`const consentBucket = "STRICT"`). This was a compliance failure: Cloudflare's
+default cache key is URL-only, meaning the first visitor's response is served to all
+subsequent visitors at that edge PoP, regardless of their country. Additionally, the
+`[intent]` landing pages and all `/courses/[slug]/` pages are statically prerendered
+(`export const prerender = true`), so middleware never runs per-visitor — there was no
+"per-request bucket" at all for those pages.
+
+The fix (Phase R1): the consent default snippet is now **unconditionally denied** for all
+visitors — safe to cache, safe for prerendered pages. The per-visitor bucket upgrade
+is fetched asynchronously from `/api/consent-bucket` after page load.
+
+### Accepted trade-off
+
+**Grant-by-default visitors** (US, CA non-QC, AU, and rest-of-world NONE-bucket regions)
+now have their analytics/ad tags fire **after an async fetch resolves**, not at initial
+page load. Timeline:
+
+- Default: all denied (fires synchronously in `<head>`, char ~1000)
+- `wait_for_update: 500ms` tells Consent Mode to hold tag execution for 500ms
+- `/api/consent-bucket` fetch: typically **< 50ms** on Cloudflare edge (SSR worker, same PoP)
+- On grant: `gtag('consent','update', {...granted})` fires, GTM tags execute
+- Worst case on slow connections (> 500ms fetch): first pageview/conversion tag fires
+  with denied defaults, then fires again with granted on next fetch cycle
+
+**For returning visitors** (cookie present): PATH A applies — no fetch, instant gtag
+update from stored cookie. No performance impact for repeat visitors.
+
+**EU/UK/STRICT visitors**: unaffected — were already denied-by-default, no change.
+
+**This trade-off is accepted, documented, and understood.** It is the necessary cost
+of compliance given the shared edge cache without disabling caching or flipping
+prerendered pages to SSR. Neither of those alternatives was within the scope of
+this change per the Phase R1 directive.
 
 ---
 

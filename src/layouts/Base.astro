@@ -3,8 +3,6 @@
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import { SITE } from '../constants/site';
-import { getConsentDefaults } from '../lib/consent';
-import type { ConsentBucket } from '../lib/consent';
 import CookieBanner from '../components/blocks/CookieBanner.svelte';
 
 /* THE ELITE 3-FONT SYSTEM (Self-Hosted, Zero Latency) */
@@ -60,13 +58,6 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, siteBas
 // Read edge-detected connection speed from Cloudflare via Astro Locals safely
 const isSlow: boolean = Astro.locals?.isSlowConnection ?? false;
 
-// Consent Mode: read server-computed bucket from middleware locals.
-// Defaults to STRICT if somehow missing (fail-closed).
-const consentBucket: ConsentBucket = Astro.locals?.consentBucket ?? 'STRICT';
-const consentDefaults = getConsentDefaults(consentBucket);
-// Serialise for inline script injection
-const consentDefaultsJson = JSON.stringify(consentDefaults);
-
 // Global Base Entity Schema
 const baseSchema = {
   '@context': 'https://schema.org',
@@ -102,21 +93,39 @@ const baseSchema = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-    <!-- Consent Mode v2 Default — must fire BEFORE GTM container loads.
-         Bucket (STRICT/MODERATE/NONE) is computed server-side per request.
-         Banner visibility is decided CLIENT-SIDE (routes are edge-cached, so
-         SSR cannot safely bake "show banner" into HTML — see CONSENT_AGENT_STATE.md).
+    <!--
+      Consent Mode v2 — Universal Safe Default.
+      This snippet is INTENTIONALLY bucket-agnostic and renders byte-identical
+      for every visitor regardless of country. It is safe under shared edge cache
+      and safe on prerendered routes (no server branching, no per-user data).
+
+      The per-visitor bucket upgrade (granting consent for US/AU/etc.) happens
+      asynchronously via /api/consent-bucket fetch in the Phase 4 inline script
+      below. See CONSENT_AGENT_STATE.md Phase R1 for the full rationale.
+
+      wait_for_update: 500ms — Consent Mode holds tag firing for this window,
+      giving the async fetch time to resolve before GTM tags execute.
+      If fetch does not resolve within 500ms, tags proceed with denied defaults.
+      This is the fail-safe trade: occasional analytics miss on fast grant-by-default
+      visitors on slow connections, in exchange for never leaking a grant to an EU visitor.
     -->
-    <script is:inline define:vars={{ consentDefaultsJson, consentBucket }}>
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      // eslint-disable-next-line prefer-rest-params
+
       function gtag() {
+        // eslint-disable-next-line prefer-rest-params
         window.dataLayer.push(arguments);
       }
-      // Apply server-computed defaults
-      gtag('consent', 'default', JSON.parse(consentDefaultsJson));
-      // Expose bucket for client-side banner logic
-      window.__consentBucket = consentBucket;
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        functionality_storage: 'granted',
+        personalization_storage: 'denied',
+        security_storage: 'granted',
+        wait_for_update: 500,
+      });
     </script>
 
     <!-- Google Tag Manager — runs AFTER consent defaults are set above -->
@@ -273,13 +282,11 @@ const baseSchema = {
 
     <!--
       Cookie Banner SSR Shell.
-      Phase 4 — client-side visibility: the banner div is hidden by default via
-      the `consent-banner-hidden` class applied synchronously by the inline script
-      below. The Svelte component (client:idle) reveals it when:
-        a) cf_consent_v1 cookie is absent (first visit), AND
-        b) bucket is STRICT or MODERATE (NONE bucket → no banner needed)
-      This pattern avoids CLS and avoids serving personalised show/hide state
-      from cached HTML. NONE-bucket visitors never see the banner at all.
+      Hidden by default via `consent-banner-hidden` CSS class (set in SSR HTML).
+      The Phase 4 async script below reveals it only when:
+        a) cf_consent_v1 cookie is absent (first visit)
+        b) /api/consent-bucket returns STRICT or MODERATE (not NONE)
+      NONE-bucket visitors with no GPC get a silent gtag update grant, no banner shown.
     -->
     <div
       id="cookie-banner-root"
@@ -287,32 +294,140 @@ const baseSchema = {
       aria-live="polite"
       aria-label="Cookie consent"
     >
-      <CookieBanner client:idle bucket={consentBucket} />
+      <CookieBanner client:idle />
     </div>
 
     <!--
-      Phase 4 inline script: runs synchronously (no defer, no async) immediately
-      after the banner shell div. Reads cf_consent_v1 cookie without JS frameworks.
-      If cookie already set OR bucket is NONE → keep banner hidden.
-      If cookie absent AND bucket requires consent → un-hide banner for Svelte hydration.
-      No layout shift: the CSS class is already applied at server-render time.
+      Phase 4 — Consent Upgrade Script (async, non-blocking).
+      Architecture rationale: the consent DEFAULT is always denied (set above in <head>).
+      This script handles two paths:
+
+      PATH A — Returning visitor (cookie present):
+        Read cf_consent_v1, parse stored choice, fire gtag('consent','update') immediately.
+        No fetch needed. Banner stays hidden.
+
+      PATH B — First visit (no cookie):
+        Fetch /api/consent-bucket (SSR endpoint, never cached, always per-request).
+        On response:
+          - STRICT or GPC → leave defaults as denied. Reveal banner (user must choose).
+          - MODERATE → call gtag update with analytics granted, ads denied. Reveal banner
+            (user can manage, but analytics already active per PIPEDA/CCPA opt-out model).
+          - NONE → call gtag update with all granted. Keep banner hidden (silent, no consent needed).
+        On fetch error → fail safe: leave denied, reveal banner (user can choose).
+
+      GRANT MAP values match getConsentDefaults() in src/lib/consent.ts — keep in sync.
     -->
     <script is:inline>
       (function () {
-        const bucket = window.__consentBucket || 'STRICT';
-        // NONE bucket → no banner needed ever, leave hidden
-        if (bucket === 'NONE') return;
+        const COOKIE_NAME = 'cf_consent_v1';
 
-        // Check for existing consent cookie
-        const hasCookie = document.cookie.split(';').some(function (c) {
-          return c.trim().startsWith('cf_consent_v1=');
-        });
-
-        if (!hasCookie) {
-          // Reveal the banner for hydration
-          const el = document.getElementById('cookie-banner-root');
-          if (el) el.classList.remove('consent-banner-hidden');
+        // ── Cookie helpers ────────────────────────────────────────────────────
+        function readCookie(name) {
+          const parts = document.cookie.split(';');
+          for (let i = 0; i < parts.length; i++) {
+            const part = parts[i].trim();
+            if (part.indexOf(name + '=') === 0) {
+              return part.substring(name.length + 1);
+            }
+          }
+          return null;
         }
+
+        // ── gtag shorthand (already defined above in <head>) ─────────────────
+        function g(cmd, params) {
+          if (typeof gtag === 'function') gtag('consent', cmd, params);
+        }
+
+        // ── Grant maps ───────────────────────────────────────────────────────
+        const GRANT_ALL = {
+          ad_storage: 'granted',
+          ad_user_data: 'granted',
+          ad_personalization: 'granted',
+          analytics_storage: 'granted',
+          functionality_storage: 'granted',
+          personalization_storage: 'granted',
+          security_storage: 'granted',
+        };
+        const GRANT_MODERATE = {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'granted',
+          functionality_storage: 'granted',
+          personalization_storage: 'denied',
+          security_storage: 'granted',
+        };
+        const DENY_ALL = {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'denied',
+          functionality_storage: 'granted',
+          personalization_storage: 'denied',
+          security_storage: 'granted',
+        };
+
+        function revealBanner(bucket) {
+          // Store on window so client:idle Svelte component can read on mount
+          // even if it hydrates AFTER this event fires (race prevention)
+          window.__resolvedBucket = bucket;
+          const el = document.getElementById('cookie-banner-root');
+          if (el) {
+            el.classList.remove('consent-banner-hidden');
+            // Also dispatch event for the case component is already mounted
+            el.dispatchEvent(
+              new CustomEvent('consent-bucket', { detail: { bucket: bucket }, bubbles: true })
+            );
+          }
+        }
+
+        function applyStoredChoice(cookieValue) {
+          // Format: "BUCKET:choice" e.g. "STRICT:accepted", "MODERATE:rejected"
+          const parts = cookieValue.split(':');
+          const bucket = parts[0];
+          const choice = parts[1];
+          if (choice === 'accepted') {
+            if (bucket === 'NONE') g('update', GRANT_ALL);
+            else if (bucket === 'MODERATE') g('update', GRANT_MODERATE);
+            else g('update', GRANT_ALL); // STRICT:accepted = explicit accept-all
+          } else {
+            g('update', DENY_ALL); // rejected = deny non-essential
+          }
+          // Banner stays hidden — user already chose
+        }
+
+        // ── PATH A: returning visitor ─────────────────────────────────────────
+        const existingCookie = readCookie(COOKIE_NAME);
+        if (existingCookie) {
+          applyStoredChoice(existingCookie);
+          return; // done — no fetch, no banner
+        }
+
+        // ── PATH B: first visit — fetch bucket and act ───────────────────────
+        fetch('/api/consent-bucket', { credentials: 'omit', cache: 'no-store' })
+          .then(function (r) {
+            return r.json();
+          })
+          .then(function (data) {
+            const bucket = data.bucket || 'STRICT';
+            const hasGPC = !!data.hasGPC;
+
+            if (bucket === 'NONE' && !hasGPC) {
+              // Silent grant — no banner
+              g('update', GRANT_ALL);
+            } else if (bucket === 'MODERATE' && !hasGPC) {
+              // Analytics granted, ads denied, show banner for explicit opt-in/out
+              g('update', GRANT_MODERATE);
+              revealBanner(bucket);
+            } else {
+              // STRICT or GPC — leave denied, show banner
+              revealBanner(bucket);
+            }
+          })
+          .catch(function () {
+            // Fetch failed — fail safe: leave denied, show banner so user can choose
+            revealBanner('STRICT');
+          });
       })();
     </script>
   </body>
