@@ -107,7 +107,7 @@
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
   let basePrice = $derived.by(() => {
     const rate = getSafeRate(currency, rates);
-    if (['USD', 'AED', 'SAR'].includes(currency)) {
+    if (currency === 'USD') {
       return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
     }
     const usdBase = (PRICING as PricingTier)?.['USD']?.[dur]?.[sess] ?? 0;
