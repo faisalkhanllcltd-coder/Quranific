@@ -38,9 +38,11 @@
   let { liveRates = null, accent = 'emerald' }: Props = $props();
 
   let rates = $state<Record<string, number> | null>(liveRates);
+  let isLoadingRates = $state<boolean>(liveRates === null);
 
   $effect(() => {
     if (!rates && typeof window !== 'undefined') {
+      isLoadingRates = true;
       fetch('/api/fx-rates')
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
@@ -50,7 +52,12 @@
         })
         .catch(() => {
           // Gracefully fall back to STATIC_FALLBACK_RATES
+        })
+        .finally(() => {
+          isLoadingRates = false;
         });
+    } else {
+      isLoadingRates = false;
     }
   });
 
@@ -274,17 +281,31 @@
       </div>
       <div class="flex justify-between items-center mb-4">
         <span class="text-sm {resultLabel} font-medium">Per session</span><span
-          class="text-sm font-bold {resultValue}">{sym}{perClass}</span
+          class="text-sm font-bold {resultValue}"
         >
+          {#if currency !== 'USD' && isLoadingRates}
+            <span class="inline-block animate-pulse opacity-40">...</span>
+          {:else}
+            {sym}{perClass}
+          {/if}
+        </span>
       </div>
 
       <div class="pt-4 border-t {resultDivider} flex flex-col items-start text-left">
         <span class="text-[15px] font-bold {resultFeeLabel} mb-1">Monthly fee</span>
         <div
           data-testid="monthly-fee"
-          class="font-serif text-3xl font-bold {resultFeeVal} leading-none"
+          class="font-serif text-3xl font-bold {resultFeeVal} leading-none flex items-baseline gap-1"
         >
-          {sym}{finalPrice}<span class="text-sm font-medium {resultFeeSub}">/mo</span>
+          {#if currency !== 'USD' && isLoadingRates}
+            <span
+              class="inline-block h-8 w-24 {isPurple
+                ? 'bg-purple-100/70'
+                : 'bg-emerald-100/70'} animate-pulse rounded-md my-0.5"
+            ></span>
+          {:else}
+            {sym}{finalPrice}<span class="text-sm font-medium {resultFeeSub}">/mo</span>
+          {/if}
         </div>
       </div>
     </div>

@@ -36,9 +36,11 @@
   let { liveRates = null }: Props = $props();
 
   let rates = $state<Record<string, number> | null>(liveRates);
+  let isLoadingRates = $state<boolean>(liveRates === null);
 
   $effect(() => {
     if (!rates && typeof window !== 'undefined') {
+      isLoadingRates = true;
       fetch('/api/fx-rates')
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
@@ -48,7 +50,12 @@
         })
         .catch(() => {
           // Gracefully fall back to STATIC_FALLBACK_RATES
+        })
+        .finally(() => {
+          isLoadingRates = false;
         });
+    } else {
+      isLoadingRates = false;
     }
   });
 
@@ -177,11 +184,16 @@
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0">
-            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-              >{getDisplayedMonthly('2')}</span
-            >
-            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            {#if currency !== 'USD' && isLoadingRates}
+              <span class="inline-block h-8 w-16 bg-emerald-100/70 animate-pulse rounded my-0.5"
+              ></span>
+            {:else}
+              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+                >{getDisplayedMonthly('2')}</span
+              >
+              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            {/if}
           </div>
         </div>
       </button>
@@ -224,11 +236,16 @@
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0">
-            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-              >{getDisplayedMonthly('3')}</span
-            >
-            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            {#if currency !== 'USD' && isLoadingRates}
+              <span class="inline-block h-8 w-16 bg-emerald-100/70 animate-pulse rounded my-0.5"
+              ></span>
+            {:else}
+              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+                >{getDisplayedMonthly('3')}</span
+              >
+              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            {/if}
           </div>
         </div>
       </button>
@@ -271,11 +288,16 @@
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0">
-            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-              >{getDisplayedMonthly('4')}</span
-            >
-            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            {#if currency !== 'USD' && isLoadingRates}
+              <span class="inline-block h-8 w-16 bg-emerald-100/70 animate-pulse rounded my-0.5"
+              ></span>
+            {:else}
+              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+                >{getDisplayedMonthly('4')}</span
+              >
+              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            {/if}
           </div>
         </div>
       </button>
@@ -327,11 +349,16 @@
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0">
-            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-              >{getDisplayedMonthly('5')}</span
-            >
-            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            {#if currency !== 'USD' && isLoadingRates}
+              <span class="inline-block h-8 w-16 bg-emerald-100/70 animate-pulse rounded my-0.5"
+              ></span>
+            {:else}
+              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+                >{getDisplayedMonthly('5')}</span
+              >
+              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            {/if}
           </div>
         </div>
       </button>
@@ -360,11 +387,16 @@
         </div>
         <!-- Price line — always shown -->
         <div class="flex flex-wrap items-baseline justify-start gap-x-2 gap-y-0.5">
-          <span class="text-lg font-black text-emerald-950"
-            >{sym}{getDisplayedMonthly(selectedPlan)}<span
-              class="text-xs font-bold text-emerald-800/50 ml-0.5">/mo</span
-            ></span
-          >
+          {#if currency !== 'USD' && isLoadingRates}
+            <span class="inline-block h-6 w-28 bg-emerald-200/60 animate-pulse rounded my-0.5"
+            ></span>
+          {:else}
+            <span class="text-lg font-black text-emerald-950"
+              >{sym}{getDisplayedMonthly(selectedPlan)}<span
+                class="text-xs font-bold text-emerald-800/50 ml-0.5">/mo</span
+              ></span
+            >
+          {/if}
         </div>
       </div>
 
