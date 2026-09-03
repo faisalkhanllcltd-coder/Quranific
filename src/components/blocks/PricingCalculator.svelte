@@ -37,6 +37,23 @@
   }
   let { liveRates = null, accent = 'emerald' }: Props = $props();
 
+  let rates = $state<Record<string, number> | null>(liveRates);
+
+  $effect(() => {
+    if (!rates && typeof window !== 'undefined') {
+      fetch('/api/fx-rates')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.rates) {
+            rates = data.rates;
+          }
+        })
+        .catch(() => {
+          // Gracefully fall back to STATIC_FALLBACK_RATES
+        });
+    }
+  });
+
   let isPurple = $derived(accent === 'purple');
 
   // Dynamic theme variables
@@ -89,7 +106,7 @@
 
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
   let basePrice = $derived.by(() => {
-    const rate = getSafeRate(currency, liveRates);
+    const rate = getSafeRate(currency, rates);
     if (['USD', 'AED', 'SAR'].includes(currency)) {
       return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
     }

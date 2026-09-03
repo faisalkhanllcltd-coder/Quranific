@@ -35,6 +35,23 @@
   }
   let { liveRates = null }: Props = $props();
 
+  let rates = $state<Record<string, number> | null>(liveRates);
+
+  $effect(() => {
+    if (!rates && typeof window !== 'undefined') {
+      fetch('/api/fx-rates')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.rates) {
+            rates = data.rates;
+          }
+        })
+        .catch(() => {
+          // Gracefully fall back to STATIC_FALLBACK_RATES
+        });
+    }
+  });
+
   let dur = $state('30');
   let currency = $state('USD');
   let selectedPlan = $state('5');
@@ -49,7 +66,7 @@
   // STEP 1 — Single computation path. Every displayed number derives from
   // displayedMonthly so a parent manually multiplying always gets the same total.
   function getBasePrice(sess: string): number {
-    const rate = getSafeRate(currency, liveRates);
+    const rate = getSafeRate(currency, rates);
     if (['USD', 'AED', 'SAR'].includes(currency)) {
       return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
     }
