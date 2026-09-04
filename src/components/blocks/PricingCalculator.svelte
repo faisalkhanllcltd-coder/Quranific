@@ -147,10 +147,11 @@
           <span class="text-sm font-bold {labelColor} uppercase tracking-wider">Currency</span>
         </div>
         <div
+          dir="ltr"
           class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} flex items-center transition-colors truncate select-none cursor-default"
           title="Detected regional currency"
         >
-          {currencyLabel}
+          <bdi>{currencyLabel}</bdi>
         </div>
       </div>
     </div>
@@ -240,18 +241,27 @@
         >
       </div>
       <div class="flex justify-between items-center mb-4">
-        <span class="text-sm {resultLabel} font-medium">Per session</span><span
-          class="text-sm font-bold {resultValue}">{sym}{perClass}</span
-        >
+        <span class="text-sm {resultLabel} font-medium">Per session</span>
+        <span class="text-sm font-bold {resultValue}">
+          <span dir="ltr" class="inline-flex items-baseline gap-0.5">
+            <bdi>{sym}</bdi>
+            <bdi>{perClass}</bdi>
+          </span>
+        </span>
       </div>
 
       <div class="pt-4 border-t {resultDivider} flex flex-col items-start text-left">
         <span class="text-[15px] font-bold {resultFeeLabel} mb-1">Monthly fee</span>
         <div
           data-testid="monthly-fee"
+          dir="ltr"
           class="font-serif text-3xl font-bold {resultFeeVal} leading-none flex items-baseline gap-1"
         >
-          {sym}{formattedFinalPrice}<span class="text-sm font-medium {resultFeeSub}">/mo</span>
+          <span dir="ltr" class="inline-flex items-baseline gap-0.5">
+            <bdi>{sym}</bdi>
+            <bdi>{formattedFinalPrice}</bdi>
+          </span>
+          <span class="text-sm font-medium {resultFeeSub}">/mo</span>
         </div>
       </div>
     </div>

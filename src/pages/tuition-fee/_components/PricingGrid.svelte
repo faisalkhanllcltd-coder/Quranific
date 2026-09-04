@@ -90,11 +90,12 @@
       >Currency:</span
     >
     <span
-      class="w-full sm:w-auto text-center sm:text-left bg-transparent text-sm font-bold text-emerald-900/80 pr-2 select-none cursor-default"
+      dir="ltr"
+      class="w-full sm:w-auto text-center sm:text-left bg-transparent text-sm font-bold text-emerald-900/80 pr-2 select-none cursor-default inline-flex items-baseline justify-center sm:justify-start gap-1"
       title="Detected regional currency"
     >
-      {currency}
-      {sym}
+      <bdi>{currency}</bdi>
+      <bdi>{sym}</bdi>
     </span>
   </div>
 </div>
@@ -139,10 +140,10 @@
             </div>
           </div>
           <!-- Line 3: Price -->
-          <div class="flex items-baseline gap-0.5 shrink-0">
-            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-              >{getDisplayedMonthly('2')}</span
+          <div class="flex items-baseline gap-0.5 shrink-0" dir="ltr">
+            <bdi class="text-base font-bold text-emerald-900/60">{sym}</bdi>
+            <bdi class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+              >{getDisplayedMonthly('2')}</bdi
             >
             <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
           </div>
@@ -186,10 +187,10 @@
             </div>
           </div>
           <!-- Line 3: Price -->
-          <div class="flex items-baseline gap-0.5 shrink-0">
-            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-              >{getDisplayedMonthly('3')}</span
+          <div class="flex items-baseline gap-0.5 shrink-0" dir="ltr">
+            <bdi class="text-base font-bold text-emerald-900/60">{sym}</bdi>
+            <bdi class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+              >{getDisplayedMonthly('3')}</bdi
             >
             <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
           </div>
@@ -233,10 +234,10 @@
             </div>
           </div>
           <!-- Line 3: Price -->
-          <div class="flex items-baseline gap-0.5 shrink-0">
-            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-              >{getDisplayedMonthly('4')}</span
+          <div class="flex items-baseline gap-0.5 shrink-0" dir="ltr">
+            <bdi class="text-base font-bold text-emerald-900/60">{sym}</bdi>
+            <bdi class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+              >{getDisplayedMonthly('4')}</bdi
             >
             <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
           </div>
@@ -289,10 +290,10 @@
             </div>
           </div>
           <!-- Line 3: Price -->
-          <div class="flex items-baseline gap-0.5 shrink-0">
-            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-              >{getDisplayedMonthly('5')}</span
+          <div class="flex items-baseline gap-0.5 shrink-0" dir="ltr">
+            <bdi class="text-base font-bold text-emerald-900/60">{sym}</bdi>
+            <bdi class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+              >{getDisplayedMonthly('5')}</bdi
             >
             <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
           </div>
@@ -322,12 +323,15 @@
           <span class="text-emerald-950 font-bold">{cadenceLabel}</span>
         </div>
         <!-- Price line — always shown -->
-        <div class="flex flex-wrap items-baseline justify-start gap-x-2 gap-y-0.5">
-          <span class="text-lg font-black text-emerald-950"
-            >{sym}{getDisplayedMonthly(selectedPlan)}<span
-              class="text-xs font-bold text-emerald-800/50 ml-0.5">/mo</span
-            ></span
+        <div class="flex flex-wrap items-baseline justify-start gap-x-2 gap-y-0.5" dir="ltr">
+          <span
+            class="text-lg font-black text-emerald-950 inline-flex items-baseline gap-0.5"
+            dir="ltr"
           >
+            <bdi>{sym}</bdi>
+            <bdi>{getDisplayedMonthly(selectedPlan)}</bdi>
+            <span class="text-xs font-bold text-emerald-800/50 ml-0.5">/mo</span>
+          </span>
         </div>
       </div>
 
