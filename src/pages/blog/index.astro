@@ -8,17 +8,18 @@ import Footer from '../../components/global/Footer.astro';
 import Section from '../../components/ui/Section.astro';
 import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
 import EyebrowText from '../../components/ui/EyebrowText.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 // Safely fetch posts and sort by date.
-const allPosts = (await getCollection('blog')) || [];
+const allPosts = ((await getCollection('blog')) || []) as CollectionEntry<'blog'>[];
 const sortedPosts = allPosts.sort(
-  (a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
+    new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
 );
 
 const hasPosts = sortedPosts.length > 0;
-const featuredPost = hasPosts ? sortedPosts[0] : null;
-const regularPosts = hasPosts ? sortedPosts.slice(1) : [];
+const featuredPost: CollectionEntry<'blog'> | null = hasPosts ? sortedPosts[0] : null;
+const regularPosts: CollectionEntry<'blog'>[] = hasPosts ? sortedPosts.slice(1) : [];
 
 // Extracted SVG icons
 const Icons = {

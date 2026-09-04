@@ -22,6 +22,8 @@ ENVIRONMENT = "production"
 binding = "SESSION"
 id = "14eab319d57e4c58b5f903bce3eb3931"
 
+
+
 [observability]
 enabled = false
 head_sampling_rate = 1

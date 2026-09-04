@@ -44,13 +44,4 @@ interface Env {
   // Cloudflare KV namespace binding for sessions and dead-letter queue
   // Must be declared in wrangler.toml as [[kv_namespaces]] binding = "SESSION"
   SESSION: KVNamespace;
-
-  // Cloudflare KV namespace for live FX rates
-  FX_RATES: KVNamespace;
-}
-
-declare module 'cloudflare:workers' {
-  interface Env {
-    FX_RATES: import('@cloudflare/workers-types').KVNamespace;
-  }
 }

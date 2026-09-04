@@ -19,7 +19,6 @@ graph TD
         CF_Edge -->|Dynamic /api/* & SSR Requests| AstroSSR[Astro Edge Adapter (Workerd)]
 
         AstroSSR -->|Rate Limiting & Dead-Letter Queue| KV_Session[(Cloudflare KV: SESSION)]
-        AstroSSR -->|Exchange Rate Lookups| KV_FX[(Cloudflare KV: FX_RATES)]
         AstroSSR -->|Bot Verification| TurnstileAPI[Cloudflare Turnstile API]
         AstroSSR -->|Transactional Emails| ResendAPI[Resend REST API]
     end

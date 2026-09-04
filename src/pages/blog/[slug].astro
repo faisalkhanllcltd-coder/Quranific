@@ -6,25 +6,28 @@ import Footer from '../../components/global/Footer.astro';
 import Section from '../../components/ui/Section.astro';
 import Button from '../../components/ui/Button.astro';
 import EyebrowText from '../../components/ui/EyebrowText.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = ((await getCollection('blog')) || []) as CollectionEntry<'blog'>[];
 
   if (!posts || posts.length === 0) {
     return [];
   }
 
-  return posts.map((post) => ({
-    // CRITICAL FIX: Fallback to post.id to prevent Astro 5/6 routing crashes
+  return posts.map((post: CollectionEntry<'blog'>) => ({
     params: { slug: post.id },
     props: { post },
   }));
 }
 
-const { post } = Astro.props;
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props as Props;
 const { Content } = await render(post);
 
 const pubDate = post.data.pubDate;
