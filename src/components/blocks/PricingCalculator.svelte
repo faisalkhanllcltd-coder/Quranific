@@ -1,11 +1,12 @@
 <script lang="ts">
   import { courses as COURSE_LIST } from '../../constants/courses';
-  import { PRICING, CURRENCY_META } from '../../constants/pricing';
-
-  // Build symbol lookup from the imported CURRENCY_META array
-  const CURRENCY_SYMBOLS: Record<string, string> = Object.fromEntries(
-    CURRENCY_META.map((c) => [c.code, c.symbol])
-  );
+  import {
+    PRICING,
+    CURRENCY_META,
+    CURRENCY_SYMBOLS,
+    formatPrice,
+    type Currency,
+  } from '../../constants/pricing';
 
   interface Props {
     accent?: 'emerald' | 'purple';
@@ -58,9 +59,25 @@
 
   let dur = $state('30');
   let sess = $state('3');
-  let currency = $state('USD');
+  let currency = $state<Currency>('USD');
   let selectedCourse = $state(COURSE_LIST[0]?.slug || 'basic-qaida');
   let courseNote = $state('');
+
+  // Geo-detection: visitor country determines currency (no selector, no switching)
+  $effect(() => {
+    if (typeof window !== 'undefined') {
+      fetch('/api/geo-currency')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.currency) {
+            currency = data.currency;
+          }
+        })
+        .catch(() => {
+          // Default remains USD
+        });
+    }
+  });
 
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
   let basePrice = $derived(
@@ -73,6 +90,8 @@
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);
   let sessPerMonth = $derived(parseInt(sess) * 4);
   let perClass = $derived(sessPerMonth > 0 ? (finalPrice / sessPerMonth).toFixed(2) : '—');
+  let formattedFinalPrice = $derived(formatPrice(finalPrice, currency));
+  let currencyLabel = $derived(CURRENCY_META.find((c) => c.code === currency)?.label ?? currency);
 
   // Hydration-safe relative URL — includes course and note
   let queryParams = $derived(
@@ -122,24 +141,17 @@
         </select>
       </div>
 
-      <!-- Currency -->
+      <!-- Currency (Geo-detected, fixed — no selector/dropdown) -->
       <div class="col-span-1 flex flex-col min-w-0">
         <div class="flex justify-between items-center mb-3">
           <span class="text-sm font-bold {labelColor} uppercase tracking-wider">Currency</span>
         </div>
-        <select
-          bind:value={currency}
-          class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} transition-colors cursor-pointer truncate"
+        <div
+          class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} flex items-center transition-colors truncate select-none cursor-default"
+          title="Detected regional currency"
         >
-          <option value="USD">USA (USD $)</option>
-          <option value="GBP">UK (GBP £)</option>
-          <option value="EUR">Europe (EUR €)</option>
-          <option value="AED">UAE (AED د.إ)</option>
-          <option value="SGD">Singapore (SGD S$)</option>
-          <option value="CAD">Canada (CAD C$)</option>
-          <option value="AUD">Australia (AUD A$)</option>
-          <option value="SAR">Saudi Arabia (SAR ﷼)</option>
-        </select>
+          {currencyLabel}
+        </div>
       </div>
     </div>
 
@@ -239,7 +251,7 @@
           data-testid="monthly-fee"
           class="font-serif text-3xl font-bold {resultFeeVal} leading-none flex items-baseline gap-1"
         >
-          {sym}{finalPrice}<span class="text-sm font-medium {resultFeeSub}">/mo</span>
+          {sym}{formattedFinalPrice}<span class="text-sm font-medium {resultFeeSub}">/mo</span>
         </div>
       </div>
     </div>

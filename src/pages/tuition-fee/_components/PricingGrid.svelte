@@ -1,13 +1,30 @@
 <script lang="ts">
-  import { PRICING, CURRENCY_META } from '../../../constants/pricing';
+  import {
+    PRICING,
+    CURRENCY_SYMBOLS,
+    formatPrice,
+    type Currency,
+  } from '../../../constants/pricing';
 
-  // Build symbol lookup from the imported CURRENCY_META array
-  const CURRENCY_SYMBOLS: Record<string, string> = Object.fromEntries(
-    CURRENCY_META.map((c) => [c.code, c.symbol])
-  );
   let dur = $state('30');
-  let currency = $state('USD');
+  let currency = $state<Currency>('USD');
   let selectedPlan = $state('5');
+
+  // Geo-detection: visitor country determines currency (no selector, no switching)
+  $effect(() => {
+    if (typeof window !== 'undefined') {
+      fetch('/api/geo-currency')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.currency) {
+            currency = data.currency;
+          }
+        })
+        .catch(() => {
+          // Default remains USD
+        });
+    }
+  });
 
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
 
@@ -27,8 +44,8 @@
   }
 
   // displayedMonthly is the ONE canonical price. All derived numbers use this.
-  function getDisplayedMonthly(sess: string): number {
-    return Math.round(getBasePrice(sess));
+  function getDisplayedMonthly(sess: string): string {
+    return formatPrice(getBasePrice(sess), currency);
   }
 
   // Cadence label — no autopay / recurring charge implication
@@ -65,26 +82,20 @@
     </div>
   </div>
 
-  <!-- Currency Bubble -->
+  <!-- Currency Bubble (Geo-detected, fixed — no selector/dropdown) -->
   <div
     class="flex flex-row items-center justify-between gap-4 bg-white border border-emerald-100 rounded-xl px-4 sm:px-5 h-14 shadow-sm w-full sm:w-auto"
   >
     <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
       >Currency:</span
     >
-    <select
-      bind:value={currency}
-      class="w-full sm:w-auto text-center sm:text-left bg-transparent text-sm font-bold text-emerald-900/80 focus:outline-none cursor-pointer pr-2"
+    <span
+      class="w-full sm:w-auto text-center sm:text-left bg-transparent text-sm font-bold text-emerald-900/80 pr-2 select-none cursor-default"
+      title="Detected regional currency"
     >
-      <option value="USD">USD $</option>
-      <option value="GBP">GBP £</option>
-      <option value="EUR">EUR €</option>
-      <option value="AED">AED د.إ</option>
-      <option value="SGD">SGD S$</option>
-      <option value="CAD">CAD C$</option>
-      <option value="AUD">AUD A$</option>
-      <option value="SAR">SAR ﷼</option>
-    </select>
+      {currency}
+      {sym}
+    </span>
   </div>
 </div>
 
