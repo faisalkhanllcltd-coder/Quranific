@@ -5,60 +5,6 @@
   const CURRENCY_SYMBOLS: Record<string, string> = Object.fromEntries(
     CURRENCY_META.map((c) => [c.code, c.symbol])
   );
-
-  // KV failure armor — used when FX_RATES KV is unavailable or stale
-  const STATIC_FALLBACK_RATES: Record<string, number> = {
-    GBP: 0.78,
-    EUR: 0.92,
-    CAD: 1.36,
-    AUD: 1.52,
-    SGD: 1.34,
-    AED: 3.67,
-    SAR: 3.75,
-    PKR: 278.5,
-    USD: 1,
-  };
-
-  function getSafeRate(
-    cur: string,
-    liveRatesObj: Record<string, number> | null | undefined
-  ): number {
-    if (cur === 'USD') return 1;
-    if (liveRatesObj && typeof liveRatesObj[cur] === 'number') {
-      return liveRatesObj[cur];
-    }
-    return STATIC_FALLBACK_RATES[cur] ?? 1;
-  }
-
-  interface Props {
-    liveRates?: Record<string, number> | null;
-  }
-  let { liveRates = null }: Props = $props();
-
-  let rates = $state<Record<string, number> | null>(liveRates);
-  let isLoadingRates = $state<boolean>(liveRates === null);
-
-  $effect(() => {
-    if (!rates && typeof window !== 'undefined') {
-      isLoadingRates = true;
-      fetch('/api/fx-rates')
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (data?.rates) {
-            rates = data.rates;
-          }
-        })
-        .catch(() => {
-          // Gracefully fall back to STATIC_FALLBACK_RATES
-        })
-        .finally(() => {
-          isLoadingRates = false;
-        });
-    } else {
-      isLoadingRates = false;
-    }
-  });
-
   let dur = $state('30');
   let currency = $state('USD');
   let selectedPlan = $state('5');
@@ -73,12 +19,11 @@
   // STEP 1 — Single computation path. Every displayed number derives from
   // displayedMonthly so a parent manually multiplying always gets the same total.
   function getBasePrice(sess: string): number {
-    const rate = getSafeRate(currency, rates);
-    if (currency === 'USD') {
-      return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
-    }
-    const usdBase = (PRICING as PricingTier)?.['USD']?.[dur]?.[sess] ?? 0;
-    return Math.round(usdBase * rate);
+    return (
+      (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ??
+      (PRICING as PricingTier)?.['USD']?.[dur]?.[sess] ??
+      0
+    );
   }
 
   // displayedMonthly is the ONE canonical price. All derived numbers use this.
@@ -184,16 +129,11 @@
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0">
-            {#if currency !== 'USD' && isLoadingRates}
-              <span class="inline-block h-8 w-16 bg-emerald-100/70 animate-pulse rounded my-0.5"
-              ></span>
-            {:else}
-              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-                >{getDisplayedMonthly('2')}</span
-              >
-              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
-            {/if}
+            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+              >{getDisplayedMonthly('2')}</span
+            >
+            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
           </div>
         </div>
       </button>
@@ -236,16 +176,11 @@
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0">
-            {#if currency !== 'USD' && isLoadingRates}
-              <span class="inline-block h-8 w-16 bg-emerald-100/70 animate-pulse rounded my-0.5"
-              ></span>
-            {:else}
-              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-                >{getDisplayedMonthly('3')}</span
-              >
-              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
-            {/if}
+            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+              >{getDisplayedMonthly('3')}</span
+            >
+            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
           </div>
         </div>
       </button>
@@ -288,16 +223,11 @@
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0">
-            {#if currency !== 'USD' && isLoadingRates}
-              <span class="inline-block h-8 w-16 bg-emerald-100/70 animate-pulse rounded my-0.5"
-              ></span>
-            {:else}
-              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-                >{getDisplayedMonthly('4')}</span
-              >
-              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
-            {/if}
+            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+              >{getDisplayedMonthly('4')}</span
+            >
+            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
           </div>
         </div>
       </button>
@@ -349,16 +279,11 @@
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0">
-            {#if currency !== 'USD' && isLoadingRates}
-              <span class="inline-block h-8 w-16 bg-emerald-100/70 animate-pulse rounded my-0.5"
-              ></span>
-            {:else}
-              <span class="text-base font-bold text-emerald-900/60">{sym}</span>
-              <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
-                >{getDisplayedMonthly('5')}</span
-              >
-              <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
-            {/if}
+            <span class="text-base font-bold text-emerald-900/60">{sym}</span>
+            <span class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
+              >{getDisplayedMonthly('5')}</span
+            >
+            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
           </div>
         </div>
       </button>
@@ -387,16 +312,11 @@
         </div>
         <!-- Price line — always shown -->
         <div class="flex flex-wrap items-baseline justify-start gap-x-2 gap-y-0.5">
-          {#if currency !== 'USD' && isLoadingRates}
-            <span class="inline-block h-6 w-28 bg-emerald-200/60 animate-pulse rounded my-0.5"
-            ></span>
-          {:else}
-            <span class="text-lg font-black text-emerald-950"
-              >{sym}{getDisplayedMonthly(selectedPlan)}<span
-                class="text-xs font-bold text-emerald-800/50 ml-0.5">/mo</span
-              ></span
-            >
-          {/if}
+          <span class="text-lg font-black text-emerald-950"
+            >{sym}{getDisplayedMonthly(selectedPlan)}<span
+              class="text-xs font-bold text-emerald-800/50 ml-0.5">/mo</span
+            ></span
+          >
         </div>
       </div>
 

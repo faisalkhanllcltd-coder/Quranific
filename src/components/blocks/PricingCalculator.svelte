@@ -7,59 +7,10 @@
     CURRENCY_META.map((c) => [c.code, c.symbol])
   );
 
-  // KV failure armor — used when FX_RATES KV is unavailable or stale
-  const STATIC_FALLBACK_RATES: Record<string, number> = {
-    GBP: 0.78,
-    EUR: 0.92,
-    CAD: 1.36,
-    AUD: 1.52,
-    SGD: 1.34,
-    AED: 3.67,
-    SAR: 3.75,
-    PKR: 278.5,
-    USD: 1,
-  };
-
-  function getSafeRate(
-    cur: string,
-    liveRatesObj: Record<string, number> | null | undefined
-  ): number {
-    if (cur === 'USD') return 1;
-    if (liveRatesObj && typeof liveRatesObj[cur] === 'number') {
-      return liveRatesObj[cur];
-    }
-    return STATIC_FALLBACK_RATES[cur] ?? 1;
-  }
-
   interface Props {
-    liveRates?: Record<string, number> | null;
     accent?: 'emerald' | 'purple';
   }
-  let { liveRates = null, accent = 'emerald' }: Props = $props();
-
-  let rates = $state<Record<string, number> | null>(liveRates);
-  let isLoadingRates = $state<boolean>(liveRates === null);
-
-  $effect(() => {
-    if (!rates && typeof window !== 'undefined') {
-      isLoadingRates = true;
-      fetch('/api/fx-rates')
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (data?.rates) {
-            rates = data.rates;
-          }
-        })
-        .catch(() => {
-          // Gracefully fall back to STATIC_FALLBACK_RATES
-        })
-        .finally(() => {
-          isLoadingRates = false;
-        });
-    } else {
-      isLoadingRates = false;
-    }
-  });
+  let { accent = 'emerald' }: Props = $props();
 
   let isPurple = $derived(accent === 'purple');
 
@@ -112,14 +63,11 @@
   let courseNote = $state('');
 
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
-  let basePrice = $derived.by(() => {
-    const rate = getSafeRate(currency, rates);
-    if (currency === 'USD') {
-      return (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ?? 0;
-    }
-    const usdBase = (PRICING as PricingTier)?.['USD']?.[dur]?.[sess] ?? 0;
-    return Math.round(usdBase * rate);
-  });
+  let basePrice = $derived(
+    (PRICING as PricingTier)?.[currency]?.[dur]?.[sess] ??
+      (PRICING as PricingTier)?.['USD']?.[dur]?.[sess] ??
+      0
+  );
 
   let finalPrice = $derived(basePrice);
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);
@@ -281,14 +229,8 @@
       </div>
       <div class="flex justify-between items-center mb-4">
         <span class="text-sm {resultLabel} font-medium">Per session</span><span
-          class="text-sm font-bold {resultValue}"
+          class="text-sm font-bold {resultValue}">{sym}{perClass}</span
         >
-          {#if currency !== 'USD' && isLoadingRates}
-            <span class="inline-block animate-pulse opacity-40">...</span>
-          {:else}
-            {sym}{perClass}
-          {/if}
-        </span>
       </div>
 
       <div class="pt-4 border-t {resultDivider} flex flex-col items-start text-left">
@@ -297,15 +239,7 @@
           data-testid="monthly-fee"
           class="font-serif text-3xl font-bold {resultFeeVal} leading-none flex items-baseline gap-1"
         >
-          {#if currency !== 'USD' && isLoadingRates}
-            <span
-              class="inline-block h-8 w-24 {isPurple
-                ? 'bg-purple-100/70'
-                : 'bg-emerald-100/70'} animate-pulse rounded-md my-0.5"
-            ></span>
-          {:else}
-            {sym}{finalPrice}<span class="text-sm font-medium {resultFeeSub}">/mo</span>
-          {/if}
+          {sym}{finalPrice}<span class="text-sm font-medium {resultFeeSub}">/mo</span>
         </div>
       </div>
     </div>
