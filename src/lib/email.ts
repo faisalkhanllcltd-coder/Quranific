@@ -444,3 +444,93 @@ export async function sendTeacherAutoResponder(email: string, name: string, apiK
     throw error;
   }
 }
+
+// ─── Contact & Newsletter Admin Notifications ───────────────────────────────
+
+export interface ContactNotificationData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  message: string;
+}
+
+export async function sendContactAdminNotification(
+  data: ContactNotificationData,
+  apiKey: string,
+  adminEmail: string | undefined | null
+) {
+  if (!apiKey || apiKey === 're_123456789') return { success: true, mock: true };
+  const safeFirst = esc(data.firstName || '');
+  const safeLast = esc(data.lastName || '');
+  const safeEmail = esc(data.email || '');
+  const safeMessage = esc(data.message || '');
+  const finalAdminEmail = adminEmail || FALLBACK_ADMIN_EMAIL;
+
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'System <onboarding@quranific.com>',
+        to: finalAdminEmail,
+        reply_to: data.email,
+        subject: `New Contact Inquiry from ${safeFirst} ${safeLast}`,
+        text: `Name: ${data.firstName} ${data.lastName}\nEmail: ${data.email}\n\nMessage:\n${data.message}`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px;">
+            <h2 style="color: #065f46;">💬 New Contact Inquiry</h2>
+            <p><strong>Name:</strong> ${safeFirst} ${safeLast}</p>
+            <p><strong>Email:</strong> ${safeEmail}</p>
+            <p><strong>Message:</strong></p>
+            <blockquote style="background: #f8fafc; padding: 12px; border-left: 4px solid #059669; margin: 0;">${safeMessage}</blockquote>
+          </div>
+        `,
+      }),
+    });
+    if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+    return { success: true };
+  } catch (error) {
+    console.error('sendContactAdminNotification failed:', error);
+    throw error;
+  }
+}
+
+export async function sendNewsletterAdminNotification(
+  email: string,
+  apiKey: string,
+  adminEmail: string | undefined | null
+) {
+  if (!apiKey || apiKey === 're_123456789') return { success: true, mock: true };
+  const safeEmail = esc(email);
+  const finalAdminEmail = adminEmail || FALLBACK_ADMIN_EMAIL;
+
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'System <onboarding@quranific.com>',
+        to: finalAdminEmail,
+        subject: `New Newsletter Subscriber!`,
+        text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px;">
+            <h2 style="color: #065f46;">📬 New Newsletter Subscriber</h2>
+            <p><strong>Email:</strong> ${safeEmail}</p>
+          </div>
+        `,
+      }),
+    });
+    if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+    return { success: true };
+  } catch (error) {
+    console.error('sendNewsletterAdminNotification failed:', error);
+    throw error;
+  }
+}

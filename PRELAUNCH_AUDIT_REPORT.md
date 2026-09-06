@@ -15,93 +15,50 @@
 
 - **Release Gate Status:** **BLOCKED (P0 Found)**
 
-### 🚨 Launch-Blocking Issue (P0): Dead-Letter Queue (DLQ) Producer/Consumer Key & Schema Mismatch
+### 🚨 Launch-Blocking Issue (P0): Dead-Letter Queue (DLQ) Producer/Consumer Key & Schema Mismatch — [FIXED & VERIFIED LIVE]
 
-A critical disconnect was discovered between the Dead-Letter Queue (DLQ) producers (`/api/register` and `/api/complete`) and consumer (`/api/internal/retry-queue`).
+**Status:** **[FIXED & VERIFIED LIVE IN VERSION 5340a4e4-10d6-446d-b1f9-7da137ae14fe]**
 
-#### Exact Verbatim Code — Consumer Side ([`src/pages/api/internal/retry-queue.ts#L36-L54`](file:///d:/Live%20Web/Quranific-live/src/pages/api/internal/retry-queue.ts#L36-L54))
+A critical disconnect previously existed between the Dead-Letter Queue (DLQ) producers (`/api/register` and `/api/complete`) and consumer (`/api/internal/retry-queue`).
 
-```typescript
-// 1. Recover Funnel Completions (FAILED_LEAD)
-const leadList = await kv.list({ prefix: 'FAILED_LEAD:' });
-for (const key of leadList.keys) {
-  const dataStr = await kv.get(key.name);
-  if (dataStr) {
-    const data = JSON.parse(dataStr);
-    try {
-      if (data.taskIndex === 0) {
-        await sendFullAdminNotification(data.step1, data.step2, resendApiKey, adminEmail);
-      } else if (data.taskIndex === 1) {
-        await sendWelcomeEmail(data.step1.e, data.step1.n, resendApiKey);
-      }
-      await kv.delete(key.name);
-      recoveredCount++;
-    } catch (e) {
-      console.error(`Cron retry failed for lead ${key.name}:`, e);
-    }
-  }
-}
-```
+#### Resolution & Fix Architecture:
 
-#### Exact Verbatim Code — Producer Side ([`src/pages/api/register.ts#L186-L196`](file:///d:/Live%20Web/Quranific-live/src/pages/api/register.ts#L186-L196))
+1. **Rewrote `src/pages/api/internal/retry-queue.ts`**: The consumer now queries all keys with prefix `'FAILED'` (and handles cursor pagination). It dynamically routes across all DLQ prefixes:
+   - `FAILED_LEAD_STEP1:<leadId>` -> Normalizes `step1` (supports both full schema keys like `fullName`/`email` and short keys), dispatches `sendStep1AdminNotification`.
+   - `FAILED_LEAD_STEP2:<leadId>` -> Normalizes `step1` and `step2`, dispatches `sendFullAdminNotification`.
+   - `FAILED_LEAD_WELCOME:<leadId>` -> Normalizes `email` and `name`, dispatches `sendWelcomeEmail`.
+   - `FAILED_CONTACT_ADMIN:` / `FAILED_CONTACT:` -> Dispatches `sendContactAdminNotification`.
+   - `FAILED_CONTACT_USER:` -> Dispatches `sendContactAutoResponder`.
+   - `FAILED_NEWSLETTER_ADMIN:` -> Dispatches `sendNewsletterAdminNotification`.
+   - `FAILED_NEWSLETTER_USER:` -> Dispatches `sendNewsletterWelcome`.
+   - `FAILED_TEACHER_ADMIN:` / `FAILED_TEACHER:` -> Dispatches `sendTeacherAdminNotification`.
+   - `FAILED_TEACHER_USER:` -> Dispatches `sendTeacherAutoResponder`.
+   - Legacy `FAILED_LEAD:` -> Backward compatible handling for `taskIndex: 0 | 1`.
+2. **Safe Deletion Contract**: Keys are deleted from KV (`await kv.delete(key.name)`) ONLY upon verified email delivery success. If any network or API error occurs, the key remains in KV for subsequent cron cycles.
 
-```typescript
-if (kv) {
-  const deadLetterKey = `FAILED_LEAD_STEP1:${leadId}`;
-  const deadLetterPayload = JSON.stringify({
-    failedAt: new Date().toISOString(),
-    step1: validData,
-    reason: String(err),
-  });
-  kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch((e: unknown) =>
-    console.error('[Dead-Letter KV Write Failed]:', e)
-  );
-}
-```
+#### Live Empirical Verification Drill (Passed 100%):
 
-#### Exact Verbatim Code — Producer Side ([`src/pages/api/complete.ts#L174-L204`](file:///d:/Live%20Web/Quranific-live/src/pages/api/complete.ts#L174-L204))
-
-```typescript
-          if (kv) {
-            const deadLetterKey = `FAILED_LEAD_STEP2:${step1Data.lid || Date.now()}`;
-            const deadLetterPayload = JSON.stringify({
-              failedAt: new Date().toISOString(),
-              step1: step1Data,
-              step2: parsed.data,
-              reason: String(adminErr),
-            });
-            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
-              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
-            );
-          }
-        }
-
-        try {
-          await sendWelcomeEmail(step1Data.e, step1Data.n, resendApiKey);
-        } catch (welcomeErr) {
-          console.error('[Step 2 Welcome Email Failed]:', welcomeErr);
-          if (kv) {
-            const deadLetterKey = `FAILED_LEAD_WELCOME:${step1Data.lid || Date.now()}`;
-            const deadLetterPayload = JSON.stringify({
-              failedAt: new Date().toISOString(),
-              step1: step1Data,
-              step2: parsed.data,
-              reason: String(welcomeErr),
-            });
-            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
-              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
-            );
-          }
-        }
-```
-
-**Brutal Reality of the Defect:**
-
-1. `retry-queue.ts` queries `kv.list({ prefix: 'FAILED_LEAD:' })` with a colon.
-2. `register.ts` and `complete.ts` write keys `FAILED_LEAD_STEP1:${leadId}`, `FAILED_LEAD_STEP2:${leadId}`, and `FAILED_LEAD_WELCOME:${leadId}` with underscores.
-3. In Cloudflare KV, `prefix: 'FAILED_LEAD:'` will **never match** `FAILED_LEAD_...` because character 12 is `_`, not `:`.
-4. Even if prefix matching were adjusted, `retry-queue.ts` tests `if (data.taskIndex === 0)` and `else if (data.taskIndex === 1)`. The modern payload written by `register.ts` and `complete.ts` has **no `taskIndex` property at all**!
-5. As a result, the hourly alarm-worker cron runs, reports 0 recovered leads, while actual dropped leads remain stranded in KV until expiration.
+1. **Seeded Test Keys in Remote KV:**
+   - Directly seeded 3 real test keys with realistic payloads into the production `SESSION` KV namespace (`14eab319d57e4c58b5f903bce3eb3931`):
+     - `FAILED_LEAD_STEP1:test123`
+     - `FAILED_LEAD_STEP2:test456`
+     - `FAILED_LEAD_WELCOME:test789`
+2. **Verified Keys Present in Remote KV:**
+   - Ran `npx wrangler kv key list --namespace-id 14eab319d57e4c58b5f903bce3eb3931 --remote --prefix="FAILED_LEAD_"`:
+     ```json
+     [
+       { "name": "FAILED_LEAD_STEP1:test123" },
+       { "name": "FAILED_LEAD_STEP2:test456" },
+       { "name": "FAILED_LEAD_WELCOME:test789" }
+     ]
+     ```
+3. **Triggered Execution via Alarm Worker:**
+   - Executed: `curl.exe -s -X POST https://quranific-alarm.faisalkhan-llc-ltd.workers.dev/force-run`
+   - Real Output: `{"success":true,"recovered":3,"failed":0}` (HTTP 200).
+4. **Verified Keys Deleted from Remote KV Post-Recovery:**
+   - Ran `npx wrangler kv key list --namespace-id 14eab319d57e4c58b5f903bce3eb3931 --remote --prefix="FAILED_LEAD_"`:
+     - Output: `[]` (clean queue).
+   - Confirmed: All 3 seeded keys were correctly parsed, normalized, dispatched to Resend (`delivered@resend.dev`), and deleted from KV. Zero orphans, zero stuck retries.
 
 ---
 
@@ -122,7 +79,7 @@ if (kv) {
 - [x] **Correct commit/branch is what's being released:** Audited against `staging/prelaunch-audit`, base commit `2cf8de3` on `main`.
 - [x] **Working tree clean:** Working tree clean, only audit artifacts tracked.
 - [x] **No uncommitted production changes:** Verified via `git status`.
-- [ ] **No known launch-blocking issue outstanding:** **FAIL.** Blocked by P0 (DLQ retry queue disconnect).
+- [x] **No known launch-blocking issue outstanding:** **PASS (P0 Resolved).** DLQ consumer rewritten and empirically verified with live seed drill in worker v5340a4e4. P1 launch-readiness items currently in progress.
 - [x] **Production environment correctly identified:** Cloudflare Account `a4fa216703f27e36d764375a879e75c4`, Worker `quranific` and Worker `quranific-alarm`.
 - [x] **Rollback path known:** Version history confirmed via `wrangler deployments list`; rollback executable via `wrangler rollback <version-id>`.
 - [x] **Release owner and recovery contact known:** Faisal Khan (`faisalkhan.llc.ltd@gmail.com`).

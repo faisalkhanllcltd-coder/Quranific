@@ -90,7 +90,17 @@ if (kv) {
         }
 ```
 
-- **Fix Required:** Update `retry-queue.ts` to scan prefixes `FAILED_LEAD_STEP1:`, `FAILED_LEAD_STEP2:`, and `FAILED_LEAD_WELCOME:` (plus `FAILED_NEWSLETTER:` and `FAILED_CONTACT:`), inspect the actual modern payload structure, dispatch appropriate Resend emails, and delete processed keys.
+- **Status:** **[FIXED & VERIFIED LIVE]**
+- **Fix Summary:** Rewrote `src/pages/api/internal/retry-queue.ts` and added helpers in `src/lib/email.ts`. The queue processor now dynamically handles all prefixes: `FAILED_LEAD_STEP1:`, `FAILED_LEAD_STEP2:`, `FAILED_LEAD_WELCOME:`, `FAILED_CONTACT_ADMIN:`, `FAILED_CONTACT_USER:`, `FAILED_NEWSLETTER_ADMIN:`, `FAILED_NEWSLETTER_USER:`, `FAILED_TEACHER_ADMIN:`, `FAILED_TEACHER_USER:`, as well as legacy `FAILED_LEAD:`. Key schemas are fully normalized (supporting full keys like `fullName`/`email` from Step 1, and compact keys `n`/`e`/`p`/`w`/`c`/`tz`/`lid` from Step 2). Keys are deleted ONLY upon successful email dispatch, and preserved if delivery throws.
+- **Empirical Verification Drill (Passed Live):**
+  1. Seeded 3 real test keys with realistic payloads into the production `SESSION` KV namespace (`14eab319d57e4c58b5f903bce3eb3931`):
+     - `FAILED_LEAD_STEP1:test123`
+     - `FAILED_LEAD_STEP2:test456`
+     - `FAILED_LEAD_WELCOME:test789`
+  2. Verified their presence in remote KV via `wrangler kv key list --prefix="FAILED_LEAD_"` -> Returned all 3 keys.
+  3. Triggered `retry-queue.ts` via alarm worker: `curl.exe -s -X POST https://quranific-alarm.faisalkhan-llc-ltd.workers.dev/force-run`
+     - Response: `{"success":true,"recovered":3,"failed":0}` (HTTP 200).
+  4. Verified remote KV namespace: `wrangler kv key list --prefix="FAILED_LEAD_"` -> Returned `[]` (all 3 keys successfully processed, dispatched to Resend, and deleted). Zero stuck keys, zero duplicates.
 
 ---
 
