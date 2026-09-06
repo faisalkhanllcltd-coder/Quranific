@@ -36,19 +36,43 @@
     isSubmitting = true;
 
     try {
+      const turnstileInput = document.querySelector<HTMLInputElement>(
+        '[name="cf-turnstile-response"]'
+      );
+      const turnstileToken = turnstileInput?.value ?? '';
+
+      if (!turnstileToken) {
+        alert('Please complete the security check before submitting.');
+        isSubmitting = false;
+        return;
+      }
+
+      const payload = {
+        ...form,
+        'cf-turnstile-response': turnstileToken,
+      };
+
       const response = await fetch('/api/apply-teacher', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error('Submission failed');
+      const resData = (await response.json().catch(() => ({}))) as { error?: string };
+
+      if (!response.ok) {
+        throw new Error(resData.error || 'Submission failed');
+      }
       step = 3; // Success State
     } catch (error) {
       console.error(error);
-      alert('Something went wrong processing your application. Please try again.');
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Something went wrong processing your application. Please try again.'
+      );
     } finally {
       isSubmitting = false;
     }

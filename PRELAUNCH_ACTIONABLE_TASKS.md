@@ -107,9 +107,16 @@ if (kv) {
 ## P1 — Fix Before Launch (High Priority / Launch Risks)
 
 2. **Fix Broken Runtime Secret & Missing Security on Teacher Application (`src/pages/api/apply-teacher.ts`)**
-   - **Defect:** Accesses `import.meta.env.RESEND_API_KEY` instead of `env` from `cloudflare:workers` (which is `undefined` at the Cloudflare edge runtime). Has zero Turnstile verification, zero rate limiting, zero Zod validation, and zero DLQ fallback.
-   - **Impact:** Teacher application submissions will silently fail or warn in production; form is completely unprotected against bot flooding and abuse.
-   - **Fix Required:** Port standard edge security architecture from `contact.ts`: use `cloudflare:workers` `env`, add Turnstile siteverify, KV rate limiting (`RL:TEACHER:${ip}`), Zod validation schema, and KV DLQ persistence (`FAILED_TEACHER:`).
+   - **Status:** **[FIXED & VERIFIED LIVE]**
+   - **Fix Summary:** Rewrote `src/pages/api/apply-teacher.ts` to use `env` from `cloudflare:workers`, bound to edge secrets `TURNSTILE_SECRET_KEY` and `RESEND_API_KEY`. Added strict Zod schema validation (`teacherSchema`), distributed IP rate limiting (`RL:TEACHER:${ip}`, max 4 submissions per 60s) via KV namespace `SESSION`, Cloudflare Turnstile token validation against `siteverify`, and DLQ fallback persistence (`FAILED_TEACHER:${Date.now()}`). Integrated Turnstile widget inside `TeacherStep2.svelte` and hooked into `TeacherApplicationForm.svelte`.
+   - **Empirical Verification Drill (Passed Live on Worker v0834683d):**
+     1. **Turnstile Verification Rejection:** Sent POST with invalid Turnstile token to `https://quranific.com/api/apply-teacher`:
+        - Response: `HTTP/1.1 400 Bad Request` -> `{"error":"Security check failed. Please refresh and try again."}`.
+     2. **Zod Schema Validation:** Sent POST with malformed payload (missing required fields):
+        - Response: `HTTP/1.1 400 Bad Request` -> `{"error":"Full name is required"}`.
+     3. **KV IP Rate Limiting Throttling:** Sent 4 rapid requests from the same IP:
+        - Requests 1-2: Evaluated normally (`HTTP 400`).
+        - Requests 3-4: Blocked by Cloudflare KV distributed rate limiter: `HTTP/1.1 429 Too Many Requests` -> `{"error":"Too many requests. Please wait a minute before trying again."}`.
 
 3. **Fix Sitemap Filter Pruning All Programmatic Intent Pages (`astro.config.mjs`)**
    - **Defect:** `sitemap()` filter in `astro.config.mjs` excludes `'/for-kids'`, `'/for-adults'`, `'/for-women'`.

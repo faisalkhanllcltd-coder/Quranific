@@ -64,7 +64,7 @@ A critical disconnect previously existed between the Dead-Letter Queue (DLQ) pro
 
 ### High Priority Issues (P1)
 
-1. `/api/apply-teacher.ts` uses `import.meta.env.RESEND_API_KEY` (which is `undefined` at the Cloudflare edge) instead of `cloudflare:workers` `env`, and lacks Turnstile, rate limiting, and Zod validation.
+1. **[FIXED & VERIFIED LIVE]** `/api/apply-teacher.ts` Security & Edge Secrets: Rewritten to use `env` from `cloudflare:workers` with edge secrets (`TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`), Zod validation, distributed IP rate limiting (`RL:TEACHER:${ip}`, max 4 per 60s), Turnstile `siteverify` verification, and DLQ fallback. Tested live: rejected bad Turnstile tokens with HTTP 400, rejected bad schemas with HTTP 400, and throttled excess requests with HTTP 429.
 2. `astro.config.mjs` sitemap filter accidentally prunes all 6 programmatic SEO landing pages (`/quran-classes/*`, `/quran-teacher/*`) from `sitemap-0.xml`.
 3. Placeholder blog post `/blog/hello-world` ("Welcome to the Quranific Blog") is published and indexed in `sitemap-0.xml`.
 4. `SITE.address` is set to `Karachi, Pakistan`, overriding the required German/EU statutory full street address in `impressum.astro`.

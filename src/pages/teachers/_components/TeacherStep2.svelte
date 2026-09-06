@@ -1,6 +1,36 @@
 <!-- src/pages/teachers/_components/TeacherStep2.svelte -->
 <script lang="ts">
   let { form = $bindable(), onBack, isSubmitting } = $props();
+
+  let turnstileContainer = $state<HTMLDivElement | null>(null);
+
+  $effect(() => {
+    if (!turnstileContainer) return;
+    const renderWidget = () => {
+      const w = window as unknown as {
+        turnstile?: {
+          render: (el: HTMLElement, opts?: { sitekey?: string; theme?: string }) => void;
+        };
+      };
+      if (w.turnstile && turnstileContainer && turnstileContainer.innerHTML.trim() === '') {
+        w.turnstile.render(turnstileContainer, {
+          sitekey: '0x4AAAAAAD-QWQWhupcuvhbK',
+          theme: 'light',
+        });
+      }
+    };
+
+    renderWidget();
+    const interval = setInterval(() => {
+      if (turnstileContainer && turnstileContainer.innerHTML.trim() !== '') {
+        clearInterval(interval);
+      } else {
+        renderWidget();
+      }
+    }, 300);
+
+    return () => clearInterval(interval);
+  });
 </script>
 
 <div class="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
@@ -56,6 +86,16 @@
         >Ensure the link is set to "Public".</span
       >
     </div>
+  </div>
+
+  <!-- Cloudflare Turnstile CAPTCHA Protection -->
+  <div class="pt-2 flex flex-col items-center sm:items-start">
+    <div
+      bind:this={turnstileContainer}
+      class="cf-turnstile min-h-[65px]"
+      data-sitekey="0x4AAAAAAD-QWQWhupcuvhbK"
+      data-theme="light"
+    ></div>
   </div>
 
   <div class="pt-6 mt-4 border-t border-emerald-100 flex flex-col-reverse sm:flex-row gap-4">
