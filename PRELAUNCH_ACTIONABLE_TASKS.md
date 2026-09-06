@@ -140,9 +140,9 @@ if (kv) {
      4. `dist/client/blog/index.html` cleanly renders the styled "Publishing Soon" empty state card.
 
 5. **Fix German/EU Statutory Impressum Address (`src/constants/site.ts` & `src/pages/legal/impressum.astro`)**
-   - **Defect:** `SITE.address` is set to `'Karachi, Pakistan'`, which overrides the fallback full street address in `impressum.astro`.
-   - **Impact:** Under German TMG § 5 and EU digital transparency rules, an Impressum must state a full street address, not just city/country.
-   - **Fix Required:** Set full street address in `SITE.address`.
+   - **Status:** **[FIXED & VERIFIED]**
+   - **Fix Summary:** Updated `SITE.address` in `src/constants/site.ts` to the full statutory street address: `'House No 1 KR-2 Area, Gulshan Askari, Quaidabad Malir, Bin Qasim Town, Karachi 75120, Pakistan'`.
+   - **Verification Evidence:** Ran `npm run build` and inspected `dist/client/legal/impressum/index.html`. Confirmed the full registered street address renders directly in the "Registered Address" section, satisfying German TMG § 5 and EU corporate transparency mandates.
 
 6. **Add Cloudflare 301 Redirect Rule for `www.quranific.com` -> `quranific.com`**
    - **Defect:** `https://www.quranific.com/` returns `200 OK` directly rather than a 301 redirect to apex.

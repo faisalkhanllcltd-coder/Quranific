@@ -21,7 +21,8 @@ export const SITE = {
   // resolve to a real value instead of undefined. Fill in real details before go-live.
   // If no phone number exists, remove SITE.phone references from contact.astro and impressum.astro.
   phone: '+92 3112112122',
-  address: 'Karachi, Pakistan',
+  address:
+    'House No 1 KR-2 Area, Gulshan Askari, Quaidabad Malir, Bin Qasim Town, Karachi 75120, Pakistan',
 
   // MARKETING ENGINE: Global Announcement Bar
   announcement: {
