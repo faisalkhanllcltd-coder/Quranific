@@ -8,7 +8,7 @@ export const GET: APIRoute = async () => {
   // Fails gracefully if the collection is empty.
   let posts: CollectionEntry<'blog'>[] = [];
   try {
-    posts = await getCollection('blog');
+    posts = await getCollection('blog', (entry: CollectionEntry<'blog'>) => !entry.data.draft);
   } catch {
     // Collection might not exist yet, safe to ignore
   }

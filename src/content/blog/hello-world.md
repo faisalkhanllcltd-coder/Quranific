@@ -5,6 +5,7 @@ pubDate: 2026-03-20
 author: 'Quranific Team'
 image: '/images/blog/placeholder.jpg'
 tags: ['Announcement']
+draft: true
 ---
 
 # Welcome to the new standard in Islamic Education.

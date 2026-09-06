@@ -12,6 +12,7 @@ const blogCollection = defineCollection({
     heroImage: z.string().optional(),
     author: z.string().default('Quranific Team'),
     tags: z.array(z.string()).optional(),
+    draft: z.boolean().default(false),
   }),
 });
 

@@ -131,9 +131,13 @@ if (kv) {
        While `/api/*`, `/getting-started/*`, and `/ads/*` remain excluded.
 
 4. **Unpublish or Replace Placeholder Blog Post (`src/content/blog/hello-world.md`)**
-   - **Defect:** Placeholder post titled "Welcome to the Quranific Blog" with body text _"This is a placeholder post. Once we build..."_ is prerendered to `/blog/hello-world/index.html` and listed in `sitemap-0.xml`.
-   - **Impact:** Search engines index incomplete draft copy, degrading Google site quality scoring.
-   - **Fix Required:** Set `draft: true` or replace with a polished launch announcement article.
+   - **Status:** **[FIXED & VERIFIED]**
+   - **Fix Summary:** Added `draft: z.boolean().default(false)` to the Astro content collection schema (`src/content.config.ts`), marked `src/content/blog/hello-world.md` with `draft: true`, and added draft filters to `src/pages/blog/index.astro`, `src/pages/blog/[slug].astro`, and `src/pages/rss.xml.ts`.
+   - **Verification Evidence:** Ran `npm run build` and verified:
+     1. Prerender list completely excludes `/blog/hello-world/index.html`.
+     2. `dist/client/sitemap-0.xml` has zero occurrences of `hello-world`.
+     3. `dist/client/rss.xml` has zero occurrences of `hello-world`.
+     4. `dist/client/blog/index.html` cleanly renders the styled "Publishing Soon" empty state card.
 
 5. **Fix German/EU Statutory Impressum Address (`src/constants/site.ts` & `src/pages/legal/impressum.astro`)**
    - **Defect:** `SITE.address` is set to `'Karachi, Pakistan'`, which overrides the fallback full street address in `impressum.astro`.

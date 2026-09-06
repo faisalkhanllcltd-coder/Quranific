@@ -10,8 +10,11 @@ import EyebrowBadge from '../../components/ui/EyebrowBadge.astro';
 import EyebrowText from '../../components/ui/EyebrowText.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-// Safely fetch posts and sort by date.
-const allPosts = ((await getCollection('blog')) || []) as CollectionEntry<'blog'>[];
+// Safely fetch published posts and sort by date.
+const allPosts = ((await getCollection(
+  'blog',
+  (entry: CollectionEntry<'blog'>) => !entry.data.draft
+)) || []) as CollectionEntry<'blog'>[];
 const sortedPosts = allPosts.sort(
   (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
     new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
