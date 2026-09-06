@@ -119,9 +119,16 @@ if (kv) {
         - Requests 3-4: Blocked by Cloudflare KV distributed rate limiter: `HTTP/1.1 429 Too Many Requests` -> `{"error":"Too many requests. Please wait a minute before trying again."}`.
 
 3. **Fix Sitemap Filter Pruning All Programmatic Intent Pages (`astro.config.mjs`)**
-   - **Defect:** `sitemap()` filter in `astro.config.mjs` excludes `'/for-kids'`, `'/for-adults'`, `'/for-women'`.
-   - **Impact:** All 6 high-value SEO programmatic intent landing pages (`/quran-classes/for-kids`, `/quran-classes/for-adults`, `/quran-classes/for-women`, `/quran-teacher/for-kids`, `/quran-teacher/for-adults`, `/quran-teacher/for-women`) are pruned from `sitemap-0.xml`!
-   - **Fix Required:** Refine filter to strictly match legacy ad paths (`page === '/for-kids'` or `page.startsWith('/ads/')`) instead of a broad `includes()`.
+   - **Status:** **[FIXED & VERIFIED]**
+   - **Fix Summary:** Updated the `sitemap()` filter in `astro.config.mjs` from substring `.includes()` to exact pathname matching (`path.startsWith('/api/') || path.startsWith('/getting-started/') || path.startsWith('/ads/') || path === '/for-kids' || path === '/for-adults' || path === '/for-women'`). This prevents substring matches on valid nested paths while preserving exclusions for internal endpoints and legacy ad redirects.
+   - **Verification Evidence:** Ran `npm run build` and inspected generated `dist/client/sitemap-0.xml`. Confirmed all 6 programmatic SEO landing pages are now present and indexed:
+     - `https://quranific.com/quran-classes/for-adults/`
+     - `https://quranific.com/quran-classes/for-kids/`
+     - `https://quranific.com/quran-classes/for-women/`
+     - `https://quranific.com/quran-teacher/for-adults/`
+     - `https://quranific.com/quran-teacher/for-kids/`
+     - `https://quranific.com/quran-teacher/for-women/`
+       While `/api/*`, `/getting-started/*`, and `/ads/*` remain excluded.
 
 4. **Unpublish or Replace Placeholder Blog Post (`src/content/blog/hello-world.md`)**
    - **Defect:** Placeholder post titled "Welcome to the Quranific Blog" with body text _"This is a placeholder post. Once we build..."_ is prerendered to `/blog/hello-world/index.html` and listed in `sitemap-0.xml`.

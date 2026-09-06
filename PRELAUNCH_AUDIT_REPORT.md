@@ -65,7 +65,7 @@ A critical disconnect previously existed between the Dead-Letter Queue (DLQ) pro
 ### High Priority Issues (P1)
 
 1. **[FIXED & VERIFIED LIVE]** `/api/apply-teacher.ts` Security & Edge Secrets: Rewritten to use `env` from `cloudflare:workers` with edge secrets (`TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`), Zod validation, distributed IP rate limiting (`RL:TEACHER:${ip}`, max 4 per 60s), Turnstile `siteverify` verification, and DLQ fallback. Tested live: rejected bad Turnstile tokens with HTTP 400, rejected bad schemas with HTTP 400, and throttled excess requests with HTTP 429.
-2. `astro.config.mjs` sitemap filter accidentally prunes all 6 programmatic SEO landing pages (`/quran-classes/*`, `/quran-teacher/*`) from `sitemap-0.xml`.
+2. **[FIXED & VERIFIED]** `astro.config.mjs` Sitemap Intent Pages Filter: Updated `sitemap()` filter from broad `.includes()` to exact path checking (`path.startsWith('/api/') || path.startsWith('/getting-started/') || path.startsWith('/ads/') || path === '/for-kids' ...`). Confirmed via build artifacts that all 6 programmatic intent pages (`/quran-classes/for-*`, `/quran-teacher/for-*`) are now properly included in `dist/client/sitemap-0.xml`.
 3. Placeholder blog post `/blog/hello-world` ("Welcome to the Quranific Blog") is published and indexed in `sitemap-0.xml`.
 4. `SITE.address` is set to `Karachi, Pakistan`, overriding the required German/EU statutory full street address in `impressum.astro`.
 5. `www.quranific.com` returns 200 OK directly instead of 301 redirecting to apex `quranific.com`.

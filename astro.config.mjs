@@ -26,11 +26,26 @@ export default defineConfig({
   integrations: [
     svelte(),
     sitemap({
-      // Exclude API routes, funnel, old ad paths, and paid lander routes
-      filter: (page) =>
-        !['/api/', '/getting-started/', '/ads/', '/for-kids', '/for-adults', '/for-women'].some(
-          (path) => page.includes(path)
-        ),
+      // Exclude internal API routes, signup funnel, and legacy ad aliases
+      filter: (page) => {
+        try {
+          const url = new URL(page);
+          const path = url.pathname;
+          return !(
+            path.startsWith('/api/') ||
+            path.startsWith('/getting-started/') ||
+            path.startsWith('/ads/') ||
+            path === '/for-kids' ||
+            path === '/for-adults' ||
+            path === '/for-women' ||
+            path === '/for-kids/' ||
+            path === '/for-adults/' ||
+            path === '/for-women/'
+          );
+        } catch {
+          return true;
+        }
+      },
     }),
 
     partytown({
