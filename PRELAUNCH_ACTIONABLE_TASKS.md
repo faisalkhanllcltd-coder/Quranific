@@ -9,10 +9,88 @@
 
 ## P0 — Blocks Launch (Immediate Fix Required)
 
-1. **Fix DLQ Consumer / Producer Key & Schema Mismatch (`src/pages/api/internal/retry-queue.ts`)**
-   - **Defect:** `retry-queue.ts` queries KV with `prefix: 'FAILED_LEAD:'` and expects legacy payload `{ taskIndex: 0 | 1, step1, step2 }`. But `register.ts` and `complete.ts` write `FAILED_LEAD_STEP1:${leadId}`, `FAILED_LEAD_STEP2:${leadId}`, and `FAILED_LEAD_WELCOME:${leadId}` with modern payload `{ failedAt, step1, step2, reason }` (no `taskIndex`).
-   - **Impact:** Failed emails during lead registration or welcome delivery are written to KV but can **NEVER** be recovered by the hourly `alarm-worker` cron. Leads would be permanently lost if Resend experiences transient downtime.
-   - **Fix Required:** Update `retry-queue.ts` to scan prefixes `FAILED_LEAD_STEP1:`, `FAILED_LEAD_STEP2:`, and `FAILED_LEAD_WELCOME:` (plus `FAILED_NEWSLETTER:` and `FAILED_CONTACT:`), inspect the actual modern payload structure, dispatch appropriate Resend emails, and delete processed keys.
+### 1. Fix DLQ Consumer / Producer Key & Schema Mismatch (`src/pages/api/internal/retry-queue.ts`)
+
+- **Defect:** `retry-queue.ts` queries KV with `prefix: 'FAILED_LEAD:'` and expects legacy payload `{ taskIndex: 0 | 1, step1, step2 }`. But `register.ts` and `complete.ts` write `FAILED_LEAD_STEP1:${leadId}`, `FAILED_LEAD_STEP2:${leadId}`, and `FAILED_LEAD_WELCOME:${leadId}` with modern payload `{ failedAt, step1, step2, reason }` (no `taskIndex`).
+- **Impact:** Failed emails during lead registration or welcome delivery are written to KV but can **NEVER** be recovered by the hourly `alarm-worker` cron. Leads would be permanently lost if Resend experiences transient downtime.
+
+#### Exact Verbatim Code — Consumer Side ([`src/pages/api/internal/retry-queue.ts#L36-L54`](file:///d:/Live%20Web/Quranific-live/src/pages/api/internal/retry-queue.ts#L36-L54))
+
+```typescript
+// 1. Recover Funnel Completions (FAILED_LEAD)
+const leadList = await kv.list({ prefix: 'FAILED_LEAD:' });
+for (const key of leadList.keys) {
+  const dataStr = await kv.get(key.name);
+  if (dataStr) {
+    const data = JSON.parse(dataStr);
+    try {
+      if (data.taskIndex === 0) {
+        await sendFullAdminNotification(data.step1, data.step2, resendApiKey, adminEmail);
+      } else if (data.taskIndex === 1) {
+        await sendWelcomeEmail(data.step1.e, data.step1.n, resendApiKey);
+      }
+      await kv.delete(key.name);
+      recoveredCount++;
+    } catch (e) {
+      console.error(`Cron retry failed for lead ${key.name}:`, e);
+    }
+  }
+}
+```
+
+#### Exact Verbatim Code — Producer Side ([`src/pages/api/register.ts#L186-L196`](file:///d:/Live%20Web/Quranific-live/src/pages/api/register.ts#L186-L196))
+
+```typescript
+if (kv) {
+  const deadLetterKey = `FAILED_LEAD_STEP1:${leadId}`;
+  const deadLetterPayload = JSON.stringify({
+    failedAt: new Date().toISOString(),
+    step1: validData,
+    reason: String(err),
+  });
+  kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch((e: unknown) =>
+    console.error('[Dead-Letter KV Write Failed]:', e)
+  );
+}
+```
+
+#### Exact Verbatim Code — Producer Side ([`src/pages/api/complete.ts#L174-L204`](file:///d:/Live%20Web/Quranific-live/src/pages/api/complete.ts#L174-L204))
+
+```typescript
+          if (kv) {
+            const deadLetterKey = `FAILED_LEAD_STEP2:${step1Data.lid || Date.now()}`;
+            const deadLetterPayload = JSON.stringify({
+              failedAt: new Date().toISOString(),
+              step1: step1Data,
+              step2: parsed.data,
+              reason: String(adminErr),
+            });
+            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
+              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
+            );
+          }
+        }
+
+        try {
+          await sendWelcomeEmail(step1Data.e, step1Data.n, resendApiKey);
+        } catch (welcomeErr) {
+          console.error('[Step 2 Welcome Email Failed]:', welcomeErr);
+          if (kv) {
+            const deadLetterKey = `FAILED_LEAD_WELCOME:${step1Data.lid || Date.now()}`;
+            const deadLetterPayload = JSON.stringify({
+              failedAt: new Date().toISOString(),
+              step1: step1Data,
+              step2: parsed.data,
+              reason: String(welcomeErr),
+            });
+            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
+              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
+            );
+          }
+        }
+```
+
+- **Fix Required:** Update `retry-queue.ts` to scan prefixes `FAILED_LEAD_STEP1:`, `FAILED_LEAD_STEP2:`, and `FAILED_LEAD_WELCOME:` (plus `FAILED_NEWSLETTER:` and `FAILED_CONTACT:`), inspect the actual modern payload structure, dispatch appropriate Resend emails, and delete processed keys.
 
 ---
 
