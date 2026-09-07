@@ -216,13 +216,18 @@
   1. Change default teacher gender preference from `'Male Teacher'` to `'No Preference'`.
   2. Rename Step 3 label in `StepIndicator.svelte` from "Verify" to "Confirmed" or "Complete".
 
-### [TASK-20] Intent Pages 404 Route Fix
+### [TASK-20] Intent Pages 404 Route Fix — [FIXED & VERIFIED LIVE]
 
 - **Original Item:** Item 20
-- **Files:** [`src/pages/for-kids.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/for-kids.astro) (new), [`src/pages/for-adults.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/for-adults.astro) (new), [`src/pages/for-women.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/for-women.astro) (new).
-- **Concrete Actions:**
-  1. Create 301 permanent redirect pages at `/for-kids`, `/for-adults`, and `/for-women` pointing to `/quran-classes/for-kids`, `/quran-classes/for-adults`, and `/quran-classes/for-women`.
-  2. Ensure external links or social ads hitting these root URLs resolve seamlessly without a 404 error.
+- **Status:** **[FIXED & VERIFIED LIVE ON WORKER vA0223311]**
+- **Files:** [`src/pages/for-kids.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/for-kids.astro), [`src/pages/for-adults.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/for-adults.astro), [`src/pages/for-women.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/for-women.astro), [`astro.config.mjs`](file:///d:/Live%20Web/Quranific-live/astro.config.mjs).
+- **Concrete Actions & Empirical Proof:**
+  1. Configured 301 permanent redirects in both `astro.config.mjs` and dedicated SSR redirect pages.
+  2. Verified live production responses (`curl.exe -sI`):
+     - `https://quranific.com/for-kids` -> `HTTP/1.1 301 Moved Permanently` | `Location: /quran-classes/for-kids`
+     - `https://quranific.com/for-adults` -> `HTTP/1.1 301 Moved Permanently` | `Location: /quran-classes/for-adults`
+     - `https://quranific.com/for-women` -> `HTTP/1.1 301 Moved Permanently` | `Location: /quran-classes/for-women`
+       Zero 404 errors; all root short-links resolve cleanly to their semantic intent targets.
 
 ### [TASK-21] Course Slug Pages Enhancement
 

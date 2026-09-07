@@ -17,11 +17,14 @@ export default defineConfig({
       enabled: true, // Mandate 11: 1:1 Local Edge Simulation
     },
   }),
-  // Permanent redirects: old /ads/* URLs → new semantic intent routes
+  // Permanent redirects: old /ads/* URLs & short intent URLs → semantic intent routes
   redirects: {
     '/ads/kids': '/quran-classes/for-kids',
     '/ads/adults': '/quran-classes/for-adults',
     '/ads/ladies': '/quran-classes/for-women',
+    '/for-kids': '/quran-classes/for-kids',
+    '/for-adults': '/quran-classes/for-adults',
+    '/for-women': '/quran-classes/for-women',
   },
   integrations: [
     svelte(),
