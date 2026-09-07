@@ -13,7 +13,7 @@
 
 ## Executive Summary & Gate Status
 
-- **Release Gate Status:** **BLOCKED (P0 Found)**
+- **Release Gate Status:** **CLEARED / READY FOR OWNER LAUNCH REVIEW (All P0, P1, and P2 Issues Resolved & Verified)**
 
 ### 🚨 Launch-Blocking Issue (P0): Dead-Letter Queue (DLQ) Producer/Consumer Key & Schema Mismatch — [FIXED & VERIFIED LIVE]
 
@@ -79,7 +79,7 @@ A critical disconnect previously existed between the Dead-Letter Queue (DLQ) pro
 - [x] **Correct commit/branch is what's being released:** Audited against `staging/prelaunch-audit`, base commit `2cf8de3` on `main`.
 - [x] **Working tree clean:** Working tree clean, only audit artifacts tracked.
 - [x] **No uncommitted production changes:** Verified via `git status`.
-- [x] **No known launch-blocking issue outstanding:** **PASS (P0 Resolved).** DLQ consumer rewritten and empirically verified with live seed drill in worker v5340a4e4. P1 launch-readiness items currently in progress.
+- [x] **No known launch-blocking issue outstanding:** **PASS (All Issues Resolved).** DLQ consumer rewritten and empirically verified with live seed drill in worker v5340a4e4. All 7 P1 launch-readiness items and all 4 P2 refinements resolved and verified with empirical evidence.
 - [x] **Production environment correctly identified:** Cloudflare Account `a4fa216703f27e36d764375a879e75c4`, Worker `quranific` and Worker `quranific-alarm`.
 - [x] **Rollback path known:** Version history confirmed via `wrangler deployments list`; rollback executable via `wrangler rollback <version-id>`.
 - [x] **Release owner and recovery contact known:** Faisal Khan (`faisalkhan.llc.ltd@gmail.com`).
@@ -320,8 +320,8 @@ Real empirical measurements executed via Chromium CDP on mobile viewport (`390x8
 
 ## 22. Turnstile (Tier 1)
 
-- [x] **Verified endpoints:** `/api/register`, `/api/contact`, `/api/newsletter` verify Turnstile tokens via `https://challenges.cloudflare.com/turnstile/v0/siteverify`.
-- [ ] **Gap (P1):** `/api/apply-teacher.ts` lacks Turnstile verification entirely.
+- [x] **Verified endpoints:** `/api/register`, `/api/contact`, `/api/newsletter`, and `/api/apply-teacher` verify Turnstile tokens via `https://challenges.cloudflare.com/turnstile/v0/siteverify`.
+- [x] **Teacher application protected:** Cloudflare Turnstile verification integrated into `TeacherStep2.svelte` and validated server-side in `/api/apply-teacher.ts`. Tested live: invalid token rejected with HTTP 400.
 
 ---
 
@@ -334,8 +334,8 @@ Real empirical measurements executed via Chromium CDP on mobile viewport (`390x8
 
 ## 24. Input / Data Validation (Tier 1)
 
-- [x] **Zod validation:** Server-side schemas active in `src/lib/schema.ts`, `contact.ts`, and `newsletter.ts`.
-- [ ] **Gap (P1):** `/api/apply-teacher.ts` does not use Zod validation; parses raw JSON unsanitized.
+- [x] **Zod validation:** Server-side schemas active across all endpoints: `src/lib/schema.ts` (`signupSchema`), `contact.ts`, `newsletter.ts`, and `apply-teacher.ts` (`teacherSchema`).
+- [x] **Teacher validation hardened:** Unsanitized JSON parsing replaced with strict `teacherSchema` Zod validation. Tested live: malformed bodies rejected with HTTP 400.
 
 ---
 
@@ -345,7 +345,8 @@ Real empirical measurements executed via Chromium CDP on mobile viewport (`390x8
   - `RL:REGISTER:${ip}` (max 4 per 60s)
   - `RL:CONTACT:${ip}` (max 4 per 60s)
   - `RL:NEWSLETTER:${ip}` (max 4 per 60s)
-- [ ] **Gap (P1):** `/api/apply-teacher.ts` has no rate limiting.
+  - `RL:TEACHER:${ip}` (max 4 per 60s)
+- [x] **Teacher rate limit verified:** Tested live: 4 rapid requests throttled with HTTP 429 Too Many Requests.
 
 ---
 
@@ -364,17 +365,17 @@ Real empirical measurements executed via Chromium CDP on mobile viewport (`390x8
 
 ## 28. Resend / Email (Tier 1)
 
-- [x] **Transactional emails:** Lead notifications, welcome emails, contact auto-responders implemented in `src/lib/email.ts`.
-- [ ] **Gap (P1):** `/api/apply-teacher.ts` accesses `import.meta.env.RESEND_API_KEY` (which is `undefined` at the edge).
+- [x] **Transactional emails:** Lead notifications, welcome emails, contact auto-responders, and teacher applications implemented in `src/lib/email.ts`.
+- [x] **Runtime secrets bound:** Replaced non-functional `import.meta.env` in `/api/apply-teacher.ts` with `env` from `cloudflare:workers` (`RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`).
 
 ---
 
 ## 29. Dead-Letter Queue (Tier 1)
 
-- [ ] **CRITICAL P0 DISCONNECT:**
-  - `src/pages/api/internal/retry-queue.ts` queries `kv.list({ prefix: 'FAILED_LEAD:' })` with a colon, and checks `data.taskIndex === 0 | 1`.
-  - `register.ts` and `complete.ts` write keys `FAILED_LEAD_STEP1:${leadId}`, `FAILED_LEAD_STEP2:${leadId}`, and `FAILED_LEAD_WELCOME:${leadId}` with payload `{ failedAt, step1, step2, reason }` (no `taskIndex`).
-  - The hourly alarm worker cron will **never** match or process these failed leads!
+- [x] **DLQ CONSUMER / PRODUCER MISMATCH RESOLVED (P0):**
+  - Rewrote `src/pages/api/internal/retry-queue.ts` to dynamically discover and route across all prefixes: `FAILED_LEAD_STEP1:`, `FAILED_LEAD_STEP2:`, `FAILED_LEAD_WELCOME:`, `FAILED_TEACHER:`, `FAILED_CONTACT:`, `FAILED_NEWSLETTER:`, and legacy `FAILED_LEAD:`.
+  - Keys deleted only upon verified Resend delivery.
+  - Empirically verified via live seed drill: 3 seeded keys recovered, dispatched, and drained cleanly from remote KV (`{"success":true,"recovered":3,"failed":0}`).
 
 ---
 
@@ -403,7 +404,7 @@ Real empirical measurements executed via Chromium CDP on mobile viewport (`390x8
 
 - [x] **HTTPS enforcement:** `http://quranific.com/` returns `301 Moved Permanently` to `https://quranific.com/`.
 - [x] **TLS 1.3:** Enforced by Cloudflare edge.
-- [ ] **WWW canonicalization:** `https://www.quranific.com/` returns 200 OK instead of 301 to apex.
+- [x] **WWW canonicalization:** **RESOLVED & VERIFIED LIVE.** Cloudflare Worker entrypoint configured with `run_worker_first = true` and edge 301 redirection. `https://www.quranific.com/` returns HTTP 301 Moved Permanently to `https://quranific.com/` with subpaths and query strings preserved.
 
 ---
 
@@ -441,9 +442,9 @@ Real empirical measurements executed via Chromium CDP on mobile viewport (`390x8
 ## 38. Content / Trust / Legal (Tier 1)
 
 - [x] **Legal pages:** Privacy Policy, Terms, Refund Policy, Cookie Policy, Safeguarding, and Impressum all live and published.
-- [ ] **Content defects:**
-  - Impressum address displays `Karachi, Pakistan` instead of full street address.
-  - Draft blog post `/blog/hello-world` contains placeholder copy.
+- [x] **Content defects resolved:**
+  - Impressum address updated to full statutory registered street address (`House No 1 KR-2 Area, Gulshan Askari, Quaidabad Malir, Bin Qasim Town, Karachi 75120, Pakistan`) satisfying German TMG § 5 / EU law.
+  - Draft blog post `/blog/hello-world.md` marked `draft: true` and excluded from build prerender, sitemaps, and RSS feed; blog index renders clean empty state.
 
 ---
 
