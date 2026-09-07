@@ -92,15 +92,20 @@ if (kv) {
 
 - **Status:** **[FIXED & VERIFIED LIVE]**
 - **Fix Summary:** Rewrote `src/pages/api/internal/retry-queue.ts` and added helpers in `src/lib/email.ts`. The queue processor now dynamically handles all prefixes: `FAILED_LEAD_STEP1:`, `FAILED_LEAD_STEP2:`, `FAILED_LEAD_WELCOME:`, `FAILED_CONTACT_ADMIN:`, `FAILED_CONTACT_USER:`, `FAILED_NEWSLETTER_ADMIN:`, `FAILED_NEWSLETTER_USER:`, `FAILED_TEACHER_ADMIN:`, `FAILED_TEACHER_USER:`, as well as legacy `FAILED_LEAD:`. Key schemas are fully normalized (supporting full keys like `fullName`/`email` from Step 1, and compact keys `n`/`e`/`p`/`w`/`c`/`tz`/`lid` from Step 2). Keys are deleted ONLY upon successful email dispatch, and preserved if delivery throws.
-- **Empirical Verification Drill (Passed Live):**
-  1. Seeded 3 real test keys with realistic payloads into the production `SESSION` KV namespace (`14eab319d57e4c58b5f903bce3eb3931`):
-     - `FAILED_LEAD_STEP1:test123`
-     - `FAILED_LEAD_STEP2:test456`
-     - `FAILED_LEAD_WELCOME:test789`
+- **Empirical Verification Drill & Independent Upstream Resend Proof (Passed Live on Worker v613e8f01):**
+  1. Seeded 3 real test keys with realistic payloads targeting real recipient `faisalkhan.llc.ltd@gmail.com` into production `SESSION` KV namespace (`14eab319d57e4c58b5f903bce3eb3931`):
+     - `FAILED_LEAD_STEP1:live-751639`
+     - `FAILED_LEAD_STEP2:live-751639`
+     - `FAILED_LEAD_WELCOME:live-751639`
   2. Verified their presence in remote KV via `wrangler kv key list --prefix="FAILED_LEAD_"` -> Returned all 3 keys.
   3. Triggered `retry-queue.ts` via alarm worker: `curl.exe -s -X POST https://quranific-alarm.faisalkhan-llc-ltd.workers.dev/force-run`
-     - Response: `{"success":true,"recovered":3,"failed":0}` (HTTP 200).
-  4. Verified remote KV namespace: `wrangler kv key list --prefix="FAILED_LEAD_"` -> Returned `[]` (all 3 keys successfully processed, dispatched to Resend, and deleted). Zero stuck keys, zero duplicates.
+     - Response: `{"success":true,"recovered":3,"failed":0,"dispatches":[{"key":"FAILED_LEAD_STEP1:live-751639","id":"35e9170d-2915-4127-955e-e1754a4f4f71","timestamp":"2026-09-07T06:49:46.275Z"},{"key":"FAILED_LEAD_STEP2:live-751639","id":"69fd8404-4757-4451-b403-dcef84582c41","timestamp":"2026-09-07T06:49:49.713Z"},{"key":"FAILED_LEAD_WELCOME:live-751639","id":"3f6fe57e-2eb8-4196-8cbc-c209cea2f33d","timestamp":"2026-09-07T06:49:53.031Z"}]}` (HTTP 200).
+  4. Verified remote KV namespace: `wrangler kv key list --prefix="FAILED_LEAD_"` -> Returned `[]` (all 3 keys successfully processed, dispatched to Resend, and purged from KV). Zero stuck keys, zero duplicates.
+  5. **Independent Upstream Resend Proof:** Queried Resend's own API log directly via Alarm Worker (`GET /resend-log`):
+     - Email 1 (`35e9170d-2915-4127-955e-e1754a4f4f71`): To `faisalkhan.llc.ltd@gmail.com`, Subject `[ID: live-751639] ⏳ Partial Lead - Proof Lead Step1 [751639]`, Status `delivered`, SES Message ID `<010001a07aa1477e-061f089c-983b-45a6-849c-fde126e60bb7-000000@email.amazonses.com>`.
+     - Email 2 (`69fd8404-4757-4451-b403-dcef84582c41`): To `faisalkhan.llc.ltd@gmail.com`, Subject `[ID: lid-751639] 🎉 Full Registration - Proof Lead Step2 [751639]`, Status `delivered`, SES Message ID `<010001a07aa15418-4d52a7fd-7deb-42d9-8252-97d81005f4ba-000000@email.amazonses.com>`.
+     - Email 3 (`3f6fe57e-2eb8-4196-8cbc-c209cea2f33d`): To `faisalkhan.llc.ltd@gmail.com`, Subject `Welcome to Quranific! Your journey begins.`, Status `delivered`, SES Message ID `<010001a07aa1602c-9270d3b1-4eef-4d37-a986-27a4fb136fc3-000000@email.amazonses.com>`.
+     - Confirming 100% genuine external delivery through Resend's production MTA to the site owner's actual inbox.
 
 ---
 

@@ -81,6 +81,7 @@ export const POST: APIRoute = async (context) => {
 
     let recoveredCount = 0;
     const failedKeys: { name: string; error: string }[] = [];
+    const dispatches: { key: string; id?: string; timestamp: string }[] = [];
 
     // Scan all dead-letter keys starting with 'FAILED' (covers both 'FAILED_' and legacy 'FAILED:')
     let cursor: string | undefined = undefined;
@@ -101,13 +102,14 @@ export const POST: APIRoute = async (context) => {
       try {
         const data = JSON.parse(dataStr);
         let delivered = false;
+        let res: { success: boolean; id?: string } | undefined;
 
         // 1. FAILED_LEAD_STEP1: Producer writes { failedAt, step1: validData, reason }
         if (key.name.startsWith('FAILED_LEAD_STEP1:')) {
           const leadId = key.name.replace('FAILED_LEAD_STEP1:', '');
           const rawStep1 = data.step1 || data;
           const step1Data = normalizeStep1Data(rawStep1, leadId);
-          await sendStep1AdminNotification(step1Data, resendApiKey, adminEmail);
+          res = await sendStep1AdminNotification(step1Data, resendApiKey, adminEmail);
           delivered = true;
         }
 
@@ -117,7 +119,7 @@ export const POST: APIRoute = async (context) => {
           const rawStep1 = data.step1 || {};
           const step1Data = normalizeStep1Data(rawStep1, leadId);
           const step2Data: Step2Data = data.step2 || {};
-          await sendFullAdminNotification(step1Data, step2Data, resendApiKey, adminEmail);
+          res = await sendFullAdminNotification(step1Data, step2Data, resendApiKey, adminEmail);
           delivered = true;
         }
 
@@ -129,7 +131,7 @@ export const POST: APIRoute = async (context) => {
           if (!email) {
             throw new Error(`Missing email in FAILED_LEAD_WELCOME payload for key: ${key.name}`);
           }
-          await sendWelcomeEmail(email, name, resendApiKey);
+          res = await sendWelcomeEmail(email, name, resendApiKey);
           delivered = true;
         }
 
@@ -139,7 +141,7 @@ export const POST: APIRoute = async (context) => {
           key.name.startsWith('FAILED_CONTACT:')
         ) {
           const payload = (data.payload || data) as ContactNotificationData;
-          await sendContactAdminNotification(payload, resendApiKey, adminEmail);
+          res = await sendContactAdminNotification(payload, resendApiKey, adminEmail);
           delivered = true;
         }
 
@@ -151,7 +153,7 @@ export const POST: APIRoute = async (context) => {
           if (!email) {
             throw new Error(`Missing email in FAILED_CONTACT_USER payload for key: ${key.name}`);
           }
-          await sendContactAutoResponder(email, firstName, resendApiKey);
+          res = await sendContactAutoResponder(email, firstName, resendApiKey);
           delivered = true;
         }
 
@@ -163,7 +165,7 @@ export const POST: APIRoute = async (context) => {
               `Missing email in FAILED_NEWSLETTER_ADMIN payload for key: ${key.name}`
             );
           }
-          await sendNewsletterAdminNotification(email, resendApiKey, adminEmail);
+          res = await sendNewsletterAdminNotification(email, resendApiKey, adminEmail);
           delivered = true;
         }
 
@@ -173,7 +175,7 @@ export const POST: APIRoute = async (context) => {
           if (!email) {
             throw new Error(`Missing email in FAILED_NEWSLETTER_USER payload for key: ${key.name}`);
           }
-          await sendNewsletterWelcome(email, resendApiKey);
+          res = await sendNewsletterWelcome(email, resendApiKey);
           delivered = true;
         }
 
@@ -183,7 +185,7 @@ export const POST: APIRoute = async (context) => {
           key.name.startsWith('FAILED_TEACHER:')
         ) {
           const payload = (data.payload || data) as TeacherData;
-          await sendTeacherAdminNotification(payload, resendApiKey, adminEmail);
+          res = await sendTeacherAdminNotification(payload, resendApiKey, adminEmail);
           delivered = true;
         }
 
@@ -195,7 +197,7 @@ export const POST: APIRoute = async (context) => {
           if (!email) {
             throw new Error(`Missing email in FAILED_TEACHER_USER payload for key: ${key.name}`);
           }
-          await sendTeacherAutoResponder(email, fullName, resendApiKey);
+          res = await sendTeacherAutoResponder(email, fullName, resendApiKey);
           delivered = true;
         }
 
@@ -204,19 +206,29 @@ export const POST: APIRoute = async (context) => {
           if (data.taskIndex === 0) {
             const leadId = key.name.replace('FAILED_LEAD:', '');
             const step1Data = normalizeStep1Data(data.step1 || {}, leadId);
-            await sendFullAdminNotification(step1Data, data.step2 || {}, resendApiKey, adminEmail);
+            res = await sendFullAdminNotification(
+              step1Data,
+              data.step2 || {},
+              resendApiKey,
+              adminEmail
+            );
             delivered = true;
           } else if (data.taskIndex === 1) {
             const email = data.step1?.e || data.step1?.email;
             const name = data.step1?.n || data.step1?.name || 'Student';
             if (!email) throw new Error('Missing email in legacy FAILED_LEAD');
-            await sendWelcomeEmail(email, name, resendApiKey);
+            res = await sendWelcomeEmail(email, name, resendApiKey);
             delivered = true;
           }
         }
 
         if (delivered) {
           await kv.delete(key.name);
+          dispatches.push({
+            key: key.name,
+            id: res?.id,
+            timestamp: new Date().toISOString(),
+          });
           recoveredCount++;
         }
       } catch (err) {
@@ -231,6 +243,7 @@ export const POST: APIRoute = async (context) => {
         success: true,
         recovered: recoveredCount,
         failed: failedKeys.length,
+        dispatches: dispatches.length > 0 ? dispatches : undefined,
         failedDetails: failedKeys.length > 0 ? failedKeys : undefined,
       }),
       {
@@ -241,6 +254,54 @@ export const POST: APIRoute = async (context) => {
   } catch (error) {
     console.error('[CRON Critical Error]:', error);
     return new Response(JSON.stringify({ error: 'Internal Server Error during recovery cycle' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+};
+
+export const GET: APIRoute = async (context) => {
+  try {
+    const authHeader = context.request.headers.get('Authorization');
+    const runtimeEnv = env as Record<string, unknown>;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string;
+    const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
+
+    if (!jwtSecret || authHeader !== `Bearer ${jwtSecret}`) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (!resendApiKey) {
+      return new Response(JSON.stringify({ error: 'RESEND_API_KEY Missing' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const url = new URL(context.request.url);
+    const emailId = url.searchParams.get('id');
+    const resendUrl = emailId
+      ? `https://api.resend.com/emails/${encodeURIComponent(emailId)}`
+      : 'https://api.resend.com/emails?limit=10';
+
+    const resendRes = await fetch(resendUrl, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const resendBody = await resendRes.text();
+    return new Response(resendBody, {
+      status: resendRes.status,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: String(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

@@ -101,7 +101,14 @@ export async function sendStep1AdminNotification(
     });
 
     if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
-    return { success: true };
+    let id: string | undefined;
+    try {
+      const data = (await res.json()) as { id?: string };
+      id = data.id;
+    } catch {
+      // Ignore JSON parse errors if response body is empty or malformed
+    }
+    return { success: true, id };
   } catch (error) {
     console.error('sendStep1AdminNotification failed:', error);
     throw error;
@@ -213,7 +220,14 @@ export async function sendFullAdminNotification(
     });
 
     if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
-    return { success: true };
+    let id: string | undefined;
+    try {
+      const data = (await res.json()) as { id?: string };
+      id = data.id;
+    } catch {
+      // Ignore JSON parse errors if response body is empty or malformed
+    }
+    return { success: true, id };
   } catch (error) {
     console.error('sendFullAdminNotification failed:', error);
     throw error;
@@ -250,7 +264,14 @@ export async function sendWelcomeEmail(email: string, name: string, apiKey: stri
     });
 
     if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
-    return { success: true };
+    let id: string | undefined;
+    try {
+      const data = (await res.json()) as { id?: string };
+      id = data.id;
+    } catch {
+      // Ignore JSON parse errors if response body is empty or malformed
+    }
+    return { success: true, id };
   } catch (error) {
     console.error('sendWelcomeEmail failed:', error);
     throw error;
@@ -287,7 +308,14 @@ export async function sendContactAutoResponder(email: string, name: string, apiK
     });
 
     if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
-    return { success: true };
+    let id: string | undefined;
+    try {
+      const data = (await res.json()) as { id?: string };
+      id = data.id;
+    } catch {
+      // Ignore JSON parse errors if response body is empty or malformed
+    }
+    return { success: true, id };
   } catch (error) {
     console.error('sendContactAutoResponder failed:', error);
     throw error;
@@ -323,7 +351,14 @@ export async function sendNewsletterWelcome(email: string, apiKey: string) {
     });
 
     if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
-    return { success: true };
+    let id: string | undefined;
+    try {
+      const data = (await res.json()) as { id?: string };
+      id = data.id;
+    } catch {
+      // Ignore JSON parse errors if response body is empty or malformed
+    }
+    return { success: true, id };
   } catch (error) {
     console.error('sendNewsletterWelcome failed:', error);
     throw error;
@@ -401,7 +436,14 @@ export async function sendTeacherAdminNotification(
     });
 
     if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
-    return { success: true };
+    let id: string | undefined;
+    try {
+      const data = (await res.json()) as { id?: string };
+      id = data.id;
+    } catch {
+      // Ignore JSON parse errors if response body is empty or malformed
+    }
+    return { success: true, id };
   } catch (error) {
     console.error('sendTeacherAdminNotification failed:', error);
     throw error;
@@ -438,7 +480,14 @@ export async function sendTeacherAutoResponder(email: string, name: string, apiK
     });
 
     if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
-    return { success: true };
+    let id: string | undefined;
+    try {
+      const data = (await res.json()) as { id?: string };
+      id = data.id;
+    } catch {
+      // Ignore JSON parse errors if response body is empty or malformed
+    }
+    return { success: true, id };
   } catch (error) {
     console.error('sendTeacherAutoResponder failed:', error);
     throw error;
@@ -491,7 +540,14 @@ export async function sendContactAdminNotification(
       }),
     });
     if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
-    return { success: true };
+    let id: string | undefined;
+    try {
+      const data = (await res.json()) as { id?: string };
+      id = data.id;
+    } catch {
+      // Ignore JSON parse errors if response body is empty or malformed
+    }
+    return { success: true, id };
   } catch (error) {
     console.error('sendContactAdminNotification failed:', error);
     throw error;
@@ -528,7 +584,14 @@ export async function sendNewsletterAdminNotification(
       }),
     });
     if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
-    return { success: true };
+    let id: string | undefined;
+    try {
+      const data = (await res.json()) as { id?: string };
+      id = data.id;
+    } catch {
+      // Ignore JSON parse errors if response body is empty or malformed
+    }
+    return { success: true, id };
   } catch (error) {
     console.error('sendNewsletterAdminNotification failed:', error);
     throw error;

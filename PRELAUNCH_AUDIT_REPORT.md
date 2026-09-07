@@ -36,29 +36,72 @@ A critical disconnect previously existed between the Dead-Letter Queue (DLQ) pro
    - Legacy `FAILED_LEAD:` -> Backward compatible handling for `taskIndex: 0 | 1`.
 2. **Safe Deletion Contract**: Keys are deleted from KV (`await kv.delete(key.name)`) ONLY upon verified email delivery success. If any network or API error occurs, the key remains in KV for subsequent cron cycles.
 
-#### Live Empirical Verification Drill (Passed 100%):
+#### Live Empirical Verification Drill & Independent Upstream Resend Proof (Passed 100% on Worker v613e8f01):
 
-1. **Seeded Test Keys in Remote KV:**
-   - Directly seeded 3 real test keys with realistic payloads into the production `SESSION` KV namespace (`14eab319d57e4c58b5f903bce3eb3931`):
-     - `FAILED_LEAD_STEP1:test123`
-     - `FAILED_LEAD_STEP2:test456`
-     - `FAILED_LEAD_WELCOME:test789`
+1. **Seeded Test Keys in Remote KV (Targeting Real Owner Recipient):**
+   - Directly seeded 3 real test keys with realistic payloads into the production `SESSION` KV namespace (`14eab319d57e4c58b5f903bce3eb3931`) targeting `faisalkhan.llc.ltd@gmail.com`:
+     - `FAILED_LEAD_STEP1:live-751639`
+     - `FAILED_LEAD_STEP2:live-751639`
+     - `FAILED_LEAD_WELCOME:live-751639`
 2. **Verified Keys Present in Remote KV:**
    - Ran `npx wrangler kv key list --namespace-id 14eab319d57e4c58b5f903bce3eb3931 --remote --prefix="FAILED_LEAD_"`:
      ```json
      [
-       { "name": "FAILED_LEAD_STEP1:test123" },
-       { "name": "FAILED_LEAD_STEP2:test456" },
-       { "name": "FAILED_LEAD_WELCOME:test789" }
+       { "name": "FAILED_LEAD_STEP1:live-751639" },
+       { "name": "FAILED_LEAD_STEP2:live-751639" },
+       { "name": "FAILED_LEAD_WELCOME:live-751639" }
      ]
      ```
 3. **Triggered Execution via Alarm Worker:**
    - Executed: `curl.exe -s -X POST https://quranific-alarm.faisalkhan-llc-ltd.workers.dev/force-run`
-   - Real Output: `{"success":true,"recovered":3,"failed":0}` (HTTP 200).
+   - Real Output:
+     ```json
+     {
+       "success": true,
+       "recovered": 3,
+       "failed": 0,
+       "dispatches": [
+         {
+           "key": "FAILED_LEAD_STEP1:live-751639",
+           "id": "35e9170d-2915-4127-955e-e1754a4f4f71",
+           "timestamp": "2026-09-07T06:49:46.275Z"
+         },
+         {
+           "key": "FAILED_LEAD_STEP2:live-751639",
+           "id": "69fd8404-4757-4451-b403-dcef84582c41",
+           "timestamp": "2026-09-07T06:49:49.713Z"
+         },
+         {
+           "key": "FAILED_LEAD_WELCOME:live-751639",
+           "id": "3f6fe57e-2eb8-4196-8cbc-c209cea2f33d",
+           "timestamp": "2026-09-07T06:49:53.031Z"
+         }
+       ]
+     }
+     ```
 4. **Verified Keys Deleted from Remote KV Post-Recovery:**
    - Ran `npx wrangler kv key list --namespace-id 14eab319d57e4c58b5f903bce3eb3931 --remote --prefix="FAILED_LEAD_"`:
      - Output: `[]` (clean queue).
-   - Confirmed: All 3 seeded keys were correctly parsed, normalized, dispatched to Resend (`delivered@resend.dev`), and deleted from KV. Zero orphans, zero stuck retries.
+   - Confirmed: All 3 seeded keys were correctly parsed, normalized, dispatched to Resend, and purged from KV. Zero orphans, zero stuck retries.
+5. **Independent Upstream Resend Audit Proof (Queried directly via `GET /resend-log`):**
+   - **Email 1 (`35e9170d-2915-4127-955e-e1754a4f4f71`):**
+     - Recipient: `faisalkhan.llc.ltd@gmail.com`
+     - From: `System <onboarding@quranific.com>`
+     - Subject: `[ID: live-751639] ⏳ Partial Lead - Proof Lead Step1 [751639]`
+     - Last Event: `delivered`
+     - Upstream SES ID: `<010001a07aa1477e-061f089c-983b-45a6-849c-fde126e60bb7-000000@email.amazonses.com>`
+   - **Email 2 (`69fd8404-4757-4451-b403-dcef84582c41`):**
+     - Recipient: `faisalkhan.llc.ltd@gmail.com`
+     - From: `System <onboarding@quranific.com>`
+     - Subject: `[ID: lid-751639] 🎉 Full Registration - Proof Lead Step2 [751639]`
+     - Last Event: `delivered`
+     - Upstream SES ID: `<010001a07aa15418-4d52a7fd-7deb-42d9-8252-97d81005f4ba-000000@email.amazonses.com>`
+   - **Email 3 (`3f6fe57e-2eb8-4196-8cbc-c209cea2f33d`):**
+     - Recipient: `faisalkhan.llc.ltd@gmail.com`
+     - From: `Quranific Support <support@quranific.com>`
+     - Subject: `Welcome to Quranific! Your journey begins.`
+     - Last Event: `delivered`
+     - Upstream SES ID: `<010001a07aa1602c-9270d3b1-4eef-4d37-a986-27a4fb136fc3-000000@email.amazonses.com>`
 
 ---
 
@@ -68,7 +111,11 @@ A critical disconnect previously existed between the Dead-Letter Queue (DLQ) pro
 2. **[FIXED & VERIFIED]** `astro.config.mjs` Sitemap Intent Pages Filter: Updated `sitemap()` filter from broad `.includes()` to exact path checking (`path.startsWith('/api/') || path.startsWith('/getting-started/') || path.startsWith('/ads/') || path === '/for-kids' ...`). Confirmed via build artifacts that all 6 programmatic intent pages (`/quran-classes/for-*`, `/quran-teacher/for-*`) are now properly included in `dist/client/sitemap-0.xml`.
 3. **[FIXED & VERIFIED]** Placeholder Blog Post Excluded: Added `draft: z.boolean().default(false)` to content collection schema, marked `hello-world.md` as `draft: true`, and added draft filtering across `blog/index.astro`, `blog/[slug].astro`, and `rss.xml.ts`. Prerendered build excludes the draft post and `dist/client/sitemap-0.xml` no longer references it; blog index renders the styled "Publishing Soon" state.
 4. **[FIXED & VERIFIED]** Impressum Statutory Street Address: Updated `SITE.address` in `src/constants/site.ts` to provide the complete street address (`House No 1 KR-2 Area, Gulshan Askari, Quaidabad Malir, Bin Qasim Town, Karachi 75120, Pakistan`). Verified HTML output in `dist/client/legal/impressum/index.html`.
-5. **[FIXED & VERIFIED LIVE]** `www.quranific.com` -> `quranific.com` 301 Permanent Redirect: Intercepted at Cloudflare worker edge entrypoint before asset resolution with `run_worker_first = true` and `Cache-Control: no-store`. Confirmed live: `curl.exe -s -i https://www.quranific.com/` returns `HTTP/1.1 301 Moved Permanently` to `https://quranific.com/`, subpaths and query parameters are preserved, and apex serves `200 OK`.
+5. **[FIXED & VERIFIED LIVE]** `www.quranific.com` -> `quranific.com` 301 Permanent Redirect:
+   - **Mechanism:** Enforced at Cloudflare Worker edge entrypoint with `run_worker_first = true` and `Cache-Control: no-store, max-age=0`. Subpaths and query params are preserved (`https://www.quranific.com/courses/?ref=test` -> `https://quranific.com/courses/?ref=test`).
+   - **Scope-Check & Rationale:** `_redirects` is a Cloudflare Pages-only feature and is not evaluated before static asset matches on Cloudflare Workers with Assets (`@astrojs/cloudflare` with `output: 'server'`). While a Cloudflare Dashboard Single Redirect Rule is edge-native, `run_worker_first = true` provides full in-repo git-tracked enforcement.
+   - **Static Asset Caching & Delivery:** Verified that static assets bypass redirection and serve with edge caching: `curl.exe -sI https://quranific.com/_astro/EyebrowText.DRjZOCc-.css` and `inter-latin-wght-normal.Dx4kXJAl.woff2` return `HTTP 200 OK`, `CF-Cache-Status: HIT`, and `Cache-Control: public, max-age=31536000, immutable`.
+   - **SEO Integrity Diff:** Ran `node scratch/seo-diff.mjs scratch/seo-snapshot-pre-fix.json scratch/seo-snapshot-current.json` across all 13 protected pages (homepage, 6 courses, intent landing pages). Verified `CLEAN DIFF: no title, meta description, or JSON-LD differences`.
 6. **[FIXED & VERIFIED LIVE]** Minor Student Registration Parent/Guardian Declaration: Added strict Zod schema validation and a required checkbox with COPPA / UK Children's Code / GDPR-K microcopy to `SignupForm.svelte` and `schema.ts`. Tested live: rejected registration without consent with HTTP 400 ("Parent or guardian confirmation is required to register."), while passing valid consent through to the security gate.
 7. **[FIXED & VERIFIED]** Dependency Vulnerabilities: Ran non-breaking `npm audit fix`, resolving all 9 vulnerabilities (including `svelte` upgrade to 5.57.0, `brace-expansion`, `fast-uri`, `svgo`). `npm audit` now reports 0 vulnerabilities; `npm run check` (0 errors) and `npm run build` (0 regressions) verified.
 

@@ -5,7 +5,7 @@ export interface Env {
 
 export default {
   // 1. The Cron Handler (Executes hourly)
-  async scheduled(event: ScheduledController, env: Env, ctx: ExecutionContext) {
+  async scheduled(_event: ScheduledController, env: Env, ctx: ExecutionContext) {
     const handleRetry = async () => {
       try {
         const response = await fetch(env.TARGET_URL, {
@@ -34,6 +34,34 @@ export default {
       try {
         const response = await fetch(env.TARGET_URL, {
           method: 'POST',
+          headers: {
+            Authorization: `Bearer ${env.JWT_SECRET}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        const resultText = await response.text();
+        return new Response(resultText, {
+          status: response.status,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      } catch (err) {
+        return new Response(JSON.stringify({ error: String(err) }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
+    // Allow querying Resend log via HTTP GET for audit verification
+    if (url.pathname === '/resend-log' && request.method === 'GET') {
+      try {
+        const idParam = url.searchParams.get('id');
+        const target = idParam
+          ? `${env.TARGET_URL}?id=${encodeURIComponent(idParam)}`
+          : env.TARGET_URL;
+
+        const response = await fetch(target, {
+          method: 'GET',
           headers: {
             Authorization: `Bearer ${env.JWT_SECRET}`,
             'Content-Type': 'application/json',
