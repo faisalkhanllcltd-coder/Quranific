@@ -1,14 +1,8 @@
 ---
 import Section from '../../../components/ui/Section.astro';
+import { WHATS_INCLUDED_ITEMS } from '../../../data/features';
 
-const items = [
-  'A dedicated 1-on-1 teacher, matched to your child',
-  'All learning materials included, no extra cost',
-  'Missed sessions made up, guaranteed',
-  'Progress updates whenever you ask, no extra fee',
-  "Full-month guarantee if you're not satisfied",
-  'Cancel anytime, no lock-in contract',
-];
+const items = WHATS_INCLUDED_ITEMS;
 ---
 
 <Section class="bg-cream-50 py-16 md:py-24 border-b border-emerald-50">

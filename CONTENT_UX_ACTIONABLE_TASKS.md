@@ -149,13 +149,17 @@
   3. **Exported Starter Helper:** Added typed `getStarterPrice(currency)` helper to enforce access without magical index lookups.
   4. **Empirical Verification:** Tested via `scratch/verify-pricing-data.mjs` confirming starter pricing across all 8 currencies (`true`) and zero external discrepancies.
 
-### [TASK-07] Centralized Features Data Architecture
+### [TASK-07] Centralized Features Data Architecture — [FIXED & VERIFIED]
 
 - **Original Item:** Item 7
-- **Files:** Create `src/data/features.ts`, update [`src/pages/tuition-fee/_components/WhatsIncluded.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/tuition-fee/_components/WhatsIncluded.astro), [`src/pages/tuition-fee/_components/TuitionPlans.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/tuition-fee/_components/TuitionPlans.astro).
-- **Concrete Actions:**
-  1. Centralize all feature arrays into `src/data/features.ts`.
-  2. Import typed feature lists into their respective pages with zero copy duplication.
+- **Status:** **[FIXED & VERIFIED ON 2026-09-08]**
+- **Files:** [`src/data/features.ts`](file:///d:/Live%20Web/Quranific-live/src/data/features.ts), [`src/pages/tuition-fee/_components/WhatsIncluded.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/tuition-fee/_components/WhatsIncluded.astro), [`src/pages/tuition-fee/_components/TuitionPlans.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/tuition-fee/_components/TuitionPlans.astro).
+- **Concrete Actions & Empirical Proof:**
+  1. **Centralized Data Layer:** Created `src/data/features.ts` containing strongly typed feature models (`AcademyFeature`, `TUITION_PLAN_FEATURES`, `WHATS_INCLUDED_ITEMS`, and `STANDARD_COURSE_FEATURES`).
+  2. **Deduplicated Component Consumption:**
+     - `WhatsIncluded.astro`: Removed hardcoded `items` array and wired directly to `WHATS_INCLUDED_ITEMS`.
+     - `TuitionPlans.astro`: Removed local `features` array and wired directly to `TUITION_PLAN_FEATURES`.
+  3. **Verification:** Tested via `scratch/verify-features.mjs`: `src/data/features.ts` exports all models (`true`), `WhatsIncluded.astro` imports from features (`true`), `TuitionPlans.astro` imports from features (`true`), and `astro check` + `astro build` succeed with 0 errors across 139 files.
 
 ---
 
