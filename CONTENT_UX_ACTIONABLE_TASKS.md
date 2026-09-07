@@ -276,15 +276,44 @@
 - **Original Item:** Item 13
 - **Action:** Document all operational email accounts hosted on Hostinger Business Email (`admin@`, `hello@`, `support@`, `careers@`, `privacy@`).
 
-### [TASK-23] Resend SPF Authorization DNS Record Fix
+### [TASK-23] Resend SPF Authorization DNS Record Fix — [FIXED & VERIFIED LIVE]
 
 - **Original Item:** Item 23
 - **Impact:** Immediate elimination of transactional email spam filtering.
+- **Status:** **[FIXED & VERIFIED LIVE ON 2026-09-07]**
 - **Concrete Actions:**
-  1. **Update Cloudflare DNS SPF TXT Record:**
-     - Current: `v=spf1 include:_spf.mail.hostinger.com ~all`
-     - Change to: `v=spf1 include:_spf.mail.hostinger.com include:resend.com ~all`
-  2. Verify DKIM record `resend._domainkey.quranific.com` status in Resend dashboard.
+  1. **Update Cloudflare DNS SPF TXT Record:** Updated `@` TXT record on Cloudflare DNS to include Resend.
+     - Value: `v=spf1 include:_spf.mail.hostinger.com include:resend.com ~all`
+  2. **Empirical Verification Evidence:**
+     - **Cloudflare DNS over HTTPS (`https://cloudflare-dns.com/dns-query?name=quranific.com&type=TXT`):**
+       ```json
+       {
+         "Status": 0,
+         "Answer": [
+           {
+             "name": "quranific.com",
+             "type": 16,
+             "TTL": 300,
+             "data": "\"v=spf1 include:_spf.mail.hostinger.com include:resend.com ~all\""
+           }
+         ]
+       }
+       ```
+     - **Google DNS over HTTPS (`https://dns.google/resolve?name=quranific.com&type=TXT`):**
+       ```json
+       {
+         "Status": 0,
+         "Answer": [
+           {
+             "name": "quranific.com.",
+             "type": 16,
+             "TTL": 300,
+             "data": "v=spf1 include:_spf.mail.hostinger.com include:resend.com ~all"
+           }
+         ]
+       }
+       ```
+     - Authoritative nameservers globally confirm SPF alignment for both Hostinger Webmail and Resend Transactional MTA.
 
 ---
 
