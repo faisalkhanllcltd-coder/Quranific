@@ -25,6 +25,14 @@ const SECURITY_HEADERS: Record<string, string> = {
 };
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  // ─── Apex Redirection: Enforce https://quranific.com ─────────────────────
+  const url = new URL(context.request.url);
+  if (url.hostname.toLowerCase() === 'www.quranific.com') {
+    url.hostname = 'quranific.com';
+    url.protocol = 'https:';
+    return context.redirect(url.toString(), 301);
+  }
+
   const cf = (context.request as Request & { cf?: Record<string, unknown> }).cf;
 
   // ─── DEV-ONLY: geo override via request headers ──────────────────────────

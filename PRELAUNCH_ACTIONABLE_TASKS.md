@@ -145,9 +145,19 @@ if (kv) {
    - **Verification Evidence:** Ran `npm run build` and inspected `dist/client/legal/impressum/index.html`. Confirmed the full registered street address renders directly in the "Registered Address" section, satisfying German TMG § 5 and EU corporate transparency mandates.
 
 6. **Add Cloudflare 301 Redirect Rule for `www.quranific.com` -> `quranific.com`**
-   - **Defect:** `https://www.quranific.com/` returns `200 OK` directly rather than a 301 redirect to apex.
-   - **Impact:** While canonical tags exist, serving 200 on both domains risks splitting link authority and crawler budget across hostnames.
-   - **Fix Required:** Configure Cloudflare Single Redirect rule (301 Permanent Redirect) from `www.quranific.com/*` to `https://quranific.com/$1`.
+   - **Status:** **[FIXED & VERIFIED LIVE]**
+   - **Fix Summary:** Configured `run_worker_first = true` under `[assets]` in `wrangler.toml` and added edge entrypoint redirection in `astro.config.mjs` (transforming Cloudflare Worker `handle()` via a Vite build plugin) with secondary protection in `src/middleware.ts`. All incoming requests for `www.quranific.com` are intercepted at the Cloudflare edge before static asset resolution and permanently redirected (HTTP 301) to `https://quranific.com` with `Cache-Control: no-store` and `CDN-Cache-Control: no-store` to prevent cache bleed.
+   - **Live Empirical Verification Drill (Passed Live on Worker vf858c912):**
+     1. **Root Redirect:** `curl.exe -s -i https://www.quranific.com/`
+        - Response: `HTTP/1.1 301 Moved Permanently`
+        - `Location: https://quranific.com/`
+        - `CF-Cache-Status: BYPASS`
+     2. **Subpath Redirect:** `curl.exe -s -i https://www.quranific.com/courses`
+        - Response: `HTTP/1.1 301 Moved Permanently` -> `Location: https://quranific.com/courses`
+     3. **Query Preservation:** `curl.exe -s -i "https://www.quranific.com/tuition-fee?ref=test"`
+        - Response: `HTTP/1.1 301 Moved Permanently` -> `Location: https://quranific.com/tuition-fee?ref=test`
+     4. **Apex Domain Direct Serving:** `curl.exe -s -i https://quranific.com/`
+        - Response: `HTTP/1.1 200 OK` (no redirect loop).
 
 7. **Add Parent/Guardian Declaration to Student Signup (`src/lib/schema.ts` & `SignupForm.svelte`)**
    - **Defect:** No parental consent confirmation checkbox or declaration in Step 1.

@@ -4,6 +4,7 @@ compatibility_flags = ["nodejs_compat"]
 
 [assets]
 directory = "dist"
+run_worker_first = true
 
 # Mandate 1 & 8: Dynamic global edge execution routing
 [placement]
