@@ -182,8 +182,9 @@ if (kv) {
 ## P2 — Post-Launch / Quality Refinements (Non-Blocking)
 
 9. **Fix Eslint Configuration for Root Utility Scripts (`eslint.config.mjs`)**
-   - **Defect:** Root scripts `dead_code.cjs` and `link_check.cjs` trigger 7 lint errors (`@typescript-eslint/no-require-imports`, `no-useless-assignment`). `src/` has 0 errors.
-   - **Fix Required:** Add ignore or cjs overrides for `*.cjs` in `eslint.config.mjs`.
+   - **Status:** **[FIXED & VERIFIED]**
+   - **Fix Summary:** Configured flat ESLint override in `eslint.config.mjs` for `['*.cjs', '**/*.cjs']` to allow CommonJS `require()` imports (`@typescript-eslint/no-require-imports: 'off'`). Cleaned up unused variable assignments in `dead_code.cjs` and `link_check.cjs`.
+   - **Verification Evidence:** `npm run lint` (`eslint .`) exits 0 with 0 errors and 0 warnings. Utility scripts `node dead_code.cjs` and `node link_check.cjs` execute cleanly.
 
 10. **Fix Playwright Test 15 Flakiness (`tests/consent.spec.ts`)**
     - **Defect:** Test 15 clicks the "Accept All" button before waiting for `toBeEnabled()`, causing occasional failures if Svelte hydration is still finalizing.

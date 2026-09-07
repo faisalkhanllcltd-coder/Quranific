@@ -31,12 +31,10 @@ function traceImports(content, currentFile) {
   while ((match = importRegex.exec(content)) !== null) {
     let importPath = match[1];
     if (importPath.startsWith('.') || importPath.startsWith('~/') || importPath.startsWith('@/')) {
-        let resolvedPath = '';
-        if (importPath.startsWith('~/') || importPath.startsWith('@/')) {
-            resolvedPath = path.join(srcDir, importPath.replace(/^~\/|^@\//, ''));
-        } else {
-            resolvedPath = path.join(path.dirname(currentFile), importPath);
-        }
+        const resolvedPath =
+            importPath.startsWith('~/') || importPath.startsWith('@/')
+                ? path.join(srcDir, importPath.replace(/^~\/|^@\//, ''))
+                : path.join(path.dirname(currentFile), importPath);
         
         // try to find the exact file
         const exts = ['', '.astro', '.svelte', '.ts', '.tsx', '/index.astro', '/index.ts'];

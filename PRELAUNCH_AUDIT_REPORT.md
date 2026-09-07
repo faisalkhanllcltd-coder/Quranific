@@ -117,7 +117,7 @@ A critical disconnect previously existed between the Dead-Letter Queue (DLQ) pro
 
 - [x] **`npm run check` (Astro Check):** PASSED. 131 files analyzed, 0 errors, 0 warnings, 15 hints.
 - [x] **`npm run typecheck` (`tsc --noEmit`):** PASSED with code 0.
-- [ ] **`npm run lint` (`eslint .`):** FAILED (7 errors in root scripts `dead_code.cjs` and `link_check.cjs` due to `@typescript-eslint/no-require-imports` and `no-useless-assignment`). `src/` has 0 errors.
+- [x] **`npm run lint` (`eslint .`):** PASSED with 0 errors and 0 warnings. Flat ESLint override configured in `eslint.config.mjs` for `['*.cjs', '**/*.cjs']` allowing CommonJS `require()` imports, and unused variable assignments cleaned up.
 - [x] **Dead-code scanner:** `node dead_code.cjs` flagged `src/content.config.ts`, which is a false positive (Astro 5 Content Layer convention).
 - [x] **Link checker:** `node link_check.cjs` reported 0 broken links and 0 dead components.
 
