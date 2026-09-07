@@ -170,9 +170,12 @@ if (kv) {
         - Response: Schema validation passed; execution safely advanced to Turnstile token verification: `HTTP/1.1 400 Bad Request` -> `{"error":"Security check failed. Please refresh and try again."}`.
 
 8. **Update Dependency Vulnerabilities (`npm audit`)**
-   - **Defect:** 9 vulnerabilities reported by `npm audit` (3 high, 5 moderate, 1 low), including `svelte <= 5.55.6` XSS/DOM clobbering advisory and `fast-uri` / `brace-expansion` DoS advisories.
-   - **Impact:** Security hygiene and automated security scanner flags.
-   - **Fix Required:** Run `npm audit fix` and verify tests.
+   - **Status:** **[FIXED & VERIFIED]**
+   - **Fix Summary:** Ran non-breaking `npm audit fix`, resolving all 9 vulnerabilities (3 high, 5 moderate, 1 low) through compatible semver upgrades: updated `svelte` from `5.55.5` to `5.57.0` (fixing SSR XSS and DOM clobbering advisories), `brace-expansion` to `5.0.9`, `fast-uri` to `3.1.7`, `postcss-selector-parser` to `7.1.6`, `svgo` to `4.1.0`, `yaml` to `2.8.3`, and `@astrojs/language-server` to `2.16.16`.
+   - **Verification Evidence:**
+     1. `npm audit`: Output: `found 0 vulnerabilities`.
+     2. `npm run check`: Diagnosed 131 files -> 0 errors, 0 warnings.
+     3. `npm run build`: All 33 static pages prerendered successfully in 42.71s with zero regressions.
 
 ---
 

@@ -70,7 +70,7 @@ A critical disconnect previously existed between the Dead-Letter Queue (DLQ) pro
 4. **[FIXED & VERIFIED]** Impressum Statutory Street Address: Updated `SITE.address` in `src/constants/site.ts` to provide the complete street address (`House No 1 KR-2 Area, Gulshan Askari, Quaidabad Malir, Bin Qasim Town, Karachi 75120, Pakistan`). Verified HTML output in `dist/client/legal/impressum/index.html`.
 5. **[FIXED & VERIFIED LIVE]** `www.quranific.com` -> `quranific.com` 301 Permanent Redirect: Intercepted at Cloudflare worker edge entrypoint before asset resolution with `run_worker_first = true` and `Cache-Control: no-store`. Confirmed live: `curl.exe -s -i https://www.quranific.com/` returns `HTTP/1.1 301 Moved Permanently` to `https://quranific.com/`, subpaths and query parameters are preserved, and apex serves `200 OK`.
 6. **[FIXED & VERIFIED LIVE]** Minor Student Registration Parent/Guardian Declaration: Added strict Zod schema validation and a required checkbox with COPPA / UK Children's Code / GDPR-K microcopy to `SignupForm.svelte` and `schema.ts`. Tested live: rejected registration without consent with HTTP 400 ("Parent or guardian confirmation is required to register."), while passing valid consent through to the security gate.
-7. 9 dependency vulnerabilities flagged by `npm audit` (including Svelte <= 5.55.6).
+7. **[FIXED & VERIFIED]** Dependency Vulnerabilities: Ran non-breaking `npm audit fix`, resolving all 9 vulnerabilities (including `svelte` upgrade to 5.57.0, `brace-expansion`, `fast-uri`, `svgo`). `npm audit` now reports 0 vulnerabilities; `npm run check` (0 errors) and `npm run build` (0 regressions) verified.
 
 ---
 
@@ -125,13 +125,14 @@ A critical disconnect previously existed between the Dead-Letter Queue (DLQ) pro
 
 ## 4. Dependency / Supply-Chain Audit
 
-- [ ] **`npm audit` results:** 9 vulnerabilities found (1 low, 5 moderate, 3 high):
-  - `brace-expansion` (high) — DoS via unbounded arrays
-  - `fast-uri` (high) — host confusion / SSRF vulnerabilities
-  - `svelte` <= 5.55.6 (moderate) — XSS via spread attributes and DOM clobbering
-  - `svgo` (high) — script execution in SVGO
-  - `yaml` (moderate) — stack overflow in language server
-  - _Fix available via `npm audit fix`._
+- [x] **`npm audit` results:** **PASS (0 vulnerabilities).** All 9 vulnerabilities previously flagged (1 low, 5 moderate, 3 high) resolved via non-breaking `npm audit fix`:
+  - `svelte` upgraded to 5.57.0 (mitigating SSR XSS and DOM clobbering CVEs).
+  - `brace-expansion` upgraded to 5.0.9 (mitigating DoS via unbounded arrays).
+  - `fast-uri` upgraded to 3.1.7 (mitigating host confusion and SSRF).
+  - `svgo` upgraded to 4.1.0 (mitigating script execution in SVGO plugin).
+  - `postcss-selector-parser` upgraded to 7.1.6.
+  - `yaml` upgraded to 2.8.3 and `@astrojs/language-server` to 2.16.16.
+  - Verified: `npm audit` reports `found 0 vulnerabilities`. Full build and typecheck verified.
 - [x] **Lockfile committed:** `package-lock.json` present and reproducible.
 
 ---
