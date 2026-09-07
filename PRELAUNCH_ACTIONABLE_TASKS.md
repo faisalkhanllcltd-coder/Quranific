@@ -201,5 +201,9 @@ if (kv) {
     - **Verification Evidence:** Added Gate 7 Playwright E2E test `Escape key closes preferences and focus is trapped inside dialog`. Verified live via Playwright: initial focus enters the dialog, pressing Escape cleanly closes the preferences panel, and focus containment holds (Test passed in 2.2s; all 17 suite tests passing).
 
 12. **Purge Unused Font Subsets (Cyrillic, Vietnamese, Greek)**
-    - **Defect:** Font packages bundle unused Cyrillic/Vietnamese font files in `dist/client/_astro/`.
-    - **Fix Required:** Prune unused font imports from `@fontsource/merriweather` and `@fontsource-variable/inter` to optimize bundle payload.
+    - **Status:** **[FIXED & VERIFIED]**
+    - **Fix Summary:** In `src/styles/fonts.css`, scoped `@font-face` definitions for `Inter Variable` to Latin and Latin-Ext subsets only, replacing the omnibus import in `src/layouts/Base.astro`. Replaced omnibus Merriweather imports with subset-specific imports (`@fontsource/merriweather/latin-400.css`, `latin-700.css`, `latin-900.css`) and Amiri (`arabic-400.css`, `arabic-700.css`, `latin-400.css`, `latin-700.css`).
+    - **Verification Evidence:** Built production bundle (`npm run build`) and inspected `dist/client/_astro/*.woff2`:
+      - Total font files dropped from 28 down to exactly 9 (only Latin and Arabic subsets).
+      - Cyrillic, Greek, and Vietnamese font files completely eliminated (0 instances).
+      - Over 270 KB of unused font asset payload pruned from build output.

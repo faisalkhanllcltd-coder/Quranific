@@ -5,13 +5,16 @@ import { ClientRouter } from 'astro:transitions';
 import { SITE } from '../constants/site';
 import CookieBanner from '../components/blocks/CookieBanner.svelte';
 
-/* THE ELITE 3-FONT SYSTEM (Self-Hosted, Zero Latency) */
-import '@fontsource-variable/inter';
-import '@fontsource/merriweather/400.css';
-import '@fontsource/merriweather/700.css';
-import '@fontsource/merriweather/900.css';
-import '@fontsource/amiri/400.css';
-import '@fontsource/amiri/700.css';
+/* THE ELITE 3-FONT SYSTEM (Self-Hosted, Latin-Only Subsets, Zero Unused Payload)
+   Inter Variable Latin is scoped in fonts.css. Merriweather & Amiri Latin/Arabic are scoped below.
+*/
+import '@fontsource/merriweather/latin-400.css';
+import '@fontsource/merriweather/latin-700.css';
+import '@fontsource/merriweather/latin-900.css';
+import '@fontsource/amiri/arabic-400.css';
+import '@fontsource/amiri/arabic-700.css';
+import '@fontsource/amiri/latin-400.css';
+import '@fontsource/amiri/latin-700.css';
 
 /* Vite ?url imports: Resolves content-hashed public paths at build time.
    Preloading these eliminates FOUT/CLS.

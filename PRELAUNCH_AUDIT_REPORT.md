@@ -172,7 +172,7 @@ A critical disconnect previously existed between the Dead-Letter Queue (DLQ) pro
   - `StepIndicator`: 2.28 KB
   - Svelte runtime chunk: 48.27 KB
 - [x] **Total Compiled CSS:** `EyebrowText.syTfifx1.css` is 138.97 KB uncompressed (~24 KB gzipped).
-- [ ] **Unused font subsets:** Bundles include Cyrillic, Vietnamese, and Greek subsets of Merriweather and Inter. Can be pruned to optimize bundle weight.
+- [x] **Unused font subsets:** **PRUNED & VERIFIED.** Replaced omnibus font package imports with scoped Latin/Arabic subsets in `src/styles/fonts.css` and `src/layouts/Base.astro`. Pruned 19 unused Cyrillic, Greek, and Vietnamese woff2 font files, reducing font assets in `dist/client/_astro/` from 28 down to 9 files (~270 KB saved).
 
 ---
 
