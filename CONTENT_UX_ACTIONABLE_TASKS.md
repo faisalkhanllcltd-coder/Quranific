@@ -42,9 +42,10 @@
 - **Original Item:** Item 28
 - **Impact:** User conversion on mobile networks, Google mobile-first ranking.
 - **Concrete Actions:**
-  1. **Self-Host Google Fonts:** Install `@fontsource/inter` and download subsetted WOFF2 files for the Quranic/Arabic serif font (`Amiri`). Remove external render-blocking stylesheets from `fonts.googleapis.com` in [`src/layouts/Base.astro`](file:///d:/Live%20Web/Quranific-live/src/layouts/Base.astro).
-  2. **Preload Critical Font Files:** Add `<link rel="preload" href="/fonts/inter-latin-400.woff2" as="font" type="font/woff2" crossorigin>` in `<head>`.
-  3. **Shave 600ms off Slow 4G FCP/LCP:** Re-run CDP throttling tests until Slow 4G LCP drops into the green zone (<2.5s).
+  1. **Fonts are already self-hosted — no action needed here.** `@fontsource-variable/inter`, `@fontsource/merriweather`, and `@fontsource/amiri` are imported as npm packages with WOFF2 preload links in `Base.astro`. The Flash agent's original finding here was incorrect.
+  2. **Enable Cloudflare Tiered Cache:** The 1.3s TTFB under Slow 4G is the dominant bottleneck. Enabling [Tiered Cache](https://developers.cloudflare.com/cache/how-to/tiered-cache/) in the Cloudflare dashboard reduces origin roundtrips for repeat visitors and reduces TTFB on cache-hits by 200–400ms.
+  3. **Reduce `run_worker_first` scope (ties to TASK-22-46):** Static assets currently invoke the Worker V8 isolate. Offloading static-asset routing to Cloudflare's asset binding directly reduces per-request overhead and improves LCP on cached pages.
+  4. Re-run CDP throttling tests after each change until Slow 4G LCP is consistently below 2.5s.
 
 ### [TASK-36] Visual & Brand Consistency Alignment
 
@@ -62,22 +63,14 @@
 ### [TASK-01] Centralized FAQ Single Source of Truth
 
 - **Original Item:** Item 1
-- **Files:** Create `src/data/faqs.ts`, update [`src/pages/faq/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/faq/index.astro), [`src/components/blocks/CoursesFAQ.astro`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/CoursesFAQ.astro), [`src/components/blocks/FAQAccordion.astro`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/FAQAccordion.astro).
+- **Files:** [`src/data/faqs.ts`](file:///d:/Live%20Web/Quranific-live/src/data/faqs.ts) (EXISTS — consolidate, do not create), update [`src/pages/faq/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/faq/index.astro), [`src/components/blocks/CoursesFAQ.astro`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/CoursesFAQ.astro), [`src/components/blocks/FAQAccordion.astro`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/FAQAccordion.astro).
 - **Concrete Actions:**
-  1. Define a strongly-typed FAQ model:
-     ```ts
-     export interface FAQItem {
-       id: string;
-       question: string;
-       answer: string;
-       category: 'general' | 'pricing' | 'courses' | 'teachers' | 'kids' | 'adults' | 'women';
-       courseSlug?: string;
-     }
-     ```
-  2. Populate page-specific sets for `/tuition-fee`, `/quran-classes/for-kids`, `/for-adults`, `/for-women`, and individual course slugs.
-  3. Wire the "Teachers" tab on `/faq` to render relevant teacher vetting and qualification Q&A.
-  4. Fix the inaccurate FAQ answer claiming USD-only billing to reflect the 8 geo-currencies.
-  5. Delete redundant hardcoded FAQ arrays from components.
+  1. Audit what's already in `src/data/faqs.ts` — confirm its TypeScript model, then expand to cover all required categories (`'general' | 'pricing' | 'courses' | 'teachers' | 'kids' | 'adults' | 'women'`) with an optional `courseSlug?` field.
+  2. Pull in and normalize FAQ items currently hardcoded in `src/constants/courses.ts`, `src/pages/contact/_components/ContactFaq.astro`, and any `.astro` templates.
+  3. Populate page-specific sets for `/tuition-fee`, `/quran-classes/for-kids`, `/for-adults`, `/for-women`, and individual course slugs.
+  4. Wire the "Teachers" tab on `/faq` to render relevant teacher vetting and qualification Q&A.
+  5. Fix the inaccurate FAQ answer claiming USD-only billing to reflect the 8 geo-currencies.
+  6. Delete redundant hardcoded FAQ arrays from components once consolidated.
 
 ### [TASK-02] Testimonials Data Consolidation & Consent Verification
 
@@ -269,9 +262,10 @@
 ### [TASK-49] Alarm Worker Periodic Health Verification
 
 - **Original Item:** Item 49
-- **Files:** [`workers/alarm-worker.js`](file:///d:/Live%20Web/Quranific-live/workers/alarm-worker.js).
+- **Files:** [`alarm-worker/src/index.ts`](file:///d:/Live%20Web/Quranific-live/alarm-worker/src/index.ts) (correct path — `workers/alarm-worker.js` does not exist).
 - **Concrete Actions:**
-  1. Maintain cron schedule `*/10 * * * *` and monitor DLQ buffer recovery.
+  1. Maintain cron schedule `0 * * * *` (hourly — **not** `*/10 * * * *` as the Flash agent incorrectly stated) and monitor DLQ buffer recovery via Cloudflare dashboard Observability (now enabled).
+  2. To manually verify health: `POST https://quranific-alarm.faisalkhan-llc-ltd.workers.dev/force-run` → expect HTTP 202 `"Manual alarm trigger initiated."` then check `retry-queue` response `{success:true, recovered:0, failed:0}`.
 
 ---
 
@@ -345,10 +339,18 @@
 - **Original Item:** Item 31
 - **Action:** Audit client-side JS bundles to ensure zero unneeded dependencies are shipped.
 
-### [TASK-38-42] Code Cleanliness & Layout Standardization
+### [TASK-38] TypeScript Type Unification
 
-- **Original Items:** Item 38 & Item 42
-- **Action:** Clean up shared TypeScript types in `src/types/` and standardize grid container widths.
+- **Original Item:** Item 38
+- **Action:** Migrate inline interface declarations from individual `.astro`/`.svelte` files into a shared `src/types/` directory. As Tier 2 data files (`team.ts`, `faqs.ts`, `features.ts`) are built out, their exported interfaces must live in `src/types/` and be imported by both data files and consuming templates — not redefined inline per component.
+
+### [TASK-42] Font, Layout, and Sizing Consistency
+
+- **Original Item:** Item 42
+- **Concrete Actions:**
+  1. **Funnel heading font:** Add Merriweather to `Funnel.astro` headings (`h1`, `h2`) to match the marketing page visual hierarchy. Currently the funnel uses Inter-only, creating a visual discontinuity at the critical signup step.
+  2. **Step indicator circles:** Reduce from `w-10 h-10` to `w-8 h-8` and thin the ring from `ring-4` to `ring-2` — consistent with TASK-18 finding. One change fixes both issues.
+  3. **Container widths:** Confirm `max-w-7xl` (marketing) and `max-w-5xl` (course/intent inner) remain consistent after any template refactoring in the fix round.
 
 ### [TASK-44] AI Tone & Watermark Removal
 
@@ -362,7 +364,10 @@
 ### [TASK-16] Legal Documentation Alignment
 
 - **Original Item:** Item 16
-- **Action:** Update Privacy, Terms, and Refund policies to reflect multi-currency geo-pricing and the Full-Month Guarantee.
+- **Concrete Actions:**
+  1. Update `/legal/terms` and `/legal/refund` to reflect multi-currency geo-pricing (change any hardcoded "USD" billing references to "your local currency as detected at signup time").
+  2. Verify `/legal/impressum` for accuracy: company registered name, physical address, VAT/company registration number — especially required for any visitors from DE/AT/CH where the Impressum is legally mandatory.
+  3. Confirm all legal pages reflect the current Full-Month Guarantee terms (30-day scope, conditions, exclusions).
 
 ### [TASK-32] Full End-to-End Verification Test Loop
 
