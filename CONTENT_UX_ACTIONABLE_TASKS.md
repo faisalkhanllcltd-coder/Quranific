@@ -1,0 +1,398 @@
+# Content, UX & Growth Actionable Tasks Ledger
+
+**Project:** Quranific (`https://quranific.com`)  
+**Branch:** `staging/content-ux-audit`  
+**Purpose:** Flat, prioritized, engineering-ready task ledger to guide the subsequent fix round.  
+**Execution Order:** Prioritized with Tier 1 (Owner's Top Priorities) first, followed by sequential tiers and senior-dev architectural requirements. Every single item maintains its original canonical ID (Items 1 through 50) with zero renumbering or drops.
+
+---
+
+## 1. Top Priority Execution Tasks (Tier 1)
+
+### [TASK-22-46] Cloudflare Worker & Pages Best-Practices Refactoring
+
+- **Original Items:** Item 22 & Item 46
+- **Impact:** Performance, compute cost optimization, deployment integrity.
+- **Concrete Actions:**
+  1. **Fix npm Deploy Script:** In [`package.json`](file:///d:/Live%20Web/Quranific-live/package.json#L12), change `"deploy": "wrangler pages deploy ./dist"` to `"deploy": "wrangler deploy"`.
+  2. **Optimize Static Asset Routing:** In [`wrangler.toml`](file:///d:/Live%20Web/Quranific-live/wrangler.toml), evaluate toggling `run_worker_first = false`. Move apex-to-www canonical redirects from the Worker isolate to Cloudflare Dashboard Bulk Redirect Rules so that all static assets (`/_astro/*`, images, fonts) are served directly from Cloudflare Global Cache without spinning up V8 compute isolates.
+  3. **Verify KV Cache Policies:** Ensure session lookup headers in [`src/pages/api/complete.ts`](file:///d:/Live%20Web/Quranific-live/src/pages/api/complete.ts) and [`src/pages/getting-started/success.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/success.astro) strictly enforce `Cache-Control: private, no-store`.
+
+### [TASK-24] Technical & On-Page SEO Overhaul
+
+- **Original Item:** Item 24
+- **Impact:** Search ranking visibility, rich snippets, structured search results.
+- **Concrete Actions:**
+  1. **Add FAQPage Schema to Course & Tuition Pages:** Create a schema helper `generateFaqSchema(faqs)` that emits valid `FAQPage` JSON-LD on [`src/pages/courses/[slug].astro`](file:///d:/Live%20Web/Quranific-live/src/pages/courses/[slug].astro) and [`src/pages/tuition-fee/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/tuition-fee/index.astro).
+  2. **Add Review & AggregateRating Schema:** In [`src/pages/testimonials/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/testimonials/index.astro) and [`src/layouts/Base.astro`](file:///d:/Live%20Web/Quranific-live/src/layouts/Base.astro), implement `Review` schema tied to `Quranific` organization with rating values.
+  3. **Teacher Person Schema:** Emit `Person` schema for faculty members with `hasCredential` and `jobTitle` on [`src/pages/teachers/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/teachers/index.astro).
+  4. **Image Alt Audit:** Ensure all decorative background SVGs have `aria-hidden="true"`, and all course illustrations have descriptive, keyword-rich alt tags.
+
+### [TASK-25] AI / LLM Crawler Content Architecture & llms.txt Update
+
+- **Original Item:** Item 25
+- **Impact:** AI answer engine citation (SearchGPT, Claude, Perplexity, Copilot).
+- **Concrete Actions:**
+  1. **Update `llms.txt` & `llms-full.txt`:** In [`src/pages/llms.txt.ts`](file:///d:/Live%20Web/Quranific-live/src/pages/llms.txt.ts) and [`public/llms.txt`](file:///d:/Live%20Web/Quranific-live/public/llms.txt), replace obsolete static USD pricing with the comprehensive 8-currency localized purchasing-power model (USD, GBP, EUR, CAD, AUD, AED, SAR, SGD).
+  2. **Structured Q&A Plaintext Format:** Structure key academy data in markdown definition lists (`Q: ... A: ...`) so LLM crawlers can cleanly extract facts without parsing complex DOM structures.
+  3. **Maintain robots.txt Directives:** Verify `robots.txt` continues allowing `GPTBot`, `ClaudeBot`, `PerplexityBot`, and `Applebot-Extended`.
+
+### [TASK-28] Core Web Vitals Optimization (100% Green on Slow 4G)
+
+- **Original Item:** Item 28
+- **Impact:** User conversion on mobile networks, Google mobile-first ranking.
+- **Concrete Actions:**
+  1. **Self-Host Google Fonts:** Install `@fontsource/inter` and download subsetted WOFF2 files for the Quranic/Arabic serif font (`Amiri`). Remove external render-blocking stylesheets from `fonts.googleapis.com` in [`src/layouts/Base.astro`](file:///d:/Live%20Web/Quranific-live/src/layouts/Base.astro).
+  2. **Preload Critical Font Files:** Add `<link rel="preload" href="/fonts/inter-latin-400.woff2" as="font" type="font/woff2" crossorigin>` in `<head>`.
+  3. **Shave 600ms off Slow 4G FCP/LCP:** Re-run CDP throttling tests until Slow 4G LCP drops into the green zone (<2.5s).
+
+### [TASK-36] Visual & Brand Consistency Alignment
+
+- **Original Item:** Item 36
+- **Impact:** Trust, brand prestige, visual harmony.
+- **Concrete Actions:**
+  1. **Harmonize Funnel UI:** Adjust [`src/layouts/Funnel.astro`](file:///d:/Live%20Web/Quranific-live/src/layouts/Funnel.astro) to incorporate subtle emerald tint accents (`bg-[#fbfcfb]`), matching the warm spiritual aesthetic of the landing pages.
+  2. **Standardize Badge & Chip Styles:** Align pill badges and tag chips across course cards, homepage features, and pricing grids to use consistent font sizes, padding (`px-3 py-1 text-xs`), and border radii (`rounded-full`).
+  3. **Tone of Voice Review:** Replace mechanical sales copy in course descriptions with warm, respectful, parent-centered language.
+
+---
+
+## 2. Content Data Architecture (Tier 2)
+
+### [TASK-01] Centralized FAQ Single Source of Truth
+
+- **Original Item:** Item 1
+- **Files:** Create `src/data/faqs.ts`, update [`src/pages/faq/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/faq/index.astro), [`src/components/blocks/CoursesFAQ.astro`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/CoursesFAQ.astro), [`src/components/blocks/FAQAccordion.astro`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/FAQAccordion.astro).
+- **Concrete Actions:**
+  1. Define a strongly-typed FAQ model:
+     ```ts
+     export interface FAQItem {
+       id: string;
+       question: string;
+       answer: string;
+       category: 'general' | 'pricing' | 'courses' | 'teachers' | 'kids' | 'adults' | 'women';
+       courseSlug?: string;
+     }
+     ```
+  2. Populate page-specific sets for `/tuition-fee`, `/quran-classes/for-kids`, `/for-adults`, `/for-women`, and individual course slugs.
+  3. Wire the "Teachers" tab on `/faq` to render relevant teacher vetting and qualification Q&A.
+  4. Fix the inaccurate FAQ answer claiming USD-only billing to reflect the 8 geo-currencies.
+  5. Delete redundant hardcoded FAQ arrays from components.
+
+### [TASK-02] Testimonials Data Consolidation & Consent Verification
+
+- **Original Item:** Item 2
+- **Files:** Unify into `src/data/testimonials.ts`, update [`src/pages/testimonials/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/testimonials/index.astro), [`src/constants/testimonials.ts`](file:///d:/Live%20Web/Quranific-live/src/constants/testimonials.ts).
+- **Concrete Actions:**
+  1. **VERIFICATION GATEWAY:** Confirm consent has been formally obtained from the 3 real customers:
+     - **Amna** (Germany, student for 14 months)
+     - **Saleem Al Mustarshid** (UAE, student for 8 months)
+     - **Naseerullah Babar** (UK, student for 11 months)
+  2. Structure the dataset to hold up to 6 total testimonials (3 real verified parents + 3 vetted case studies).
+  3. Delete duplicate testimonial definitions in `src/data/testimonials.ts` and hardcoded arrays in `for-women.astro`.
+
+### [TASK-03-11] Teachers & Leadership Team Unified Architecture
+
+- **Original Items:** Item 3 & Item 11
+- **Files:** Create `src/data/team.ts`, update [`src/pages/about/_components/AboutTeam.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/about/_components/AboutTeam.astro), [`src/pages/about/_components/AboutTeachers.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/about/_components/AboutTeachers.astro), [`src/pages/teachers/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/teachers/index.astro).
+- **Concrete Actions:**
+  1. Build unified model in `src/data/team.ts`:
+     ```ts
+     export interface TeamMember {
+       id: string;
+       name: string;
+       role: string;
+       category: 'leadership' | 'faculty' | 'admin';
+       credentials: string[];
+       bio: string;
+       avatarUrl: string;
+       languages: string[];
+     }
+     ```
+  2. Register the owner's exact required team roster:
+     - **Faisal Khan:** Owner / CEO (Leadership)
+     - **Imranullah:** Admin / Operations (Admin & Operations)
+     - **Hakeem Sadi:** Head Teacher (Leadership & Faculty)
+     - **Haseeb ul Hasan:** Tajweed & Hifz Tutor (Faculty)
+     - **Fatima S.:** Female Quran & Islamic Studies Tutor (Faculty)
+     - **Abdul Hanan:** Qaida & Recitation Tutor (Faculty)
+  3. Eradicate dummy placeholder names (Fatima K., Muhammad A., Bilal A., Aisha R., Omar T.) across the repository.
+
+### [TASK-04] Long-Form Unique Academy Blog Article
+
+- **Original Item:** Item 4
+- **Files:** `src/content/blog/the-quranific-method.md`, update [`src/pages/blog/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/blog/index.astro).
+- **Concrete Actions:**
+  1. Author a comprehensive, 1,500+ word cornerstone article detailing the academy's unique pedagogical framework (gentle teaching methods, retention psychology for kids, 1-on-1 personalized pacing).
+  2. **Image Rule:** Zero images (clean, elegant typography only).
+  3. 100% humanized, thoughtful tone without AI clichés.
+  4. Fully optimized for AI answer extraction and SEO with schema markup.
+
+### [TASK-05] Courses Data Cleansing & Normalization
+
+- **Original Item:** Item 5
+- **Files:** Update [`src/constants/courses.ts`](file:///d:/Live%20Web/Quranific-live/src/constants/courses.ts) or migrate to `src/data/courses.ts`.
+- **Concrete Actions:**
+  1. Strip all hardcoded `pricing: { perMonth: ... }` blocks from course definitions.
+  2. Ensure syllabus outlines, age suitability, and prerequisites match actual academy teaching practices.
+
+### [TASK-06] Fee Data Verification
+
+- **Original Item:** Item 6
+- **Files:** [`src/constants/pricing.ts`](file:///d:/Live%20Web/Quranific-live/src/constants/pricing.ts).
+- **Concrete Actions:**
+  1. Re-verify `pricing.ts` is the single source of truth for all pricing calculations.
+  2. Confirm base fee of $40/month (or regional equivalent) for starter plans across all currencies.
+
+### [TASK-07] Centralized Features Data Architecture
+
+- **Original Item:** Item 7
+- **Files:** Create `src/data/features.ts`, update [`src/pages/tuition-fee/_components/WhatsIncluded.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/tuition-fee/_components/WhatsIncluded.astro), [`src/pages/tuition-fee/_components/TuitionPlans.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/tuition-fee/_components/TuitionPlans.astro).
+- **Concrete Actions:**
+  1. Centralize all feature arrays into `src/data/features.ts`.
+  2. Import typed feature lists into their respective pages with zero copy duplication.
+
+---
+
+## 3. Calculator & Pricing UX (Tier 3)
+
+### [TASK-08] Pricing Calculator Edge UX Redesign
+
+- **Original Item:** Item 8
+- **Files:** [`src/components/blocks/PricingCalculator.svelte`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/PricingCalculator.svelte).
+- **Concrete Actions:**
+  1. **Shorten Course Titles:** Trim course `<select>` option labels to just the clean title (e.g. "Quran Memorization (Hifz)"), removing wordy descriptions.
+  2. **Remove Currency Box:** Delete the static Currency box from Row 1 entirely.
+  3. **Full Country & Currency in Summary:** In the calculator result box, render the complete country and currency name (e.g. _"USA (USD $)"_, _"Singapore (SGD S$)"_, _"Saudi Arabia (SAR)"_) using a complete country name lookup.
+  4. **Responsive 30/70 Layout:**
+     - Desktop (`md:`): Place Course selector (~30% width) and Session Length selector (~70% width) side-by-side on a single row.
+     - Mobile: Stack Course selector and Session Length selector vertically at full width.
+
+### [TASK-10] Tuition Page Currency Box Removal
+
+- **Original Item:** Item 10
+- **Files:** [`src/pages/tuition-fee/_components/PricingGrid.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/tuition-fee/_components/PricingGrid.svelte).
+- **Concrete Actions:**
+  1. Remove the static "Currency" bubble from lines 86–100.
+  2. Move the full currency/country context note into the pricing header or plan cards.
+
+### [TASK-48] Dynamic Geo-Pricing Edge Logic Verification
+
+- **Original Item:** Item 48
+- **Files:** [`src/pages/api/geo-currency.ts`](file:///d:/Live%20Web/Quranific-live/src/pages/api/geo-currency.ts), [`src/constants/pricing.ts`](file:///d:/Live%20Web/Quranific-live/src/constants/pricing.ts).
+- **Concrete Actions:**
+  1. Ensure changes in Tasks 8 and 10 maintain full reactive compatibility with `/api/geo-currency`.
+  2. Run automated unit tests verifying that all 8 currencies resolve accurately under Cloudflare edge headers.
+
+---
+
+## 4. Funnel & Page-Specific UX (Tier 4)
+
+### [TASK-14] Portals Page Redirect & NXDOMAIN Fix
+
+- **Original Item:** Item 14
+- **Files:** [`src/pages/portals/_components/PortalsGrid.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/portals/_components/PortalsGrid.astro), [`src/pages/portals/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/portals/index.astro).
+- **Concrete Actions:**
+  1. **Fix Broken Subdomain Links:** Replace dead `https://app.quranific.com/login` links with a helpful modal or redirect notice explaining the student/teacher portal access procedure.
+  2. **Account Routing:** If an unregistered visitor lands on `/portals`, provide prominent, unmistakable buttons routing students to `/getting-started/signup` and teachers to `/teachers/apply`.
+
+### [TASK-15] Funnel Progression & Conversion Tracking
+
+- **Original Item:** Item 15
+- **Files:** [`src/pages/getting-started/signup.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/signup.astro), [`src/pages/getting-started/complete.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/complete.astro), [`src/pages/getting-started/success.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/success.astro).
+- **Concrete Actions:**
+  1. Emit standard GTM/GA4 events at each funnel step:
+     - Step 1 mount / submit: `dataLayer.push({ event: 'begin_checkout', ... })`
+     - Step 2 submit: `dataLayer.push({ event: 'add_shipping_info', ... })`
+     - Step 3 mount: `dataLayer.push({ event: 'generate_lead', lead_id: ... })`
+  2. Preserve UTM and campaign attribution through the entire funnel into the final CRM payload.
+
+### [TASK-18] Signup Step 1 UI/UX Refinement
+
+- **Original Item:** Item 18
+- **Files:** [`src/pages/getting-started/_components/StepIndicator.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/StepIndicator.svelte), [`src/pages/getting-started/signup.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/signup.astro).
+- **Concrete Actions:**
+  1. Reduce step circle dimensions from `w-10 h-10` to `w-8 h-8` and reduce border/ring visual weight.
+  2. Fine-tune desktop testimonial sidebar so it does not distract from the primary form fields.
+
+### [TASK-19] Complete (Step 2) Form UI & Step 3 Clarity
+
+- **Original Item:** Item 19
+- **Files:** [`src/pages/getting-started/_components/CompleteForm.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/CompleteForm.svelte), [`src/pages/getting-started/_components/StepIndicator.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/StepIndicator.svelte).
+- **Concrete Actions:**
+  1. Change default teacher gender preference from `'Male Teacher'` to `'No Preference'`.
+  2. Rename Step 3 label in `StepIndicator.svelte` from "Verify" to "Confirmed" or "Complete".
+
+### [TASK-20] Intent Pages 404 Route Fix
+
+- **Original Item:** Item 20
+- **Files:** [`src/pages/for-kids.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/for-kids.astro) (new), [`src/pages/for-adults.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/for-adults.astro) (new), [`src/pages/for-women.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/for-women.astro) (new).
+- **Concrete Actions:**
+  1. Create 301 permanent redirect pages at `/for-kids`, `/for-adults`, and `/for-women` pointing to `/quran-classes/for-kids`, `/quran-classes/for-adults`, and `/quran-classes/for-women`.
+  2. Ensure external links or social ads hitting these root URLs resolve seamlessly without a 404 error.
+
+### [TASK-21] Course Slug Pages Enhancement
+
+- **Original Item:** Item 21
+- **Files:** [`src/pages/courses/[slug].astro`](file:///d:/Live%20Web/Quranific-live/src/pages/courses/[slug].astro), [`src/pages/courses/_components/CoursePricingSection.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/courses/_components/CoursePricingSection.astro).
+- **Concrete Actions:**
+  1. Pass the active course slug prop (`initialCourse={course.slug}`) to `<PricingCalculator />` in `CoursePricingSection.astro` so the calculator defaults to the active course.
+  2. Add `FAQPage` JSON-LD schema to the course page for all course-specific FAQs.
+
+---
+
+## 5. Reusable Components & Logic (Tier 5)
+
+### [TASK-09] Full-Month Guarantee Reusable Component
+
+- **Original Item:** Item 9
+- **Files:** Create `src/components/common/GuaranteeCard.astro`, refactor [`src/components/blocks/CoursesFAQ.astro`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/CoursesFAQ.astro), [`src/components/blocks/FAQAccordion.astro`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/FAQAccordion.astro).
+- **Concrete Actions:**
+  1. Build a single, reusable `GuaranteeCard.astro` component supporting light and dark theme variants.
+  2. Replace duplicate guarantee markup across FAQ and landing components.
+
+### [TASK-12] Promo Bar Attribution Tracking
+
+- **Original Item:** Item 12
+- **Files:** [`src/constants/site.ts`](file:///d:/Live%20Web/Quranific-live/src/constants/site.ts#L34).
+- **Concrete Actions:**
+  1. Update announcement link from `/getting-started/signup` to `/getting-started/signup?ref=top_promo_bar&utm_source=internal&utm_medium=promo_banner`.
+
+### [TASK-47] GTM Tag Activation for Consent Mode
+
+- **Original Item:** Item 47
+- **Files:** Cloudflare / Google Tag Manager.
+- **Concrete Actions:**
+  1. Configure GA4 Configuration tag in GTM container `GTM-5CJMMJ29`.
+  2. Enable Google Consent Mode settings in GTM so tags fire conditionally upon user consent in `CookieBanner.svelte`.
+
+### [TASK-49] Alarm Worker Periodic Health Verification
+
+- **Original Item:** Item 49
+- **Files:** [`workers/alarm-worker.js`](file:///d:/Live%20Web/Quranific-live/workers/alarm-worker.js).
+- **Concrete Actions:**
+  1. Maintain cron schedule `*/10 * * * *` and monitor DLQ buffer recovery.
+
+---
+
+## 6. Infrastructure & Operations (Tier 6)
+
+### [TASK-13] Corporate Email Inventory Audit
+
+- **Original Item:** Item 13
+- **Action:** Document all operational email accounts hosted on Hostinger Business Email (`admin@`, `hello@`, `support@`, `careers@`, `privacy@`).
+
+### [TASK-23] Resend SPF Authorization DNS Record Fix
+
+- **Original Item:** Item 23
+- **Impact:** Immediate elimination of transactional email spam filtering.
+- **Concrete Actions:**
+  1. **Update Cloudflare DNS SPF TXT Record:**
+     - Current: `v=spf1 include:_spf.mail.hostinger.com ~all`
+     - Change to: `v=spf1 include:_spf.mail.hostinger.com include:resend.com ~all`
+  2. Verify DKIM record `resend._domainkey.quranific.com` status in Resend dashboard.
+
+---
+
+## 7. SEO, Growth, and Ads Readiness (Tier 7)
+
+### [TASK-17] Corner-to-Corner Data Contradiction Scrub
+
+- **Original Item:** Item 17
+- **Action:** Perform a global search and replace to eliminate conflicting price references and outdated claims.
+
+### [TASK-26] Internal Linking Ecosystem Optimization
+
+- **Original Item:** Item 26
+- **Action:** Add cross-links from course slug pages to target audience intent pages, and add breadcrumb navigation.
+
+### [TASK-33] Indexing & Error Handling Verification
+
+- **Original Item:** Item 33
+- **Action:** Verify 404 and 500 error pages retain branding, navigation, and zero dead ends.
+
+### [TASK-34-35] GTM & Search Console Verification Protocol
+
+- **Original Items:** Item 34 & Item 35
+- **Action:** Validate sitemap submission and structured data indexing in Google Search Console.
+
+### [TASK-39-40-41] Ad Platform & Payment Gateway Compliance Audit
+
+- **Original Items:** Item 39, Item 40, Item 41
+- **Action:** Verify all required policy disclosures, safeguarding statements, and transparent billing terms are present on all landing pages.
+
+---
+
+## 8. Performance & Code Quality (Tier 8)
+
+### [TASK-27] Security Hardening Pass
+
+- **Original Item:** Item 27
+- **Action:** Review CSP headers, rate-limiting rules, and Turnstile integration on all dynamic forms.
+
+### [TASK-29] SSR / SSG Boundary Verification
+
+- **Original Item:** Item 29
+- **Action:** Confirm `export const prerender = true;` remains intact on all static marketing routes.
+
+### [TASK-30-43] Asset & Image Performance Optimization
+
+- **Original Items:** Item 30 & Item 43
+- **Action:** Ensure all images have explicit width/height dimensions and appropriate `loading` attributes.
+
+### [TASK-31] Bundle Size & Edge Middleware Audit
+
+- **Original Item:** Item 31
+- **Action:** Audit client-side JS bundles to ensure zero unneeded dependencies are shipped.
+
+### [TASK-38-42] Code Cleanliness & Layout Standardization
+
+- **Original Items:** Item 38 & Item 42
+- **Action:** Clean up shared TypeScript types in `src/types/` and standardize grid container widths.
+
+### [TASK-44] AI Tone & Watermark Removal
+
+- **Original Item:** Item 44
+- **Action:** Ensure all marketing copy reads in a genuine, human, respectful tone with zero generative AI clichés.
+
+---
+
+## 9. Legal & Final Verification (Tier 9)
+
+### [TASK-16] Legal Documentation Alignment
+
+- **Original Item:** Item 16
+- **Action:** Update Privacy, Terms, and Refund policies to reflect multi-currency geo-pricing and the Full-Month Guarantee.
+
+### [TASK-32] Full End-to-End Verification Test Loop
+
+- **Original Item:** Item 32
+- **Action:** Execute the complete verification pipeline:
+  1. `npm run check`
+  2. `npm run build`
+  3. `npx playwright test`
+  4. Core Web Vitals audit
+
+### [TASK-50] Final Production Smoke Test
+
+- **Original Item:** Item 50
+- **Action:** Perform end-to-end user registration and checkout smoke test on live edge deployment.
+
+---
+
+## 10. Senior-Dev Additions & Architecture Reserves
+
+### [TASK-37] Reserved Architecture Ledger Slot
+
+- **Original Item:** Item 37
+- **Action:** Sequential ledger placeholder preserved for post-fix edge runtime diagnostics.
+
+### [TASK-45] Senior-Dev Architectural Deliverables
+
+- **Original Item:** Item 45
+- **Actions:**
+  1. Emit JSON-LD schema generators for all new content collections (`FAQPage`, `Review`, `Person`).
+  2. Scrub legacy duplicate content completely from `.astro` templates once centralized.
+  3. Implement comprehensive ISO 3166-1 country name map for calculator summaries.
+  4. Document GA4/Ads event taxonomy.
+  5. Establish an editorial sign-off workflow for student reviews and blog articles.
