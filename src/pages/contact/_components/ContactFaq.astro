@@ -1,4 +1,19 @@
 ---
-// src/components/contact/ContactFaq.astro
-// Reserved for future FAQ Shortcuts section
+// src/pages/contact/_components/ContactFaq.astro
+import { faqs } from '../../../data/faqs';
+import FAQAccordion from '../../../components/blocks/FAQAccordion.astro';
+
+const contactQuestions = faqs.contact || [];
 ---
+
+{
+  contactQuestions.length > 0 && (
+    <FAQAccordion
+      questions={contactQuestions}
+      eyebrow="Quick Support Answers"
+      title="Common questions "
+      highlightWord="before reaching out."
+      subtitle="Find immediate answers to questions about response times, trial scheduling, and communication channels."
+    />
+  )
+}

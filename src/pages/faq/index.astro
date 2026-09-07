@@ -14,11 +14,12 @@ import { faqs } from '../../data/faqs';
 
 // --- 110% SEO: DYNAMIC GOOGLE FAQ SCHEMA ---
 // This automatically transforms your array into Google's required Rich Snippet format.
-const allFaqs = Object.values(faqs).flat();
+const rawFaqs = Object.values(faqs).flat();
+const uniqueFaqs = Array.from(new Map(rawFaqs.map((faq) => [faq.question, faq])).values());
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: allFaqs.map((faq) => ({
+  mainEntity: uniqueFaqs.map((faq) => ({
     '@type': 'Question',
     name: faq.question,
     acceptedAnswer: {

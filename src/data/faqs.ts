@@ -1,7 +1,22 @@
+export type FAQCategory =
+  | 'general'
+  | 'pricing'
+  | 'courses'
+  | 'teachers'
+  | 'safeguarding'
+  | 'technical'
+  | 'kids'
+  | 'adults'
+  | 'women'
+  | 'contact'
+  | 'home';
+
 export type FAQ = {
   question: string;
   answer: string;
   link?: { text: string; href: string };
+  category?: FAQCategory;
+  courseSlug?: string;
 };
 
 export const landingKids: FAQ[] = [
@@ -165,7 +180,8 @@ export const faqs: Record<string, FAQ[]> = {
     {
       question: 'Can I pay in my local currency?',
       answer:
-        'Prices are listed in USD, which is our base currency. <strong class="text-emerald-950">Your card is charged in USD and your bank applies its standard conversion rate</strong>. We do not add a foreign exchange surcharge. Families in the UK, UAE, Canada, Australia, and the EU all pay in USD. If you would prefer an invoice in your local currency for accounting purposes, contact us and we will arrange it.',
+        'Yes. We support 8 major localized purchasing currencies: <strong class="text-emerald-950">USD ($), GBP (£), EUR (€), CAD (CA$), AUD (A$), AED (د.إ), SAR (﷼), and SGD (S$)</strong>. Our platform automatically detects your region and charges in your home currency with zero foreign transaction fees. If you reside outside these eight supported currency zones, tuition is billed in USD at your bank\'s standard conversion rate with no hidden surcharge from Quranific.',
+      category: 'pricing',
     },
   ],
   courses: [
@@ -230,41 +246,294 @@ export const faqs: Record<string, FAQ[]> = {
         'Teacher chemistry matters enormously in 1-on-1 learning. If your child does not connect with their teacher for any reason — personality, teaching style, pace — simply let us know and we arrange a new match immediately. There is no awkward conversation, no forms to fill, and absolutely no charge. We have done this many times and consider it a normal part of finding the right learning relationship.',
     },
   ],
-  teachers: [], // Vetting QA: "Can I request a female teacher?", "Are teachers native Arabic speakers?"
+  teachers: [
+    {
+      question: 'What qualifications and credentials do your teachers hold?',
+      answer:
+        'Every Quranific teacher holds a verified <strong>Ijazah</strong> (an unbroken chain of oral transmission back to the Prophet ﷺ) with Sanad, and a formal degree in Quranic or Islamic studies from esteemed institutions such as Al-Azhar University, the Islamic University of Madinah, or recognized Darul Ulooms. You receive your assigned teacher’s complete verified profile before your first trial class.',
+      category: 'teachers',
+    },
+    {
+      question: 'Can I specifically request a female Quran teacher?',
+      answer:
+        'Yes, absolutely. We offer guaranteed <strong>female-to-female matching</strong> with certified, vetted Ustadhas for sisters, young girls, and mothers. Our female faculty hold verified Ijazahs and provide a completely private, safe, and culturally comfortable learning environment.',
+      category: 'teachers',
+    },
+    {
+      question: 'What is your teacher vetting and onboarding process?',
+      answer:
+        'Fewer than 3% of applicants are accepted to our faculty. Our strict four-stage vetting process includes: (1) Identity verification and thorough safeguarding/criminal background checks, (2) Live recitation and Tajweed audit by our senior scholarly board, (3) Practical English-language pedagogical demonstration to assess student engagement, and (4) Ongoing spot-checks, lesson auditing, and student progress reviews.',
+      category: 'teachers',
+    },
+    {
+      question: 'What if my child does not connect with their assigned teacher?',
+      answer:
+        'Teacher chemistry is essential to consistent learning. If your child does not feel 100% comfortable or engaged for any reason, simply send us a message. We will reassign a new teacher immediately with zero hassle, no awkward questions, and at no extra charge.',
+      category: 'teachers',
+    },
+    {
+      question: 'What languages do the teachers speak?',
+      answer:
+        'All of our teachers are fluent in <strong>English</strong> and conduct lessons with clear communication designed for students living in the UK, US, Canada, Australia, and the Middle East. Teachers are also fluent in <strong>Arabic</strong> and <strong>Urdu</strong>, allowing them to switch seamlessly or explain concepts in your family’s preferred home language.',
+      category: 'teachers',
+    },
+  ],
   safeguarding: [
     {
       question: 'Are the teachers background checked?',
       answer:
         'Absolutely. Every single teacher undergoes a comprehensive identity and criminal background check before they ever teach a session. We have a zero-tolerance policy on safeguarding and take the security of our students extremely seriously.',
+      category: 'safeguarding',
     },
     {
       question: 'Can parents observe the sessions?',
       answer:
         'We actively encourage it. Because the classes are conducted via a secure online link, you are welcome to sit next to your child or join the meeting from another device at any time, unannounced. We want you to feel 100% comfortable with the teaching process.',
+      category: 'safeguarding',
     },
     {
       question: 'How secure are the video links?',
       answer:
         "All classes run on secure, private video links that are uniquely generated for your child's session. They are end-to-end encrypted and cannot be accessed by anyone without the specific link and passcode.",
+      category: 'safeguarding',
     },
-  ], // Security QA: "How are teachers vetted?", "Who monitors the sessions?"
+  ],
   technical: [
     {
       question: 'What are the internet speed requirements?',
       answer:
         'A standard broadband connection (around 5 Mbps) is perfectly fine for our live 1-on-1 video classes. If you can watch a YouTube video smoothly, your connection is strong enough for our sessions.',
+      category: 'technical',
     },
     {
       question: 'Does the platform work on an iPad or tablet?',
       answer:
         'Yes, our classes are fully accessible across all devices including laptops, desktops, iPads, and Android tablets. We recommend using a device with a decent-sized screen so your child can easily see the interactive whiteboard.',
+      category: 'technical',
     },
     {
       question: 'What if I forget my password or get locked out?',
       answer:
         "You can instantly reset your password via the login screen. If you're having trouble connecting to a class, our 24/7 technical support team is always available via WhatsApp to get you connected within minutes so you don't lose session time.",
+      category: 'technical',
     },
-  ], // IT QA: "Does it work on an iPad?", "Do we need our camera on?"
-  contact: [], // Support QA: "How fast do you reply to WhatsApp?"
-  legal: [], // Policy QA: "How do you store my data?"
+  ],
+  contact: [
+    {
+      question: 'How quickly do you respond to messages and inquiries?',
+      answer:
+        'Our team operates 24/7 across multiple time zones. We maintain a strict operational response target of <strong>under 5 minutes on WhatsApp</strong> and <strong>under 1 hour via email</strong> or the website contact form, including weekends and public holidays.',
+      category: 'contact',
+    },
+    {
+      question: 'Can I speak with someone before booking a free trial class?',
+      answer:
+        'Yes! Reach out to us on WhatsApp or submit your inquiry through the contact form. Our academic coordinators can answer your questions about scheduling, curriculum levels, SEN adaptations, or teacher matching before you schedule your trial.',
+      category: 'contact',
+    },
+    {
+      question: 'What happens after I submit a message through the contact form?',
+      answer:
+        'Your message is routed directly to our dedicated support desk. An academic coordinator will review your request and reply via email or WhatsApp (whichever channel you prefer) within minutes.',
+      category: 'contact',
+    },
+    {
+      question: 'How do I reschedule a scheduled session or trial class?',
+      answer:
+        'Simply send a quick WhatsApp message to our support line or reply directly to your booking confirmation email. We will adjust your time slot immediately without any penalty or cancellation fee.',
+      category: 'contact',
+    },
+  ],
+  legal: [],
 };
+
+export const courseFaqsBySlug: Record<string, FAQ[]> = {
+  'basic-qaida': [
+    {
+      question: 'Do I need to know Arabic before starting?',
+      answer: 'No. Basic Qaida assumes zero prior Arabic knowledge.',
+      category: 'courses',
+      courseSlug: 'basic-qaida',
+    },
+    {
+      question: 'What age is this course for?',
+      answer: 'Any age — the same step-by-step method works for kids and adults.',
+      category: 'courses',
+      courseSlug: 'basic-qaida',
+    },
+    {
+      question: 'How is this different from a Quran reading app?',
+      answer:
+        "Apps track page progress. This course tracks whether you can actually decode new, unseen words — that's the real skill.",
+      category: 'courses',
+      courseSlug: 'basic-qaida',
+    },
+    {
+      question: 'What happens after I finish Basic Qaida?',
+      answer:
+        'You move to correct pronunciation and Tajweed rules, applied to what you can now read.',
+      category: 'courses',
+      courseSlug: 'basic-qaida',
+    },
+  ],
+  'quran-reading-with-tajweed': [
+    {
+      question: "What's the difference between this and Basic Qaida?",
+      answer:
+        'Basic Qaida teaches you to decode letters and words. This course fixes how you pronounce what you already read.',
+      category: 'courses',
+      courseSlug: 'quran-reading-with-tajweed',
+    },
+    {
+      question: 'Do I need to read fluently before joining?',
+      answer:
+        "Yes — basic reading ability is the prerequisite. If you're not there yet, start with Basic Qaida.",
+      category: 'courses',
+      courseSlug: 'quran-reading-with-tajweed',
+    },
+    {
+      question: 'What is Makharij and why does it matter?',
+      answer:
+        'It is the precise articulation point of each Arabic letter. Get it wrong, and the meaning of a word can change entirely.',
+      category: 'courses',
+      courseSlug: 'quran-reading-with-tajweed',
+    },
+    {
+      question: 'Will I get feedback on my own recitation?',
+      answer:
+        'Yes — your personal error profile is built from your actual recitation, not a generic rulebook.',
+      category: 'courses',
+      courseSlug: 'quran-reading-with-tajweed',
+    },
+  ],
+  'quran-memorization': [
+    {
+      question: 'What are Sabaq, Sabqi, and Manzil?',
+      answer:
+        'Sabaq is your new memorization. Sabqi is your recent review (last 7–10 days). Manzil is your long-term review, so nothing older fades.',
+      category: 'courses',
+      courseSlug: 'quran-memorization',
+    },
+    {
+      question: "How do I stop forgetting what I've already memorized?",
+      answer:
+        'The Manzil cycle exists for exactly this — it schedules review of old portions on a strict system, not on hope.',
+      category: 'courses',
+      courseSlug: 'quran-memorization',
+    },
+    {
+      question: 'Is Hifz suitable for adults, or only children?',
+      answer: 'Both. The system adapts to your pace and capacity, not your age.',
+      category: 'courses',
+      courseSlug: 'quran-memorization',
+    },
+    {
+      question: "What if I've already memorized some Surahs elsewhere?",
+      answer:
+        'You can join and slot straight into the review cycle — no need to restart from zero.',
+      category: 'courses',
+      courseSlug: 'quran-memorization',
+    },
+  ],
+  'quran-translation-with-tafsir': [
+    {
+      question: 'Do I need Arabic fluency to study Tafsir?',
+      answer: 'No — the course builds the vocabulary and context you need as you go.',
+      category: 'courses',
+      courseSlug: 'quran-translation-with-tafsir',
+    },
+    {
+      question: 'What is the Word → Context → Tafsir → Lesson method?',
+      answer:
+        'A four-step framework: learn the word, understand its context, read the Tafsir, then extract the lesson for your own life.',
+      category: 'courses',
+      courseSlug: 'quran-translation-with-tafsir',
+    },
+    {
+      question: 'Which topics does the thematic study cover?',
+      answer:
+        'Core themes including Mercy, Patience, Tawhid, and Justice, traced across multiple Surahs.',
+      category: 'courses',
+      courseSlug: 'quran-translation-with-tafsir',
+    },
+    {
+      question: 'Is this based on reliable scholarly sources?',
+      answer:
+        'Yes — grounded in established, mainstream Tafsir, with clear separation between translation and interpretation.',
+      category: 'courses',
+      courseSlug: 'quran-translation-with-tafsir',
+    },
+  ],
+  'advanced-tajweed-ijazah': [
+    {
+      question: 'Who should take this instead of the regular Tajweed course?',
+      answer:
+        'Fluent readers who already recite correctly but want precision — the regular course fixes correctness first.',
+      category: 'courses',
+      courseSlug: 'advanced-tajweed-ijazah',
+    },
+    {
+      question: "What is the 'unseen passage' test?",
+      answer:
+        "A recitation assessment on a passage you haven't practiced. It proves control, not memorized performance.",
+      category: 'courses',
+      courseSlug: 'advanced-tajweed-ijazah',
+    },
+    {
+      question: 'What are Sifaat al-Huruf?',
+      answer:
+        "The characteristics of each letter's sound — beyond just its articulation point — that shape recitation quality.",
+      category: 'courses',
+      courseSlug: 'advanced-tajweed-ijazah',
+    },
+    {
+      question: 'Can this fix an accent influence in my recitation?',
+      answer:
+        "Yes — that's the core of the diagnostic approach. We identify the specific habit and drill it out.",
+      category: 'courses',
+      courseSlug: 'advanced-tajweed-ijazah',
+    },
+  ],
+  'arabic-language': [
+    {
+      question: 'Is this Quranic Arabic or Modern Standard Arabic (MSA)?',
+      answer:
+        "Both — connected through the same root system, so you're not learning two disconnected languages.",
+      category: 'courses',
+      courseSlug: 'arabic-language',
+    },
+    {
+      question: 'Do I need to know the Arabic alphabet first?',
+      answer: 'No — Foundations covers script and pronunciation from the start.',
+      category: 'courses',
+      courseSlug: 'arabic-language',
+    },
+    {
+      question: 'How does the root system make learning faster?',
+      answer:
+        'Ten roots unlock hundreds of related words, instead of memorizing each word in isolation.',
+      category: 'courses',
+      courseSlug: 'arabic-language',
+    },
+    {
+      question: 'Can I use this Arabic for daily conversation?',
+      answer:
+        'Yes — Functional MSA covers real, everyday communication alongside Quranic application.',
+      category: 'courses',
+      courseSlug: 'arabic-language',
+    },
+  ],
+};
+
+// Also attach course FAQs to the global dictionary for direct lookup by slug
+Object.entries(courseFaqsBySlug).forEach(([slug, list]) => {
+  faqs[slug] = list;
+});
+
+export function getCourseFaqs(slug: string): FAQ[] {
+  return courseFaqsBySlug[slug] || [];
+}
+
+export function getCategoryFaqs(category: FAQCategory | string): FAQ[] {
+  return faqs[category] || [];
+}

@@ -1,3 +1,5 @@
+import { courseFaqsBySlug } from '../data/faqs';
+
 export type CourseLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'All Levels';
 export type CourseCategory = 'Kids' | 'Adult' | 'All Ages' | 'Specialist';
 export type CourseSlug =
@@ -86,26 +88,7 @@ export const courses: Course[] = [
         linkUrl: '/courses/quran-reading-with-tajweed/',
       },
     ],
-    courseFaqs: [
-      {
-        question: 'Do I need to know Arabic before starting?',
-        answer: 'No. Basic Qaida assumes zero prior Arabic knowledge.',
-      },
-      {
-        question: 'What age is this course for?',
-        answer: 'Any age — the same step-by-step method works for kids and adults.',
-      },
-      {
-        question: 'How is this different from a Quran reading app?',
-        answer:
-          "Apps track page progress. This course tracks whether you can actually decode new, unseen words — that's the real skill.",
-      },
-      {
-        question: 'What happens after I finish Basic Qaida?',
-        answer:
-          'You move to correct pronunciation and Tajweed rules, applied to what you can now read.',
-      },
-    ],
+    courseFaqs: courseFaqsBySlug['basic-qaida'],
     icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
     level: 'Beginner',
     category: 'Kids',
@@ -220,28 +203,7 @@ export const courses: Course[] = [
         desc: 'Hearing your own mistakes before the teacher points them out.',
       },
     ],
-    courseFaqs: [
-      {
-        question: "What's the difference between this and Basic Qaida?",
-        answer:
-          'Basic Qaida teaches you to decode letters and words. This course fixes how you pronounce what you already read.',
-      },
-      {
-        question: 'Do I need to read fluently before joining?',
-        answer:
-          "Yes — basic reading ability is the prerequisite. If you're not there yet, start with Basic Qaida.",
-      },
-      {
-        question: 'What is Makharij and why does it matter?',
-        answer:
-          'It is the precise articulation point of each Arabic letter. Get it wrong, and the meaning of a word can change entirely.',
-      },
-      {
-        question: 'Will I get feedback on my own recitation?',
-        answer:
-          'Yes — your personal error profile is built from your actual recitation, not a generic rulebook.',
-      },
-    ],
+    courseFaqs: courseFaqsBySlug['quran-reading-with-tajweed'],
     prerequisites: ['Completion of Basic Qaida or ability to read basic Arabic words.'],
     relatedSlugs: ['quran-memorization', 'arabic-language'],
     riveFile: 'tajweed.riv',
@@ -306,27 +268,7 @@ export const courses: Course[] = [
         desc: 'Your personal error bank for similar verses you keep mixing up.',
       },
     ],
-    courseFaqs: [
-      {
-        question: 'What are Sabaq, Sabqi, and Manzil?',
-        answer:
-          'Sabaq is your new memorization. Sabqi is your recent review (last 7–10 days). Manzil is your long-term review, so nothing older fades.',
-      },
-      {
-        question: "How do I stop forgetting what I've already memorized?",
-        answer:
-          'The Manzil cycle exists for exactly this — it schedules review of old portions on a strict system, not on hope.',
-      },
-      {
-        question: 'Is Hifz suitable for adults, or only children?',
-        answer: 'Both. The system adapts to your pace and capacity, not your age.',
-      },
-      {
-        question: "What if I've already memorized some Surahs elsewhere?",
-        answer:
-          'You can join and slot straight into the review cycle — no need to restart from zero.',
-      },
-    ],
+    courseFaqs: courseFaqsBySlug['quran-memorization'],
     prerequisites: ['Fluent reading of the Quran with basic Tajweed rules applied.'],
     relatedSlugs: ['advanced-tajweed-ijazah', 'quran-translation-with-tafsir'],
     riveFile: 'hifz.riv',
@@ -404,27 +346,7 @@ export const courses: Course[] = [
         desc: 'Themes of Mercy, Patience, Tawhid, and Justice, traced across the Quran.',
       },
     ],
-    courseFaqs: [
-      {
-        question: 'Do I need Arabic fluency to study Tafsir?',
-        answer: 'No — the course builds the vocabulary and context you need as you go.',
-      },
-      {
-        question: 'What is the Word → Context → Tafsir → Lesson method?',
-        answer:
-          'A four-step framework: learn the word, understand its context, read the Tafsir, then extract the lesson for your own life.',
-      },
-      {
-        question: 'Which topics does the thematic study cover?',
-        answer:
-          'Core themes including Mercy, Patience, Tawhid, and Justice, traced across multiple Surahs.',
-      },
-      {
-        question: 'Is this based on reliable scholarly sources?',
-        answer:
-          'Yes — grounded in established, mainstream Tafsir, with clear separation between translation and interpretation.',
-      },
-    ],
+    courseFaqs: courseFaqsBySlug['quran-translation-with-tafsir'],
     prerequisites: [
       'Ability to read Arabic is helpful, but not strictly required (transliteration options available).',
     ],
@@ -502,28 +424,7 @@ export const courses: Course[] = [
         desc: 'Training your ear to catch errors in your own recording.',
       },
     ],
-    courseFaqs: [
-      {
-        question: 'Who should take this instead of the regular Tajweed course?',
-        answer:
-          'Fluent readers who already recite correctly but want precision — the regular course fixes correctness first.',
-      },
-      {
-        question: "What is the 'unseen passage' test?",
-        answer:
-          "A recitation assessment on a passage you haven't practiced. It proves control, not memorized performance.",
-      },
-      {
-        question: 'What are Sifaat al-Huruf?',
-        answer:
-          "The characteristics of each letter's sound — beyond just its articulation point — that shape recitation quality.",
-      },
-      {
-        question: 'Can this fix an accent influence in my recitation?',
-        answer:
-          "Yes — that's the core of the diagnostic approach. We identify the specific habit and drill it out.",
-      },
-    ],
+    courseFaqs: courseFaqsBySlug['advanced-tajweed-ijazah'],
     prerequisites: ['Flawless recitation of the Quran with complete application of Tajweed rules.'],
     relatedSlugs: ['quran-memorization', 'quran-translation-with-tafsir'],
     riveFile: 'ijazah.riv',
@@ -580,27 +481,7 @@ export const courses: Course[] = [
       { title: 'Quranic Grammar', desc: 'Understanding how verbs and pronouns shift meaning.' },
       { title: 'Functional MSA', desc: 'Greetings, daily conversation, and practical speaking.' },
     ],
-    courseFaqs: [
-      {
-        question: 'Is this Quranic Arabic or Modern Standard Arabic (MSA)?',
-        answer:
-          "Both — connected through the same root system, so you're not learning two disconnected languages.",
-      },
-      {
-        question: 'Do I need to know the Arabic alphabet first?',
-        answer: 'No — Foundations covers script and pronunciation from the start.',
-      },
-      {
-        question: 'How does the root system make learning faster?',
-        answer:
-          'Ten roots unlock hundreds of related words, instead of memorizing each word in isolation.',
-      },
-      {
-        question: 'Can I use this Arabic for daily conversation?',
-        answer:
-          'Yes — Functional MSA covers real, everyday communication alongside Quranic application.',
-      },
-    ],
+    courseFaqs: courseFaqsBySlug['arabic-language'],
     prerequisites: ['Basic reading ability of the Arabic script.'],
     relatedSlugs: ['quran-translation-with-tafsir', 'quran-reading-with-tajweed'],
     riveFile: 'arabic.riv',

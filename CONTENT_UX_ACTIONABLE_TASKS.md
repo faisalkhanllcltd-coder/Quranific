@@ -60,17 +60,19 @@
 
 ## 2. Content Data Architecture (Tier 2)
 
-### [TASK-01] Centralized FAQ Single Source of Truth
+### [TASK-01] Centralized FAQ Single Source of Truth — [FIXED & VERIFIED]
 
 - **Original Item:** Item 1
-- **Files:** [`src/data/faqs.ts`](file:///d:/Live%20Web/Quranific-live/src/data/faqs.ts) (EXISTS — consolidate, do not create), update [`src/pages/faq/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/faq/index.astro), [`src/components/blocks/CoursesFAQ.astro`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/CoursesFAQ.astro), [`src/components/blocks/FAQAccordion.astro`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/FAQAccordion.astro).
-- **Concrete Actions:**
-  1. Audit what's already in `src/data/faqs.ts` — confirm its TypeScript model, then expand to cover all required categories (`'general' | 'pricing' | 'courses' | 'teachers' | 'kids' | 'adults' | 'women'`) with an optional `courseSlug?` field.
-  2. Pull in and normalize FAQ items currently hardcoded in `src/constants/courses.ts`, `src/pages/contact/_components/ContactFaq.astro`, and any `.astro` templates.
-  3. Populate page-specific sets for `/tuition-fee`, `/quran-classes/for-kids`, `/for-adults`, `/for-women`, and individual course slugs.
-  4. Wire the "Teachers" tab on `/faq` to render relevant teacher vetting and qualification Q&A.
-  5. Fix the inaccurate FAQ answer claiming USD-only billing to reflect the 8 geo-currencies.
-  6. Delete redundant hardcoded FAQ arrays from components once consolidated.
+- **Status:** **[FIXED & VERIFIED ON 2026-09-07]**
+- **Files:** [`src/data/faqs.ts`](file:///d:/Live%20Web/Quranific-live/src/data/faqs.ts), [`src/constants/courses.ts`](file:///d:/Live%20Web/Quranific-live/src/constants/courses.ts), [`src/pages/faq/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/faq/index.astro), [`src/pages/contact/_components/ContactFaq.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/contact/_components/ContactFaq.astro).
+- **Concrete Actions & Empirical Proof:**
+  1. **Centralized Data Layer:** Expanded `FAQ` model in `src/data/faqs.ts` with `FAQCategory` and `courseSlug?`.
+  2. **8 Geo-Currencies:** Updated pricing FAQ #8 from obsolete USD-only statement to accurately state the 8 supported purchasing currencies (USD, GBP, EUR, CAD, AUD, AED, SAR, SGD) with zero foreign transaction fees.
+  3. **Faculty & Teachers Q&A:** Populated `faqs.teachers` with 5 detailed questions covering Ijazah qualifications, guaranteed female teacher matching, the 4-stage vetting process, student chemistry reassignment, and English/Arabic/Urdu fluency.
+  4. **Contact & Support Q&A:** Populated `faqs.contact` with 4 questions on sub-5-minute response times, pre-booking advisory, and rescheduling. Wired `src/pages/contact/_components/ContactFaq.astro` to render them via `FAQAccordion`.
+  5. **Course-Specific FAQs:** Centralized all 6 course FAQ sets in `src/data/faqs.ts` under `courseFaqsBySlug` and eliminated hardcoded duplicates in `src/constants/courses.ts`.
+  6. **Schema Deduplication:** Updated `src/pages/faq/index.astro` to deduplicate questions before emitting `FAQPage` JSON-LD schema.
+  7. **Build & Prerender Verification:** Clean `npm run build` (0 errors, 0 warnings across 137 files). Verified via `scratch/verify-faqs.mjs` that `dist/client/faq/index.html` has 8 currencies (`true`), teacher qualifications (`true`), female teacher QA (`true`), FAQPage schema (`true`), and `dist/client/contact/index.html` has contact Q&As (`true`).
 
 ### [TASK-02] Testimonials Data Consolidation & Consent Verification
 
