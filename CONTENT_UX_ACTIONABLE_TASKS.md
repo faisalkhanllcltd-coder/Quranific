@@ -120,13 +120,15 @@
   3. 100% humanized, thoughtful tone without AI clichés.
   4. Fully optimized for AI answer extraction and SEO with schema markup.
 
-### [TASK-05] Courses Data Cleansing & Normalization
+### [TASK-05] Courses Data Cleansing & Normalization — [FIXED & VERIFIED]
 
 - **Original Item:** Item 5
-- **Files:** Update [`src/constants/courses.ts`](file:///d:/Live%20Web/Quranific-live/src/constants/courses.ts) or migrate to `src/data/courses.ts`.
-- **Concrete Actions:**
-  1. Strip all hardcoded `pricing: { perMonth: ... }` blocks from course definitions.
-  2. Ensure syllabus outlines, age suitability, and prerequisites match actual academy teaching practices.
+- **Status:** **[FIXED & VERIFIED ON 2026-09-08]**
+- **Files:** [`src/constants/courses.ts`](file:///d:/Live%20Web/Quranific-live/src/constants/courses.ts).
+- **Concrete Actions & Empirical Proof:**
+  1. **Stripped Obsolete Static Pricing:** Removed `price: string;` from the `Course` interface and eliminated all 6 hardcoded legacy price strings (`From $39/mo`, `From $49/mo`, `From $59/mo`, `From $69/mo`) from `src/constants/courses.ts`. Course tuition is decoupled from course subject and centrally governed by `pricing.ts`.
+  2. **Pedagogical Alignment:** Audited syllabus outlines, prerequisites, age suitability, and target outcomes across all 6 courses (Basic Qaida: ages 4–14; Tajweed: ages 8+; Hifz: all ages; Tafsir: ages 14+; Ijazah: adults; Arabic: ages 10+).
+  3. **Verification:** Verified via `scratch/verify-pricing-data.mjs` that `Course` interface has no price field (`false`), zero courses have hardcoded prices (`false`), and the project compiles with 0 errors (`astro check` & `astro build` 100% green).
 
 ### [TASK-06] Fee Data Verification
 
