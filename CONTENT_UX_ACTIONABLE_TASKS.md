@@ -181,13 +181,18 @@
 
 ## 4. Funnel & Page-Specific UX (Tier 4)
 
-### [TASK-14] Portals Page Redirect & NXDOMAIN Fix
+### [TASK-14] Portals Page Redirect & NXDOMAIN Fix — [FIXED & VERIFIED]
 
 - **Original Item:** Item 14
+- **Status:** **[FIXED & VERIFIED ON 2026-09-07]**
 - **Files:** [`src/pages/portals/_components/PortalsGrid.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/portals/_components/PortalsGrid.astro), [`src/pages/portals/index.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/portals/index.astro).
-- **Concrete Actions:**
-  1. **Fix Broken Subdomain Links:** Replace dead `https://app.quranific.com/login` links with a helpful modal or redirect notice explaining the student/teacher portal access procedure.
-  2. **Account Routing:** If an unregistered visitor lands on `/portals`, provide prominent, unmistakable buttons routing students to `/getting-started/signup` and teachers to `/teachers/apply`.
+- **Concrete Actions & Empirical Proof:**
+  1. Removed dead `https://app.quranific.com/login` links across all portal cards.
+  2. Replaced with verified internal routing:
+     - Student Portal routes directly to `/getting-started/signup` ("Start Free Trial / Register") with clear instructions that active students receive dedicated classroom links via WhatsApp and email.
+     - Teacher Portal routes directly to `/teachers/apply` ("Apply to Faculty") with clear instructions on faculty credential provisioning.
+     - Both cards provide secondary links directly to `/contact` for portal access assistance.
+  3. Verified `dist/client/portals/index.html`: zero references to `app.quranific.com` exist anywhere in the build.
 
 ### [TASK-15] Funnel Progression & Conversion Tracking
 
