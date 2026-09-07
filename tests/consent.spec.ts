@@ -334,9 +334,9 @@ test.describe('Gate 6 — Banner actions', () => {
     await mockBucket(page, 'STRICT');
 
     await page.goto(`${BASE}/`);
-    await waitForBanner(page);
-
-    await page.getByRole('button', { name: /accept all/i }).click();
+    const acceptBtn = page.getByRole('button', { name: /accept all/i });
+    await expect(acceptBtn).toBeEnabled({ timeout: BANNER_WAIT });
+    await acceptBtn.click();
     await expect(page.getByRole('dialog', { name: /cookie consent/i })).not.toBeVisible();
 
     // Reload — returning visitor (PATH A), banner must NOT reappear

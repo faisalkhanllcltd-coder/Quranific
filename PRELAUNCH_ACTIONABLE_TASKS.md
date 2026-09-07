@@ -187,8 +187,13 @@ if (kv) {
    - **Verification Evidence:** `npm run lint` (`eslint .`) exits 0 with 0 errors and 0 warnings. Utility scripts `node dead_code.cjs` and `node link_check.cjs` execute cleanly.
 
 10. **Fix Playwright Test 15 Flakiness (`tests/consent.spec.ts`)**
-    - **Defect:** Test 15 clicks the "Accept All" button before waiting for `toBeEnabled()`, causing occasional failures if Svelte hydration is still finalizing.
-    - **Fix Required:** Add `await expect(acceptBtn).toBeEnabled({ timeout: BANNER_WAIT });` before `.click()`.
+    - **Status:** **[FIXED & VERIFIED]**
+    - **Fix Summary:** In `tests/consent.spec.ts`, updated test 15 (`click Accept All then reload: banner does NOT reappear`) to explicitly assert `await expect(acceptBtn).toBeEnabled({ timeout: BANNER_WAIT });` prior to invoking `.click()`, ensuring Svelte hydration has fully activated the button.
+    - **Verification Evidence:** Executed 3 consecutive test runs with local edge server (`wrangler dev`):
+      - Run 1: 16 passed (100% in 2.0m).
+      - Run 2: 16 passed (100% in 1.3m).
+      - Run 3: 16 passed (100% in 1.2m).
+      - Zero failures across all 48 test assertions.
 
 11. **Enhance `CookieBanner.svelte` Accessibility Focus & Keyboard Trap**
     - **Defect:** Modal dialog does not trap keyboard focus or dismiss on `Escape`.

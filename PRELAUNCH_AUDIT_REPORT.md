@@ -274,6 +274,7 @@ Real empirical measurements executed via Chromium CDP on mobile viewport (`390x8
 - [x] **Bucketing logic:** STRICT, MODERATE, and NONE classification verified across 19 unit test cases in `tests/consent-unit.test.ts`.
 - [x] **Cache safety:** Static denied baseline with `wait_for_update: 500` set in `<head>`.
 - [x] **GPC binding:** Global Privacy Control (`Sec-GPC: 1`) automatically elevates visitor to STRICT bucket.
+- [x] **End-to-End Playwright test suite:** Verified 16/16 browser integration tests in `tests/consent.spec.ts` across 3 consecutive runs (100% pass rate). Flakiness in test 15 resolved by asserting `toBeEnabled()` before `.click()`.
 
 ---
 
