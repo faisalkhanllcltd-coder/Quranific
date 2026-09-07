@@ -13,6 +13,12 @@ export const signupSchema = z.object({
   honeypot: z.string().max(0, 'Bot detected').optional(),
   // B-2 FIX: Turnstile token always required.
   turnstileToken: z.string().min(1, 'Bot check required: please complete the security check.'),
+  // Parent/Guardian Declaration (COPPA / GDPR-K / UK Children's Code)
+  guardianConsent: z
+    .preprocess((val) => val === true || val === 'true' || val === 'on' || val === '1', z.boolean())
+    .refine((val) => val === true, {
+      message: 'Parent or guardian confirmation is required to register.',
+    }),
   // ── Funnel calculator context (all optional — not all paths provide them) ──
   enrollType: z.string().optional(),
   duration: z.string().optional(),

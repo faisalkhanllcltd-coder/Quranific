@@ -69,7 +69,7 @@ A critical disconnect previously existed between the Dead-Letter Queue (DLQ) pro
 3. **[FIXED & VERIFIED]** Placeholder Blog Post Excluded: Added `draft: z.boolean().default(false)` to content collection schema, marked `hello-world.md` as `draft: true`, and added draft filtering across `blog/index.astro`, `blog/[slug].astro`, and `rss.xml.ts`. Prerendered build excludes the draft post and `dist/client/sitemap-0.xml` no longer references it; blog index renders the styled "Publishing Soon" state.
 4. **[FIXED & VERIFIED]** Impressum Statutory Street Address: Updated `SITE.address` in `src/constants/site.ts` to provide the complete street address (`House No 1 KR-2 Area, Gulshan Askari, Quaidabad Malir, Bin Qasim Town, Karachi 75120, Pakistan`). Verified HTML output in `dist/client/legal/impressum/index.html`.
 5. **[FIXED & VERIFIED LIVE]** `www.quranific.com` -> `quranific.com` 301 Permanent Redirect: Intercepted at Cloudflare worker edge entrypoint before asset resolution with `run_worker_first = true` and `Cache-Control: no-store`. Confirmed live: `curl.exe -s -i https://www.quranific.com/` returns `HTTP/1.1 301 Moved Permanently` to `https://quranific.com/`, subpaths and query parameters are preserved, and apex serves `200 OK`.
-6. Minor student registration lacks explicit parent/guardian declaration checkbox.
+6. **[FIXED & VERIFIED LIVE]** Minor Student Registration Parent/Guardian Declaration: Added strict Zod schema validation and a required checkbox with COPPA / UK Children's Code / GDPR-K microcopy to `SignupForm.svelte` and `schema.ts`. Tested live: rejected registration without consent with HTTP 400 ("Parent or guardian confirmation is required to register."), while passing valid consent through to the security gate.
 7. 9 dependency vulnerabilities flagged by `npm audit` (including Svelte <= 5.55.6).
 
 ---
@@ -431,6 +431,7 @@ Real empirical measurements executed via Chromium CDP on mobile viewport (`390x8
 ## 37. Privacy & Data Minimization (Tier 1)
 
 - [x] **Minimal data collected:** Only student name, contact email/phone, and class preferences. Zero payment card details, zero national ID numbers collected.
+- [x] **Parent/Guardian Declaration (COPPA / GDPR-K / UK Children's Code):** Added mandatory parental/guardian confirmation checkbox and validation (`guardianConsent: true`) to `src/lib/schema.ts` and `SignupForm.svelte`. Empirically verified live: registration rejected with HTTP 400 Bad Request (`{"error":"Parent or guardian confirmation is required to register."}`) if consent is omitted.
 
 ---
 

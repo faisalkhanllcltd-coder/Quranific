@@ -160,9 +160,14 @@ if (kv) {
         - Response: `HTTP/1.1 200 OK` (no redirect loop).
 
 7. **Add Parent/Guardian Declaration to Student Signup (`src/lib/schema.ts` & `SignupForm.svelte`)**
-   - **Defect:** No parental consent confirmation checkbox or declaration in Step 1.
-   - **Impact:** Compliance risk under COPPA / UK Children's Code / GDPR-K when parents register on behalf of minor children.
-   - **Fix Required:** Add parent/guardian consent confirmation checkbox or explicit clarifying microcopy above submit button.
+   - **Status:** **[FIXED & VERIFIED LIVE]**
+   - **Fix Summary:** Added `guardianConsent` boolean field to `signupSchema` in `src/lib/schema.ts` with strict Zod validation (`Parent or guardian confirmation is required to register.`). Updated `src/pages/getting-started/_components/SignupForm.svelte` to include a required checkbox with explicit legal microcopy linking to `/legal/terms` and `/legal/privacy` ("I confirm that I am a parent or legal guardian registering on behalf of a student (or an adult student 18+ registering for myself), and I agree to the Terms and Privacy Policy.").
+   - **Live Empirical Verification Drill (Passed Live on Worker vc1753731):**
+     1. **Submission Without Consent:** Sent registration payload without `guardianConsent`:
+        - Command: `curl.exe -s -i -X POST https://quranific.com/api/register -H "Origin: https://quranific.com" -F "name=Test Parent" -F "email=testparent@example.com" -F "whatsapp=+12345678901" -F "country=US" -F "turnstileToken=fake-token"`
+        - Response: `HTTP/1.1 400 Bad Request` -> `{"error":"Parent or guardian confirmation is required to register."}`.
+     2. **Submission With Consent:** Sent identical payload with `-F "guardianConsent=on"`:
+        - Response: Schema validation passed; execution safely advanced to Turnstile token verification: `HTTP/1.1 400 Bad Request` -> `{"error":"Security check failed. Please refresh and try again."}`.
 
 8. **Update Dependency Vulnerabilities (`npm audit`)**
    - **Defect:** 9 vulnerabilities reported by `npm audit` (3 high, 5 moderate, 1 low), including `svelte <= 5.55.6` XSS/DOM clobbering advisory and `fast-uri` / `brace-expansion` DoS advisories.

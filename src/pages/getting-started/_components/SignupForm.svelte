@@ -9,6 +9,7 @@
   let email = $state('');
   let whatsapp = $state('');
   let country = $state('');
+  let guardianConsent = $state(false);
   let emailError = $state('');
   let phoneError = $state('');
 
@@ -178,6 +179,13 @@
     }
     formData.set('turnstileToken', turnstileToken);
 
+    if (!guardianConsent) {
+      errorMsg = 'Please confirm the parent or guardian declaration before continuing.';
+      loading = false;
+      return;
+    }
+    formData.set('guardianConsent', 'true');
+
     try {
       const response = await fetch('/api/register', { method: 'POST', body: formData });
       const result = await response.json();
@@ -300,6 +308,35 @@
         placeholder="e.g. United Kingdom"
       />
     </div>
+  </div>
+
+  <!-- Parent / Guardian Declaration (COPPA / GDPR-K / UK Children's Code) -->
+  <div class="pt-2">
+    <label class="flex items-start gap-3 cursor-pointer group select-none">
+      <input
+        type="checkbox"
+        name="guardianConsent"
+        id="guardianConsent"
+        bind:checked={guardianConsent}
+        required
+        class="mt-1 w-4 h-4 text-emerald-700 bg-white border-emerald-300 rounded focus:ring-emerald-600 focus:ring-offset-0 transition-colors shrink-0 accent-emerald-700"
+      />
+      <span class="text-xs text-emerald-950/80 leading-relaxed group-hover:text-emerald-950">
+        I confirm that I am a parent or legal guardian registering on behalf of a student (or an
+        adult student 18+ registering for myself), and I agree to the
+        <a
+          href="/legal/terms"
+          target="_blank"
+          class="text-emerald-700 underline hover:text-emerald-900 font-semibold">Terms</a
+        >
+        and
+        <a
+          href="/legal/privacy"
+          target="_blank"
+          class="text-emerald-700 underline hover:text-emerald-900 font-semibold">Privacy Policy</a
+        >.
+      </span>
+    </label>
   </div>
 
   <button
