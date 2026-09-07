@@ -17,6 +17,7 @@ import LandingFooter from '../../components/blocks/LandingFooter.astro';
 import StickyMobileCTA from '../../components/blocks/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { landingWomen } from '../../data/faqs';
+import { testimonials } from '../../data/testimonials';
 
 export const prerender = true;
 
@@ -56,29 +57,7 @@ const copy = intentCopy[intent as Intent];
 // SEO Shield: canonical always points to master quran-classes URL
 const canonicalUrl = `${SITE.url}/quran-classes/for-women`;
 
-const womenTestimonials = [
-  {
-    name: 'Amna',
-    initials: 'A',
-    location: 'Germany',
-    quote:
-      'Studying at Quranific has been a profound experience. With the guidance of my dedicated teacher, I have enhanced my Quran recitation and memorized significant portions. Additionally, I learned about Islamic Studies, fiqah, and Salah.',
-  },
-  {
-    name: 'Fatima',
-    initials: 'F',
-    location: 'UK',
-    quote:
-      "Finding a reliable teacher without compromising on privacy was my biggest challenge. The sisters-only environment and my Ustadha's patience completely transformed my recitation without feeling rushed.",
-  },
-  {
-    name: 'Sarah',
-    initials: 'S',
-    location: 'Canada',
-    quote:
-      'Managing household and work left zero time for local classes. The portal’s flexibility around my daily schedule has been an absolute lifesaver.',
-  },
-];
+const womenTestimonials = testimonials.filter((t) => t.audience.includes('women'));
 
 const vettingSteps = [
   {
