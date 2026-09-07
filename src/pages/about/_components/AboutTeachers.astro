@@ -3,6 +3,14 @@
 import Section from '../../../components/ui/Section.astro';
 import EyebrowBadge from '../../../components/ui/EyebrowBadge.astro';
 import EyebrowText from '../../../components/ui/EyebrowText.astro';
+import { facultyTeam } from '../../../data/team';
+
+const featuredFaculty = [
+  facultyTeam.find((m) => m.id === 'hakeem-sadi')!,
+  facultyTeam.find((m) => m.id === 'haseeb-ul-hasan')!,
+  facultyTeam.find((m) => m.id === 'fatima-s')!,
+  facultyTeam.find((m) => m.id === 'abdul-hanan')!,
+];
 
 const Icons = {
   scroll: `<svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`,
@@ -44,120 +52,55 @@ const Icons = {
       </div>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6 mb-12">
-      <div
-        class="bg-cream-50 border border-emerald-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-      >
-        <div class="bg-gradient-to-br from-emerald-700 to-emerald-500 p-8 text-white">
-          <div
-            class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center font-serif text-2xl font-bold mb-4 shadow-inner"
-            aria-hidden="true"
-          >
-            ف
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      {
+        featuredFaculty.map((teacher) => (
+          <div class="bg-cream-50 border border-emerald-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div
+                class={`bg-gradient-to-br ${teacher.avatarBg || 'from-emerald-700 to-emerald-500'} p-8 text-white`}
+              >
+                <div
+                  class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center font-serif text-2xl font-bold mb-4 shadow-inner"
+                  aria-hidden="true"
+                >
+                  {teacher.arabicLetter || teacher.name.charAt(0)}
+                </div>
+                <h3 class="text-xl font-bold mb-1">
+                  {teacher.gender === 'Female' ? 'Ustadha ' : 'Ustadh '}
+                  {teacher.name}
+                </h3>
+                <p class="text-sm text-emerald-50/80 font-medium mb-4">
+                  {teacher.credentials[0] || teacher.role}
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <EyebrowBadge class="bg-white/10 border border-white/20 text-white">
+                    {teacher.specialties[0]}
+                  </EyebrowBadge>
+                </div>
+              </div>
+              <div class="p-8">
+                <EyebrowText class="text-emerald-900/50 mb-4"> Specialises in </EyebrowText>
+                <ul class="space-y-3 mb-6">
+                  {teacher.specialties.slice(0, 2).map((spec) => (
+                    <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true" />
+                      {spec}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            {teacher.quote && (
+              <div class="px-8 pb-8">
+                <p class="font-serif italic text-emerald-900 text-lg pt-6 border-t border-emerald-100">
+                  "{teacher.quote}"
+                </p>
+              </div>
+            )}
           </div>
-          <h3 class="text-xl font-bold mb-1">Ustadha Fatima K.</h3>
-          <p class="text-sm text-emerald-50/80 font-medium mb-4">
-            Hafiza · Ijazah in Hafs 'an 'Asim
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <EyebrowBadge class="bg-white/10 border border-white/20 text-white">
-              Children's specialist
-            </EyebrowBadge>
-          </div>
-        </div>
-        <div class="p-8">
-          <EyebrowText class="text-emerald-900/50 mb-4"> Specialises in </EyebrowText>
-          <ul class="space-y-3 mb-6">
-            <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> Ages 5–12,
-              beginner to intermediate
-            </li>
-            <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> Tajweed
-              fundamentals & Noorani Qaida
-            </li>
-          </ul>
-          <p class="font-serif italic text-emerald-900 text-lg pt-6 border-t border-emerald-100">
-            "Every child is a beginner exactly once. I want that experience to feel safe."
-          </p>
-        </div>
-      </div>
-
-      <div
-        class="bg-cream-50 border border-emerald-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-      >
-        <div class="bg-gradient-to-br from-emerald-700 to-emerald-500 p-8 text-white">
-          <div
-            class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center font-serif text-2xl font-bold mb-4 shadow-inner"
-            aria-hidden="true"
-          >
-            م
-          </div>
-          <h3 class="text-xl font-bold mb-1">Ustadh Muhammad A.</h3>
-          <p class="text-sm text-emerald-50/80 font-medium mb-4">
-            Hafiz · Ijazah in Multiple Qira'at
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <EyebrowBadge class="bg-white/10 border border-white/20 text-white">
-              Advanced Tajweed
-            </EyebrowBadge>
-          </div>
-        </div>
-        <div class="p-8">
-          <EyebrowText class="text-emerald-900/50 mb-4"> Specialises in </EyebrowText>
-          <ul class="space-y-3 mb-6">
-            <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> Ages 10+
-              & adult learners
-            </li>
-            <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> Hifz (full
-              memorisation) programmes
-            </li>
-          </ul>
-          <p class="font-serif italic text-emerald-900 text-lg pt-6 border-t border-emerald-100">
-            "Tajweed isn't rules. It's the sound of a living tradition. I teach the soul of it."
-          </p>
-        </div>
-      </div>
-
-      <div
-        class="bg-cream-50 border border-emerald-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-      >
-        <div class="bg-gradient-to-br from-emerald-700 to-emerald-500 p-8 text-white">
-          <div
-            class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center font-serif text-2xl font-bold mb-4 shadow-inner"
-            aria-hidden="true"
-          >
-            ز
-          </div>
-          <h3 class="text-xl font-bold mb-1">Ustadha Zainab R.</h3>
-          <p class="text-sm text-emerald-50/80 font-medium mb-4">
-            Hafiza · Child Psychology background
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <EyebrowBadge class="bg-white/10 border border-white/20 text-white">
-              Special Needs
-            </EyebrowBadge>
-          </div>
-        </div>
-        <div class="p-8">
-          <EyebrowText class="text-emerald-900/50 mb-4"> Specialises in </EyebrowText>
-          <ul class="space-y-3 mb-6">
-            <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> ADHD-adapted
-              lesson structure
-            </li>
-            <li class="flex items-center gap-3 text-[14px] font-medium text-emerald-800/80">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-700" aria-hidden="true"></span> Anxiety-sensitive
-              teaching methods
-            </li>
-          </ul>
-          <p class="font-serif italic text-emerald-900 text-lg pt-6 border-t border-emerald-100">
-            "No child is difficult. Every child just needs someone who understands how they learn."
-          </p>
-        </div>
-      </div>
+        ))
+      }
     </div>
 
     <div class="bg-white border border-emerald-100 rounded-3xl p-8 lg:p-12 shadow-sm">

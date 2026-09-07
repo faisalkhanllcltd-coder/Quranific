@@ -2,6 +2,15 @@
 // src/pages/about/_components/AboutTeam.astro
 import Section from '../../../components/ui/Section.astro';
 import EyebrowText from '../../../components/ui/EyebrowText.astro';
+import { teamMembers } from '../../../data/team';
+
+// Display core leadership and leads from unified data
+const coreTeam = [
+  teamMembers.find((m) => m.id === 'faisal-khan')!,
+  teamMembers.find((m) => m.id === 'imranullah')!,
+  teamMembers.find((m) => m.id === 'hakeem-sadi')!,
+  teamMembers.find((m) => m.id === 'haseeb-ul-hasan')!,
+];
 ---
 
 <Section class="py-10 md:py-20 lg:py-32 bg-cream-50 border-t border-emerald-100">
@@ -20,75 +29,21 @@ import EyebrowText from '../../../components/ui/EyebrowText.astro';
     </div>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-      <div
-        class="bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center"
-      >
-        <div
-          class="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-500 flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner"
-          aria-hidden="true"
-        >
-          ف
-        </div>
-        <h3 class="text-xl font-bold text-emerald-950 mb-1">Faisal Khan</h3>
-        <EyebrowText class="text-emerald-700 mb-4"> Founder & CEO </EyebrowText>
-        <p class="text-[13px] text-emerald-900/80 font-medium leading-relaxed">
-          Faisal brings a rare dual-expertise to Quranific. He is formally trained as an Islamic
-          scholar with years of professional experience proofreading classical texts in Hadith,
-          Fiqh, and Tafsir. As a software engineer and digital marketing expert, he architected
-          Quranific’s platform to ensure the technology is as reliable as the teaching methodology.
-        </p>
-      </div>
-
-      <div
-        class="bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center"
-      >
-        <div
-          class="w-20 h-20 rounded-full bg-gradient-to-br from-teal-700 to-teal-500 flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner"
-          aria-hidden="true"
-        >
-          ع
-        </div>
-        <h3 class="text-xl font-bold text-emerald-950 mb-1">Ustad Imranullah</h3>
-        <EyebrowText class="text-teal-700 mb-4"> Operations Lead </EyebrowText>
-        <p class="text-[13px] text-emerald-900/80 font-medium leading-relaxed">
-          Oversees the day-to-day running of the academy, from matching students with the right
-          teacher to ensuring every family's scheduling and technical experience is seamless.
-        </p>
-      </div>
-
-      <div
-        class="bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center"
-      >
-        <div
-          class="w-20 h-20 rounded-full bg-gradient-to-br from-purple-700 to-purple-500 flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner"
-          aria-hidden="true"
-        >
-          ف
-        </div>
-        <h3 class="text-xl font-bold text-emerald-950 mb-1">Ustadha Fatima Saif</h3>
-        <EyebrowText class="text-purple-700 mb-4"> Female Teacher Lead </EyebrowText>
-        <p class="text-[13px] text-emerald-900/80 font-medium leading-relaxed">
-          Leads and mentors Quranific's female teaching team, ensuring our warmth-first,
-          patience-led approach is applied in every session.
-        </p>
-      </div>
-
-      <div
-        class="bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center"
-      >
-        <div
-          class="w-20 h-20 rounded-full bg-gradient-to-br from-amber-600 to-amber-400 flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner"
-          aria-hidden="true"
-        >
-          ح
-        </div>
-        <h3 class="text-xl font-bold text-emerald-950 mb-1">Ustad Haseeb ul Hasan</h3>
-        <EyebrowText class="text-amber-600 mb-4"> Male Teacher Lead </EyebrowText>
-        <p class="text-[13px] text-emerald-900/80 font-medium leading-relaxed">
-          Directs the male teaching team, holding every instructor to our high standards of pedagy,
-          accuracy, and empathy.
-        </p>
-      </div>
+      {
+        coreTeam.map((member) => (
+          <div class="bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center">
+            <div
+              class={`w-20 h-20 rounded-full ${member.avatarBg || 'bg-gradient-to-br from-emerald-700 to-emerald-500'} flex items-center justify-center text-white font-serif text-3xl mx-auto mb-5 shadow-inner`}
+              aria-hidden="true"
+            >
+              {member.arabicLetter || member.name.charAt(0)}
+            </div>
+            <h3 class="text-xl font-bold text-emerald-950 mb-1">{member.name}</h3>
+            <EyebrowText class="text-emerald-700 mb-4"> {member.role} </EyebrowText>
+            <p class="text-[13px] text-emerald-900/80 font-medium leading-relaxed">{member.bio}</p>
+          </div>
+        ))
+      }
     </div>
   </div>
 </Section>
