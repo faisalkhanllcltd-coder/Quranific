@@ -138,3 +138,11 @@ export function getCurrencyForCountry(countryCode?: string | null): Currency {
   const clean = countryCode.trim().toUpperCase();
   return COUNTRY_CURRENCY_MAP[clean] ?? 'USD';
 }
+
+/**
+ * Helper to retrieve base starter monthly fee (30 min, 2 sessions/week) for a given currency.
+ * Single source of truth starter pricing: USD $40, GBP £29, EUR €34, AED 146, SAR 150, SGD 50, CAD 55, AUD 55.
+ */
+export function getStarterPrice(currency: Currency = 'USD'): number {
+  return PRICING[currency]['30']['2'];
+}

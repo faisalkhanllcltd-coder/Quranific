@@ -130,13 +130,24 @@
   2. **Pedagogical Alignment:** Audited syllabus outlines, prerequisites, age suitability, and target outcomes across all 6 courses (Basic Qaida: ages 4–14; Tajweed: ages 8+; Hifz: all ages; Tafsir: ages 14+; Ijazah: adults; Arabic: ages 10+).
   3. **Verification:** Verified via `scratch/verify-pricing-data.mjs` that `Course` interface has no price field (`false`), zero courses have hardcoded prices (`false`), and the project compiles with 0 errors (`astro check` & `astro build` 100% green).
 
-### [TASK-06] Fee Data Verification
+### [TASK-06] Fee Data Verification — [FIXED & VERIFIED]
 
 - **Original Item:** Item 6
+- **Status:** **[FIXED & VERIFIED ON 2026-09-08]**
 - **Files:** [`src/constants/pricing.ts`](file:///d:/Live%20Web/Quranific-live/src/constants/pricing.ts).
-- **Concrete Actions:**
-  1. Re-verify `pricing.ts` is the single source of truth for all pricing calculations.
-  2. Confirm base fee of $40/month (or regional equivalent) for starter plans across all currencies.
+- **Concrete Actions & Empirical Proof:**
+  1. **Single Source of Truth Verified:** Confirmed `PRICING` matrix in `src/constants/pricing.ts` is the sole calculation authority for all 8 supported currencies across all durations (30 min, 40 min) and frequencies (2, 3, 4, 5 sessions/week).
+  2. **Base Starter Fee Confirmed:** Verified starter plan (30-min session, 2 sessions/week) base rates:
+     - USD: $40/month
+     - GBP: £29/month
+     - EUR: €34/month
+     - AED: د.إ146/month
+     - SAR: ﷼150/month
+     - SGD: S$50/month
+     - CAD: CA$55/month
+     - AUD: A$55/month
+  3. **Exported Starter Helper:** Added typed `getStarterPrice(currency)` helper to enforce access without magical index lookups.
+  4. **Empirical Verification:** Tested via `scratch/verify-pricing-data.mjs` confirming starter pricing across all 8 currencies (`true`) and zero external discrepancies.
 
 ### [TASK-07] Centralized Features Data Architecture
 
