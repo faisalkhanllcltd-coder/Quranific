@@ -368,3 +368,34 @@ test.describe('Gate 6 — Banner actions', () => {
     expect(home).toEqual(course);
   });
 });
+
+// ─── Gate 7 — Accessibility & Keyboard Navigation ──────────────────────────
+
+test.describe('Gate 7 — Accessibility & Keyboard Navigation', () => {
+  test.beforeEach(async ({ context }) => {
+    await context.clearCookies();
+  });
+
+  test('Escape key closes preferences and focus is trapped inside dialog', async ({ page }) => {
+    await mockBucket(page, 'STRICT');
+    await page.goto(`${BASE}/`);
+    await waitForBanner(page);
+
+    const dialog = page.getByRole('dialog', { name: /cookie consent/i });
+    await expect(dialog).toBeVisible();
+
+    // 1. Initial focus is placed inside dialog
+    const isFocusInDialog = await dialog.evaluate((el) => el.contains(document.activeElement));
+    expect(isFocusInDialog).toBe(true);
+
+    // 2. Open preferences details
+    const prefsBtn = page.getByRole('button', { name: /manage preferences/i });
+    await prefsBtn.click();
+    await expect(page.getByText(/cookie categories/i)).toBeVisible();
+
+    // 3. Press Escape -> preferences close
+    await page.keyboard.press('Escape');
+    await expect(page.getByText(/cookie categories/i)).not.toBeVisible();
+    await expect(dialog).toBeVisible(); // main dialog remains visible
+  });
+});

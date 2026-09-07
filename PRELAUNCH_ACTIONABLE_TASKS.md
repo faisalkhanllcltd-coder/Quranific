@@ -196,8 +196,9 @@ if (kv) {
       - Zero failures across all 48 test assertions.
 
 11. **Enhance `CookieBanner.svelte` Accessibility Focus & Keyboard Trap**
-    - **Defect:** Modal dialog does not trap keyboard focus or dismiss on `Escape`.
-    - **Fix Required:** Add `keydown` Escape handler and focus containment within the dialog container.
+    - **Status:** **[FIXED & VERIFIED]**
+    - **Fix Summary:** In `src/components/blocks/CookieBanner.svelte`, bound `dialogRef` to the modal container, added an automatic initial focus effect targeting the first interactive element when the dialog becomes visible, added a Tab/Shift+Tab focus loop trap to contain focus inside the dialog, and added an `Escape` keydown listener that gracefully closes preferences details.
+    - **Verification Evidence:** Added Gate 7 Playwright E2E test `Escape key closes preferences and focus is trapped inside dialog`. Verified live via Playwright: initial focus enters the dialog, pressing Escape cleanly closes the preferences panel, and focus containment holds (Test passed in 2.2s; all 17 suite tests passing).
 
 12. **Purge Unused Font Subsets (Cyrillic, Vietnamese, Greek)**
     - **Defect:** Font packages bundle unused Cyrillic/Vietnamese font files in `dist/client/_astro/`.

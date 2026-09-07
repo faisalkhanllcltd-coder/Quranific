@@ -121,6 +121,62 @@
       bannerRoot.removeEventListener('consent-bucket', onBucketResolved);
     };
   });
+
+  // ─── Keyboard Accessibility & Focus Containment ──────────────────────────
+  let dialogRef = $state<HTMLElement | null>(null);
+
+  function handleKeydown(e: KeyboardEvent) {
+    if (!visible) return;
+
+    if (e.key === 'Escape') {
+      if (showDetails) {
+        showDetails = false;
+        e.preventDefault();
+      }
+      return;
+    }
+
+    if (e.key === 'Tab' && dialogRef) {
+      const focusable = Array.from(
+        dialogRef.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          last.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === last) {
+          first.focus();
+          e.preventDefault();
+        }
+      }
+    }
+  }
+
+  $effect(() => {
+    if (visible && dialogRef) {
+      const first = dialogRef.querySelector<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled])'
+      );
+      first?.focus();
+    }
+  });
+
+  $effect(() => {
+    if (visible) {
+      window.addEventListener('keydown', handleKeydown);
+      return () => {
+        window.removeEventListener('keydown', handleKeydown);
+      };
+    }
+  });
 </script>
 
 {#if visible}
@@ -132,6 +188,7 @@
     aria-label="Cookie consent"
   >
     <div
+      bind:this={dialogRef}
       class="pointer-events-auto w-full sm:max-w-md bg-white border border-emerald-100 shadow-2xl shadow-emerald-900/10 rounded-t-2xl sm:rounded-2xl p-6 sm:p-7 text-sm"
     >
       <!-- Header -->
