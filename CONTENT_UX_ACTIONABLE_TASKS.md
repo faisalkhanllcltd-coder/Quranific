@@ -257,13 +257,20 @@
      - In `Funnel.astro`, refined desktop sidebar reviews to `p-3.5 xl:p-4 bg-emerald-900/30 border-emerald-800/40` with compact typography (`text-xs sm:text-sm`) and subtle gold star ratings, providing reassuring social proof without drawing attention away from the form fields.
   4. **Verification:** Verified via `scratch/verify-step1-ux.mjs` (100% assertions true) and clean production build (`astro check` 0 errors, `astro build` complete).
 
-### [TASK-19] Complete (Step 2) Form UI & Step 3 Clarity
+### [TASK-19] Complete (Step 2) Form UI & Step 3 Clarity — [FIXED & VERIFIED]
 
 - **Original Item:** Item 19
-- **Files:** [`src/pages/getting-started/_components/CompleteForm.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/CompleteForm.svelte), [`src/pages/getting-started/_components/StepIndicator.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/StepIndicator.svelte).
-- **Concrete Actions:**
-  1. Change default teacher gender preference from `'Male Teacher'` to `'No Preference'`.
-  2. Rename Step 3 label in `StepIndicator.svelte` from "Verify" to "Confirmed" or "Complete".
+- **Status:** **[FIXED & VERIFIED ON 2026-09-08]**
+- **Files:** [`src/pages/getting-started/_components/CompleteForm.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/CompleteForm.svelte), [`src/pages/getting-started/_components/StepIndicator.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/StepIndicator.svelte), [`src/pages/getting-started/complete.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/complete.astro), [`src/pages/getting-started/success.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/success.astro).
+- **Concrete Actions & Empirical Proof:**
+  1. **Teacher Gender Preference Defaulting:**
+     - Updated default state in `CompleteForm.svelte` to `'No Preference'` (`selectedTeacher = $state('No Preference')`).
+     - Aligned URL/Session fallback in `onMount` to safely default to `'No Preference'`.
+  2. **Step 3 Label Clarification:**
+     - Renamed Step 3 label in `StepIndicator.svelte` from `"Verify"` to `"Confirmed"`, eliminating ambiguity and signaling unambiguous completion upon arrival.
+  3. **Typography Consistency Across Funnel:**
+     - Harmonized `h1` headings in `complete.astro` and `success.astro` with `font-serif font-black text-emerald-950` (Merriweather), matching the marketing site visual hierarchy.
+  4. **Verification:** Verified via `scratch/verify-step2-ux.mjs` (100% assertions true) and clean production build (`astro check` 0 errors, `astro build` complete).
 
 ### [TASK-20] Intent Pages 404 Route Fix — [FIXED & VERIFIED LIVE]
 

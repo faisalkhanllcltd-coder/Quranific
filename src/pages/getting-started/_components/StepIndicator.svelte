@@ -6,7 +6,7 @@
   const steps = [
     { num: 1, label: 'Your Details' },
     { num: 2, label: 'Customize Plan' },
-    { num: 3, label: 'Verify' },
+    { num: 3, label: 'Confirmed' },
   ];
 
   // Svelte 5 Rune: Mathematically perfect, zero-overhead reactivity

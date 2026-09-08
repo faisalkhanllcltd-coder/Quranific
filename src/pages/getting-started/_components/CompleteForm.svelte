@@ -11,7 +11,7 @@
   // Core state for native radio bindings
   let selectedCourse = $state('');
   let selectedGender = $state('');
-  let selectedTeacher = $state('Male Teacher');
+  let selectedTeacher = $state('No Preference');
   let selectedLevel = $state('');
   let selectedDays = $state('');
   let selectedSchedule = $state('');
@@ -34,7 +34,7 @@
       selectedTeacher =
         params.get('teacherGender') ||
         sessionStorage.getItem('q_track_teacherGender') ||
-        'Male Teacher';
+        'No Preference';
       selectedLevel = params.get('level') || sessionStorage.getItem('q_track_level') || '';
       selectedSchedule = params.get('schedule') || sessionStorage.getItem('q_track_schedule') || '';
       selectedDuration = params.get('duration') || sessionStorage.getItem('q_track_duration') || '';
