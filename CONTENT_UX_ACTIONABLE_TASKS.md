@@ -220,16 +220,25 @@
      - Both cards provide secondary links directly to `/contact` for portal access assistance.
   3. Verified `dist/client/portals/index.html`: zero references to `app.quranific.com` exist anywhere in the build.
 
-### [TASK-15] Funnel Progression & Conversion Tracking
+### [TASK-15] Funnel Progression & Conversion Tracking — [FIXED & VERIFIED]
 
 - **Original Item:** Item 15
-- **Files:** [`src/pages/getting-started/signup.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/signup.astro), [`src/pages/getting-started/complete.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/complete.astro), [`src/pages/getting-started/success.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/success.astro).
-- **Concrete Actions:**
-  1. Emit standard GTM/GA4 events at each funnel step:
-     - Step 1 mount / submit: `dataLayer.push({ event: 'begin_checkout', ... })`
-     - Step 2 submit: `dataLayer.push({ event: 'add_shipping_info', ... })`
-     - Step 3 mount: `dataLayer.push({ event: 'generate_lead', lead_id: ... })`
-  2. Preserve UTM and campaign attribution through the entire funnel into the final CRM payload.
+- **Status:** **[FIXED & VERIFIED ON 2026-09-08]**
+- **Files:** [`src/pages/getting-started/signup.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/signup.astro), [`src/pages/getting-started/_components/SignupForm.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/SignupForm.svelte), [`src/pages/getting-started/_components/CompleteForm.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/CompleteForm.svelte), [`src/pages/getting-started/success.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/success.astro), [`src/lib/schema.ts`](file:///d:/Live%20Web/Quranific-live/src/lib/schema.ts), [`src/pages/api/register.ts`](file:///d:/Live%20Web/Quranific-live/src/pages/api/register.ts), [`src/pages/api/complete.ts`](file:///d:/Live%20Web/Quranific-live/src/pages/api/complete.ts), [`src/lib/email.ts`](file:///d:/Live%20Web/Quranific-live/src/lib/email.ts).
+- **Concrete Actions & Empirical Proof:**
+  1. **Step 1 Tracking (begin_checkout):**
+     - Emits `dataLayer.push({ event: 'begin_checkout', funnel_step: 1, step_name: 'signup', traffic_source })` on `SignupForm.svelte` component mount.
+     - Emits `dataLayer.push({ event: 'step1_completed', funnel_step: 1, step_name: 'signup' })` immediately on successful initial registration.
+  2. **Step 2 Tracking (add_shipping_info):**
+     - Emits `dataLayer.push({ event: 'add_shipping_info', funnel_step: 2, step_name: 'customize_plan', course, gender, teacher_preference, level, days, schedule, duration })` immediately on Step 2 submit before redirect.
+  3. **Step 3 Tracking (generate_lead):**
+     - Emits `dataLayer.push({ event: 'generate_lead', funnel_step: 3, step_name: 'registration_success', lead_id: leadId, course, plan })` via inline script in `success.astro`.
+  4. **Attribution Preservation (UTMs & Ad Click IDs):**
+     - Extended `trackingKeys` in `SignupForm.svelte` to preserve `utm_term`, alongside `utm_source`, `utm_campaign`, `utm_medium`, `utm_content`, `gclid`, `fbclid`, `ttclid`.
+     - Validated via `signupSchema` in `schema.ts`.
+     - Forwarded `uco` (`utm_content`) and `ut` (`utm_term`) into signed session JWT in `register.ts`.
+     - Delivered intact into `complete.ts` and forwarded into Zapier/CRM webhook payload and Resend notification emails with rich formatting.
+  5. **Verification:** Verified via `scratch/verify-funnel-tracking.mjs` (100% assertions true) and clean production build (`astro check` 0 errors, `astro build` complete).
 
 ### [TASK-18] Signup Step 1 UI/UX Refinement
 

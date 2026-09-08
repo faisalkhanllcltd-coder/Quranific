@@ -123,6 +123,22 @@
         throw new Error(result.error || 'Failed to complete registration');
       }
 
+      if (typeof window !== 'undefined') {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'add_shipping_info',
+          funnel_step: 2,
+          step_name: 'customize_plan',
+          course: selectedCourse,
+          gender: selectedGender,
+          teacher_preference: selectedTeacher,
+          level: selectedLevel,
+          days: selectedDays,
+          schedule: selectedSchedule,
+          duration: selectedDuration,
+        });
+      }
+
       window.location.assign('/getting-started/success');
     } catch (err: unknown) {
       globalError =

@@ -49,6 +49,7 @@
         'utm_campaign',
         'utm_medium',
         'utm_content',
+        'utm_term',
         'source',
       ];
       const contextKeys = [
@@ -138,6 +139,14 @@
         whatsapp = localStorage.getItem('q_draft_whatsapp') || '';
         country = localStorage.getItem('q_draft_country') || '';
       }
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'begin_checkout',
+        funnel_step: 1,
+        step_name: 'signup',
+        traffic_source: trafficSource,
+      });
     }
   });
 
@@ -191,6 +200,15 @@
       const result = await response.json();
 
       if (response.ok || result.success) {
+        if (typeof window !== 'undefined') {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: 'step1_completed',
+            funnel_step: 1,
+            step_name: 'signup',
+            traffic_source: trafficSource,
+          });
+        }
         ['name', 'email', 'whatsapp', 'country'].forEach((k) =>
           localStorage.removeItem('q_draft_' + k)
         );

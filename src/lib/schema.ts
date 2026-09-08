@@ -38,6 +38,7 @@ export const signupSchema = z.object({
   utm_campaign: z.string().optional(),
   utm_medium: z.string().optional(),
   utm_content: z.string().optional(),
+  utm_term: z.string().optional(),
 });
 
 export const completeSchema = z.object({

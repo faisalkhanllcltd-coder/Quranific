@@ -25,6 +25,8 @@ export interface Step1Data {
   us?: string; // utm_source
   uc?: string; // utm_campaign
   um?: string; // utm_medium
+  uco?: string; // utm_content
+  ut?: string; // utm_term
   // Calculator context (short keys from JWT)
   et?: string; // enrollType
   dur?: string; // duration
@@ -143,6 +145,8 @@ export async function sendFullAdminNotification(
   const safeUtmSource = esc(String(step1Data.us || ''));
   const safeUtmCampaign = esc(String(step1Data.uc || ''));
   const safeUtmMedium = esc(String(step1Data.um || ''));
+  const safeUtmContent = esc(String(step1Data.uco || ''));
+  const safeUtmTerm = esc(String(step1Data.ut || ''));
   // Step 2 fields
   const safeCourse = esc(String(step2Data?.course || step1Data?.crs || ''));
   const safeLevel = esc(String(step2Data.level || ''));
@@ -195,6 +199,8 @@ export async function sendFullAdminNotification(
         ${safeUtmSource ? `<tr><td style="padding: 4px 0;"><strong>utm_source:</strong></td><td style="padding: 4px 0;">${safeUtmSource}</td></tr>` : ''}
         ${safeUtmCampaign ? `<tr><td style="padding: 4px 0;"><strong>utm_campaign:</strong></td><td style="padding: 4px 0;">${safeUtmCampaign}</td></tr>` : ''}
         ${safeUtmMedium ? `<tr><td style="padding: 4px 0;"><strong>utm_medium:</strong></td><td style="padding: 4px 0;">${safeUtmMedium}</td></tr>` : ''}
+        ${safeUtmContent ? `<tr><td style="padding: 4px 0;"><strong>utm_content:</strong></td><td style="padding: 4px 0;">${safeUtmContent}</td></tr>` : ''}
+        ${safeUtmTerm ? `<tr><td style="padding: 4px 0;"><strong>utm_term:</strong></td><td style="padding: 4px 0;">${safeUtmTerm}</td></tr>` : ''}
       </table>`
           : ''
       }

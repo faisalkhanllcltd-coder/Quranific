@@ -14,6 +14,11 @@ declare namespace App {
   }
 }
 
+interface Window {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dataLayer?: any[];
+}
+
 interface Env {
   // Email provider
   RESEND_API_KEY: string;

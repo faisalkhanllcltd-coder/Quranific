@@ -72,6 +72,19 @@ const waLink = generateWhatsAppLink(fullMessage);
 ---
 
 <Funnel title="Registration Successful | Quranific">
+  <script is:inline define:vars={{ leadId, course, duration, sessions }}>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'generate_lead',
+      lead_id: leadId,
+      course: course || 'General',
+      duration: duration || '',
+      sessions: sessions || '',
+      funnel_step: 3,
+      step_name: 'registration_success',
+    });
+  </script>
+
   <div
     class="w-full flex flex-col items-center justify-center text-center animate-in duration-700 fade-in slide-in-from-bottom-4"
   >

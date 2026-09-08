@@ -117,6 +117,8 @@ export const POST: APIRoute = async (context) => {
       us?: string;
       uc?: string;
       um?: string;
+      uco?: string;
+      ut?: string;
     };
     let jti: string | undefined;
 

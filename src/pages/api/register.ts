@@ -82,6 +82,8 @@ export const POST: APIRoute = async (context) => {
       us: (formData.utm_source as string) || '',
       uc: (formData.utm_campaign as string) || '',
       um: (formData.utm_medium as string) || '',
+      uco: (formData.utm_content as string) || '',
+      ut: (formData.utm_term as string) || '',
     };
 
     const parsed = signupSchema.safeParse(formData);
