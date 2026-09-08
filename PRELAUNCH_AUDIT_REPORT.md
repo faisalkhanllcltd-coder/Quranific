@@ -8,6 +8,7 @@
 **Live Production Worker Deployment:** Version `64499c10-a7d0-47cf-a3f7-2c7b5cffe34d` (Created `2026-09-05T19:08:43.587Z`)  
 **Live Alarm Worker Deployment:** Version `97e2b6e4-d703-4bab-9d56-2650ff70274c` (Created `2026-09-05T19:06:25.577Z`)  
 **Auditor:** Antigravity AI (Independent Corner-to-Corner Verification)
+**Note**: The subsequent `staging/content-ux-audit` branch was reverted and deleted; `main` was restored to the prelaunch-audit close-out state.
 
 ---
 
