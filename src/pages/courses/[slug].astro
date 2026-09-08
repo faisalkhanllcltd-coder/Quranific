@@ -15,6 +15,7 @@ import CourseCurriculum from './_components/CourseCurriculum.astro';
 import CoursePricingSection from './_components/CoursePricingSection.astro';
 
 import { courses } from '../../constants/courses';
+import { faqs } from '../../data/faqs';
 
 export function getStaticPaths() {
   return courses.map((course) => ({
@@ -55,10 +56,27 @@ const schema = {
     },
   },
 };
+
+const activeFaqs =
+  course.courseFaqs && course.courseFaqs.length > 0 ? course.courseFaqs : faqs.courses;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: activeFaqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer.replace(/<[^>]*>?/gm, '').trim(),
+    },
+  })),
+};
 ---
 
 <Page description={course.shortDesc} title={`${course.title} | Quranific`} image={imageSrc}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
 
   <!-- layout="split" locks the grid to 50/50 text-to-image ratio -->
   <PageHero

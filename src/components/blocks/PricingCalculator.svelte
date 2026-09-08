@@ -10,8 +10,9 @@
 
   interface Props {
     accent?: 'emerald' | 'purple';
+    initialCourse?: string;
   }
-  let { accent = 'emerald' }: Props = $props();
+  let { accent = 'emerald', initialCourse = '' }: Props = $props();
 
   let isPurple = $derived(accent === 'purple');
 
@@ -70,7 +71,7 @@
   let dur = $state('30');
   let sess = $state('3');
   let currency = $state<Currency>('USD');
-  let selectedCourse = $state(COURSE_LIST[0]?.slug || 'basic-qaida');
+  let selectedCourse = $state(initialCourse || COURSE_LIST[0]?.slug || 'basic-qaida');
   let courseNote = $state('');
 
   // Geo-detection: visitor country determines currency (no selector, no switching)
