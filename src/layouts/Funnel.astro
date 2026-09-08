@@ -85,15 +85,20 @@ const { title, description = 'Complete your registration for Quranific.' } = Ast
           </footer>
         </blockquote>
 
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-3.5">
           {
             testimonials.slice(0, 2).map((review) => (
-              <div class="bg-emerald-900/40 border border-emerald-800/50 p-4 xl:p-5 rounded-xl backdrop-blur-sm">
-                <div class="flex items-center gap-1 mb-2 text-amber-400 text-xs" aria-hidden="true">
+              <div class="bg-emerald-900/30 border border-emerald-800/40 p-3.5 xl:p-4 rounded-xl backdrop-blur-sm">
+                <div
+                  class="flex items-center gap-1 mb-1.5 text-amber-400 text-[11px]"
+                  aria-hidden="true"
+                >
                   ★★★★★
                 </div>
-                <p class="text-emerald-100 text-sm leading-relaxed mb-2">"{review.quote}"</p>
-                <p class="text-xs font-bold text-emerald-400">— {review.name}</p>
+                <p class="text-emerald-100/90 text-xs sm:text-sm leading-relaxed mb-1.5">
+                  "{review.quote}"
+                </p>
+                <p class="text-[11px] font-semibold text-emerald-300">— {review.name}</p>
               </div>
             ))
           }

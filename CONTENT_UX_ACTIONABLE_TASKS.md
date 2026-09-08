@@ -240,13 +240,22 @@
      - Delivered intact into `complete.ts` and forwarded into Zapier/CRM webhook payload and Resend notification emails with rich formatting.
   5. **Verification:** Verified via `scratch/verify-funnel-tracking.mjs` (100% assertions true) and clean production build (`astro check` 0 errors, `astro build` complete).
 
-### [TASK-18] Signup Step 1 UI/UX Refinement
+### [TASK-18] Signup Step 1 UI/UX Refinement — [FIXED & VERIFIED]
 
 - **Original Item:** Item 18
-- **Files:** [`src/pages/getting-started/_components/StepIndicator.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/StepIndicator.svelte), [`src/pages/getting-started/signup.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/signup.astro).
-- **Concrete Actions:**
-  1. Reduce step circle dimensions from `w-10 h-10` to `w-8 h-8` and reduce border/ring visual weight.
-  2. Fine-tune desktop testimonial sidebar so it does not distract from the primary form fields.
+- **Status:** **[FIXED & VERIFIED ON 2026-09-08]**
+- **Files:** [`src/pages/getting-started/_components/StepIndicator.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/_components/StepIndicator.svelte), [`src/pages/getting-started/signup.astro`](file:///d:/Live%20Web/Quranific-live/src/pages/getting-started/signup.astro), [`src/layouts/Funnel.astro`](file:///d:/Live%20Web/Quranific-live/src/layouts/Funnel.astro).
+- **Concrete Actions & Empirical Proof:**
+  1. **Step Indicator Circle Resizing:**
+     - Reduced step indicator dimensions from `w-10 h-10` to `w-8 h-8` across all states.
+     - Adjusted horizontal connecting bar baseline from `top-5` to `top-4` for concentric vertical alignment.
+     - Reduced active ring prominence from `ring-4 ring-emerald-50` to `ring-2 ring-emerald-100 shadow-sm scale-105`.
+     - Scaled checkmark icon stroke from `3` to `2.5` (`w-4 h-4`).
+  2. **Brand Typography Alignment:**
+     - Updated Step 1 heading in `signup.astro` to include `font-serif` (Merriweather), bringing the funnel header into typographic harmony with the marketing site.
+  3. **Sidebar Testimonial Fine-Tuning:**
+     - In `Funnel.astro`, refined desktop sidebar reviews to `p-3.5 xl:p-4 bg-emerald-900/30 border-emerald-800/40` with compact typography (`text-xs sm:text-sm`) and subtle gold star ratings, providing reassuring social proof without drawing attention away from the form fields.
+  4. **Verification:** Verified via `scratch/verify-step1-ux.mjs` (100% assertions true) and clean production build (`astro check` 0 errors, `astro build` complete).
 
 ### [TASK-19] Complete (Step 2) Form UI & Step 3 Clarity
 

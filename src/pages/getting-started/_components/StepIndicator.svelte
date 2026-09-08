@@ -15,7 +15,7 @@
 
 <div class="w-full max-w-[400px] mx-auto mb-8 relative" aria-label="Signup Progress">
   <div
-    class="absolute top-5 left-[15%] right-[15%] h-1 bg-emerald-100 z-0 rounded-full"
+    class="absolute top-4 left-[15%] right-[15%] h-1 bg-emerald-100 z-0 rounded-full"
     aria-hidden="true"
   >
     <div
@@ -35,16 +35,16 @@
         aria-current={step.num === currentStep ? 'step' : undefined}
       >
         <div
-          class={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold relative z-10 transition-all duration-500 ease-in-out ${
+          class={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold relative z-10 transition-all duration-500 ease-in-out ${
             step.num < currentStep
               ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20'
               : step.num === currentStep
-                ? 'bg-white text-emerald-700 border-2 border-emerald-500 ring-4 ring-emerald-50 shadow-sm scale-110'
+                ? 'bg-white text-emerald-700 border-2 border-emerald-500 ring-2 ring-emerald-100 shadow-sm scale-105'
                 : 'bg-white text-emerald-300 border-2 border-emerald-100'
           }`}
         >
           {#if step.num < currentStep}
-            <Check class="w-5 h-5 text-white animate-in zoom-in duration-300" strokeWidth={3} />
+            <Check class="w-4 h-4 text-white animate-in zoom-in duration-300" strokeWidth={2.5} />
           {:else}
             {step.num}
           {/if}
