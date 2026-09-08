@@ -57,6 +57,16 @@
       : 'bg-emerald-700 hover:bg-emerald-800 focus:ring-emerald-600'
   );
 
+  // Short, clean course labels (TASK-08)
+  const courseDisplayNames: Record<string, string> = {
+    'basic-qaida': 'Basic Qaida',
+    'quran-reading-with-tajweed': 'Quran Reading with Tajweed',
+    'quran-memorization': 'Quran Memorization (Hifz)',
+    'quran-translation-with-tafsir': 'Quran Translation & Tafsir',
+    'advanced-tajweed-ijazah': 'Advanced Tajweed & Ijazah',
+    'arabic-language': 'Arabic Language',
+  };
+
   let dur = $state('30');
   let sess = $state('3');
   let currency = $state<Currency>('USD');
@@ -122,41 +132,51 @@
   </p>
 
   <div class="space-y-5">
-    <!-- ROW 1: THE 50/50 EDGE UI GRID -->
-    <!-- Course and Currency sit exactly 50/50 side-by-side on all screens -->
-    <div class="grid grid-cols-2 gap-4 md:gap-5">
-      <!-- Course -->
-      <div class="col-span-1 flex flex-col min-w-0">
-        <div class="flex justify-between items-center mb-3">
+    <!-- ROW 1: RESPONSIVE 30/70 SPLIT (Course ~30%, Session Length ~70% on desktop) -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5 items-start">
+      <!-- Course Selector -->
+      <div class="md:col-span-4 flex flex-col min-w-0">
+        <div class="flex justify-between items-center mb-2">
           <span class="text-sm font-bold {labelColor} uppercase tracking-wider">Course</span>
         </div>
         <select
           bind:value={selectedCourse}
-          class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} transition-colors cursor-pointer truncate"
+          class="w-full px-3.5 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} transition-colors cursor-pointer truncate"
         >
           {#each COURSE_LIST as course (course.slug)}
-            <option value={course.slug}>{course.title}</option>
+            <option value={course.slug}>{courseDisplayNames[course.slug] || course.title}</option>
           {/each}
           <option value="other">Not sure / Others</option>
         </select>
       </div>
 
-      <!-- Currency (Geo-detected, fixed — no selector/dropdown) -->
-      <div class="col-span-1 flex flex-col min-w-0">
-        <div class="flex justify-between items-center mb-3">
-          <span class="text-sm font-bold {labelColor} uppercase tracking-wider">Currency</span>
+      <!-- Session Length -->
+      <div class="md:col-span-8 flex flex-col min-w-0">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-sm font-bold {labelColor} uppercase tracking-wider">Session length</span
+          >
+          <span class="text-sm font-bold {valueColor}">{dur} min</span>
         </div>
-        <div
-          dir="ltr"
-          class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} flex items-center transition-colors truncate select-none cursor-default"
-          title="Detected regional currency"
-        >
-          <bdi>{currencyLabel}</bdi>
+        <div class="flex gap-2">
+          <button
+            class="flex-1 px-4 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {dur ===
+            '30'
+              ? activeBtn
+              : inactiveBtn}"
+            onclick={() => (dur = '30')}>30 min</button
+          >
+          <button
+            class="flex-1 px-4 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {dur ===
+            '40'
+              ? activeBtn
+              : inactiveBtn}"
+            onclick={() => (dur = '40')}>40 min</button
+          >
         </div>
       </div>
     </div>
 
-    <!-- Optional Course Textarea (Breaks out of grid for full width) -->
+    <!-- Optional Course Textarea (Full width below selector) -->
     {#if selectedCourse === 'other'}
       <textarea
         bind:value={courseNote}
@@ -166,30 +186,6 @@
         class="w-full px-4 py-3 bg-cream-50 border rounded-lg text-sm transition-colors resize-none {textareaInput}"
       ></textarea>
     {/if}
-
-    <!-- Duration -->
-    <div>
-      <div class="flex justify-between items-center mb-3">
-        <span class="text-sm font-bold {labelColor} uppercase tracking-wider">Session length</span>
-        <span class="text-sm font-bold {valueColor}">{dur} min</span>
-      </div>
-      <div class="flex gap-2">
-        <button
-          class="flex-1 px-4 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {dur ===
-          '30'
-            ? activeBtn
-            : inactiveBtn}"
-          onclick={() => (dur = '30')}>30 min</button
-        >
-        <button
-          class="flex-1 px-4 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {dur ===
-          '40'
-            ? activeBtn
-            : inactiveBtn}"
-          onclick={() => (dur = '40')}>40 min</button
-        >
-      </div>
-    </div>
 
     <!-- Sessions per week -->
     <div>
@@ -235,10 +231,17 @@
     <div
       class="bg-white border {resultBoxBorder} shadow-sm rounded-2xl p-5 transition-colors duration-300"
     >
+      <!-- Region & Currency Context (TASK-08) -->
+      <div class="flex justify-between items-center mb-2.5 pb-2.5 border-b {resultDivider}">
+        <span class="text-sm {resultLabel} font-medium">Region & Currency</span>
+        <span class="text-sm font-bold {resultValue}">
+          <bdi>{currencyLabel}</bdi>
+        </span>
+      </div>
+
       <div class="flex justify-between items-center mb-2">
-        <span class="text-sm {resultLabel} font-medium">Sessions / month</span><span
-          class="text-sm font-bold {resultValue}">{sessPerMonth} sessions</span
-        >
+        <span class="text-sm {resultLabel} font-medium">Sessions / month</span>
+        <span class="text-sm font-bold {resultValue}">{sessPerMonth} sessions</span>
       </div>
       <div class="flex justify-between items-center mb-4">
         <span class="text-sm {resultLabel} font-medium">Per session</span>

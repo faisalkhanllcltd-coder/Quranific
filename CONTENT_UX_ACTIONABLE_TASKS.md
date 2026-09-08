@@ -165,17 +165,17 @@
 
 ## 3. Calculator & Pricing UX (Tier 3)
 
-### [TASK-08] Pricing Calculator Edge UX Redesign
+### [TASK-08] Pricing Calculator Edge UX Redesign — [FIXED & VERIFIED]
 
 - **Original Item:** Item 8
+- **Status:** **[FIXED & VERIFIED ON 2026-09-08]**
 - **Files:** [`src/components/blocks/PricingCalculator.svelte`](file:///d:/Live%20Web/Quranific-live/src/components/blocks/PricingCalculator.svelte).
-- **Concrete Actions:**
-  1. **Shorten Course Titles:** Trim course `<select>` option labels to just the clean title (e.g. "Quran Memorization (Hifz)"), removing wordy descriptions.
-  2. **Remove Currency Box:** Delete the static Currency box from Row 1 entirely.
-  3. **Full Country & Currency in Summary:** In the calculator result box, render the complete country and currency name (e.g. _"USA (USD $)"_, _"Singapore (SGD S$)"_, _"Saudi Arabia (SAR)"_) using a complete country name lookup.
-  4. **Responsive 30/70 Layout:**
-     - Desktop (`md:`): Place Course selector (~30% width) and Session Length selector (~70% width) side-by-side on a single row.
-     - Mobile: Stack Course selector and Session Length selector vertically at full width.
+- **Concrete Actions & Empirical Proof:**
+  1. **Shortened Course Titles:** Mapped course `<select>` option labels to clean, concise titles (`Basic Qaida`, `Quran Reading with Tajweed`, `Quran Memorization (Hifz)`, `Quran Translation & Tafsir`, `Advanced Tajweed & Ijazah`, `Arabic Language`), eradicating redundant descriptions.
+  2. **Removed Row 1 Static Currency Box:** Completely excised the non-functional currency box from Row 1, keeping the calculator clean and focused.
+  3. **Full Region & Currency in Summary:** Added prominent `Region & Currency` metadata line directly inside the result box rendering full purchasing power currency (`USA (USD $)`, `UK (GBP £)`, `Singapore (SGD S$)`, etc.).
+  4. **Responsive 30/70 Layout:** Re-engineered Row 1 with `grid grid-cols-1 md:grid-cols-12` where Course selector occupies `md:col-span-4` (~33%) and Session Length selector occupies `md:col-span-8` (~67%) side-by-side on desktop, seamlessly collapsing to stacked full-width on mobile.
+  5. **Verification:** Tested via `scratch/verify-calculator-ux.mjs` confirming clean course names (`true`), removal of static currency box (`true`), full region in summary (`true`), responsive grid classes (`true`), and `astro check` + `astro build` 100% green.
 
 ### [TASK-10] Tuition Page Currency Box Removal
 
