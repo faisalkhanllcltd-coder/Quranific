@@ -188,13 +188,19 @@
   3. **Added Full Regional Context in Summary:** Relocated regional currency context (`currencyLabel`, e.g. _"USA (USD $)"_, _"UK (GBP £)"_) into the Selection Summary Bar alongside classes/week, session duration, and payment cadence.
   4. **Verification:** Verified via `scratch/verify-tuition-currency.mjs` that the static bubble is removed (`true`), centered length toggle is present (`true`), currency context is displayed in summary (`true`), and compilation passes with 0 errors (`astro check` + `astro build` 100% green).
 
-### [TASK-48] Dynamic Geo-Pricing Edge Logic Verification
+### [TASK-48] Dynamic Geo-Pricing Edge Logic Verification — [FIXED & VERIFIED]
 
 - **Original Item:** Item 48
+- **Status:** **[FIXED & VERIFIED ON 2026-09-08]**
 - **Files:** [`src/pages/api/geo-currency.ts`](file:///d:/Live%20Web/Quranific-live/src/pages/api/geo-currency.ts), [`src/constants/pricing.ts`](file:///d:/Live%20Web/Quranific-live/src/constants/pricing.ts).
-- **Concrete Actions:**
-  1. Ensure changes in Tasks 8 and 10 maintain full reactive compatibility with `/api/geo-currency`.
-  2. Run automated unit tests verifying that all 8 currencies resolve accurately under Cloudflare edge headers.
+- **Concrete Actions & Empirical Proof:**
+  1. **Reactive Compatibility:** Verified that the redesigned `PricingCalculator.svelte` (Task 8) and `PricingGrid.svelte` (Task 10) dynamically and reactively ingest currency payload from `/api/geo-currency`.
+  2. **Automated Unit Testing Suite:** Created `scratch/test-geo-pricing.mjs` running 4 comprehensive test suites:
+     - ISO Country to Regional Currency resolution (US→USD, GB→GBP, FR→EUR, DE→EUR, IT→EUR, AE→AED, SA→SAR, SG→SGD, CA→CAD, AU→AUD, plus fallback tests for unmapped regions like PK/IN and undefined values defaulting safely to USD).
+     - Starter price verification across all 8 currencies ($40, £29, €34, د.إ146, ﷼150, S$50, CA$55, A$55).
+     - Monotonic matrix integrity proving strictly positive and increasing rates across all 64 pricing tiers (8 currencies × 2 durations × 4 frequencies).
+     - Currency decimal formatting (EUR with 2 decimal places, all other currencies with whole numbers).
+  3. **Verification:** 100% of automated unit tests passed cleanly (`node scratch/test-geo-pricing.mjs`).
 
 ---
 
