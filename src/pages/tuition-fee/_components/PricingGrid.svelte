@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     PRICING,
+    CURRENCY_META,
     CURRENCY_SYMBOLS,
     formatPrice,
     type Currency,
@@ -29,6 +30,9 @@
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
 
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);
+  let currencyLabel = $derived(
+    CURRENCY_META.find((c) => c.code === currency)?.label ?? `${currency} (${sym})`
+  );
   let checkoutUrl = $derived(
     `/getting-started/signup?sessions=${selectedPlan}x&duration=${dur}&billing=monthly&currency=${currency}`
   );
@@ -55,16 +59,13 @@
   const SESSIONS_PER_MONTH: Record<string, number> = { '2': 8, '3': 12, '4': 16, '5': 20 };
 </script>
 
-<!-- Top Controls: Inline on all devices, strict identical heights (h-14) -->
-<div
-  class="flex flex-col sm:flex-row items-stretch justify-center gap-3 mb-10 w-full px-4 sm:px-0 max-w-fit mx-auto"
->
-  <!-- Length Bubble -->
+<!-- Top Controls: Centered Session Length Toggle -->
+<div class="flex justify-center mb-10 w-full px-4 sm:px-0">
   <div
-    class="flex flex-row items-center justify-between gap-4 bg-white border border-emerald-100 rounded-xl px-4 sm:px-5 h-14 shadow-sm w-full sm:w-auto"
+    class="flex flex-row items-center justify-between gap-4 bg-white border border-emerald-100 rounded-xl px-4 sm:px-5 h-14 shadow-sm"
   >
     <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
-      >Length:</span
+      >Session length:</span
     >
     <div class="flex gap-1.5 shrink-0">
       <button
@@ -80,23 +81,6 @@
         onclick={() => (dur = '40')}>40 min</button
       >
     </div>
-  </div>
-
-  <!-- Currency Bubble (Geo-detected, fixed — no selector/dropdown) -->
-  <div
-    class="flex flex-row items-center justify-between gap-4 bg-white border border-emerald-100 rounded-xl px-4 sm:px-5 h-14 shadow-sm w-full sm:w-auto"
-  >
-    <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
-      >Currency:</span
-    >
-    <span
-      dir="ltr"
-      class="w-full sm:w-auto text-center sm:text-left bg-transparent text-sm font-bold text-emerald-900/80 pr-2 select-none cursor-default inline-flex items-baseline justify-center sm:justify-start gap-1"
-      title="Detected regional currency"
-    >
-      <bdi>{currency}</bdi>
-      <bdi>{sym}</bdi>
-    </span>
   </div>
 </div>
 
@@ -310,7 +294,7 @@
         <span class="text-[10px] font-black tracking-widest uppercase text-emerald-900/40 mb-1.5"
           >Your Selection</span
         >
-        <!-- Sessions / duration / cadence line -->
+        <!-- Sessions / duration / cadence / region line -->
         <div
           class="text-sm font-medium text-emerald-900/70 flex flex-wrap items-center justify-start gap-x-2 gap-y-1 mb-2"
         >
@@ -321,6 +305,8 @@
           <span><strong class="text-emerald-950 font-bold">{dur} mins</strong> / class</span>
           <span class="opacity-30">•</span>
           <span class="text-emerald-950 font-bold">{cadenceLabel}</span>
+          <span class="opacity-30">•</span>
+          <span class="text-emerald-800 font-semibold">{currencyLabel}</span>
         </div>
         <!-- Price line — always shown -->
         <div class="flex flex-wrap items-baseline justify-start gap-x-2 gap-y-0.5" dir="ltr">

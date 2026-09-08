@@ -177,13 +177,16 @@
   4. **Responsive 30/70 Layout:** Re-engineered Row 1 with `grid grid-cols-1 md:grid-cols-12` where Course selector occupies `md:col-span-4` (~33%) and Session Length selector occupies `md:col-span-8` (~67%) side-by-side on desktop, seamlessly collapsing to stacked full-width on mobile.
   5. **Verification:** Tested via `scratch/verify-calculator-ux.mjs` confirming clean course names (`true`), removal of static currency box (`true`), full region in summary (`true`), responsive grid classes (`true`), and `astro check` + `astro build` 100% green.
 
-### [TASK-10] Tuition Page Currency Box Removal
+### [TASK-10] Tuition Page Currency Box Removal — [FIXED & VERIFIED]
 
 - **Original Item:** Item 10
+- **Status:** **[FIXED & VERIFIED ON 2026-09-08]**
 - **Files:** [`src/pages/tuition-fee/_components/PricingGrid.svelte`](file:///d:/Live%20Web/Quranific-live/src/pages/tuition-fee/_components/PricingGrid.svelte).
-- **Concrete Actions:**
-  1. Remove the static "Currency" bubble from lines 86–100.
-  2. Move the full currency/country context note into the pricing header or plan cards.
+- **Concrete Actions & Empirical Proof:**
+  1. **Excised Static Currency Bubble:** Removed the redundant static Currency bubble from the top controls of `PricingGrid.svelte`, eliminating cognitive clutter and visual repetition.
+  2. **Centered Session Length Toggle:** Cleanly centered the 30-min / 40-min session toggle at the top of the pricing matrix.
+  3. **Added Full Regional Context in Summary:** Relocated regional currency context (`currencyLabel`, e.g. _"USA (USD $)"_, _"UK (GBP £)"_) into the Selection Summary Bar alongside classes/week, session duration, and payment cadence.
+  4. **Verification:** Verified via `scratch/verify-tuition-currency.mjs` that the static bubble is removed (`true`), centered length toggle is present (`true`), currency context is displayed in summary (`true`), and compilation passes with 0 errors (`astro check` + `astro build` 100% green).
 
 ### [TASK-48] Dynamic Geo-Pricing Edge Logic Verification
 
