@@ -14,7 +14,7 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: 'cloudflare',
     platformProxy: {
-      enabled: true, // Mandate 11: 1:1 Local Edge Simulation
+      enabled: false, // Mandate 11: 1:1 Local Edge Simulation
     },
   }),
   // Permanent redirects: old /ads/* URLs → new semantic intent routes
