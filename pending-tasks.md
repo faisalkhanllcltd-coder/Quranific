@@ -93,7 +93,7 @@ Then migrate the 30+ hardcoded instances identified in the typography audit to u
 
 **Priority:** Low (regulatory defensibility, not a legal block)  
 **Source:** CONSENT_MANUAL_CHECKLIST §F  
-**Status:** Not built. Decision still open.
+**Status:** **[CANCELLED BY OWNER] - Rejected to preserve strict GDPR privacy (no shadow logging) and optimize Cloudflare KV write costs.**
 
 **What to build (if approved by owner):**  
 In `CookieBanner.svelte`, after writing the `cf_consent_v1` cookie on accept/reject, dispatch a fire-and-forget `POST /api/consent-record` with `{ timestamp, bucket, choice, sessionId }`. The endpoint writes a minimal record to the `SESSION` KV namespace under key `CONSENT_RECORD:{timestamp}:{sessionId}` with a 2-year TTL.

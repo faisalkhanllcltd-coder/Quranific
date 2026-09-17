@@ -52,6 +52,7 @@ The edge caching architecture relies exclusively on `CDN-Cache-Control` headers 
 
 ## OA-3 — Decide: Consent Record Logging to KV
 
+**Status:** **[CANCELLED BY OWNER] - Rejected to preserve strict GDPR privacy (no shadow logging) and optimize Cloudflare KV write costs.**  
 **Priority:** Low (regulatory defensibility, not a legal block today)  
 **Background:** GDPR technically requires demonstrating that consent was given (timestamp, what was consented to, which policy version). The current implementation stores consent only in a client-side browser cookie — no server-side record exists.
 
