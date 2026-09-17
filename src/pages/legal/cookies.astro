@@ -175,6 +175,26 @@ const jsonLd = {
         </ul>
       </section>
 
+      <!-- Section: Manage Cookie Preferences (GDPR Art. 7(3)) -->
+      <section class="mt-16 pt-16 border-t border-emerald-100">
+        <h2 class="text-3xl font-black text-emerald-950 mb-6 tracking-tight">
+          Manage Cookie Preferences
+        </h2>
+        <p class="text-lg text-emerald-900/80 font-medium mb-6">
+          You can withdraw or change your consent at any time. Click the button below to wipe your
+          current tracking permissions and reload the page to start fresh.
+        </p>
+        <button
+          onclick="window.__reopenConsentBanner?.()"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+        >
+          Manage Cookie Preferences
+        </button>
+        <p class="text-sm text-emerald-700/60 mt-4">
+          Preferences can also be reset by clearing your browser's cookies for this site.
+        </p>
+      </section>
+
       <!-- Contact Section -->
       <section class="mt-16 pt-16 border-t border-emerald-100">
         <h2 class="text-3xl font-black text-emerald-950 mb-6 tracking-tight">
