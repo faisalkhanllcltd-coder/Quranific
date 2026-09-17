@@ -38,6 +38,9 @@ interface Env {
   // Optional legacy webhook
   SHEET_WEBHOOK_URL?: string;
 
+  // Optional DLQ alerting webhook (Discord/Slack/etc.)
+  ALERT_WEBHOOK_URL?: string;
+
   // Cloudflare environment tag
   ENVIRONMENT: 'development' | 'production';
 
