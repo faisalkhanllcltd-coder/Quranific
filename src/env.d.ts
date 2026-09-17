@@ -35,6 +35,12 @@ interface Env {
   // GA tracking ID (optional)
   GA_ID?: string;
 
+  // Server-side tracking (optional)
+  META_PIXEL_ID?: string;
+  META_CAPI_TOKEN?: string;
+  GA4_MEASUREMENT_ID?: string;
+  GA4_API_SECRET?: string;
+
   // Optional legacy webhook
   SHEET_WEBHOOK_URL?: string;
 
