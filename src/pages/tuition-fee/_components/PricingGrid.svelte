@@ -63,9 +63,7 @@
   <div
     class="flex flex-row items-center justify-between gap-4 bg-white border border-emerald-100 rounded-xl px-4 sm:px-5 h-14 shadow-sm w-full sm:w-auto"
   >
-    <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
-      >Length:</span
-    >
+    <span class="eyebrow-pill text-emerald-900/50 shrink-0">Length:</span>
     <div class="flex gap-1.5 shrink-0">
       <button
         class="px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {dur === '30'
@@ -86,9 +84,7 @@
   <div
     class="flex flex-row items-center justify-between gap-4 bg-white border border-emerald-100 rounded-xl px-4 sm:px-5 h-14 shadow-sm w-full sm:w-auto"
   >
-    <span class="text-xs font-bold text-emerald-900/50 uppercase tracking-wider shrink-0"
-      >Currency:</span
-    >
+    <span class="eyebrow-pill text-emerald-900/50 shrink-0">Currency:</span>
     <span
       dir="ltr"
       class="w-full sm:w-auto text-center sm:text-left bg-transparent text-sm font-bold text-emerald-900/80 pr-2 select-none cursor-default inline-flex items-baseline justify-center sm:justify-start gap-1"
@@ -128,7 +124,7 @@
           <div class="flex flex-col">
             <!-- Line 1: Title -->
             <div
-              class="text-xs font-black tracking-widest uppercase {selectedPlan === '2'
+              class="eyebrow-pill {selectedPlan === '2'
                 ? 'text-emerald-700'
                 : 'text-emerald-900/40'} mb-0.5 transition-colors"
             >
@@ -175,7 +171,7 @@
           <div class="flex flex-col">
             <!-- Line 1: Title -->
             <div
-              class="text-xs font-black tracking-widest uppercase {selectedPlan === '3'
+              class="eyebrow-pill {selectedPlan === '3'
                 ? 'text-emerald-700'
                 : 'text-emerald-900/40'} mb-0.5 transition-colors"
             >
@@ -222,7 +218,7 @@
           <div class="flex flex-col">
             <!-- Line 1: Title -->
             <div
-              class="text-xs font-black tracking-widest uppercase {selectedPlan === '4'
+              class="eyebrow-pill {selectedPlan === '4'
                 ? 'text-emerald-700'
                 : 'text-emerald-900/40'} mb-0.5 transition-colors"
             >
@@ -268,9 +264,7 @@
             <div class="absolute top-0 bottom-0 right-0 w-[2px] bg-amber-400"></div>
           </div>
         {/if}
-        <div
-          class="text-[9px] font-black tracking-widest uppercase text-amber-600 mb-1.5 pt-1 text-left"
-        >
+        <div class="eyebrow-micro text-amber-600 mb-1.5 pt-1 text-left">
           Most families choose this
         </div>
 
@@ -278,7 +272,7 @@
           <div class="flex flex-col">
             <!-- Line 1: Title -->
             <div
-              class="text-xs font-black tracking-widest uppercase {selectedPlan === '5'
+              class="eyebrow-pill {selectedPlan === '5'
                 ? 'text-emerald-700'
                 : 'text-emerald-900/40'} mb-0.5 transition-colors"
             >
@@ -307,9 +301,7 @@
     >
       <!-- Left Edge Aligned Summary -->
       <div class="flex flex-col text-left w-full sm:w-auto">
-        <span class="text-[10px] font-black tracking-widest uppercase text-emerald-900/40 mb-1.5"
-          >Your Selection</span
-        >
+        <span class="eyebrow-pill text-emerald-900/40 mb-1.5">Your Selection</span>
         <!-- Sessions / duration / cadence line -->
         <div
           class="text-sm font-medium text-emerald-900/70 flex flex-wrap items-center justify-start gap-x-2 gap-y-1 mb-2"

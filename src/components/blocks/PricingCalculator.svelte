@@ -128,7 +128,7 @@
       <!-- Course -->
       <div class="col-span-1 flex flex-col min-w-0">
         <div class="flex justify-between items-center mb-3">
-          <span class="text-sm font-bold {labelColor} uppercase tracking-wider">Course</span>
+          <span class="eyebrow-pill {labelColor}">Course</span>
         </div>
         <select
           bind:value={selectedCourse}
@@ -144,7 +144,7 @@
       <!-- Currency (Geo-detected, fixed — no selector/dropdown) -->
       <div class="col-span-1 flex flex-col min-w-0">
         <div class="flex justify-between items-center mb-3">
-          <span class="text-sm font-bold {labelColor} uppercase tracking-wider">Currency</span>
+          <span class="eyebrow-pill {labelColor}">Currency</span>
         </div>
         <div
           dir="ltr"
@@ -170,7 +170,7 @@
     <!-- Duration -->
     <div>
       <div class="flex justify-between items-center mb-3">
-        <span class="text-sm font-bold {labelColor} uppercase tracking-wider">Session length</span>
+        <span class="eyebrow-pill {labelColor}">Session length</span>
         <span class="text-sm font-bold {valueColor}">{dur} min</span>
       </div>
       <div class="flex gap-2">
@@ -194,7 +194,7 @@
     <!-- Sessions per week -->
     <div>
       <div class="flex justify-between items-center mb-3">
-        <span class="text-sm font-bold {labelColor} uppercase tracking-wider">Sessions / week</span>
+        <span class="eyebrow-pill {labelColor}">Sessions / week</span>
         <span class="text-sm font-bold {valueColor}">{sess}×</span>
       </div>
       <div class="grid grid-cols-4 gap-2">

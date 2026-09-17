@@ -205,7 +205,7 @@
         </div>
         <a
           href="/legal/cookies"
-          class="shrink-0 text-[10px] font-semibold uppercase tracking-wider text-emerald-600 hover:text-emerald-800 transition-colors mt-0.5"
+          class="shrink-0 eyebrow-micro text-emerald-600 hover:text-emerald-800 transition-colors mt-0.5"
           aria-label="Read our Cookie Policy"
         >
           Learn more

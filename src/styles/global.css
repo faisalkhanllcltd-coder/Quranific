@@ -74,3 +74,14 @@ body {
 @utility consent-banner-hidden {
   display: none !important;
 }
+
+/* Eyebrow Typography Tokens */
+@utility eyebrow-pill {
+  @apply text-[11px] font-bold uppercase tracking-widest;
+}
+@utility eyebrow-text {
+  @apply text-xs font-bold uppercase tracking-widest block mb-3;
+}
+@utility eyebrow-micro {
+  @apply text-[9px] font-bold uppercase tracking-wider;
+}
