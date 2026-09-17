@@ -1,7 +1,7 @@
 # Owner Actions
 
 > Manual tasks that require Cloudflare dashboard access, business decisions, DNS changes, or third-party platform configuration. These cannot be executed by an AI agent.
-> Last audited: 2026-09-16.
+> Last audited: 2026-09-18.
 
 ---
 
@@ -50,41 +50,41 @@ The edge caching architecture relies exclusively on `CDN-Cache-Control` headers 
 
 ---
 
-## OA-3 — Decide: Consent Record Logging to KV
+## OA-3 — Configure Server-Side Tracking Secrets (Meta CAPI & GA4)
 
-**Status:** **[CANCELLED BY OWNER] - Rejected to preserve strict GDPR privacy (no shadow logging) and optimize Cloudflare KV write costs.**  
-**Priority:** Low (regulatory defensibility, not a legal block today)  
-**Background:** GDPR technically requires demonstrating that consent was given (timestamp, what was consented to, which policy version). The current implementation stores consent only in a client-side browser cookie — no server-side record exists.
+**Platform:** Cloudflare Pages Dashboard  
+**Priority:** Medium (required to activate the PT-5 server-side tracking deployed to `api/complete.ts`)  
+**Background:** The code to bypass ad-blockers and send server-to-server conversions is live, but it will silently bypass until these encrypted secrets are provided.
 
-**Decision required:**
+**Steps:**
 
-- **Yes → implement:** Agent will add a `POST /api/consent-record` endpoint that writes a minimal record `{ timestamp, bucket, choice }` to KV (2-year TTL). Low-effort addition. → See `pending-tasks.md` PT-4.
-- **No → document:** Accept the risk; note in Privacy Policy that consent records are stored client-side only.
+1. Go to Cloudflare Pages → Quranific Project → Settings → Environment variables
+2. Add the following variables to the **Production** environment (mark them as Encrypted):
+   - `META_PIXEL_ID` (Your Meta Pixel ID)
+   - `META_CAPI_TOKEN` (Generated from Facebook Events Manager → Settings → Generate Access Token)
+   - `GA4_MEASUREMENT_ID` (Format: G-XXXXXXXXXX)
+   - `GA4_API_SECRET` (Generated from GA4 Admin → Data Streams → Measurement Protocol API secrets)
 
 ---
 
-## OA-4 — Decide: Server-Side Conversion Tracking (GA4 MAPI / Meta CAPI)
+## OA-4 — Configure DLQ Alert Webhook Secret
 
-**Priority:** Medium (revenue attribution gap)  
-**Background:** EU/UK STRICT-bucket visitors who decline consent have **zero** client-side conversion tracking. This means registrations from EU/UK are invisible in GA4 and Meta Pixel.
+**Platform:** Cloudflare Pages Dashboard  
+**Priority:** Medium (required to receive failure alerts deployed in PT-6)  
+**Background:** The Dead Letter Queue (DLQ) retry loop is live. If a lead fails to sync, it will try to alert you via webhook, but the URL is missing.
 
-A compliant alternative — server-side conversion tracking — requires no consent because no client-side cookie is set:
+**Steps:**
 
-- **GA4 Measurement Protocol:** Send `sign_up` events from `api/complete.ts` directly to Google's MP API using the JWT `jti` as `client_id`
-- **Meta Conversion API (CAPI):** Send `CompleteRegistration` events using hashed email/phone from signup data
-
-**Decision required:**
-
-- **Yes → implement:** Provide GA4 Measurement Protocol API secret and (if needed) Meta Pixel ID + CAPI token. Agent will implement in `api/complete.ts` via `waitUntil()`. → See `pending-tasks.md` PT-5.
-- **No → accept:** EU/UK conversions remain untracked in ad platforms.
+1. Create a webhook URL in your preferred platform (Discord Server Settings → Webhooks, Slack Incoming Webhooks, or a Zapier/Make.com catch hook).
+2. Go to Cloudflare Pages → Quranific Project → Settings → Environment variables.
+3. Add `ALERT_WEBHOOK_URL` to the Production environment (mark as Encrypted) and paste your webhook URL.
 
 ---
 
 ## OA-5 — Add Secondary Emergency Admin Account to Cloudflare
 
 **Platform:** Cloudflare Dashboard → Manage Account → Members  
-**Priority:** Medium (single point of failure risk)  
-**Source:** PRELAUNCH_AUDIT_REPORT §53
+**Priority:** Medium (single point of failure risk)
 
 The entire Cloudflare infrastructure (Pages, Workers, KV, DNS, Turnstile) is administered under a single account: `faisalkhan.llc.ltd@gmail.com`. Loss of access to this Google account would lock out all infrastructure management.
 
@@ -100,8 +100,7 @@ The entire Cloudflare infrastructure (Pages, Workers, KV, DNS, Turnstile) is adm
 ## OA-6 — Real-Edge CA-QC and GPC Validation on Cloudflare Pages Preview
 
 **Platform:** Cloudflare Pages Preview URL (not local dev, not production)  
-**Priority:** Medium (provisional — verified locally, not at real Cloudflare edge)  
-**Source:** CONSENT_AGENT_STATE §"Open items for human", CONSENT_MANUAL_CHECKLIST §C
+**Priority:** Medium (provisional — verified locally, not at real Cloudflare edge)
 
 Local unit tests (7/7 PASS) and Playwright E2E tests (17/17 PASS) confirm correct bucket logic. However, `cf.regionCode` in `wrangler pages dev` may not be populated from real Cloudflare CF headers.
 
@@ -110,35 +109,3 @@ Local unit tests (7/7 PASS) and Playwright E2E tests (17/17 PASS) confirm correc
 1. Deploy to a named Cloudflare Pages preview branch (not production)
 2. **CA-QC test:** Use a Canadian VPN set to Quebec province; navigate to the preview URL; verify consent banner appears in STRICT mode (open DevTools → Application → Cookies → verify no `cf_consent_v1` cookie written without user action)
 3. **GPC test:** Use Firefox with "Tell websites I do not want to be tracked" enabled (or browser extension that sets `Sec-GPC: 1`); use a PK-geolocated IP; verify STRICT banner appears despite PK being a NONE bucket
-
----
-
-## OA-7 — DLQ Alert Webhook: Provide Destination URL
-
-**Priority:** Medium  
-**Source:** `pending-tasks.md` PT-6  
-**Background:** The agent can implement `ALERT_WEBHOOK_URL` support in the retry-queue endpoint (PT-6), but the destination URL is a business decision.
-
-**Action:** Choose one:
-
-- Discord: Create a webhook in your Discord server (Server Settings → Integrations → Webhooks) and provide the URL
-- Slack: Create an Incoming Webhook app in your workspace and provide the URL
-- Email: Any service with a `POST` webhook → email relay (e.g., Zapier, Make.com)
-
-Then set `ALERT_WEBHOOK_URL` as a secret in the Cloudflare Pages dashboard after PT-6 is implemented.
-
----
-
-## [PENDING] OA: Configure PT-5 Server-Side Tracking Secrets
-
-**Context:** Server-side tracking for Meta CAPI and GA4 was deployed during the PT-5 architectural update. The edge logic is guarded by environment variables. The tracking will silently bypass until these are populated.
-
-**Action Required (Cloudflare Pages Dashboard):**
-
-1. Go to Cloudflare Pages -> Your Project -> Settings -> Environment variables.
-2. Add the following variables to the Production environment (mark them as Encrypted):
-   - `META_PIXEL_ID` (Your Meta Pixel ID)
-   - `META_CAPI_TOKEN` (Generated from Facebook Events Manager -> Settings -> Generate Access Token)
-   - `GA4_MEASUREMENT_ID` (Format: G-XXXXXXXXXX)
-   - `GA4_API_SECRET` (Generated from GA4 Admin -> Data Streams -> Measurement Protocol API secrets)
-3. Ensure these are also added to your local `.env` file for local testing.
