@@ -80,7 +80,7 @@ body {
   @apply text-[11px] font-bold uppercase tracking-widest;
 }
 @utility eyebrow-text {
-  @apply text-xs font-bold uppercase tracking-widest block mb-3;
+  @apply text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.2em];
 }
 @utility eyebrow-micro {
   @apply text-[9px] font-bold uppercase tracking-wider;
