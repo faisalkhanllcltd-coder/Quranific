@@ -177,6 +177,20 @@
       };
     }
   });
+
+  $effect(() => {
+    if (typeof window !== 'undefined') {
+      (window as Record<string, unknown>).__reopenConsentBanner = () => {
+        // Wipe the consent cookie completely (flags must match creation)
+        document.cookie = 'cf_consent_v1=; max-age=0; path=/; SameSite=Lax; Secure';
+        // Hard reload to instantly kill any running GTM/Meta scripts in memory
+        window.location.reload();
+      };
+      return () => {
+        delete (window as Record<string, unknown>).__reopenConsentBanner;
+      };
+    }
+  });
 </script>
 
 {#if visible}
@@ -205,7 +219,7 @@
         </div>
         <a
           href="/legal/cookies"
-          class="shrink-0 text-[10px] font-semibold uppercase tracking-wider text-emerald-600 hover:text-emerald-800 transition-colors mt-0.5"
+          class="shrink-0 eyebrow-micro text-emerald-600 hover:text-emerald-800 transition-colors mt-0.5"
           aria-label="Read our Cookie Policy"
         >
           Learn more

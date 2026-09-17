@@ -238,6 +238,18 @@ export const POST: APIRoute = async (context) => {
       }
     }
 
+    if (recoveredCount > 0 && runtimeEnv.ALERT_WEBHOOK_URL) {
+      await fetch(runtimeEnv.ALERT_WEBHOOK_URL as string, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: `[Quranific DLQ] Recovered ${recoveredCount} failed email(s). ${failedKeys.length} still failing.`,
+        }),
+      }).catch((err: unknown) => {
+        console.error('[DLQ Alert Webhook Failed]:', err);
+      });
+    }
+
     return new Response(
       JSON.stringify({
         success: true,

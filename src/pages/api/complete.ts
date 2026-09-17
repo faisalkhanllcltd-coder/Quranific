@@ -5,6 +5,14 @@ import { completeSchema } from '../../lib/schema';
 import { sendFullAdminNotification, sendWelcomeEmail } from '../../lib/email';
 import { jwtVerify } from 'jose';
 
+async function hashData(data: string): Promise<string> {
+  const buffer = new TextEncoder().encode((data || '').toLowerCase().trim());
+  const hash = await crypto.subtle.digest('SHA-256', buffer);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
 export const prerender = false;
 
 // ─── HEAD & GET: Pre-flight session check ─────────────────────────────────────────
@@ -73,13 +81,22 @@ export const POST: APIRoute = async (context) => {
       });
     }
 
-    const parsed = completeSchema.safeParse(formData);
-    if (!parsed.success) {
-      return new Response(JSON.stringify({ error: parsed.error.issues[0].message }), {
+    const parsedRaw = completeSchema.safeParse(formData);
+    if (!parsedRaw.success) {
+      return new Response(JSON.stringify({ error: parsedRaw.error.issues[0].message }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
     }
+
+    const parsed = {
+      ...parsedRaw,
+      data: {
+        ...parsedRaw.data,
+        currency: (formData.currency as string) || undefined,
+        price: (formData.price as string) || undefined,
+      },
+    };
 
     // 1. Read the JWT from the HttpOnly cookie (NOT the form body)
     const cookieHeader = context.request.headers.get('cookie');
@@ -131,6 +148,19 @@ export const POST: APIRoute = async (context) => {
         headers: { 'Content-Type': 'application/json' },
       });
     }
+
+    if (step1Data) {
+      if (!parsed.data.currency && step1Data.cur) parsed.data.currency = step1Data.cur;
+      if (!parsed.data.price && step1Data.prc) parsed.data.price = step1Data.prc;
+    }
+
+    const clientIp = context.request.headers.get('CF-Connecting-IP') || '';
+    const userAgent = context.request.headers.get('User-Agent') || '';
+    const fbp = getCookieValue(cookieHeader, '_fbp') || '';
+
+    // Extract GA Client ID (format is usually GA1.1.123456789.123456789, we need the last two parts)
+    const rawGa = getCookieValue(cookieHeader, '_ga') || '';
+    const gaClientId = rawGa.split('.').slice(-2).join('.') || step1Data.lid || 'unknown';
 
     // 3. Idempotency Check via Cloudflare KV
     const kv = getKV();
@@ -214,9 +244,94 @@ export const POST: APIRoute = async (context) => {
       }
     };
 
+    const dispatchTrackingTask = async () => {
+      const metaPixel = runtimeEnv.META_PIXEL_ID as string;
+      const metaToken = runtimeEnv.META_CAPI_TOKEN as string;
+      const gaId = runtimeEnv.GA4_MEASUREMENT_ID as string;
+      const gaSecret = runtimeEnv.GA4_API_SECRET as string;
+
+      const unixTime = Math.floor(Date.now() / 1000);
+
+      // 1. Meta Conversions API
+      if (metaPixel && metaToken) {
+        try {
+          const hashedEmail = await hashData(step1Data.e);
+          const hashedPhone = await hashData(step1Data.w.replace(/\D/g, '')); // Strip non-digits
+
+          const metaPayload = {
+            data: [
+              {
+                event_name: 'CompleteRegistration',
+                event_time: unixTime,
+                action_source: 'website',
+                event_id: step1Data.lid, // Deduplication key
+                user_data: {
+                  em: [hashedEmail],
+                  ph: [hashedPhone],
+                  client_ip_address: clientIp,
+                  client_user_agent: userAgent,
+                  fbc: step1Data.fb ? `fb.1.${unixTime}.${step1Data.fb}` : undefined,
+                  fbp: fbp || undefined,
+                  country: await hashData(step1Data.c),
+                },
+                custom_data: {
+                  currency: parsed.data.currency || 'USD',
+                  value: parsed.data.price ? parseFloat(parsed.data.price) : 0,
+                  content_name: parsed.data.course,
+                },
+              },
+            ],
+          };
+
+          await fetch(
+            `https://graph.facebook.com/v19.0/${metaPixel}/events?access_token=${metaToken}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(metaPayload),
+            }
+          );
+        } catch (err) {
+          console.error('[Meta CAPI Failed]:', err);
+        }
+      }
+
+      // 2. GA4 Measurement Protocol
+      if (gaId && gaSecret) {
+        try {
+          const gaPayload = {
+            client_id: gaClientId,
+            events: [
+              {
+                name: 'generate_lead',
+                params: {
+                  currency: parsed.data.currency || 'USD',
+                  value: parsed.data.price ? parseFloat(parsed.data.price) : 0,
+                  lead_id: step1Data.lid,
+                  course: parsed.data.course,
+                  traffic_source: step1Data.s,
+                },
+              },
+            ],
+          };
+
+          await fetch(
+            `https://www.google-analytics.com/mp/collect?measurement_id=${gaId}&api_secret=${gaSecret}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(gaPayload),
+            }
+          );
+        } catch (err) {
+          console.error('[GA4 MP Failed]:', err);
+        }
+      }
+    };
+
     // Background Task Execution (Mandate 1 - Modernized Path)
     const executeBackgroundTasks = async () => {
-      await Promise.allSettled([sendEmailsTask(), dispatchWebhookTask()]);
+      await Promise.allSettled([sendEmailsTask(), dispatchWebhookTask(), dispatchTrackingTask()]);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
