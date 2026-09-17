@@ -126,3 +126,19 @@ Local unit tests (7/7 PASS) and Playwright E2E tests (17/17 PASS) confirm correc
 - Email: Any service with a `POST` webhook → email relay (e.g., Zapier, Make.com)
 
 Then set `ALERT_WEBHOOK_URL` as a secret in the Cloudflare Pages dashboard after PT-6 is implemented.
+
+---
+
+## [PENDING] OA: Configure PT-5 Server-Side Tracking Secrets
+
+**Context:** Server-side tracking for Meta CAPI and GA4 was deployed during the PT-5 architectural update. The edge logic is guarded by environment variables. The tracking will silently bypass until these are populated.
+
+**Action Required (Cloudflare Pages Dashboard):**
+
+1. Go to Cloudflare Pages -> Your Project -> Settings -> Environment variables.
+2. Add the following variables to the Production environment (mark them as Encrypted):
+   - `META_PIXEL_ID` (Your Meta Pixel ID)
+   - `META_CAPI_TOKEN` (Generated from Facebook Events Manager -> Settings -> Generate Access Token)
+   - `GA4_MEASUREMENT_ID` (Format: G-XXXXXXXXXX)
+   - `GA4_API_SECRET` (Generated from GA4 Admin -> Data Streams -> Measurement Protocol API secrets)
+3. Ensure these are also added to your local `.env` file for local testing.
