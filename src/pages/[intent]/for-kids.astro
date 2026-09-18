@@ -16,7 +16,7 @@ import LandingCTA from '../../components/blocks/LandingCTA.astro';
 import LandingFooter from '../../components/blocks/LandingFooter.astro';
 import StickyMobileCTA from '../../components/blocks/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
-import { TESTIMONIALS_DATA } from '../../constants/testimonials';
+import { testimonials } from '../../data/testimonials';
 import { faqs } from '../../data/faqs';
 
 export const prerender = true;
@@ -60,8 +60,8 @@ const copy = intentCopy[intent as Intent];
 const canonicalUrl = `${SITE.url}/quran-classes/for-kids`;
 
 // Testimonials: page-level filter — pre-filtered array passed to component
-const kidsTestimonials = TESTIMONIALS_DATA.filter((t) =>
-  ['Amna', 'Saleem Al Mustarshid', 'Naseerullah Babar'].includes(t.name)
+const kidsTestimonials = testimonials.filter((t) =>
+  ['amna-de', 'saleem-uae', 'naseer-uk'].includes(t.id)
 );
 
 const vettingSteps = [

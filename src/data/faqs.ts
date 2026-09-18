@@ -230,7 +230,33 @@ export const faqs: Record<string, FAQ[]> = {
         'Teacher chemistry matters enormously in 1-on-1 learning. If your child does not connect with their teacher for any reason — personality, teaching style, pace — simply let us know and we arrange a new match immediately. There is no awkward conversation, no forms to fill, and absolutely no charge. We have done this many times and consider it a normal part of finding the right learning relationship.',
     },
   ],
-  teachers: [], // Vetting QA: "Can I request a female teacher?", "Are teachers native Arabic speakers?"
+  teachers: [
+    {
+      question: 'What qualifications do your teachers hold?',
+      answer:
+        'Every teacher holds a verified <strong>Ijazah</strong> — a documented, traceable chain of Quranic transmission that links directly back to the Prophet ﷺ through a continuous line of authenticated scholars. Alongside the Ijazah, all teachers pass a four-stage vetting process: Ijazah verification, a live recitation assessment, a structured teaching methodology interview, and a formal safeguarding check. We do not accept self-certification or unverified credentials.',
+    },
+    {
+      question: 'Can I request a female teacher?',
+      answer:
+        "Yes, always. Gender matching is a standard option at enrolment — you can request a male or female teacher and we will match accordingly. Our women's programme is exclusively taught by qualified female Ustadhas, with strict female-to-female sessions and no exceptions. For children, families can also specify their preference.",
+    },
+    {
+      question: 'Are your teachers native Arabic speakers?',
+      answer:
+        'Not all of them — and that is by design. Many of our best teachers are scholars from South Asia who were trained in traditional Arabic-medium institutions and hold Ijazahs in Arabic and Tajweed. For our Arabic Language course, we specifically assign teachers with formal Arabic linguistics training. For Quran recitation, the criterion is Ijazah and pronunciation accuracy, not country of origin.',
+    },
+    {
+      question: 'What happens if my teacher is unavailable for a session?',
+      answer:
+        'We notify you as far in advance as possible and arrange a qualified substitute or reschedule the session — your choice. We do not cancel sessions without providing a replacement. Make-up sessions are part of our guarantee regardless of whether the absence is on your side or ours.',
+    },
+    {
+      question: 'Can I switch to a different teacher if the chemistry is not right?',
+      answer:
+        'Yes, without any awkward conversation or paperwork. If your child or you do not feel the learning relationship is working — for any reason — simply send us a message and we arrange a new match immediately. There is no penalty, no form to fill, and no minimum notice period. Finding the right teacher is part of the service.',
+    },
+  ],
   safeguarding: [
     {
       question: 'Are the teachers background checked?',
@@ -265,6 +291,48 @@ export const faqs: Record<string, FAQ[]> = {
         "You can instantly reset your password via the login screen. If you're having trouble connecting to a class, our 24/7 technical support team is always available via WhatsApp to get you connected within minutes so you don't lose session time.",
     },
   ], // IT QA: "Does it work on an iPad?", "Do we need our camera on?"
-  contact: [], // Support QA: "How fast do you reply to WhatsApp?"
-  legal: [], // Policy QA: "How do you store my data?"
+  contact: [
+    {
+      question: 'How quickly do you respond to messages?',
+      answer:
+        'WhatsApp messages are answered within a few hours during business hours (09:00–21:00 PKT, Monday to Saturday). Emails sent to <a href="mailto:support@quranific.com" class="text-emerald-700 underline">support@quranific.com</a> receive a response within 24 hours on business days. We do not use automated bots — every reply comes from a real person on the admin team.',
+    },
+    {
+      question: 'What is the best way to contact you?',
+      answer:
+        'WhatsApp is the fastest channel for most queries — session changes, teacher feedback, or billing questions are all handled there. For formal requests, data privacy queries, or anything requiring a paper trail, email is better. Our WhatsApp number is +92 311 2112122.',
+    },
+    {
+      question: 'Can I speak to someone before booking?',
+      answer:
+        "Yes. If you'd like to discuss your child's level, ask about teacher availability, or just understand how the process works before committing to a trial, send us a WhatsApp message and we'll arrange a short call at a time that suits you.",
+    },
+    {
+      question: 'Do you have a parent or student dashboard I can log into?',
+      answer:
+        'Yes. The Student Portal at <a href="/portals" class="text-emerald-700 underline">quranific.com/portals</a> gives you access to your schedule, session history, and progress reports. For teacher contact and admin requests, WhatsApp remains the main communication channel.',
+    },
+  ],
+  legal: [
+    {
+      question: 'How do you store and protect my personal data?',
+      answer:
+        'Personal data (name, email, and session preferences) is stored securely in Cloudflare\'s edge infrastructure and is never sold to third parties. We process your data in accordance with the GDPR (for EU/UK residents), CCPA (for California residents), and applicable international privacy standards. Our full Privacy Policy is at <a href="/legal/privacy" class="text-emerald-700 underline">quranific.com/legal/privacy</a>.',
+    },
+    {
+      question: 'Do you use cookies, and can I opt out?',
+      answer:
+        'Yes. We use strictly necessary cookies to keep your session active, and optional analytics cookies (Google Analytics) to understand how our site performs. You can manage your cookie preferences at any time through the consent banner or by emailing <a href="mailto:compliance@quranific.com" class="text-emerald-700 underline">compliance@quranific.com</a>. Our full Cookie Policy is at <a href="/legal/cookies" class="text-emerald-700 underline">quranific.com/legal/cookies</a>.',
+    },
+    {
+      question: 'Can I request deletion of my personal data?',
+      answer:
+        'Yes. Under GDPR Article 17, you have the right to request erasure of your personal data. Send a deletion request to <a href="mailto:compliance@quranific.com" class="text-emerald-700 underline">compliance@quranific.com</a> and we will process it within 30 days. Retention of billing records required by law (e.g., for VAT purposes) is exempt from erasure requests.',
+    },
+    {
+      question: 'Where can I find your Terms of Service and Refund Policy?',
+      answer:
+        'Our Terms of Service are at <a href="/legal/terms" class="text-emerald-700 underline">quranific.com/legal/terms</a>. Our Refund Policy — including the full-month money-back guarantee — is at <a href="/legal/refund" class="text-emerald-700 underline">quranific.com/legal/refund</a>. For any policy questions, contact <a href="mailto:support@quranific.com" class="text-emerald-700 underline">support@quranific.com</a>.',
+    },
+  ],
 };
