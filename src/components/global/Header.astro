@@ -36,7 +36,8 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
         </span>
 
         <a
-          href={SITE.announcement.linkUrl}
+          href={`${SITE.announcement.linkUrl}?source=promo_bar`}
+          id="promo-bar-link"
           class="inline-flex items-center text-emerald-300 hover:text-white underline decoration-emerald-500/40 hover:decoration-emerald-300 underline-offset-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-sm ml-1"
         >
           <EyebrowText class="inline" set:html={SITE.announcement.linkText} />
@@ -125,22 +126,44 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
 
 <script>
   // ---------------------------------------------------------------------------
-  // PROMO BAR LOGIC
+  // PROMO BAR LOGIC — with route suppression and dataLayer tracking
   // ---------------------------------------------------------------------------
   function initPromoBar(): void {
     const promoBar = document.getElementById('promo-bar');
     const closeBtn = document.getElementById('close-promo');
+    const promoLink = document.getElementById('promo-bar-link');
     const PROMO_KEY = 'quranific_promo_dismissed';
+    const dl = (window as unknown as { dataLayer?: unknown[] }).dataLayer || [];
+    (window as unknown as { dataLayer: unknown[] }).dataLayer = dl;
 
     if (!promoBar || !closeBtn) return;
 
-    if (sessionStorage.getItem(PROMO_KEY) === 'true') {
+    // Route-based suppression: hide promo on critical funnel pages to prevent leakage.
+    const path = window.location.pathname;
+    const isFunnelRoute =
+      path.startsWith('/getting-started') || path === '/tuition-fee' || path === '/tuition-fee/';
+
+    if (isFunnelRoute || sessionStorage.getItem(PROMO_KEY) === 'true') {
       promoBar.style.display = 'none';
       return;
     }
 
+    // Track impression (fires once per page load when bar is visible).
+    dl.push({ event: 'promo_bar_impression', promo_text: promoBar.textContent?.trim() });
+
+    // Track link clicks.
+    if (promoLink) {
+      promoLink.addEventListener('click', () => {
+        dl.push({ event: 'promo_bar_click', destination: (promoLink as HTMLAnchorElement).href });
+      });
+    }
+
     closeBtn.addEventListener('click', () => {
       sessionStorage.setItem(PROMO_KEY, 'true');
+
+      // Track dismissal.
+      dl.push({ event: 'promo_bar_dismiss' });
+
       promoBar.style.opacity = '0';
       promoBar.style.height = promoBar.offsetHeight + 'px';
 

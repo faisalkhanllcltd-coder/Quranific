@@ -1,5 +1,7 @@
 ---
+// src/components/blocks/FAQAccordion.astro
 import EyebrowBadge from '../ui/EyebrowBadge.astro';
+import GuaranteeCard from './GuaranteeCard.astro';
 
 interface Props {
   questions: { question: string; answer: string }[];
@@ -17,11 +19,10 @@ const {
   subtitle = "These are the real questions parents ask us before they book. We've answered every one honestly.",
   hideLeftColumn = false,
 } = Astro.props;
-// src/components/blocks/FAQAccordion.astro
 ---
 
-<section class="py-16 md:py-24 lg:py-32 bg-[#fefdf9]" id="faq">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="quranific-section bg-[#fefdf9]" id="faq">
+  <div class="quranific-container">
     <!-- Grid ratio inverted to 1fr_1.4fr to give the accordion the wider right column -->
     <div
       class={hideLeftColumn
@@ -43,29 +44,7 @@ const {
               </>
             </h2>
             <p class="text-lg text-emerald-900/70 font-medium mb-10 text-balance">{subtitle}</p>
-
-            <div class="bg-white border border-emerald-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-emerald-900/5">
-              <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-700 mb-6 border border-emerald-100/50">
-                <svg
-                  class="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
-              </div>
-              <h3 class="font-bold text-xl text-emerald-950 mb-3">Our Full-Month Guarantee</h3>
-              <p class="text-[15px] text-emerald-900/80 font-medium leading-relaxed">
-                If after your first full paid month you're not completely satisfied, for any reason,
-                we will refund you in full. No questions, no forms, no chasing. Just send one email.
-              </p>
-            </div>
+            <GuaranteeCard />
           </div>
         )
       }

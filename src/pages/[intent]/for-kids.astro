@@ -9,7 +9,7 @@ import LandingPreview from '../../components/blocks/LandingPreview.astro';
 import LandingTrust from '../../components/blocks/LandingTrust.astro';
 import LandingOnboarding from '../../components/blocks/LandingOnboarding.astro';
 import LandingTestimonials from '../../components/blocks/LandingTestimonials.astro';
-import LandingGuarantee from './_components/LandingGuarantee.astro';
+import GuaranteeSection from '../../components/blocks/GuaranteeSection.astro';
 import LandingPricing from '../../components/blocks/LandingPricing.astro';
 import LandingFAQ from '../../components/blocks/LandingFAQ.astro';
 import LandingCTA from '../../components/blocks/LandingCTA.astro';
@@ -18,6 +18,7 @@ import StickyMobileCTA from '../../components/blocks/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { testimonials } from '../../data/testimonials';
 import { faqs } from '../../data/faqs';
+import { generateWhatsAppLink } from '../../lib/helpers';
 
 export const prerender = true;
 
@@ -168,7 +169,9 @@ const jsonLd = {
         },
       ]}
       ctaLabel="Discuss your child's needs on WhatsApp"
-      ctaHref="https://wa.me/447477382348?text=Hello! I'm looking for a better Quran teacher for my child and want to discuss my options."
+      ctaHref={generateWhatsAppLink(
+        "Hi, I'm looking for a better Quran teacher for my child and would like to discuss my options."
+      )}
     />
 
     <!-- § 3 OUTCOME -->
@@ -263,7 +266,7 @@ const jsonLd = {
     />
 
     <!-- § 9 GUARANTEE -->
-    <LandingGuarantee
+    <GuaranteeSection
       eyebrow="OUR GUARANTEE"
       headline="We carry all the risk. You carry none."
       body="Your peace of mind is built into our platform. From your first free session to your first 30 days of paid learning, you are completely protected."
@@ -293,7 +296,7 @@ const jsonLd = {
     <!-- Sticky Mobile CTA Bar -->
     <StickyMobileCTA
       signupHref={`/getting-started/signup?source=ad_kids_${intent}`}
-      whatsappHref="https://wa.me/447477382348?text=Hello! I want to start a free Quran trial for my kids."
+      whatsappHref={generateWhatsAppLink("Hi, I'd like to start a free Quran trial for my child.")}
     />
   </div><!-- /bg-cream-50 -->
 
