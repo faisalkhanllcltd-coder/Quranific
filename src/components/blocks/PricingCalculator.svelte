@@ -60,6 +60,7 @@
   let dur = $state('30');
   let sess = $state('3');
   let currency = $state<Currency>('USD');
+  let detectedCountry = $state('');
   let selectedCourse = $state(COURSE_LIST[0]?.slug || 'basic-qaida');
   let courseNote = $state('');
 
@@ -71,6 +72,9 @@
         .then((data) => {
           if (data?.currency) {
             currency = data.currency;
+          }
+          if (data?.country && data.country !== 'Unknown') {
+            detectedCountry = data.country;
           }
         })
         .catch(() => {
@@ -91,9 +95,16 @@
   let sessPerMonth = $derived(parseInt(sess) * 4);
   let perClass = $derived(sessPerMonth > 0 ? (finalPrice / sessPerMonth).toFixed(2) : '—');
   let formattedFinalPrice = $derived(formatPrice(finalPrice, currency));
-  let currencyLabel = $derived(CURRENCY_META.find((c) => c.code === currency)?.label ?? currency);
+  // Billing context line: "Billed in USD ($) • United States"
+  let billingContext = $derived(() => {
+    const meta = CURRENCY_META.find((c) => c.code === currency);
+    const sym_ = meta?.symbol ?? currency;
+    const parts = [`Billed in ${currency} (${sym_})`];
+    if (detectedCountry) parts.push(detectedCountry);
+    return parts.join(' • ');
+  });
 
-  // Hydration-safe relative URL — includes course and note
+  // Hydration-safe relative URL — includes course slug (stable ID) and note
   let queryParams = $derived(
     `?duration=${dur}&sessions=${sess}&currency=${currency}&billing=monthly&price=${finalPrice}&course=${encodeURIComponent(selectedCourse)}&note=${encodeURIComponent(courseNote)}`
   );
@@ -122,11 +133,13 @@
   </p>
 
   <div class="space-y-5">
-    <!-- ROW 1: THE 50/50 EDGE UI GRID -->
-    <!-- Course and Currency sit exactly 50/50 side-by-side on all screens -->
-    <div class="grid grid-cols-2 gap-4 md:gap-5">
-      <!-- Course -->
-      <div class="col-span-1 flex flex-col min-w-0">
+    <!--
+      ROW 1: 30% Course / 70% Session Length on desktop.
+      Mobile: stacked full-width (grid-cols-1).
+    -->
+    <div class="grid grid-cols-1 md:grid-cols-[30%_1fr] gap-4 md:gap-5 md:items-start">
+      <!-- Course (30% desktop, 100% mobile) -->
+      <div class="flex flex-col min-w-0">
         <div class="flex justify-between items-center mb-3">
           <span class="eyebrow-pill {labelColor}">Course</span>
         </div>
@@ -135,28 +148,38 @@
           class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} transition-colors cursor-pointer truncate"
         >
           {#each COURSE_LIST as course (course.slug)}
-            <option value={course.slug}>{course.title}</option>
+            <option value={course.slug}>{course.shortTitle}</option>
           {/each}
-          <option value="other">Not sure / Others</option>
+          <option value="other">Not sure / Other</option>
         </select>
       </div>
 
-      <!-- Currency (Geo-detected, fixed — no selector/dropdown) -->
-      <div class="col-span-1 flex flex-col min-w-0">
+      <!-- Session Length (70% desktop, 100% mobile) -->
+      <div class="flex flex-col min-w-0">
         <div class="flex justify-between items-center mb-3">
-          <span class="eyebrow-pill {labelColor}">Currency</span>
+          <span class="eyebrow-pill {labelColor}">Session length</span>
+          <span class="text-sm font-bold {valueColor}">{dur} min</span>
         </div>
-        <div
-          dir="ltr"
-          class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} flex items-center transition-colors truncate select-none cursor-default"
-          title="Detected regional currency"
-        >
-          <bdi>{currencyLabel}</bdi>
+        <div class="flex gap-2">
+          <button
+            class="flex-1 px-4 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {dur ===
+            '30'
+              ? activeBtn
+              : inactiveBtn}"
+            onclick={() => (dur = '30')}>30 min</button
+          >
+          <button
+            class="flex-1 px-4 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {dur ===
+            '40'
+              ? activeBtn
+              : inactiveBtn}"
+            onclick={() => (dur = '40')}>40 min</button
+          >
         </div>
       </div>
     </div>
 
-    <!-- Optional Course Textarea (Breaks out of grid for full width) -->
+    <!-- Optional Course Note (full width, only for "other") -->
     {#if selectedCourse === 'other'}
       <textarea
         bind:value={courseNote}
@@ -166,30 +189,6 @@
         class="w-full px-4 py-3 bg-cream-50 border rounded-lg text-sm transition-colors resize-none {textareaInput}"
       ></textarea>
     {/if}
-
-    <!-- Duration -->
-    <div>
-      <div class="flex justify-between items-center mb-3">
-        <span class="eyebrow-pill {labelColor}">Session length</span>
-        <span class="text-sm font-bold {valueColor}">{dur} min</span>
-      </div>
-      <div class="flex gap-2">
-        <button
-          class="flex-1 px-4 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {dur ===
-          '30'
-            ? activeBtn
-            : inactiveBtn}"
-          onclick={() => (dur = '30')}>30 min</button
-        >
-        <button
-          class="flex-1 px-4 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {dur ===
-          '40'
-            ? activeBtn
-            : inactiveBtn}"
-          onclick={() => (dur = '40')}>40 min</button
-        >
-      </div>
-    </div>
 
     <!-- Sessions per week -->
     <div>
@@ -263,6 +262,12 @@
           </span>
           <span class="text-sm font-medium {resultFeeSub}">/mo</span>
         </div>
+        <!-- Geo billing context — injected dynamically, empty during SSR -->
+        {#if billingContext()}
+          <p class="mt-2 text-[11px] font-medium text-emerald-800/50 leading-snug">
+            {billingContext()}
+          </p>
+        {/if}
       </div>
     </div>
 

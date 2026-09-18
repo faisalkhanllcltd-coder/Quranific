@@ -30,9 +30,12 @@ let note: string;
 let leadId: string;
 
 try {
-  // Astro v6 Standard: Read from cloudflare:workers env
+  // Astro v6 Standard: Read exclusively from cloudflare:workers runtime env.
+  // DO NOT fall back to import.meta.env.JWT_SECRET — it is resolved at build time
+  // by Vite and will be undefined in production where only runtime secrets are set,
+  // causing this throw to fire and trapping all users in a 500 error.
   const runtimeEnv = env as Record<string, unknown>;
-  const jwtSecret = (runtimeEnv.JWT_SECRET as string) || (import.meta.env.JWT_SECRET as string);
+  const jwtSecret = runtimeEnv.JWT_SECRET as string;
 
   if (!jwtSecret) {
     throw new Error('Missing JWT_SECRET in environment');
@@ -72,6 +75,20 @@ const waLink = generateWhatsAppLink(fullMessage);
 ---
 
 <Funnel title="Registration Successful | Quranific">
+  <!-- Analytics: lead_conversion fires on success page load -->
+  <script define:vars={{ course, leadId }} is:inline>
+    (function () {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'lead_conversion',
+        funnel_step: 3,
+        funnel_step_name: 'success',
+        course: course || undefined,
+        lead_id: leadId || undefined,
+      });
+    })();
+  </script>
+
   <div
     class="w-full flex flex-col items-center justify-center text-center animate-in duration-700 fade-in slide-in-from-bottom-4"
   >

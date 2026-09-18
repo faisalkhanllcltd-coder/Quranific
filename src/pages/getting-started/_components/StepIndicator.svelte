@@ -13,9 +13,15 @@
   let progressWidth = $derived(((currentStep - 1) / (steps.length - 1)) * 100);
 </script>
 
-<div class="w-full max-w-[400px] mx-auto mb-8 relative" aria-label="Signup Progress">
+<!--
+  Slimmed SaaS-style step indicator:
+  - Circles: 28px (w-7 h-7) with 1.5px border, no ring, scale-105 active
+  - Connector: 2px (h-[2px]) instead of 4px (h-1)
+  - Margin reduced from mb-8 to mb-4
+-->
+<div class="w-full max-w-[360px] mx-auto mb-4 relative" aria-label="Signup Progress">
   <div
-    class="absolute top-5 left-[15%] right-[15%] h-1 bg-emerald-100 z-0 rounded-full"
+    class="absolute top-3.5 left-[15%] right-[15%] h-[2px] bg-emerald-100 z-0 rounded-full"
     aria-hidden="true"
   >
     <div
@@ -31,27 +37,27 @@
   <div class="flex items-start justify-between relative z-10 w-full">
     {#each steps as step (step.num)}
       <div
-        class="flex flex-col items-center gap-2 w-24"
+        class="flex flex-col items-center gap-1.5 w-20"
         aria-current={step.num === currentStep ? 'step' : undefined}
       >
         <div
-          class={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold relative z-10 transition-all duration-500 ease-in-out ${
+          class={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold relative z-10 transition-all duration-500 ease-in-out ${
             step.num < currentStep
-              ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20'
+              ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/20'
               : step.num === currentStep
-                ? 'bg-white text-emerald-700 border-2 border-emerald-500 ring-4 ring-emerald-50 shadow-sm scale-110'
-                : 'bg-white text-emerald-300 border-2 border-emerald-100'
+                ? 'bg-white text-emerald-700 border-[1.5px] border-emerald-500 shadow-sm scale-105'
+                : 'bg-white text-emerald-300 border-[1.5px] border-emerald-100'
           }`}
         >
           {#if step.num < currentStep}
-            <Check class="w-5 h-5 text-white animate-in zoom-in duration-300" strokeWidth={3} />
+            <Check class="w-3.5 h-3.5 text-white animate-in zoom-in duration-300" strokeWidth={3} />
           {:else}
             {step.num}
           {/if}
         </div>
 
         <span
-          class={`text-xs font-bold text-center leading-tight transition-colors duration-300 ease-in-out mt-1 ${
+          class={`text-[10px] font-bold text-center leading-tight transition-colors duration-300 ease-in-out ${
             step.num <= currentStep ? 'text-emerald-950' : 'text-emerald-700/40'
           }`}
         >

@@ -11,18 +11,22 @@ const PORTALS = [
     title: 'Student Portal',
     desc: 'Access your virtual classroom, track your learning progress, and manage your schedule.',
     icon: Icons.student,
-    signInLink: 'https://app.quranific.com/login',
-    signUpLink: '/getting-started/signup',
-    signUpText: 'New student? Create an account',
+    // Role-aware login — passes ?role= so the app can route correctly post-auth
+    signInLink: 'https://app.quranific.com/login?role=student',
+    onboardingLink: '/getting-started/signup',
+    onboardingLabel: 'New student? Start your free trial',
+    onboardingCTA: 'No account yet? Get started free →',
   },
   {
     id: 'teacher',
     title: 'Teacher Portal',
     desc: 'Access your teaching dashboard, manage global student sessions, and review lesson notes.',
     icon: Icons.teacher,
-    signInLink: 'https://app.quranific.com/login',
-    signUpLink: '/teachers/apply',
-    signUpText: 'Want to teach with us? Apply now',
+    // Role-aware login — passes ?role= so the app can route teachers to their dashboard
+    signInLink: 'https://app.quranific.com/login?role=teacher',
+    onboardingLink: '/teachers/apply',
+    onboardingLabel: 'Want to teach with us?',
+    onboardingCTA: 'Apply to teach with Quranific →',
   },
 ];
 ---
@@ -57,7 +61,7 @@ const PORTALS = [
             </p>
           </div>
 
-          {/* Actions */}
+          {/* Returning user — Sign In */}
           <div class="flex flex-col gap-3 mt-auto w-full max-w-xs mx-auto">
             <a
               href={portal.signInLink}
@@ -68,15 +72,27 @@ const PORTALS = [
             </a>
           </div>
 
-          {/* Footer/Signup Link */}
-          <div class="mt-8 pt-6 border-t border-emerald-900/10 text-center w-full">
-            <a
-              href={portal.signUpLink}
-              class="text-[14px] text-emerald-700 font-bold hover:text-emerald-900 transition-colors"
-            >
-              {portal.signUpText}
-            </a>
+          {/* Divider */}
+          <div class="my-6 flex items-center gap-3">
+            <div class="flex-1 h-px bg-emerald-900/8" aria-hidden="true" />
+            <span class="text-[11px] font-bold text-emerald-900/30 uppercase tracking-widest">
+              or
+            </span>
+            <div class="flex-1 h-px bg-emerald-900/8" aria-hidden="true" />
           </div>
+
+          {/* First-time onboarding — prominent block so users without accounts aren't dumped at a login wall */}
+          <a
+            href={portal.onboardingLink}
+            class="group w-full text-center py-3 px-4 rounded-xl border-2 border-emerald-100 bg-emerald-50/60 hover:border-emerald-300 hover:bg-emerald-50 transition-colors duration-200"
+          >
+            <p class="text-[11px] font-bold text-emerald-700/60 mb-0.5 uppercase tracking-wider">
+              {portal.onboardingLabel}
+            </p>
+            <p class="text-[14px] font-bold text-emerald-800 group-hover:text-emerald-950 transition-colors">
+              {portal.onboardingCTA}
+            </p>
+          </a>
         </div>
       ))
     }
