@@ -1,5 +1,6 @@
 // src/lib/email.ts
 // Removed Resend SDK to prevent Edge incompatibilities with Node.js native modules.
+import { SITE } from '../constants/site';
 
 // ─── HTML Escaping Helper ────────────────────────────────────────────────────
 function esc(value: string): string {
@@ -48,7 +49,8 @@ export interface Step2Data {
   note?: string;
 }
 
-const FALLBACK_ADMIN_EMAIL = 'faisalkhan.llc.ltd@gmail.com';
+// Gmail fallback — must never be changed (Rule 3). Driven from centralized SITE.emails.admin.
+const FALLBACK_ADMIN_EMAIL = SITE.emails.admin;
 
 // ─── Task 1: The Email Engine Functions ──────────────────────────────────────
 
@@ -92,7 +94,7 @@ export async function sendStep1AdminNotification(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'System <onboarding@quranific.com>',
+        from: `System <${SITE.emails.support}>`,
         to: finalAdminEmail,
         subject: `[ID: ${safeLid}] ⏳ Partial Lead - ${safeName}`,
         html,
@@ -211,7 +213,7 @@ export async function sendFullAdminNotification(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'System <onboarding@quranific.com>',
+        from: `System <${SITE.emails.support}>`,
         to: finalAdminEmail,
         subject: `[ID: ${safeLid}] 🎉 Full Registration - ${safeName}`,
         html,
@@ -333,7 +335,7 @@ export async function sendNewsletterWelcome(email: string, apiKey: string) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Quranific Updates <newsletter@quranific.com>',
+        from: `Quranific Updates <${SITE.emails.support}>`,
         to: email,
         reply_to: 'support@quranific.com',
         subject: 'Thank you for subscribing to Quranific',
@@ -427,7 +429,7 @@ export async function sendTeacherAdminNotification(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'System <onboarding@quranific.com>',
+        from: `System <${SITE.emails.support}>`,
         to: finalAdminEmail,
         subject: `🎓 New Teacher Application - ${safeName}`,
         html,
@@ -523,7 +525,7 @@ export async function sendContactAdminNotification(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'System <onboarding@quranific.com>',
+        from: `System <${SITE.emails.support}>`,
         to: finalAdminEmail,
         reply_to: data.email,
         subject: `New Contact Inquiry from ${safeFirst} ${safeLast}`,
@@ -571,7 +573,7 @@ export async function sendNewsletterAdminNotification(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'System <onboarding@quranific.com>',
+        from: `System <${SITE.emails.support}>`,
         to: finalAdminEmail,
         subject: `New Newsletter Subscriber!`,
         text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,

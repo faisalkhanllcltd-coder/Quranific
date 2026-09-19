@@ -132,25 +132,38 @@ export const POST: APIRoute = async (context) => {
       );
     }
 
-    // 4. Dispatch Emails & Dead-Letter Queue on failure
-    try {
-      await Promise.all([
-        sendTeacherAdminNotification(teacherData, resendApiKey, adminEmail),
-        sendTeacherAutoResponder(teacherData.email, teacherData.fullName, resendApiKey),
-      ]);
-    } catch (emailErr) {
-      console.error('[Teacher Application Email Failed]:', emailErr);
-      if (kv) {
-        const deadLetterKey = `FAILED_TEACHER:${Date.now()}`;
-        const deadLetterPayload = JSON.stringify({
-          failedAt: new Date().toISOString(),
-          payload: teacherData,
-          reason: String(emailErr),
-        });
-        await kv
-          .put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 })
-          .catch((e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e));
+    // 4. Dispatch Emails in background via waitUntil — never block the response
+    const sendEmailTask = async () => {
+      try {
+        await Promise.all([
+          sendTeacherAdminNotification(teacherData, resendApiKey, adminEmail),
+          sendTeacherAutoResponder(teacherData.email, teacherData.fullName, resendApiKey),
+        ]);
+      } catch (emailErr) {
+        console.error('[Teacher Application Email Failed]:', emailErr);
+        // Dead-letter queue — write to KV for retry-queue processing
+        if (kv) {
+          const deadLetterKey = `FAILED_TEACHER:${Date.now()}`;
+          const deadLetterPayload = JSON.stringify({
+            failedAt: new Date().toISOString(),
+            payload: teacherData,
+            reason: String(emailErr),
+          });
+          kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch((e: unknown) =>
+            console.error('[Dead-Letter KV Write Failed]:', e)
+          );
+        }
       }
+    };
+
+    // Use Cloudflare's waitUntil for background fire-and-forget execution
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ctx = (context.locals as any)?.runtime?.ctx;
+    if (ctx?.waitUntil) {
+      ctx.waitUntil(sendEmailTask());
+    } else {
+      // Local dev fallback — run without blocking
+      sendEmailTask().catch(console.error);
     }
 
     return new Response(JSON.stringify({ success: true }), {

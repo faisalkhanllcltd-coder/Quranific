@@ -10,11 +10,11 @@ const SECURITY_HEADERS: Record<string, string> = {
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://tagassistant.google.com 'unsafe-inline' 'unsafe-eval'",
+    "script-src 'self' https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://tagassistant.google.com 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https:",
     "font-src 'self' data:",
-    "connect-src 'self' https://api.resend.com https://challenges.cloudflare.com https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net",
+    "connect-src 'self' https://api.resend.com https://challenges.cloudflare.com https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://graph.facebook.com",
     "frame-src 'self' https://challenges.cloudflare.com https://www.googletagmanager.com",
     "worker-src 'self' blob:",
     "object-src 'none'",

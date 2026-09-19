@@ -22,12 +22,19 @@ export const GET: APIRoute = (context) => {
     currency,
   });
 
+  // Smart CORS: allow localhost for local dev, lock to production origin otherwise
+  const origin = context.request.headers.get('origin') ?? '';
+  const allowedOrigin =
+    origin.includes('localhost') || origin.includes('127.0.0.1') ? origin : 'https://quranific.com';
+
   return new Response(body, {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'no-store',
-      'Access-Control-Allow-Origin': '*',
+      // Smart CORS: localhost allowed for dev, production locked to quranific.com only.
+      'Access-Control-Allow-Origin': allowedOrigin,
+      Vary: 'Origin',
     },
   });
 };

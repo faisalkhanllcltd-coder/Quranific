@@ -118,11 +118,44 @@ export const POST: APIRoute = async (context) => {
 
     const { email } = parsed.data;
 
-    // TODO: Phase 5 D1 Database integration for uniqueness constraint
+    // 2. Dispatch to Resend Audiences + email tasks in the background
+    const resendAudienceId = runtimeEnv.RESEND_AUDIENCE_ID as string | undefined;
 
-    // 2. Dispatch the Email via Resend in the background
     const sendEmailTask = async () => {
       if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
+        // ── Step A: Push contact to Resend Audiences for list management ──────
+        // Handles duplicate/uniqueness at the Resend level (upsert by email).
+        if (resendAudienceId) {
+          try {
+            const audienceRes = await fetch(
+              `https://api.resend.com/audiences/${resendAudienceId}/contacts`,
+              {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${resendApiKey}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  email,
+                  unsubscribed: false,
+                }),
+              }
+            );
+            if (!audienceRes.ok) {
+              const errText = await audienceRes.text();
+              // 422 = duplicate contact — treat as success (idempotent upsert)
+              if (audienceRes.status !== 422) {
+                console.error(`[Resend Audiences Error]: ${audienceRes.status} ${errText}`);
+              }
+            }
+          } catch (audienceErr) {
+            console.error('[Resend Audiences Fetch Failed]:', audienceErr);
+          }
+        } else {
+          console.warn('[Newsletter]: RESEND_AUDIENCE_ID not set — skipping contact upsert');
+        }
+
+        // ── Step B: Admin notification ────────────────────────────────────────
         try {
           const res = await fetch('https://api.resend.com/emails', {
             method: 'POST',
@@ -131,7 +164,7 @@ export const POST: APIRoute = async (context) => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              from: 'System <onboarding@quranific.com>',
+              from: `System <${adminEmail}>`,
               to: adminEmail,
               subject: `New Newsletter Subscriber!`,
               text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,
@@ -153,6 +186,7 @@ export const POST: APIRoute = async (context) => {
           }
         }
 
+        // ── Step C: Welcome email to subscriber ───────────────────────────────
         try {
           await sendNewsletterWelcome(email, resendApiKey);
         } catch (userErr) {
@@ -173,6 +207,7 @@ export const POST: APIRoute = async (context) => {
         // Local Mock Mode
         console.log('\n====== 📬 MOCK NEWSLETTER SUB ======');
         console.log(`New Subscriber: ${email}`);
+        console.log(`Audience ID: ${resendAudienceId ?? 'NOT SET'}`);
         console.log(`Notification sent to: ${adminEmail}`);
         console.log('====================================\n');
       }
