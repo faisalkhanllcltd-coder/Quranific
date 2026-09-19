@@ -118,9 +118,44 @@
   );
   let baseHref = $derived(`/getting-started/signup${queryParams}`);
 
+  // GTM Tracking — fire calculate_price on every interactive change
+  $effect(() => {
+    // Access reactive state so Svelte tracks changes
+    const _course = selectedCourse;
+    const _dur = dur;
+    const _sess = sess;
+    if (
+      typeof window !== 'undefined' &&
+      Array.isArray((window as Window & { dataLayer?: unknown[] }).dataLayer)
+    ) {
+      (window as Window & { dataLayer: unknown[] }).dataLayer.push({
+        event: 'calculate_price',
+        course: _course,
+        duration: _dur,
+        sessions: _sess,
+        price: finalPrice,
+        currency,
+      });
+    }
+  });
+
   // Forward tracking parameters ONLY on click, avoiding SSR mismatch
   function handleCheckout(e: MouseEvent) {
     e.preventDefault();
+    // GTM: begin_checkout fires on calculator CTA click
+    if (
+      typeof window !== 'undefined' &&
+      Array.isArray((window as Window & { dataLayer?: unknown[] }).dataLayer)
+    ) {
+      (window as Window & { dataLayer: unknown[] }).dataLayer.push({
+        event: 'begin_checkout',
+        course: selectedCourse,
+        duration: dur,
+        sessions: sess,
+        price: finalPrice,
+        currency,
+      });
+    }
     const url = new URL(baseHref, window.location.origin);
     const existing = new URLSearchParams(window.location.search);
     existing.forEach((v, k) => {

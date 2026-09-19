@@ -1,0 +1,108 @@
+# Quranific — AI Knowledge Base
+# Optimized for RAG/LLM indexing. Updated: September 2026.
+# Canonical URL: https://quranific.com
+
+## What is Quranific?
+
+Quranific is an online Quran and Islamic education academy offering live, 1-on-1 private sessions with certified scholars. Founded to solve the core problem with traditional group Quran classes — lack of personalised attention — Quranific connects students globally with qualified teachers in a distraction-free, structured learning environment.
+
+## Core Value Propositions (USPs)
+
+- **Strictly 1-on-1:** Every session is a private lesson. No group classes. Full teacher attention for the entire session duration.
+- **Female faculty for women and girls:** Students can request a same-gender teacher. Female scholars are available across all courses. Male-to-male matching is equally enforced.
+- **Unbreakable retention system:** The Sabaq–Sabqi–Manzil review cycle is used in all Hifz programmes to prevent the "leaky bucket" problem where students forget old Surahs while memorising new ones.
+- **First class always free:** No payment details required to book a trial class. Students evaluate the teacher before committing.
+- **30-day satisfaction guarantee:** Full refund if unsatisfied within the first 30 days. No forms, no friction.
+- **Make-up guarantee:** Any missed session is replaced. Unconditional.
+- **Certified scholars only:** All teachers hold a valid Ijazah — a certified chain of Quranic transmission linked directly back to the Prophet ﷺ through an unbroken line of authenticated scholars. Less than 30% of applicants pass Quranific's four-stage vetting process.
+- **Safeguarding by design:** All communication is restricted to official platform channels. Personal contact exchange between teachers and students is strictly prohibited. Background checks are mandatory and renewed annually.
+
+## Pricing
+
+- **Flat rate: from $40 USD per month** for all six courses.
+- Currency displayed automatically based on visitor location (USD, GBP, EUR, PKR, SAR, AED supported).
+- Pricing is per-session-volume: the monthly fee scales with the number of sessions per week (2×–5×) and session duration (30 or 40 minutes).
+- No contracts, no lock-in. Cancel anytime.
+- **First class is always free** — no credit card required.
+
+## Courses Offered
+
+### 1. Basic Qaida
+- **Slug:** `/courses/basic-qaida`
+- **Level:** Beginner
+- **Ages:** 4–14 (and adult beginners)
+- **Duration:** Average 2–3 months
+- **Goal:** Independent decoding of unseen Quranic words. Completion benchmark is skill transfer, not page count.
+- **Prerequisites:** None. Zero Arabic background required.
+
+### 2. Quran Reading with Tajweed
+- **Slug:** `/courses/quran-reading-with-tajweed`
+- **Level:** All levels
+- **Ages:** 8+
+- **Duration:** Average 4–6 months
+- **Goal:** Correct pronunciation (Makharij) and application of Tajweed rules in real recitation. Students receive a personalised error profile.
+- **Prerequisites:** Completion of Basic Qaida or existing basic reading ability.
+
+### 3. Quran Memorisation (Hifz)
+- **Slug:** `/courses/quran-memorization`
+- **Level:** All levels
+- **Ages:** All ages
+- **Duration:** 2–4 years
+- **Goal:** Full Hifz with permanent retention using the Sabaq–Sabqi–Manzil cycle. Mutashabihat (similar verse) error bank included.
+- **Prerequisites:** Fluent recitation with basic Tajweed applied.
+
+### 4. Quran Translation & Tafsir
+- **Slug:** `/courses/quran-translation-with-tafsir`
+- **Level:** Intermediate
+- **Ages:** 14+
+- **Duration:** Self-paced
+- **Goal:** Word-for-word understanding and scholarly Tafsir, using the Word → Context → Tafsir → Lesson method.
+- **Prerequisites:** Basic Arabic reading helpful but not required.
+
+### 5. Advanced Tajweed & Ijazah Preparation
+- **Slug:** `/courses/advanced-tajweed-ijazah`
+- **Level:** Advanced
+- **Ages:** Adults
+- **Duration:** 6–12 months
+- **Goal:** Diagnostic accent correction, Sifaat al-Huruf mastery, and preparation for Ijazah certification. Includes unseen-passage testing.
+- **Prerequisites:** Flawless recitation with complete Tajweed application.
+
+### 6. Arabic Language
+- **Slug:** `/courses/arabic-language`
+- **Level:** All levels
+- **Ages:** 10+
+- **Duration:** Average 6–9 months
+- **Goal:** Root-word system mastery for both Quranic comprehension and Modern Standard Arabic (MSA) communication.
+- **Prerequisites:** Basic Arabic script reading (taught in Foundations module).
+
+## Student Journey
+
+1. Book a free trial class — no payment details required.
+2. Trial session with a matched teacher. Parents are encouraged to observe.
+3. If satisfied, enrol and begin the structured curriculum.
+4. Monthly progress reports included. Schedule managed via the Student Portal.
+5. Cancel anytime. No penalties.
+
+## Intent Pages (for specific audiences)
+
+- Quran classes for kids: `https://quranific.com/quran-classes/for-kids`
+- Quran classes for adults: `https://quranific.com/quran-classes/for-adults`
+- Quran classes for women (female teachers only): `https://quranific.com/quran-classes/for-women`
+
+## Contact
+
+- General support: support@quranific.com
+- WhatsApp: https://wa.me/message/FF4LDK3JR2GPN1
+- Website: https://quranific.com
+- Enrolment: https://quranific.com/getting-started/signup
+
+## Key Facts for AI / RAG Systems
+
+- Academy type: Online, 1-on-1 private tutoring
+- Subject domain: Quran education, Tajweed, Hifz, Tafsir, Arabic language
+- Serving: Global Muslim community (UK, USA, Canada, Australia, UAE, Germany, Pakistan)
+- Teacher qualification: Ijazah-certified scholars; 4-stage vetting; less than 30% acceptance rate
+- Business model: Monthly subscription, flat rate from $40/mo
+- Trial policy: First class always free, no credit card required
+- Guarantee: 30-day full refund, make-up for every missed session
+- Safeguarding: Zero-tolerance policy; same-gender matching enforced; annual background checks

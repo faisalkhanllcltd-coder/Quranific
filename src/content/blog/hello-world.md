@@ -34,7 +34,7 @@ The standard approach is sequential and volume-driven: children move through les
 
 A child who has drilled a page until they can recite it from memory is not demonstrating reading ability — they are demonstrating memory. The moment that child encounters a new configuration of letters, they slow down, guess, or stop entirely.
 
-Our Qaida methodology is built around a different goal: the point of the Qaida is not to finish the Qaida. It is to reach the moment when the student can pick up a Mushaf and decode a verse they have never seen before, without support, without transliteration, and without needing to hear it first.
+Our [Basic Qaida course](/courses/basic-qaida) is built around a different goal: the point of the Qaida is not to finish the Qaida. It is to reach the moment when the student can pick up a Mushaf and decode a verse they have never seen before, without support, without transliteration, and without needing to hear it first.
 
 We do not advance a student to the next lesson until they have demonstrated that ability with the current material. This takes longer upfront. It produces significantly more capable readers in the long run.
 
@@ -78,7 +78,7 @@ The advantages of the online format for Quran education are practical and signif
 
 ## The Typical Progression at Quranific
 
-For a child starting from zero, the typical progression works as follows. Basic Qaida takes an average of two to three months, and the benchmark for completion is independent decoding of unseen words, not reaching the last page. Quran Reading with Tajweed follows — this stage diagnoses the specific pronunciation errors the student has formed and corrects them systematically, with a personalised error profile rather than a generic rulebook. Most students spend four to six months at this stage. Hifz, for students who choose that path, begins after Tajweed foundations are solid — beginning Hifz before Tajweed is established embeds errors that are very difficult to correct once memorised.
+For a child starting from zero, the typical progression works as follows. Basic Qaida takes an average of two to three months, and the benchmark for completion is independent decoding of unseen words, not reaching the last page. [Quran Reading with Tajweed](/courses/quran-reading-with-tajweed) follows — this stage diagnoses the specific pronunciation errors the student has formed and corrects them systematically, with a personalised error profile rather than a generic rulebook. Most students spend four to six months at this stage. [Hifz (Quran Memorisation)](/courses/quran-memorization), for students who choose that path, begins after Tajweed foundations are solid — beginning Hifz before Tajweed is established embeds errors that are very difficult to correct once memorised.
 
 Adult students follow the same progression but with more context-setting in the early stages, since adult learners tend to have more analytical questions and benefit from understanding why a rule exists rather than simply accepting it. Our teachers adjust accordingly.
 

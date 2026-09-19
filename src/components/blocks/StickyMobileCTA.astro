@@ -21,6 +21,7 @@ const { signupHref, whatsappHref } = Astro.props;
       target="_blank"
       rel="noopener noreferrer"
       data-track-cta
+      onclick="if(typeof window!=='undefined'&&Array.isArray(window.dataLayer))window.dataLayer.push({event:'contact_whatsapp',source:'sticky_mobile_cta'});"
       class="flex-none flex items-center justify-center w-11 h-11 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
       aria-label="Chat on WhatsApp"
     >
@@ -32,7 +33,13 @@ const { signupHref, whatsappHref } = Astro.props;
     </a>
 
     <!-- PRIMARY: Sign Up -->
-    <Button href={signupHref} data-track-cta variant="primary" class="flex-1">
+    <Button
+      href={signupHref}
+      data-track-cta
+      onclick="if(typeof window!=='undefined'&&Array.isArray(window.dataLayer))window.dataLayer.push({event:'click_book_trial',source:'sticky_mobile_cta'});"
+      variant="primary"
+      class="flex-1"
+    >
       Book Free Class
     </Button>
   </div>

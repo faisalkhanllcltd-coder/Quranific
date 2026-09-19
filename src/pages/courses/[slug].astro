@@ -29,6 +29,11 @@ if (!course) {
   return Astro.redirect('/404');
 }
 
+// Pre-compute related courses for the SEO linking block
+const relatedCourses = course.relatedSlugs
+  .map((slug) => courses.find((c) => c.slug === slug))
+  .filter((c): c is (typeof courses)[number] => c !== undefined);
+
 const imageSrc = `/images/${course.slug}.webp`;
 const testFallback = '/images/basic-qaida.webp';
 
@@ -113,6 +118,49 @@ const schema = {
       />
     ) : (
       <CoursesFAQ />
+    )
+  }
+
+  {
+    relatedCourses.length > 0 && (
+      <section
+        aria-label="Related Courses"
+        class="quranific-section bg-emerald-50/50 border-t border-emerald-100"
+      >
+        <div class="quranific-container">
+          <p class="eyebrow-pill text-emerald-600 mb-5">Continue Learning</p>
+          <h2 class="text-2xl md:text-3xl font-black text-emerald-950 tracking-tight mb-8">
+            Related Courses
+          </h2>
+          <div class="flex flex-wrap gap-4">
+            {relatedCourses.map((related) => (
+              <a
+                href={`/courses/${related.slug}`}
+                class="group flex items-center gap-3 px-6 py-4 bg-white rounded-2xl border border-emerald-100 shadow-sm hover:border-emerald-300 hover:shadow-md transition-all duration-200 text-left"
+              >
+                <div class="flex flex-col">
+                  <span class="text-sm font-bold text-emerald-950 group-hover:text-emerald-700 transition-colors">
+                    {related.title}
+                  </span>
+                  <span class="text-xs text-emerald-700/60 font-medium mt-0.5">
+                    {related.level} · {related.ageRange}
+                  </span>
+                </div>
+                <svg
+                  class="w-4 h-4 text-emerald-400 group-hover:text-emerald-600 shrink-0 transition-colors"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
     )
   }
 
