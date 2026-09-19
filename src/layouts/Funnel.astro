@@ -12,19 +12,7 @@ interface Props {
 const { title, description = 'Complete your registration for Quranific.' } = Astro.props;
 ---
 
-<Base title={title} description={description} robots="noindex, nofollow">
-  <!--
-    B-2 FIX: Cloudflare Turnstile widget script loaded once at the layout level.
-    Using async defer so it never blocks the main thread. The is:inline directive
-    suppresses the Astro 4000 warning since this is a third-party script.
-  -->
-  <script
-    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-    async
-    defer
-    is:inline
-    slot="head"></script>
-
+<Base title={title} description={description} robots="noindex, nofollow" requireTurnstile={true}>
   <div class="flex flex-col lg:flex-row min-h-screen bg-[#fefdf9] w-full">
     <aside
       aria-label="Brand panel"

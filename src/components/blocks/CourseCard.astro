@@ -35,6 +35,8 @@ const getPrefix = (slug: string) => {
       src={imageSrc}
       onerror={`this.onerror=null;this.src='${testFallback}';`}
       alt=""
+      width="600"
+      height="400"
       class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
       aria-hidden="true"
       loading={isPriority ? 'eager' : 'lazy'}

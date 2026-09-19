@@ -39,8 +39,10 @@ const jsonLd = {
 ---
 
 <Base
-  title="Contact Us - Quranific | We Reply to Every Message"
-  description="Get in touch with the Quranific team. Contact us via email or WhatsApp for support, inquiries, or feedback."
+  title="Contact Us | Quranific Support"
+  description="Need help? Reach out to our dedicated support team via email or WhatsApp."
+  robots="index, follow"
+  requireTurnstile={true}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
   <script
