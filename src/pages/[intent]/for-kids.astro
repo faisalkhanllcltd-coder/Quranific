@@ -18,6 +18,7 @@ import StickyMobileCTA from '../../components/blocks/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { testimonials } from '../../data/testimonials';
 import { faqs } from '../../data/faqs';
+import { kidsVettingSteps, kidsTrustPoints, kidsOnboardingSteps } from '../../data/features';
 import { generateWhatsAppLink } from '../../lib/helpers';
 
 export const prerender = true;
@@ -65,57 +66,10 @@ const kidsTestimonials = testimonials.filter((t) =>
   ['amna-de', 'saleem-uae', 'naseer-uk'].includes(t.id)
 );
 
-const vettingSteps = [
-  {
-    n: '01',
-    title: 'Ijazah Verification',
-    body: 'We confirm the teacher holds a valid chain of Ijazah — a certified lineage of Quranic transmission. No exceptions.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`,
-  },
-  {
-    n: '02',
-    title: 'Live Recitation Assessment',
-    body: 'Our academic team conducts a live Tajweed assessment. Not a CV review — an actual recitation, evaluated to professional standards.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>`,
-  },
-  {
-    n: '03',
-    title: 'Teaching Methodology Interview',
-    body: "We probe specifically for child-teaching ability: how do they explain a concept when a child doesn't understand? How do they keep an 8-year-old engaged after 15 minutes? Concrete answers only.",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
-  },
-  {
-    n: '04',
-    title: 'Full Safeguarding Check',
-    body: 'Every teacher completes a formal safeguarding background check before they ever meet a student. This is non-negotiable and renewed annually.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`,
-  },
-];
-
-const trustPoints = [
-  'Progress updates on request — always included, no extra fee',
-  'Sit in on any session, announced or unannounced',
-  'Direct teacher contact from your first class onward',
-  'Safeguarding checks renewed annually — not a one-time box-tick',
-];
-
-const onboardingSteps = [
-  {
-    n: '1',
-    title: 'Book your free class — no card required.',
-    body: "Tell us your child's age, current Quran level, and when you're free. That's all we need to match you with the right teacher.",
-  },
-  {
-    n: '2',
-    title: 'Meet your teacher and start where your child is.',
-    body: 'No placement test. No pressure. In the first session, the teacher listens before they teach — understanding where your child is starting from, what they enjoy, and how they learn.',
-  },
-  {
-    n: '3',
-    title: 'Watch your child want to come back for the next one.',
-    body: "That's the whole point of the trial: not a sales pitch, a real first lesson. If your child isn't engaged, we'll find a better match — or we part ways, no hard feelings.",
-  },
-];
+// Aliases for centralized data — eliminates in-page copy-paste
+const vettingSteps = kidsVettingSteps;
+const trustPoints = kidsTrustPoints;
+const onboardingSteps = kidsOnboardingSteps;
 
 const faqItems = (faqs.landingKids || []).map((item) => ({
   q: item.question,

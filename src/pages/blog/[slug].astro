@@ -4,7 +4,6 @@ import Base from '../../layouts/Base.astro';
 import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 import Section from '../../components/ui/Section.astro';
-import Button from '../../components/ui/Button.astro';
 import EyebrowText from '../../components/ui/EyebrowText.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 
@@ -40,6 +39,11 @@ const formattedDate = new Date(pubDate).toLocaleDateString('en-US', {
   year: 'numeric',
 });
 
+// Estimated reading time — based on 200wpm average for non-native readers
+const rawBody = post.body ?? '';
+const wordCount = rawBody.trim().split(/\s+/).filter(Boolean).length;
+const readingTimeMin = Math.max(1, Math.round(wordCount / 200));
+
 // Dynamic Article SEO Schema: Fortified for Google Discover integration
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -74,6 +78,10 @@ const jsonLd = {
         <div class="flex items-center justify-center gap-3 mb-6">
           <EyebrowText class="inline text-emerald-700/70">
             {formattedDate}
+          </EyebrowText>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-200" aria-hidden="true"></span>
+          <EyebrowText class="inline text-emerald-700/70">
+            {readingTimeMin} min read
           </EyebrowText>
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-200" aria-hidden="true"></span>
           <EyebrowText class="inline text-emerald-700/70"> Article </EyebrowText>
@@ -123,8 +131,36 @@ const jsonLd = {
         <Content />
       </Section>
 
-      <div class="mt-16 pt-10 border-t border-emerald-100 flex justify-center">
-        <Button href="/blog" variant="ghost">← Back to all articles</Button>
+      <!-- Post-article CTA — drives readers into the funnel instead of bouncing -->
+      <div class="mt-16 pt-10 border-t border-emerald-100">
+        <div
+          class="bg-gradient-to-br from-emerald-50 to-emerald-100/60 border border-emerald-200/60 rounded-3xl p-8 sm:p-10 text-center"
+        >
+          <p class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-3">
+            Ready to Start?
+          </p>
+          <h3 class="text-2xl sm:text-3xl font-black text-emerald-950 mb-3 tracking-tight">
+            Book your free first class today.
+          </h3>
+          <p class="text-emerald-800/70 font-medium mb-8 max-w-md mx-auto">
+            No credit card. No commitment. Just one class with a vetted teacher — and you decide if
+            it's right for you.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href="/getting-started/signup"
+              class="inline-flex items-center gap-2 px-7 py-3.5 bg-emerald-700 text-white font-bold rounded-xl hover:bg-emerald-800 transition-colors shadow-md text-[15px]"
+            >
+              Book Free Trial Class →
+            </a>
+            <a
+              href="/courses"
+              class="inline-flex items-center gap-2 px-7 py-3.5 border-2 border-emerald-200 text-emerald-800 font-bold rounded-xl hover:border-emerald-400 transition-colors text-[15px]"
+            >
+              Browse All Courses
+            </a>
+          </div>
+        </div>
       </div>
     </article>
   </main>

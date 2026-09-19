@@ -1,5 +1,6 @@
 <!-- src/pages/teachers/_components/TeacherStep2.svelte -->
 <script lang="ts">
+  import { SITE } from '../../../constants/site';
   let { form = $bindable(), onBack, isSubmitting } = $props();
 
   let turnstileContainer = $state<HTMLDivElement | null>(null);
@@ -14,7 +15,7 @@
       };
       if (w.turnstile && turnstileContainer && turnstileContainer.innerHTML.trim() === '') {
         w.turnstile.render(turnstileContainer, {
-          sitekey: '0x4AAAAAAD-QWQWhupcuvhbK',
+          sitekey: SITE.turnstileSiteKey,
           theme: 'light',
         });
       }
@@ -93,7 +94,7 @@
     <div
       bind:this={turnstileContainer}
       class="cf-turnstile min-h-[65px]"
-      data-sitekey="0x4AAAAAAD-QWQWhupcuvhbK"
+      data-sitekey={SITE.turnstileSiteKey}
       data-theme="light"
     ></div>
   </div>

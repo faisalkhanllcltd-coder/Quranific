@@ -17,16 +17,21 @@ export default defineConfig({
       enabled: false, // Mandate 11: 1:1 Local Edge Simulation
     },
   }),
-  // Permanent redirects: old /ads/* URLs → new semantic intent routes
+  // Permanent redirects: old /ads/* URLs and bare intent shortcuts → canonical intent routes
   redirects: {
     '/ads/kids': '/quran-classes/for-kids',
     '/ads/adults': '/quran-classes/for-adults',
     '/ads/ladies': '/quran-classes/for-women',
+    // Bare top-level shortcuts → canonical intent paths (301)
+    '/for-kids': '/quran-classes/for-kids',
+    '/for-adults': '/quran-classes/for-adults',
+    '/for-women': '/quran-classes/for-women',
   },
   integrations: [
     svelte(),
     sitemap({
-      // Exclude internal API routes, signup funnel, and legacy ad aliases
+      // Exclude internal API routes, signup funnel, legacy ad aliases,
+      // AND all intent/landing pages (noindex) — /quran-classes/*, /quran-teacher/*
       filter: (page) => {
         try {
           const url = new URL(page);
@@ -35,6 +40,8 @@ export default defineConfig({
             path.startsWith('/api/') ||
             path.startsWith('/getting-started/') ||
             path.startsWith('/ads/') ||
+            path.startsWith('/quran-classes/') ||
+            path.startsWith('/quran-teacher/') ||
             path === '/for-kids' ||
             path === '/for-adults' ||
             path === '/for-women' ||

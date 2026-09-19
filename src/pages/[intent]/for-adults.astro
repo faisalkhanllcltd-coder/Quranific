@@ -9,9 +9,7 @@ import LandingPreview from '../../components/blocks/LandingPreview.astro';
 import LandingTrust from '../../components/blocks/LandingTrust.astro';
 import LandingOnboarding from '../../components/blocks/LandingOnboarding.astro';
 import LandingTestimonials from '../../components/blocks/LandingTestimonials.astro';
-import GuaranteeSection, {
-  type GuaranteeCard,
-} from '../../components/blocks/GuaranteeSection.astro';
+import GuaranteeSection from '../../components/blocks/GuaranteeSection.astro';
 import LandingPricing from '../../components/blocks/LandingPricing.astro';
 import LandingFAQ from '../../components/blocks/LandingFAQ.astro';
 import LandingCTA from '../../components/blocks/LandingCTA.astro';
@@ -20,6 +18,7 @@ import StickyMobileCTA from '../../components/blocks/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { testimonials } from '../../data/testimonials';
 import { landingAdults } from '../../data/faqs';
+import { adultsVettingSteps, adultsOnboardingSteps } from '../../data/features';
 import { generateWhatsAppLink } from '../../lib/helpers';
 
 export const prerender = true;
@@ -65,40 +64,18 @@ const adultsTestimonials = testimonials.filter((t) =>
   ['amna-de', 'naseer-uk', 'khalid-usa'].includes(t.id)
 );
 
-const vettingSteps = [
-  {
-    n: '01',
-    title: 'Ijazah Verification',
-    body: 'We confirm the teacher holds a valid chain of Ijazah — a certified lineage of Quranic transmission. No exceptions.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`,
-  },
-  {
-    n: '02',
-    title: 'Live Recitation Assessment',
-    body: 'Our academic team conducts a live Tajweed assessment to ensure professional, elite-level recitation.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>`,
-  },
-  {
-    n: '03',
-    title: 'Adult Pedagogy Interview',
-    body: 'We probe specifically for adult-teaching ability. How do they explain complex Tajweed rules to an English-speaking professional? We hire for patience, logic, and clarity — not rote repetition.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
-  },
-  {
-    n: '04',
-    title: 'Professional Conduct Check',
-    body: 'Every teacher is vetted for punctuality, professionalism, and strict privacy standards.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
-  },
-];
+// Aliases for centralized data — eliminates in-page copy-paste
+const vettingSteps = adultsVettingSteps;
+const onboardingSteps = adultsOnboardingSteps;
 
+// Page-specific trust points (different copy from women's/kids' pages)
 const trustPoints = [
   'Strict male-to-male and female-to-female matching',
   '24/7 Student Portal for instant schedule management',
   'Distraction-free, professional learning environment',
 ];
 
-const adultGuaranteeCards: GuaranteeCard[] = [
+const adultGuaranteeCards = [
   {
     title: 'Free first class',
     description:
@@ -113,24 +90,6 @@ const adultGuaranteeCards: GuaranteeCard[] = [
     title: 'Make-up guarantee',
     description:
       'Missed a session? It gets made up, guaranteed. There are no lock-in contracts. Cancel anytime.',
-  },
-];
-
-const onboardingSteps = [
-  {
-    n: '1',
-    title: 'Book your free class.',
-    body: 'No card required. Tell us your goals and your preferred schedule.',
-  },
-  {
-    n: '2',
-    title: 'Judgment-Free Assessment.',
-    body: 'Meet your teacher. Even if you are starting from the absolute alphabet (Qaida), there is zero judgment. The teacher simply listens to understand your starting line.',
-  },
-  {
-    n: '3',
-    title: 'Experience a real lesson.',
-    body: "See exactly how the teaching style fits you. If it's not a perfect match, we will assign a different teacher — or we part ways with no hard feelings.",
   },
 ];
 
