@@ -51,6 +51,7 @@ test.describe('Signup Funnel E2E', () => {
     });
 
     await page.goto('/getting-started/signup');
+    await page.waitForLoadState('networkidle');
 
     // Verify Step 1 fields
     const nameInput = page.locator('input[name="name"]');
@@ -70,6 +71,11 @@ test.describe('Signup Funnel E2E', () => {
     await phoneInput.fill('+1234567890');
     await countryInput.fill('United States');
     await consentCheckbox.check();
+
+    await expect(nameInput).toHaveValue('Test Parent');
+    await expect(emailInput).toHaveValue('test@example.com');
+    await expect(phoneInput).toHaveValue('+1234567890');
+    await expect(countryInput).toHaveValue('United States');
 
     // Mock Turnstile token injection in test environment without touching prod code
     await page.evaluate(() => {

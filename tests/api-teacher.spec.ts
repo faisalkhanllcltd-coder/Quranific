@@ -25,6 +25,12 @@ const validTeacherPayload = {
   'cf-turnstile-response': '1x00000000000000000000AA',
 };
 
+const isRemote = Boolean(
+  process.env.BASE_URL &&
+  !process.env.BASE_URL.includes('127.0.0.1') &&
+  !process.env.BASE_URL.includes('localhost')
+);
+
 test.describe('PT-1: Apply Teacher API (/api/apply-teacher)', () => {
   test('Test 1: POST missing email -> Expect 400', async ({ request }) => {
     const payloadWithoutEmail = { ...validTeacherPayload };
@@ -47,7 +53,7 @@ test.describe('PT-1: Apply Teacher API (/api/apply-teacher)', () => {
   });
 
   test('Test 2: POST invalid Turnstile token -> Expect 400', async ({ request }) => {
-    if (process.env.TURNSTILE_SECRET_KEY === '1x0000000000000000000000000000000AA') {
+    if (!isRemote && process.env.TURNSTILE_SECRET_KEY === '1x0000000000000000000000000000000AA') {
       test.skip();
     }
 
@@ -67,6 +73,13 @@ test.describe('PT-1: Apply Teacher API (/api/apply-teacher)', () => {
   test('Test 3: POST valid payload with Turnstile test token 1x00000000000000000000AA -> Expect 200', async ({
     request,
   }) => {
+    if (isRemote) {
+      test.skip(
+        true,
+        'Live production uses real Turnstile secret key which rejects dummy test tokens'
+      );
+    }
+
     const response = await request.post('/api/apply-teacher', {
       data: validTeacherPayload,
     });
@@ -79,6 +92,10 @@ test.describe('PT-1: Apply Teacher API (/api/apply-teacher)', () => {
   test('Test 4 (Rate Limit): Loop 5 POST requests forcing CF-Connecting-IP: test-teacher-ip', async ({
     request,
   }) => {
+    if (isRemote) {
+      test.skip(true, 'Live Cloudflare edge proxy strips spoofed CF-Connecting-IP headers');
+    }
+
     const ip = `test-teacher-ip-${Date.now()}`;
 
     for (let i = 1; i <= 5; i++) {
