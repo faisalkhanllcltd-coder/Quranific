@@ -114,7 +114,7 @@ export const courses: Course[] = [
     ageRange: 'Ages 4–14',
     frequency: '2–3 sessions/week',
     instructionLanguage: ['English', 'Arabic'],
-    price: 'From $39/mo',
+    price: 'From $40/mo',
     features: [
       '1-on-1 private sessions with certified scholars',
       'Step-by-step Salah & Wudu practical guidance',
@@ -193,7 +193,7 @@ export const courses: Course[] = [
     ageRange: 'Ages 8+',
     frequency: '2–4 sessions/week',
     instructionLanguage: ['English', 'Arabic'],
-    price: 'From $49/mo',
+    price: 'From $40/mo',
     features: [
       '1-on-1 private sessions with certified scholars',
       'Step-by-step Salah & Wudu practical guidance',
@@ -286,7 +286,7 @@ export const courses: Course[] = [
     ageRange: 'All Ages',
     frequency: '3–5 sessions/week',
     instructionLanguage: ['English', 'Arabic'],
-    price: 'From $59/mo',
+    price: 'From $40/mo',
     features: [
       '1-on-1 private Hifz coaching with certified Hafiz',
       'Sabaq, Sabqi, and Manzil retention tracking',
@@ -378,7 +378,7 @@ export const courses: Course[] = [
     ageRange: 'Ages 14+',
     frequency: '1–2 sessions/week',
     instructionLanguage: ['English', 'Arabic'],
-    price: 'From $49/mo',
+    price: 'From $40/mo',
     features: [
       '1-on-1 private Tafsir sessions with qualified scholars',
       'Word-for-word root analysis and translation',
@@ -476,7 +476,7 @@ export const courses: Course[] = [
     ageRange: 'Adults',
     frequency: '2–3 sessions/week',
     instructionLanguage: ['Arabic', 'English'],
-    price: 'From $69/mo',
+    price: 'From $40/mo',
     features: [
       '1-on-1 private coaching with elite scholars',
       'Diagnostic accent correction and Sifaat mastery',
@@ -566,7 +566,7 @@ export const courses: Course[] = [
     ageRange: 'Ages 10+',
     frequency: '2–3 sessions/week',
     instructionLanguage: ['Arabic', 'English'],
-    price: 'From $49/mo',
+    price: 'From $40/mo',
     features: [
       '1-on-1 Conversational & Quranic Arabic sessions',
       'Root-based vocabulary engine (Learn 1, unlock 10)',

@@ -10,7 +10,11 @@ interface Testimonial {
   content?: string;
   location?: string;
   locationAndRole?: string;
+  /** Unified field from src/data/testimonials.ts — location + student context. */
+  details?: string;
   enrollmentTime?: string;
+  /** Alias for enrollmentTime from src/data/testimonials.ts. */
+  enrolled?: string;
   theme?: 'light' | 'dark';
 }
 
@@ -96,8 +100,8 @@ const gridClass =
               <div>
                 <h4 class:list={['font-bold', nameColor]}>{t.name}</h4>
                 <p class="text-sm text-slate-500">
-                  {t.location || t.locationAndRole}
-                  {t.enrollmentTime ? ` · ${t.enrollmentTime}` : ''}
+                  {t.location || t.locationAndRole || t.details}
+                  {t.enrollmentTime || t.enrolled ? ` · ${t.enrollmentTime || t.enrolled}` : ''}
                 </p>
               </div>
             </div>

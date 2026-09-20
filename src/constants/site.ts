@@ -10,7 +10,7 @@ export const SITE = {
   defaultImage: '/images/og/default.png', // Optimized for Edge CDN delivery
   whatsappNumber: '923112112122',
   whatsappLink: 'https://wa.me/message/FF4LDK3JR2GPN1',
-  email: 'admin@quranific.com',
+  email: 'support@quranific.com',
 
   // B-2 FIX: Turnstile site key exposed at build time for the funnel widget.
   // This is the PUBLIC site key (safe to embed in HTML). The SECRET key stays
@@ -34,18 +34,23 @@ export const SITE = {
     linkUrl: '/getting-started/signup',
   },
 
-  // Synced with all actual mailto links across the platform
+  // ─── Canonical Email Inventory ───────────────────────────────────────────────
+  // Single source of truth for all public-facing mailto links and admin routing.
+  //   support@     → Terms, Refund Policy, General contact form
+  //   contact@     → Impressum (legal business contact address)
+  //   compliance@  → Privacy Policy, Cookie Policy, Safeguarding
+  //   admin        → Server-side lead alerts (API routes, email.ts fallback)
   emails: {
-    support: 'hello@quranific.com',
-    careers: 'careers@quranific.com',
-    partners: 'partners@quranific.com',
-    privacy: 'privacy@quranific.com',
+    support: 'support@quranific.com',
+    contact: 'contact@quranific.com',
+    compliance: 'compliance@quranific.com',
+    // Private — never rendered in HTML. Fallback when ADMIN_EMAIL env var is absent.
+    admin: 'faisalkhan.llc.ltd@gmail.com',
   },
 
   social: {
     facebook: 'https://www.facebook.com/quranific',
     instagram: 'https://www.instagram.com/quranific_com',
-    youtube: 'https://www.youtube.com/@Quranific',
     pinterest: 'https://pinterest.com/quranific',
     tiktok: 'https://www.tiktok.com/@quranific.com',
     x: 'https://x.com/quranific_',
