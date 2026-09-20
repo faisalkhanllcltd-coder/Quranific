@@ -19,6 +19,11 @@ export const GET: APIRoute = (context) => {
 
   const body = JSON.stringify({ bucket, hasGPC });
 
+  // Smart CORS: allow localhost for local dev, lock to production origin otherwise
+  const origin = context.request.headers.get('origin') ?? '';
+  const allowedOrigin =
+    origin.includes('localhost') || origin.includes('127.0.0.1') ? origin : 'https://quranific.com';
+
   return new Response(body, {
     status: 200,
     headers: {
@@ -27,9 +32,9 @@ export const GET: APIRoute = (context) => {
       // The middleware CDN-Cache-Control rule already excludes /api/* routes,
       // but this header is an explicit no-store as additional protection.
       'Cache-Control': 'no-store',
-      // Allow all origins to fetch this — it returns no sensitive user data,
-      // only a derived compliance bucket string ("STRICT"/"MODERATE"/"NONE").
-      'Access-Control-Allow-Origin': '*',
+      // Smart CORS: localhost allowed for dev, production locked to quranific.com only.
+      'Access-Control-Allow-Origin': allowedOrigin,
+      Vary: 'Origin',
     },
   });
 };
