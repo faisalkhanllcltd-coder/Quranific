@@ -19,6 +19,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "deploy": "npm run build && wrangler deploy",
+    "test:e2e": "playwright test",
+    "test:smoke": "node scripts/smoke-test.mjs",
     "prepare": "husky"
   },
   "dependencies": {
