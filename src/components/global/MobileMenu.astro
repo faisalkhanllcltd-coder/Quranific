@@ -1,38 +1,93 @@
 ---
 // src/components/global/MobileMenu.astro
-// Pure HTML/Tailwind with Vanilla JS. Zero hydration cost.
+// Flash-free mobile nav. Zero synchronous reflow. GPU-safe backdrop.
+// Hamburger morphs to × via CSS path animation — no swap, no flicker.
 import { SITE, MOBILE_NAVIGATION } from '../../constants/site';
 ---
 
 <div class="lg:hidden">
+  <!--
+    Hamburger toggle button.
+    Two SVG paths share the same <svg>; JS adds/removes [data-open] on the wrapper
+    which drives the CSS-only morph from ☰ to ×.
+  -->
   <button
     id="mobile-menu-toggle"
     type="button"
     aria-label="Open navigation menu"
     aria-expanded="false"
     aria-controls="mobile-menu-drawer"
-    class="text-emerald-950 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+    class="relative text-emerald-950 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
   >
-    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <svg
+      id="hamburger-icon"
+      class="w-7 h-7"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      style="overflow: visible;"
+    >
+      <!--
+        Three bars → × morphing hamburger.
+        Each path has an individual transition. JS toggles data-open on the button.
+        Line 1: top bar → top arm of ×
+        Line 2: middle bar → fades out
+        Line 3: bottom bar → bottom arm of ×
+      -->
       <path
+        id="hbg-top"
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
-        d="M4 6h16M4 12h16M4 18h16"></path>
+        d="M4 6h16"
+        style="transform-origin: center; transition: transform 280ms cubic-bezier(0.4,0,0.2,1), opacity 200ms ease;"
+      ></path>
+      <path
+        id="hbg-mid"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 12h16"
+        style="transform-origin: center; transition: opacity 200ms ease;"></path>
+      <path
+        id="hbg-bot"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 18h16"
+        style="transform-origin: center; transition: transform 280ms cubic-bezier(0.4,0,0.2,1), opacity 200ms ease;"
+      ></path>
     </svg>
   </button>
 
-  <div
-    id="mobile-menu-overlay"
-    class="fixed inset-0 z-[60] invisible overflow-hidden bg-emerald-950/20 backdrop-blur-sm transition-opacity duration-300 opacity-0"
-  >
+  <!--
+    Overlay + drawer. Both start hidden via `display: none` (not `invisible`)
+    so they are fully out of the rendering pipeline when closed.
+    We animate with `translate-x-full` → `translate-x-0` on the drawer
+    and `opacity-0` → `opacity-100` on a dedicated backdrop div.
+    Backdrop blur is on a SEPARATE layer from the opacity transition to avoid
+    the WebKit GPU flash that occurs when backdrop-filter and opacity animate together.
+  -->
+  <div id="mobile-menu-overlay" style="display:none;" class="fixed inset-0 z-[60] overflow-hidden">
+    <!-- Backdrop layer: opacity-only animation, blur is always-on once visible -->
+    <div
+      id="mobile-menu-backdrop"
+      class="absolute inset-0 bg-emerald-950/25 backdrop-blur-[3px] opacity-0"
+      style="transition: opacity 280ms cubic-bezier(0.4,0,0.2,1);"
+      aria-hidden="true"
+    >
+    </div>
+
+    <!-- Drawer: translate-only animation, no opacity changes -->
     <div
       id="mobile-menu-drawer"
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
       inert
-      class="absolute inset-y-0 right-0 w-full sm:w-80 bg-[#fefdf9] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col pt-6 px-4 sm:px-6 shadow-2xl will-change-transform"
+      class="absolute inset-y-0 right-0 w-full sm:w-80 bg-[#fefdf9] flex flex-col pt-6 px-4 sm:px-6 shadow-2xl will-change-transform"
+      style="transform: translateX(100%); transition: transform 300ms cubic-bezier(0.4,0,0.2,1); border-left: 1px solid rgba(6,78,59,0.08);"
     >
       <div class="flex items-center justify-between mb-12">
         <a
@@ -107,30 +162,49 @@ import { SITE, MOBILE_NAVIGATION } from '../../constants/site';
 <script>
   let mobileMenuAbortController: AbortController | null = null;
 
+  // --- Hamburger morph helpers ---
+  function setHamburgerOpen(btn: HTMLElement, isOpen: boolean): void {
+    const top = btn.querySelector<SVGPathElement>('#hbg-top');
+    const mid = btn.querySelector<SVGPathElement>('#hbg-mid');
+    const bot = btn.querySelector<SVGPathElement>('#hbg-bot');
+    if (!top || !mid || !bot) return;
+
+    if (isOpen) {
+      // Morph ☰ → ×
+      top.style.transform = 'rotate(45deg) translate(0px, 8.5px)';
+      mid.style.opacity = '0';
+      bot.style.transform = 'rotate(-45deg) translate(0px, -8.5px)';
+    } else {
+      // Morph × → ☰
+      top.style.transform = '';
+      mid.style.opacity = '';
+      bot.style.transform = '';
+    }
+  }
+
   function initMobileMenu(): void {
     mobileMenuAbortController?.abort();
     mobileMenuAbortController = new AbortController();
     const { signal } = mobileMenuAbortController;
 
     const overlay = document.getElementById('mobile-menu-overlay');
+    const backdrop = document.getElementById('mobile-menu-backdrop');
     const toggleBtn = document.getElementById('mobile-menu-toggle');
     const closeBtn = document.getElementById('mobile-menu-close');
     const drawer = document.getElementById('mobile-menu-drawer');
 
-    if (!toggleBtn || !closeBtn || !drawer || !overlay) return;
+    if (!toggleBtn || !closeBtn || !drawer || !overlay || !backdrop) return;
 
-    // ASTRO SAFE PORTAL: Move to root body to escape Header transform contexts
+    // Portal overlay to body so it escapes any stacking context / transform parent.
     if (overlay.parentNode !== document.body) {
       document.body.appendChild(overlay);
     }
 
-    // Cleanup: Destroy the portaled overlay before Astro swaps the page to prevent ghost duplicates
+    // Destroy before Astro swaps the page to prevent ghost duplicates.
     document.addEventListener(
       'astro:before-swap',
       () => {
-        if (overlay.parentNode === document.body) {
-          overlay.remove();
-        }
+        if (overlay.parentNode === document.body) overlay.remove();
       },
       { signal }
     );
@@ -140,29 +214,35 @@ import { SITE, MOBILE_NAVIGATION } from '../../constants/site';
       return Array.from(drawer!.querySelectorAll<HTMLElement>(FOCUSABLE));
     }
 
+    let closing = false;
+
     function openMenu(e?: Event): void {
       if (e) {
         e.preventDefault();
-        e.stopPropagation(); // Stop event bubbling storm
+        e.stopPropagation();
       }
+      if (closing) return;
 
-      // 1. Remove display: none to inject into render tree
-      overlay!.classList.remove('invisible');
-      drawer!.removeAttribute('inert');
+      // 1. Make overlay visible in the render tree BEFORE any animation.
+      //    Using display/style directly avoids the Tailwind class-toggle reflow risk.
+      overlay!.style.display = 'block';
 
-      // 2. Force hardware paint recalculation before animating
-      void drawer!.offsetWidth;
+      // 2. Let the browser paint one frame with display:block + initial states,
+      //    then trigger transitions. requestAnimationFrame queues *after* that paint.
+      requestAnimationFrame(() => {
+        // Backdrop: fade in
+        backdrop!.style.opacity = '1';
+        // Drawer: slide in from right
+        drawer!.style.transform = 'translateX(0)';
 
-      // 3. Trigger GPU-accelerated slide and fade
-      overlay!.classList.remove('opacity-0');
-      drawer!.classList.remove('translate-x-full');
-      drawer!.classList.add('translate-x-0');
+        // Unlock inert after paint starts (screen readers / focus)
+        drawer!.removeAttribute('inert');
+      });
 
-      // 4. Stricter iOS scroll lock
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
-
       toggleBtn!.setAttribute('aria-expanded', 'true');
+      setHamburgerOpen(toggleBtn!, true);
       closeBtn!.focus();
     }
 
@@ -171,25 +251,28 @@ import { SITE, MOBILE_NAVIGATION } from '../../constants/site';
         e.preventDefault();
         e.stopPropagation();
       }
+      if (closing) return;
+      closing = true;
 
-      overlay!.classList.add('opacity-0');
-      drawer!.classList.add('translate-x-full');
-      drawer!.classList.remove('translate-x-0');
+      // Reverse animations
+      backdrop!.style.opacity = '0';
+      drawer!.style.transform = 'translateX(100%)';
 
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
-
       toggleBtn!.setAttribute('aria-expanded', 'false');
+      setHamburgerOpen(toggleBtn!, false);
       drawer!.setAttribute('inert', '');
 
-      // Fixed 300ms timeout matching Tailwind classes. No layout thrashing!
+      // Wait for drawer slide-out (300ms) then hide overlay from render tree.
       setTimeout(() => {
-        overlay!.classList.add('invisible');
+        overlay!.style.display = 'none';
+        closing = false;
         toggleBtn!.focus();
-      }, 300);
+      }, 310);
     }
 
-    // Keyboard Trap
+    // Keyboard trap
     drawer.addEventListener(
       'keydown',
       (e: KeyboardEvent) => {
@@ -213,11 +296,11 @@ import { SITE, MOBILE_NAVIGATION } from '../../constants/site';
       { signal }
     );
 
-    // Click outside to close (Attached directly to overlay, heavily optimized)
-    overlay.addEventListener(
+    // Click on backdrop to close
+    backdrop.addEventListener(
       'click',
       (e: MouseEvent) => {
-        if (e.target === overlay) closeMenu(e);
+        if (e.target === backdrop) closeMenu(e);
       },
       { signal }
     );
@@ -225,9 +308,8 @@ import { SITE, MOBILE_NAVIGATION } from '../../constants/site';
     toggleBtn.addEventListener('click', openMenu, { signal });
     closeBtn.addEventListener('click', closeMenu, { signal });
 
-    // Close automatically if a link inside the drawer is clicked
-    const links = drawer.querySelectorAll('a');
-    links.forEach((link) => {
+    // Close on in-drawer nav link click
+    drawer.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => closeMenu(), { signal });
     });
   }

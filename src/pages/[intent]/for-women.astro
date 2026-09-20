@@ -9,7 +9,9 @@ import LandingPreview from '../../components/blocks/LandingPreview.astro';
 import LandingTrust from '../../components/blocks/LandingTrust.astro';
 import LandingOnboarding from '../../components/blocks/LandingOnboarding.astro';
 import LandingTestimonials from '../../components/blocks/LandingTestimonials.astro';
-import LandingGuarantee, { type GuaranteeCard } from './_components/LandingGuarantee.astro';
+import GuaranteeSection, {
+  type GuaranteeCard,
+} from '../../components/blocks/GuaranteeSection.astro';
 import LandingPricing from '../../components/blocks/LandingPricing.astro';
 import LandingFAQ from '../../components/blocks/LandingFAQ.astro';
 import LandingCTA from '../../components/blocks/LandingCTA.astro';
@@ -17,6 +19,7 @@ import LandingFooter from '../../components/blocks/LandingFooter.astro';
 import StickyMobileCTA from '../../components/blocks/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
 import { landingWomen } from '../../data/faqs';
+import { generateWhatsAppLink } from '../../lib/helpers';
 
 export const prerender = true;
 
@@ -177,7 +180,9 @@ const jsonLd = {
       headline="Finding a safe, consistent learning space is harder than it should be."
       body="Between managing a household, a career, and daily responsibilities, finding time for your own Quran journey is hard enough."
       ctaLabel="Discuss your goals privately on WhatsApp"
-      ctaHref="https://wa.me/447477382348?text=Hello! I'm a sister looking to learn Quran and want to discuss my options privately."
+      ctaHref={generateWhatsAppLink(
+        "As-salamu alaykum, I'm a sister interested in learning Quran and would like to discuss my options privately."
+      )}
       painPoints={[
         {
           title: 'Inflexible Schedules',
@@ -283,7 +288,7 @@ const jsonLd = {
     />
 
     <!-- § 9 GUARANTEE -->
-    <LandingGuarantee
+    <GuaranteeSection
       eyebrow="OUR GUARANTEE"
       headline="We carry all the risk. You carry none."
       body="Your peace of mind is built into our platform. From your first free session to your first 30 days of paid learning, you are completely protected."
@@ -315,7 +320,9 @@ const jsonLd = {
     <!-- Sticky Mobile CTA Bar -->
     <StickyMobileCTA
       signupHref={`/getting-started/signup?source=ad_women_${intent || 'default'}`}
-      whatsappHref="https://wa.me/447477382348?text=Hello! I want to start a free Quran trial for women."
+      whatsappHref={generateWhatsAppLink(
+        "As-salamu alaykum, I'd like to start a free Quran trial for sisters."
+      )}
     />
   </div><!-- /bg-cream-50 -->
 
