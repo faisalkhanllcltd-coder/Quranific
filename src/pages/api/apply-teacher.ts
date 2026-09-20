@@ -149,18 +149,20 @@ export const POST: APIRoute = async (context) => {
             payload: teacherData,
             reason: String(emailErr),
           });
-          kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch((e: unknown) =>
-            console.error('[Dead-Letter KV Write Failed]:', e)
-          );
+          try {
+            await kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 });
+          } catch (e: unknown) {
+            console.error('[Dead-Letter KV Write Failed]:', e);
+          }
         }
       }
     };
 
     // Use Cloudflare's waitUntil for background fire-and-forget execution
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ctx = (context.locals as any)?.runtime?.ctx;
-    if (ctx?.waitUntil) {
-      ctx.waitUntil(sendEmailTask());
+    const locals = context.locals as any;
+    if (locals.cfContext?.waitUntil) {
+      locals.cfContext.waitUntil(sendEmailTask());
     } else {
       // Local dev fallback — run without blocking
       sendEmailTask().catch(console.error);

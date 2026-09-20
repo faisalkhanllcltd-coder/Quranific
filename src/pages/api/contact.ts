@@ -177,8 +177,6 @@ export const POST: APIRoute = async (context) => {
     const locals = context.locals as any;
     if (locals.cfContext?.waitUntil) {
       locals.cfContext.waitUntil(sendEmailTask());
-    } else if (locals.runtime?.ctx?.waitUntil) {
-      locals.runtime.ctx.waitUntil(sendEmailTask());
     } else {
       sendEmailTask().catch(console.error);
     }

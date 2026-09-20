@@ -3,21 +3,10 @@
 import Section from '../../../components/ui/Section.astro';
 import EyebrowBadge from '../../../components/ui/EyebrowBadge.astro';
 import EyebrowText from '../../../components/ui/EyebrowText.astro';
-
-export interface Teacher {
-  name: string;
-  gender: string;
-  title: string;
-  experience: string;
-  rating: string;
-  students: string;
-  specialties: string[];
-  languages: string[];
-  bio: string;
-}
+import type { TeamMember } from '../../../data/team';
 
 interface Props {
-  teachers: Teacher[];
+  teachers: TeamMember[];
 }
 
 const { teachers } = Astro.props;
@@ -58,10 +47,10 @@ const getAvatarLetter = (name: string) => {
               </div>
               <div class="flex items-center gap-1 text-amber-500 mb-1">
                 <span set:html={Icons.star} aria-hidden="true" />
-                <span class="text-sm font-bold text-emerald-950">{teacher.rating}</span>
+                <span class="text-sm font-bold text-emerald-950">{teacher.rating || '5.0'}</span>
               </div>
               <EyebrowText class="text-emerald-700/70 text-center">
-                {teacher.students}
+                {teacher.students || '12+ Active'}
                 <br />
                 Students
               </EyebrowText>
@@ -74,7 +63,7 @@ const getAvatarLetter = (name: string) => {
                   {teacher.name}
                 </h3>
                 <EyebrowBadge class="bg-emerald-50 text-emerald-700 border border-emerald-100">
-                  {teacher.gender} Tutor
+                  {teacher.gender === 'female' ? 'Female' : 'Male'} Tutor
                 </EyebrowBadge>
               </div>
 
@@ -84,7 +73,7 @@ const getAvatarLetter = (name: string) => {
                   <span class="hidden sm:inline">&nbsp;·&nbsp;</span>
                   <br class="sm:hidden" />
                 </>{' '}
-                {teacher.experience}
+                {teacher.experience || '8+ Years'}
               </p>
 
               <p class="text-emerald-900/80 text-sm font-medium leading-relaxed mb-6">
@@ -95,7 +84,7 @@ const getAvatarLetter = (name: string) => {
                 <div class="flex flex-col sm:flex-row sm:items-start gap-2">
                   <EyebrowText class="text-emerald-950 sm:w-20 shrink-0 pt-0.5">Focus:</EyebrowText>
                   <div class="flex flex-wrap gap-2">
-                    {teacher.specialties.map((spec) => (
+                    {(teacher.specialties || teacher.specialisms || []).map((spec) => (
                       <span class="bg-cream-50 border border-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-medium shadow-sm whitespace-nowrap">
                         {spec}
                       </span>
@@ -107,7 +96,7 @@ const getAvatarLetter = (name: string) => {
                     Speaks:
                   </EyebrowText>
                   <div class="flex flex-wrap gap-2">
-                    {teacher.languages.map((lang) => (
+                    {(teacher.languages || ['English', 'Arabic', 'Urdu']).map((lang) => (
                       <span class="text-emerald-800/80 text-xs font-medium bg-white border border-emerald-50 px-2 py-0.5 rounded-md shadow-sm whitespace-nowrap">
                         {lang}
                       </span>

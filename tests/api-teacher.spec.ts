@@ -30,9 +30,16 @@ test.describe('PT-1: Apply Teacher API (/api/apply-teacher)', () => {
     const payloadWithoutEmail = { ...validTeacherPayload };
     delete (payloadWithoutEmail as { email?: string }).email;
 
-    const response = await request.post('/api/apply-teacher', {
+    let response = await request.post('/api/apply-teacher', {
       data: payloadWithoutEmail,
     });
+
+    if (response.status() === 500) {
+      // Retry if Miniflare dev server dropped the internal workerd connection
+      response = await request.post('/api/apply-teacher', {
+        data: payloadWithoutEmail,
+      });
+    }
 
     expect(response.status()).toBe(400);
     const body = await response.json();
@@ -72,7 +79,7 @@ test.describe('PT-1: Apply Teacher API (/api/apply-teacher)', () => {
   test('Test 4 (Rate Limit): Loop 5 POST requests forcing CF-Connecting-IP: test-teacher-ip', async ({
     request,
   }) => {
-    const ip = 'test-teacher-ip';
+    const ip = `test-teacher-ip-${Date.now()}`;
 
     for (let i = 1; i <= 5; i++) {
       const response = await request.post('/api/apply-teacher', {

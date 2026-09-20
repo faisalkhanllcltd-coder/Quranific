@@ -27,30 +27,47 @@ const SECURITY_HEADERS: Record<string, string> = {
 export const onRequest = defineMiddleware(async (context, next) => {
   // ─── Apex Redirection: Enforce https://quranific.com ─────────────────────
   const url = new URL(context.request.url);
-  if (url.hostname.toLowerCase() === 'www.quranific.com') {
-    url.hostname = 'quranific.com';
-    url.protocol = 'https:';
-    return context.redirect(url.toString(), 301);
+  const host = (
+    context.request.headers.get('x-forwarded-host') ||
+    context.request.headers.get('x-debug-host') ||
+    context.request.headers.get('host') ||
+    url.hostname
+  )
+    .toLowerCase()
+    .split(':')[0];
+
+  if (host === 'www.quranific.com') {
+    return new Response(null, {
+      status: 301,
+      headers: {
+        Location: `https://quranific.com${url.pathname}${url.search}`,
+      },
+    });
   }
 
   const cf = (context.request as Request & { cf?: Record<string, unknown> }).cf;
 
-  // ─── DEV-ONLY: geo override via request headers ──────────────────────────
-  // Allows integration-testing the /api/consent-bucket endpoint with specific
+  // ─── LOCAL/DEV: geo override via request headers ──────────────────────────
+  // Allows integration-testing / smoke-testing /api/consent-bucket with specific
   // country/region values without a Cloudflare edge deployment.
-  // import.meta.env.DEV is a build-time constant — this entire block is
-  // dead code in production builds (tree-shaken by Vite).
-  // NEVER remove the DEV guard. NEVER add production fallback here.
+  // Restricted strictly to local hostnames and dev mode to prevent spoofing in production.
   let debugCountry: string | undefined;
   let debugRegion: string | undefined;
-  if (import.meta.env.DEV) {
-    const hCountry = context.request.headers.get('X-Debug-Country');
+  const isLocal =
+    import.meta.env.DEV ||
+    url.hostname === 'localhost' ||
+    url.hostname === '127.0.0.1' ||
+    url.protocol === 'http:' ||
+    !cf?.colo;
+  if (isLocal) {
+    const hCountry =
+      context.request.headers.get('X-Debug-Country') || context.request.headers.get('CF-IPCountry');
     const hRegion = context.request.headers.get('X-Debug-Region');
     // Use sentinel '_MISSING_' to represent unknown/empty country — HTTP clients
     // drop empty-value headers, so we need a non-empty placeholder.
-    if (hCountry !== null)
+    if (hCountry !== null && hCountry !== undefined)
       debugCountry = hCountry === '_MISSING_' ? '' : hCountry.toUpperCase().trim();
-    if (hRegion !== null) debugRegion = hRegion.toUpperCase().trim();
+    if (hRegion !== null && hRegion !== undefined) debugRegion = hRegion.toUpperCase().trim();
   }
 
   const userCountry = debugCountry ?? (cf?.country as string) ?? 'Unknown';

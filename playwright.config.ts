@@ -10,7 +10,7 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:4321',
+    baseURL: process.env.BASE_URL || 'http://127.0.0.1:8788',
     trace: 'on-first-retry',
   },
   projects: [
@@ -19,6 +19,10 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  // Do NOT auto-start a dev server — we rely on the already-running instance
-  // (astro dev is already running at localhost:4321)
+  webServer: {
+    command: 'npm run preview',
+    url: 'http://127.0.0.1:8788',
+    reuseExistingServer: true,
+    timeout: 120_000,
+  },
 });
