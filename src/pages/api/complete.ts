@@ -232,17 +232,19 @@ export const POST: APIRoute = async (context) => {
             );
           }
         }
-
-        // 5. Mark this jti as processed in KV
-        if (kv && jti) {
-          await kv
-            .put(`IDEMPOTENCY:${jti}`, '1', { expirationTtl: 960 })
-            .catch((e: unknown) => console.error('[Idempotency KV Write Failed]:', e));
-        }
       } catch (error) {
         console.error('[Email Task Critical Error]:', error);
       }
     };
+
+    // P1 FIX — Write idempotency key BEFORE handing off to waitUntil.
+    // This closes the race window where two simultaneous requests both pass
+    // the check above before either has written the key.
+    if (kv && jti) {
+      await kv
+        .put(`IDEMPOTENCY:${jti}`, '1', { expirationTtl: 960 })
+        .catch((e: unknown) => console.error('[Idempotency KV Write Failed]:', e));
+    }
 
     const dispatchTrackingTask = async () => {
       const metaPixel = runtimeEnv.META_PIXEL_ID as string;

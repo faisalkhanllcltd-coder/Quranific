@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     PRICING,
+    CURRENCY_META,
     CURRENCY_SYMBOLS,
     formatPrice,
     type Currency,
@@ -8,6 +9,7 @@
 
   let dur = $state('30');
   let currency = $state<Currency>('USD');
+  let detectedCountry = $state('');
   let selectedPlan = $state('5');
 
   // Geo-detection: visitor country determines currency (no selector, no switching)
@@ -19,6 +21,9 @@
           if (data?.currency) {
             currency = data.currency;
           }
+          if (data?.country && data.country !== 'Unknown') {
+            detectedCountry = data.country;
+          }
         })
         .catch(() => {
           // Default remains USD
@@ -29,6 +34,16 @@
   type PricingTier = Record<string, Record<string, Record<string, number>>>;
 
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);
+
+  // Billing context: "Billed in USD ($) • United States"
+  let billingContext = $derived(() => {
+    const meta = CURRENCY_META.find((c) => c.code === currency);
+    const sym_ = meta?.symbol ?? currency;
+    const parts = [`Billed in ${currency} (${sym_})`];
+    if (detectedCountry) parts.push(detectedCountry);
+    return parts.join(' • ');
+  });
+
   let checkoutUrl = $derived(
     `/getting-started/signup?sessions=${selectedPlan}x&duration=${dur}&billing=monthly&currency=${currency}`
   );
@@ -78,21 +93,6 @@
         onclick={() => (dur = '40')}>40 min</button
       >
     </div>
-  </div>
-
-  <!-- Currency Bubble (Geo-detected, fixed — no selector/dropdown) -->
-  <div
-    class="flex flex-row items-center justify-between gap-4 bg-white border border-emerald-100 rounded-xl px-4 sm:px-5 h-14 shadow-sm w-full sm:w-auto"
-  >
-    <span class="eyebrow-pill text-emerald-900/50 shrink-0">Currency:</span>
-    <span
-      dir="ltr"
-      class="w-full sm:w-auto text-center sm:text-left bg-transparent text-sm font-bold text-emerald-900/80 pr-2 select-none cursor-default inline-flex items-baseline justify-center sm:justify-start gap-1"
-      title="Detected regional currency"
-    >
-      <bdi>{currency}</bdi>
-      <bdi>{sym}</bdi>
-    </span>
   </div>
 </div>
 
@@ -325,6 +325,12 @@
             <span class="text-xs font-bold text-emerald-800/50 ml-0.5">/mo</span>
           </span>
         </div>
+        <!-- Geo billing context -->
+        {#if billingContext()}
+          <p class="mt-1 text-[11px] font-medium text-emerald-700/60 leading-snug">
+            {billingContext()}
+          </p>
+        {/if}
       </div>
 
       <!-- Center Anchored CTA Button (Mobile) / Right Aligned (Desktop) -->

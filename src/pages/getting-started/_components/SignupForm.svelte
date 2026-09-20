@@ -35,7 +35,6 @@
   // These are injected as hidden inputs on submit — no matching visible form fields exist yet.
   let ctxParams = $state<Record<string, string>>({});
 
-  // Capture the Meta/Google Ad tracking parameter on mount
   onMount(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -138,6 +137,28 @@
         whatsapp = localStorage.getItem('q_draft_whatsapp') || '';
         country = localStorage.getItem('q_draft_country') || '';
       }
+
+      // Geo country autofill — only pre-populate if user hasn't manually filled country
+      if (!country) {
+        fetch('/api/geo-currency')
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => {
+            if (data?.country && data.country !== 'Unknown' && !country) {
+              country = data.country;
+            }
+          })
+          .catch(() => {});
+      }
+
+      // Analytics: funnel_step_view — fires once on mount
+      const dl = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ||= []);
+      dl.push({
+        event: 'funnel_step_view',
+        funnel_step: 1,
+        funnel_step_name: 'contact_details',
+        course: captured.course || undefined,
+        traffic_source: trafficSource,
+      });
     }
   });
 
@@ -194,6 +215,14 @@
         ['name', 'email', 'whatsapp', 'country'].forEach((k) =>
           localStorage.removeItem('q_draft_' + k)
         );
+        // Analytics: funnel_step_complete
+        const dl = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ||= []);
+        dl.push({
+          event: 'funnel_step_complete',
+          funnel_step: 1,
+          funnel_step_name: 'contact_details',
+          course: ctxParams.course || undefined,
+        });
         window.location.href = '/getting-started/complete';
         return;
       } else {

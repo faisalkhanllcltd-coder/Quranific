@@ -29,7 +29,14 @@
       const params = new URLSearchParams(window.location.search);
 
       // Pre-fill from URL or Session Storage
-      selectedCourse = params.get('course') || sessionStorage.getItem('q_track_course') || '';
+      // CRITICAL: Read slug from sessionStorage (stored by calculator via course.slug),
+      // then validate it exists in COURSE_LIST to avoid phantom selections.
+      const rawCourse = params.get('course') || sessionStorage.getItem('q_track_course') || '';
+      const matchedCourse = COURSE_LIST.find(
+        (c) => c.slug === rawCourse || c.shortTitle === rawCourse
+      );
+      selectedCourse = matchedCourse?.slug || rawCourse;
+
       selectedGender = params.get('gender') || sessionStorage.getItem('q_track_gender') || '';
       selectedTeacher =
         params.get('teacherGender') ||
@@ -51,6 +58,15 @@
           selectedDays = `${numericMatch[0]} Days`;
         }
       }
+
+      // Analytics: funnel_step_view
+      const dl = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ||= []);
+      dl.push({
+        event: 'funnel_step_view',
+        funnel_step: 2,
+        funnel_step_name: 'customize_plan',
+        course: selectedCourse || undefined,
+      });
     }
   });
 
@@ -123,6 +139,15 @@
         throw new Error(result.error || 'Failed to complete registration');
       }
 
+      // Analytics: funnel_step_complete
+      const dl = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ||= []);
+      dl.push({
+        event: 'funnel_step_complete',
+        funnel_step: 2,
+        funnel_step_name: 'customize_plan',
+        course: selectedCourse || undefined,
+      });
+
       window.location.assign('/getting-started/success');
     } catch (err: unknown) {
       globalError =
@@ -159,18 +184,18 @@
       >Select Course <span class="text-red-500">*</span></label
     >
     <div class="flex flex-wrap gap-2 {fieldErrors.course ? errorRing : ''}">
-      {#each COURSE_LIST as course (course.title)}
+      {#each COURSE_LIST as course (course.slug)}
         <label class={labelBase}>
           <input
             type="radio"
             name="course"
-            value={course.title}
+            value={course.slug}
             bind:group={selectedCourse}
             disabled={loading}
             class="peer sr-only"
           />
           <div class="{pillBase} {pillOff} {pillOn}">
-            {course.title}
+            {course.shortTitle}
           </div>
         </label>
       {/each}
@@ -302,8 +327,8 @@
     </div>
   </div>
 
-  <!-- Session Length (Optional) -->
-  <div class="space-y-3 md:w-1/2 md:pr-4">
+  <!-- Session Length (Optional — full width grid like other sections) -->
+  <div class="space-y-3">
     <label class="block text-sm font-semibold text-emerald-950">Session Length</label>
     <div class="flex flex-wrap gap-2">
       {#each durationOptions as opt (opt)}
