@@ -291,4 +291,27 @@ const jsonLd = {
     attachAttribution();
     document.addEventListener('astro:page-load', attachAttribution);
   </script>
+
+  <!-- GTM: WhatsApp & primary CTA click tracking -->
+  <script is:inline>
+    const attachGTM = () => {
+      if (typeof window === 'undefined' || !Array.isArray(window.dataLayer)) return;
+      document.querySelectorAll('a[href*="wa.me"]').forEach((el) => {
+        if (el.dataset.gtmBound) return;
+        el.dataset.gtmBound = '1';
+        el.addEventListener('click', () => {
+          window.dataLayer.push({ event: 'contact_whatsapp', source: 'for_women_page' });
+        });
+      });
+      document.querySelectorAll('a[href*="/getting-started/signup"]').forEach((el) => {
+        if (el.dataset.gtmBound) return;
+        el.dataset.gtmBound = '1';
+        el.addEventListener('click', () => {
+          window.dataLayer.push({ event: 'click_book_trial', source: 'for_women_page' });
+        });
+      });
+    };
+    attachGTM();
+    document.addEventListener('astro:page-load', attachGTM);
+  </script>
 </Base>

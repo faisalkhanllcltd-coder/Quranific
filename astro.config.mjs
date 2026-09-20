@@ -11,6 +11,7 @@ export default defineConfig({
   site: 'https://quranific.com',
   output: 'server',
   compressHTML: true,
+  trailingSlash: 'never',
   adapter: cloudflare({
     imageService: 'cloudflare',
     platformProxy: {
@@ -42,6 +43,8 @@ export default defineConfig({
             path.startsWith('/ads/') ||
             path.startsWith('/quran-classes/') ||
             path.startsWith('/quran-teacher/') ||
+            path === '/404' ||
+            path === '/portals' ||
             path === '/for-kids' ||
             path === '/for-adults' ||
             path === '/for-women' ||
