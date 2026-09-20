@@ -4,28 +4,22 @@ compatibility_flags = ["nodejs_compat"]
 
 [assets]
 directory = "dist"
-run_worker_first = true
+# run_worker_first has been intentionally removed. 
+# Static assets (images, CSS) will bypass the worker for maximum speed and zero CPU cost.
 
-
-# Mandate 1 & 8: Dynamic global edge execution routing
+# Dynamic global edge execution routing
 [placement]
 mode = "smart"
-
-# Edge runtime fetch cache
-[cache]
-enabled = true
 
 [vars]
 ENVIRONMENT = "production"
 
-# C-1 FIX: Uncommented the SESSION KV binding so the API routes can perform
-# idempotency checks and store dead-letter leads when Resend fails.
+# KV binding for API route idempotency checks and dead-letter lead storage
 [[kv_namespaces]]
 binding = "SESSION"
 id = "14eab319d57e4c58b5f903bce3eb3931"
 
-
-
+# Telemetry and logging configuration
 [observability]
 enabled = false
 head_sampling_rate = 1

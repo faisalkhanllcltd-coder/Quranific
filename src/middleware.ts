@@ -25,18 +25,25 @@ const SECURITY_HEADERS: Record<string, string> = {
 };
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  // ─── Apex Redirection: Enforce https://quranific.com ─────────────────────
+  const cf = (context.request as Request & { cf?: Record<string, unknown> }).cf;
   const url = new URL(context.request.url);
-  const host = (
-    context.request.headers.get('x-forwarded-host') ||
-    context.request.headers.get('x-debug-host') ||
-    context.request.headers.get('host') ||
-    url.hostname
-  )
-    .toLowerCase()
-    .split(':')[0];
 
-  if (host === 'www.quranific.com') {
+  const isLocal =
+    import.meta.env.DEV ||
+    url.hostname === 'localhost' ||
+    url.hostname === '127.0.0.1' ||
+    url.protocol === 'http:' ||
+    !cf?.colo;
+
+  // ─── Apex Redirection: Enforce https://quranific.com ─────────────────────
+  const isApexRedirect =
+    url.hostname === 'www.quranific.com' ||
+    (isLocal &&
+      (context.request.headers.get('x-forwarded-host') === 'www.quranific.com' ||
+        context.request.headers.get('x-debug-host') === 'www.quranific.com' ||
+        context.request.headers.get('host') === 'www.quranific.com'));
+
+  if (isApexRedirect) {
     return new Response(null, {
       status: 301,
       headers: {
@@ -45,20 +52,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
     });
   }
 
-  const cf = (context.request as Request & { cf?: Record<string, unknown> }).cf;
-
   // ─── LOCAL/DEV: geo override via request headers ──────────────────────────
   // Allows integration-testing / smoke-testing /api/consent-bucket with specific
   // country/region values without a Cloudflare edge deployment.
   // Restricted strictly to local hostnames and dev mode to prevent spoofing in production.
   let debugCountry: string | undefined;
   let debugRegion: string | undefined;
-  const isLocal =
-    import.meta.env.DEV ||
-    url.hostname === 'localhost' ||
-    url.hostname === '127.0.0.1' ||
-    url.protocol === 'http:' ||
-    !cf?.colo;
   if (isLocal) {
     const hCountry =
       context.request.headers.get('X-Debug-Country') || context.request.headers.get('CF-IPCountry');
