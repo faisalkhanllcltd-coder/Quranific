@@ -3,6 +3,7 @@ import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
 import { sendNewsletterWelcome } from '../../lib/email';
+import { SITE } from '../../constants/site';
 
 const newsletterSchema = z.object({
   email: z.email({ error: 'Invalid email address' }),
@@ -164,8 +165,8 @@ export const POST: APIRoute = async (context) => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              from: `System <${adminEmail}>`,
-              to: adminEmail,
+              from: `Quranific System <${SITE.emails.support}>`,
+              to: adminEmail || SITE.emails.admin,
               subject: `New Newsletter Subscriber!`,
               text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,
             }),
@@ -180,9 +181,11 @@ export const POST: APIRoute = async (context) => {
               email: email,
               reason: String(adminErr),
             });
-            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
-              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
-            );
+            try {
+              await kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 });
+            } catch (e: unknown) {
+              console.error('[Dead-Letter KV Write Failed]:', e);
+            }
           }
         }
 
@@ -198,9 +201,11 @@ export const POST: APIRoute = async (context) => {
               email: email,
               reason: String(userErr),
             });
-            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
-              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
-            );
+            try {
+              await kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 });
+            } catch (e: unknown) {
+              console.error('[Dead-Letter KV Write Failed]:', e);
+            }
           }
         }
       } else {
@@ -216,8 +221,6 @@ export const POST: APIRoute = async (context) => {
     // 3. Background Task Execution (Safe)
     if (locals.cfContext?.waitUntil) {
       locals.cfContext.waitUntil(sendEmailTask());
-    } else if (locals.runtime?.ctx?.waitUntil) {
-      locals.runtime.ctx.waitUntil(sendEmailTask());
     } else {
       sendEmailTask().catch(console.error);
     }

@@ -70,12 +70,13 @@ test.describe('PT-1: Contact API (/api/contact)', () => {
   test('Test 4 (Rate Limit): Loop 5 POST requests forcing CF-Connecting-IP: test-contact-ip', async ({
     request,
   }) => {
-    const ip = 'test-contact-ip';
+    const ip = `test-contact-ip-${Date.now()}`;
 
     for (let i = 1; i <= 5; i++) {
       const response = await request.post('/api/contact', {
         headers: {
           'CF-Connecting-IP': ip,
+          Connection: 'close',
         },
         data: {
           firstName: 'Rate',

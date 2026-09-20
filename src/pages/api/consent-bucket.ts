@@ -19,10 +19,11 @@ export const GET: APIRoute = (context) => {
 
   const body = JSON.stringify({ bucket, hasGPC });
 
-  // Smart CORS: allow localhost for local dev, lock to production origin otherwise
+  // Smart CORS: allow localhost strictly for local dev, lock to production origin otherwise
   const origin = context.request.headers.get('origin') ?? '';
-  const allowedOrigin =
-    origin.includes('localhost') || origin.includes('127.0.0.1') ? origin : 'https://quranific.com';
+  const isDev = import.meta.env.DEV;
+  const isLocalhost = origin && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+  const allowedOrigin = isDev && isLocalhost ? origin : 'https://quranific.com';
 
   return new Response(body, {
     status: 200,

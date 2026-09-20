@@ -176,25 +176,6 @@ export const POST: APIRoute = async (context) => {
     }
 
     // 4. Process emails asynchronously using waitUntil
-    const dispatchWebhookTask = async () => {
-      const webhookUrl = runtimeEnv.ZAPIER_WEBHOOK_URL as string;
-      if (!webhookUrl) return; // Fail silently if not configured
-      try {
-        await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            event: 'Lead_Complete',
-            timestamp: new Date().toISOString(),
-            lead: step1Data,
-            preferences: parsed.data,
-          }),
-        });
-      } catch (err) {
-        console.error('[Webhook Dispatch Failed]:', err);
-      }
-    };
-
     const sendEmailsTask = async () => {
       try {
         try {
@@ -209,9 +190,11 @@ export const POST: APIRoute = async (context) => {
               step2: parsed.data,
               reason: String(adminErr),
             });
-            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
-              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
-            );
+            try {
+              await kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 });
+            } catch (e: unknown) {
+              console.error('[Dead-Letter KV Write Failed]:', e);
+            }
           }
         }
 
@@ -227,9 +210,11 @@ export const POST: APIRoute = async (context) => {
               step2: parsed.data,
               reason: String(welcomeErr),
             });
-            kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 }).catch(
-              (e: unknown) => console.error('[Dead-Letter KV Write Failed]:', e)
-            );
+            try {
+              await kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 });
+            } catch (e: unknown) {
+              console.error('[Dead-Letter KV Write Failed]:', e);
+            }
           }
         }
       } catch (error) {
@@ -333,15 +318,13 @@ export const POST: APIRoute = async (context) => {
 
     // Background Task Execution (Mandate 1 - Modernized Path)
     const executeBackgroundTasks = async () => {
-      await Promise.allSettled([sendEmailsTask(), dispatchWebhookTask(), dispatchTrackingTask()]);
+      await Promise.allSettled([sendEmailsTask(), dispatchTrackingTask()]);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const locals = context.locals as any;
     if (locals.cfContext?.waitUntil) {
       locals.cfContext.waitUntil(executeBackgroundTasks());
-    } else if (locals.runtime?.ctx?.waitUntil) {
-      locals.runtime.ctx.waitUntil(executeBackgroundTasks());
     } else {
       executeBackgroundTasks().catch(console.error);
     }

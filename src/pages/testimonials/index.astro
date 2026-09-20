@@ -12,27 +12,16 @@ import TestimonialsGrid from './_components/TestimonialsGrid.astro';
 import TestimonialsCta from './_components/TestimonialsCta.astro';
 import EyebrowText from '../../components/ui/EyebrowText.astro';
 
-import { testimonials as unifiedTestimonials } from '../../data/testimonials';
+import { testimonials } from '../../data/testimonials';
 
 // Map unified Testimonial interface to the shape TestimonialsGrid expects.
-// Additional real reviews that aren't in the unified 6 can be appended here.
-const TESTIMONIALS = [
-  ...unifiedTestimonials.map((t) => ({
-    name: t.name,
-    role: 'Verified Student',
-    location: t.details,
-    text: t.quote,
-    rating: 5,
-  })),
-  // Real reviews received via support channels — not yet in unified data/testimonials.ts
-  {
-    name: 'Usama Meer',
-    role: 'Verified Parent & Student',
-    location: 'Saudi Arabia',
-    text: 'Two of my daughters are studying Quran with Quranific and we have great experience with them. Their customer support is extraordinary. They always work with you and resolve any issues. I myself am also learning Tajweed and translation through one of their teachers. I recommended Quranific to many of my friends.',
-    rating: 5,
-  },
-];
+const TESTIMONIALS = testimonials.map((t) => ({
+  name: t.name,
+  role: 'Verified Student',
+  location: t.details,
+  text: t.quote,
+  rating: 5,
+}));
 
 const jsonLd = {
   '@context': 'https://schema.org',

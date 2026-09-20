@@ -19,7 +19,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-const BASE = 'http://localhost:4321';
+const BASE = process.env.BASE_URL || 'http://127.0.0.1:8788';
 const COOKIE_NAME = 'cf_consent_v1';
 const BANNER_WAIT = 12_000; // ms — client:idle means banner appears after browser idle
 

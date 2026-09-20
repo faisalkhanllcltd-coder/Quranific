@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { courses as COURSE_LIST } from '../../constants/courses';
   import {
     PRICING,
@@ -71,6 +72,12 @@
       : COURSE_LIST[0]?.slug || 'basic-qaida'
   );
   let courseNote = $state('');
+  let hasInteracted = $state(false);
+  let isHydrated = $state(false);
+
+  onMount(() => {
+    isHydrated = true;
+  });
 
   // Geo-detection: visitor country determines currency (no selector, no switching)
   $effect(() => {
@@ -118,12 +125,13 @@
   );
   let baseHref = $derived(`/getting-started/signup${queryParams}`);
 
-  // GTM Tracking — fire calculate_price on every interactive change
+  // GTM Tracking — fire calculate_price on every interactive change (never on initial mount)
   $effect(() => {
     // Access reactive state so Svelte tracks changes
     const _course = selectedCourse;
     const _dur = dur;
     const _sess = sess;
+    if (!hasInteracted) return;
     if (
       typeof window !== 'undefined' &&
       Array.isArray((window as Window & { dataLayer?: unknown[] }).dataLayer)
@@ -142,13 +150,13 @@
   // Forward tracking parameters ONLY on click, avoiding SSR mismatch
   function handleCheckout(e: MouseEvent) {
     e.preventDefault();
-    // GTM: begin_checkout fires on calculator CTA click
+    // GTM: click_book_trial fires on calculator CTA click
     if (
       typeof window !== 'undefined' &&
       Array.isArray((window as Window & { dataLayer?: unknown[] }).dataLayer)
     ) {
       (window as Window & { dataLayer: unknown[] }).dataLayer.push({
-        event: 'begin_checkout',
+        event: 'click_book_trial',
         course: selectedCourse,
         duration: dur,
         sessions: sess,
@@ -168,6 +176,7 @@
 <div
   id="pricing-calculator"
   data-testid="pricing-calculator"
+  data-hydrated={isHydrated}
   class="bg-white rounded-3xl shadow-xl {cardShadow} border {cardBorder} p-6 sm:p-8 w-full min-w-0"
 >
   <h3 class="text-xl font-bold {titleColor} mb-1">Calculate your monthly fee</h3>
@@ -212,6 +221,7 @@
         {:else}
           <select
             bind:value={selectedCourse}
+            onchange={() => (hasInteracted = true)}
             class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} transition-colors cursor-pointer truncate"
           >
             {#each COURSE_LIST as course (course.slug)}
@@ -234,14 +244,20 @@
             '30'
               ? activeBtn
               : inactiveBtn}"
-            onclick={() => (dur = '30')}>30 min</button
+            onclick={() => {
+              hasInteracted = true;
+              dur = '30';
+            }}>30 min</button
           >
           <button
             class="flex-1 px-4 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {dur ===
             '40'
               ? activeBtn
               : inactiveBtn}"
-            onclick={() => (dur = '40')}>40 min</button
+            onclick={() => {
+              hasInteracted = true;
+              dur = '40';
+            }}>40 min</button
           >
         </div>
       </div>
@@ -251,6 +267,7 @@
     {#if selectedCourse === 'other'}
       <textarea
         bind:value={courseNote}
+        oninput={() => (hasInteracted = true)}
         rows="3"
         maxlength="500"
         placeholder="Type your message or leave it blank and talk directly with admin after submitting the form."
@@ -270,28 +287,40 @@
           '2'
             ? activeBtn
             : inactiveBtn}"
-          onclick={() => (sess = '2')}>2×</button
+          onclick={() => {
+            hasInteracted = true;
+            sess = '2';
+          }}>2×</button
         >
         <button
           class="px-3 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {sess ===
           '3'
             ? activeBtn
             : inactiveBtn}"
-          onclick={() => (sess = '3')}>3×</button
+          onclick={() => {
+            hasInteracted = true;
+            sess = '3';
+          }}>3×</button
         >
         <button
           class="px-3 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {sess ===
           '4'
             ? activeBtn
             : inactiveBtn}"
-          onclick={() => (sess = '4')}>4×</button
+          onclick={() => {
+            hasInteracted = true;
+            sess = '4';
+          }}>4×</button
         >
         <button
           class="px-3 py-2.5 border rounded-lg text-sm font-bold transition-colors min-w-0 truncate {sess ===
           '5'
             ? activeBtn
             : inactiveBtn}"
-          onclick={() => (sess = '5')}>5×</button
+          onclick={() => {
+            hasInteracted = true;
+            sess = '5';
+          }}>5×</button
         >
       </div>
     </div>

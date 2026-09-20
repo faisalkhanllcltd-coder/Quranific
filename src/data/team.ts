@@ -1,4 +1,4 @@
-﻿// src/data/team.ts
+// src/data/team.ts
 // Single source of truth for all faculty and leadership data.
 // Consumed by: src/pages/about/_components/AboutTeam.astro,
 //              src/pages/teachers/index.astro,
@@ -24,6 +24,16 @@ export interface TeamMember {
   qualifications: string[];
   /** Subjects or specialisms this person covers. */
   specialisms: string[];
+  /** Alias for specialisms for faculty component compatibility. */
+  specialties?: string[];
+  /** Languages spoken by the instructor. */
+  languages?: string[];
+  /** Teaching experience in years. */
+  experience?: string;
+  /** Verified student rating. */
+  rating?: string;
+  /** Active students count. */
+  students?: string;
   /** ISO 3166-1 alpha-2 country code where the teacher is based. */
   location: string;
   /** Whether this member is actively accepting new students. */
@@ -70,6 +80,11 @@ export const TEAM_MEMBERS: TeamMember[] = [
       'Certified Hafiz of the Quran',
     ],
     specialisms: ['Tajweed', 'Ijazah Preparation', 'Advanced Recitation', 'Hifz Coaching'],
+    specialties: ['Tajweed', 'Ijazah Preparation', 'Advanced Recitation', 'Hifz Coaching'],
+    languages: ['Arabic', 'English', 'Urdu'],
+    experience: '12+ Years',
+    rating: '5.0',
+    students: '16 Active',
     location: 'PK',
     accepting: true,
   },
@@ -86,6 +101,11 @@ export const TEAM_MEMBERS: TeamMember[] = [
       'Diploma in Quranic Sciences',
     ],
     specialisms: ['Quran Reading with Tajweed', 'Makharij Correction', 'Adult Learners', 'Qaida'],
+    specialties: ['Quran Reading with Tajweed', 'Makharij Correction', 'Adult Learners', 'Qaida'],
+    languages: ['English', 'Urdu', 'Arabic'],
+    experience: '9+ Years',
+    rating: '4.9',
+    students: '14 Active',
     location: 'PK',
     accepting: true,
   },
@@ -102,6 +122,11 @@ export const TEAM_MEMBERS: TeamMember[] = [
       'Child Safeguarding Certified',
     ],
     specialisms: ["Women's Programme", 'Kids Qaida', 'Tajweed', 'Islamic Studies'],
+    specialties: ["Women's Programme", 'Kids Qaida', 'Tajweed', 'Islamic Studies'],
+    languages: ['English', 'Urdu', 'Arabic'],
+    experience: '8+ Years',
+    rating: '5.0',
+    students: '15 Active',
     location: 'PK',
     accepting: true,
   },
@@ -118,18 +143,25 @@ export const TEAM_MEMBERS: TeamMember[] = [
       'Certified Hafiz',
     ],
     specialisms: ['Arabic Language', 'Quran Translation & Tafsir', 'Qaida', 'Hifz'],
+    specialties: ['Arabic Language', 'Quran Translation & Tafsir', 'Qaida', 'Hifz'],
+    languages: ['Arabic', 'English', 'Urdu'],
+    experience: '7+ Years',
+    rating: '4.9',
+    students: '12 Active',
     location: 'PK',
     accepting: true,
   },
 ];
 
-/** Leadership and admin members only — used on the About page. */
-export const LEADERSHIP = TEAM_MEMBERS.filter((m) => m.role === 'Leadership' || m.role === 'Admin');
+/** Leadership and admin members only — used on the About page. Includes Founder, Admin, and Head Teacher. */
+export const LEADERSHIP = TEAM_MEMBERS.filter(
+  (m) => m.role === 'Leadership' || m.role === 'Admin' || m.id === 'hakeem-sadi'
+);
 
 /** Active teaching faculty — used on the Teachers page. */
 export const FACULTY = TEAM_MEMBERS.filter((m) => m.role === 'Teacher');
 
-/** Female teachers only — used for women''s programme filtering. */
+/** Female teachers only — used for women's programme filtering. */
 export const FEMALE_FACULTY = TEAM_MEMBERS.filter(
   (m) => m.role === 'Teacher' && m.gender === 'female'
 );

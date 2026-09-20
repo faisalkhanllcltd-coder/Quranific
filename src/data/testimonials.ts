@@ -90,4 +90,15 @@ export const testimonials: Testimonial[] = [
     avatarColor: 'bg-violet-50 text-violet-700',
     theme: 'dark',
   },
+  {
+    id: 'usama-sa',
+    initials: 'UM',
+    name: 'Usama Meer',
+    details: 'Saudi Arabia · Two daughters & self',
+    quote:
+      'Two of my daughters are studying Quran with Quranific and we have great experience with them. Their customer support is extraordinary. They always work with you and resolve any issues. I myself am also learning Tajweed and translation through one of their teachers. I recommended Quranific to many of my friends.',
+    enrolled: '10 months',
+    avatarColor: 'bg-emerald-50 text-emerald-700',
+    theme: 'light',
+  },
 ];
