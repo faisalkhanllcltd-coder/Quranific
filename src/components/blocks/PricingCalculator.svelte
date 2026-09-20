@@ -10,8 +10,12 @@
 
   interface Props {
     accent?: 'emerald' | 'purple';
+    /** If true, hides the course dropdown and shows a static pill instead. */
+    lockedCourse?: boolean;
+    /** Pre-select this course slug when lockedCourse is true (or to set a default). */
+    initialCourseSlug?: string;
   }
-  let { accent = 'emerald' }: Props = $props();
+  let { accent = 'emerald', lockedCourse = false, initialCourseSlug }: Props = $props();
 
   let isPurple = $derived(accent === 'purple');
 
@@ -61,7 +65,11 @@
   let sess = $state('3');
   let currency = $state<Currency>('USD');
   let detectedCountry = $state('');
-  let selectedCourse = $state(COURSE_LIST[0]?.slug || 'basic-qaida');
+  let selectedCourse = $state(
+    initialCourseSlug && COURSE_LIST.find((c) => c.slug === initialCourseSlug)
+      ? initialCourseSlug
+      : COURSE_LIST[0]?.slug || 'basic-qaida'
+  );
   let courseNote = $state('');
 
   // Geo-detection: visitor country determines currency (no selector, no switching)
@@ -143,15 +151,40 @@
         <div class="flex justify-between items-center mb-3">
           <span class="eyebrow-pill {labelColor}">Course</span>
         </div>
-        <select
-          bind:value={selectedCourse}
-          class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} transition-colors cursor-pointer truncate"
-        >
-          {#each COURSE_LIST as course (course.slug)}
-            <option value={course.slug}>{course.shortTitle}</option>
-          {/each}
-          <option value="other">Not sure / Other</option>
-        </select>
+        {#if lockedCourse}
+          <!-- Locked state: non-interactive pill — shown on individual course pages -->
+          {@const lockedTitle =
+            COURSE_LIST.find((c) => c.slug === selectedCourse)?.shortTitle ?? selectedCourse}
+          <div
+            class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-sm font-bold text-emerald-800 flex items-center gap-2 select-none"
+            aria-label="Selected course: {lockedTitle}"
+            title="Course pre-selected from this page"
+          >
+            <svg
+              class="w-3.5 h-3.5 text-emerald-500 shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span class="truncate">{lockedTitle}</span>
+          </div>
+        {:else}
+          <select
+            bind:value={selectedCourse}
+            class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} transition-colors cursor-pointer truncate"
+          >
+            {#each COURSE_LIST as course (course.slug)}
+              <option value={course.slug}>{course.shortTitle}</option>
+            {/each}
+            <option value="other">Not sure / Other</option>
+          </select>
+        {/if}
       </div>
 
       <!-- Session Length (70% desktop, 100% mobile) -->

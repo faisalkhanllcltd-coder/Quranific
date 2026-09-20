@@ -18,7 +18,9 @@ import LandingCTA from '../../components/blocks/LandingCTA.astro';
 import LandingFooter from '../../components/blocks/LandingFooter.astro';
 import StickyMobileCTA from '../../components/blocks/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
+import { testimonials } from '../../data/testimonials';
 import { landingWomen } from '../../data/faqs';
+import { womenVettingSteps, womenTrustPoints, womenOnboardingSteps } from '../../data/features';
 import { generateWhatsAppLink } from '../../lib/helpers';
 
 export const prerender = true;
@@ -59,62 +61,15 @@ const copy = intentCopy[intent as Intent];
 // SEO Shield: canonical always points to master quran-classes URL
 const canonicalUrl = `${SITE.url}/quran-classes/for-women`;
 
-const womenTestimonials = [
-  {
-    name: 'Amna',
-    initials: 'A',
-    location: 'Germany',
-    quote:
-      'Studying at Quranific has been a profound experience. With the guidance of my dedicated teacher, I have enhanced my Quran recitation and memorized significant portions. Additionally, I learned about Islamic Studies, fiqah, and Salah.',
-  },
-  {
-    name: 'Fatima',
-    initials: 'F',
-    location: 'UK',
-    quote:
-      "Finding a reliable teacher without compromising on privacy was my biggest challenge. The sisters-only environment and my Ustadha's patience completely transformed my recitation without feeling rushed.",
-  },
-  {
-    name: 'Sarah',
-    initials: 'S',
-    location: 'Canada',
-    quote:
-      'Managing household and work left zero time for local classes. The portal’s flexibility around my daily schedule has been an absolute lifesaver.',
-  },
-];
+// Testimonials: use sisters who match the women's page context
+const womenTestimonials = testimonials.filter((t) =>
+  ['amna-de', 'nadia-uae', 'sarah-uk'].includes(t.id)
+);
 
-const vettingSteps = [
-  {
-    n: '01',
-    title: 'Ijazah Verification',
-    body: 'We confirm the teacher holds a valid chain of Ijazah — a certified lineage of Quranic transmission. No exceptions.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`,
-  },
-  {
-    n: '02',
-    title: 'Live Recitation Assessment',
-    body: 'Our academic team conducts a live Tajweed assessment to ensure professional, elite-level recitation.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>`,
-  },
-  {
-    n: '03',
-    title: 'Ustadha Pedagogy Interview',
-    body: 'We probe specifically for empathetic, adult-teaching ability. How do they explain complex Tajweed rules to an English-speaking sister? We hire for patience, warmth, and clarity.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
-  },
-  {
-    n: '04',
-    title: 'Privacy & Professional Conduct Check',
-    body: 'Every Ustadha is vetted for punctuality, professionalism, and strict adherence to privacy protocols.',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`,
-  },
-];
-
-const trustPoints = [
-  '100% verified female Ustadhas — no exceptions',
-  '24/7 Student Portal for instant schedule management',
-  'Distraction-free, private 1-on-1 learning environment',
-];
+// Aliases for centralized data — eliminates in-page copy-paste
+const vettingSteps = womenVettingSteps;
+const trustPoints = womenTrustPoints;
+const onboardingSteps = womenOnboardingSteps;
 
 const womenGuaranteeCards: GuaranteeCard[] = [
   {
@@ -131,24 +86,6 @@ const womenGuaranteeCards: GuaranteeCard[] = [
     title: 'Make-up guarantee',
     description:
       'Missed a session? It gets made up, guaranteed. There are no lock-in contracts. Cancel anytime.',
-  },
-];
-
-const onboardingSteps = [
-  {
-    n: '1',
-    title: 'Book your free class.',
-    body: 'No card required. Tell us your goals and your preferred schedule.',
-  },
-  {
-    n: '2',
-    title: 'Judgment-Free Assessment.',
-    body: 'Meet your Ustadha. Even if you are starting from the absolute alphabet (Qaida), there is zero judgment. Your teacher simply listens to understand your starting line.',
-  },
-  {
-    n: '3',
-    title: 'Experience a real lesson.',
-    body: "See exactly how the teaching style fits you. If it's not a perfect match, we will assign a different teacher — or we part ways with no hard feelings.",
   },
 ];
 
