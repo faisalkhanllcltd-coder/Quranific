@@ -1,6 +1,5 @@
 ---
 // src/pages/faq/_components/FaqTabs.astro
-import Section from '../../../components/ui/Section.astro';
 import FAQAccordion from '../../../components/blocks/FAQAccordion.astro';
 import { faqs } from '../../../data/faqs';
 
@@ -16,14 +15,16 @@ const tabCategories = [
 ];
 ---
 
-<Section height={800} class="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
-  {/* TAB BUTTONS */}
-  <div class="flex overflow-x-auto gap-2 no-scrollbar mb-8 pb-2">
+<div class="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+  {/* TAB BUTTONS — Sticky filter bar with compact button padding */}
+  <div
+    class="sticky top-20 z-20 bg-cream-50/95 backdrop-blur-md py-3 mb-8 flex overflow-x-auto gap-2 no-scrollbar"
+  >
     {
       tabCategories.map((category) => (
         <button
           data-tab-target={category.id}
-          class={`whitespace-nowrap px-6 py-2.5 rounded-full font-semibold text-sm transition-colors border ${
+          class={`whitespace-nowrap px-3.5 py-2 rounded-full font-semibold text-sm transition-colors border ${
             category.id === 'home'
               ? 'bg-emerald-600 text-white border-emerald-600'
               : 'bg-white text-emerald-900 border-emerald-200 hover:bg-emerald-50'
@@ -45,7 +46,7 @@ const tabCategories = [
       ))
     }
   </div>
-</Section>
+</div>
 
 <script is:inline>
   // Lightweight Tab Switching Logic

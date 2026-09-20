@@ -11,36 +11,6 @@ const newsletterSchema = z.object({
 
 export const prerender = false;
 
-// ─── Cloudflare Turnstile Verification ──────────────────────────────────────
-async function verifyTurnstile(token: string, secret: string, remoteip?: string): Promise<boolean> {
-  try {
-    const body = new URLSearchParams({
-      secret: secret,
-      response: token,
-    });
-    if (remoteip && remoteip !== 'unknown') {
-      body.set('remoteip', remoteip);
-    }
-
-    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: body.toString(),
-    });
-
-    const data = (await res.json()) as { success: boolean; 'error-codes'?: string[] };
-    if (!data.success) {
-      console.error('[Turnstile Edge Rejection] Error codes:', data['error-codes']);
-      return false;
-    }
-    return true;
-  } catch (error) {
-    console.error('[Turnstile Fetch Exception]:', error);
-    return false;
-  }
-}
 // CRITICAL: This cannot be a static file
 
 export const POST: APIRoute = async (context) => {
@@ -73,40 +43,8 @@ export const POST: APIRoute = async (context) => {
 
     const data = (await context.request.json()) as Record<string, unknown>;
 
-    const turnstileToken = data['cf-turnstile-response'] as string | undefined;
-    if (!turnstileToken) {
-      return new Response(
-        JSON.stringify({ error: 'Security check missing. Please refresh and try again.' }),
-        {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-    }
-
-    const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
-      runtimeEnv.TURNSTILE_SECRET_KEY) as string;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
     const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
-
-    if (!turnstileSecret) {
-      console.error('[Configuration Error]: Missing Turnstile Secret');
-      return new Response(JSON.stringify({ error: 'Internal Configuration Error' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    const isHuman = await verifyTurnstile(turnstileToken, turnstileSecret, cfConnectingIp);
-    if (!isHuman) {
-      return new Response(
-        JSON.stringify({ error: 'Security check failed. Please refresh and try again.' }),
-        {
-          status: 403,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-    }
 
     // 1. Validate incoming data with Zod
     const parsed = newsletterSchema.safeParse(data);

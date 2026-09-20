@@ -107,20 +107,18 @@ export const MOBILE_NAVIGATION: ReadonlyArray<NavItem> = [
 ];
 
 export const FOOTER_NAVIGATION = {
-  academy: [
-    { label: 'About Us', href: '/about' },
-    { label: 'Contact', href: '/contact' },
-  ],
-  learn: [
+  discover: [
     { label: 'Courses', href: '/courses' },
-    { label: 'Expert Teachers', href: '/teachers' },
     { label: 'Tuition & Fee', href: '/tuition-fee' },
+    { label: 'Expert Teachers', href: '/teachers' },
+    { label: 'FAQs', href: '/faq' },
     { label: 'Blog', href: '/blog' },
   ],
-  trust: [
+  community: [
+    { label: 'About Us', href: '/about' },
+    { label: 'Contact', href: '/contact' },
     { label: 'Testimonials', href: '/testimonials' },
-    { label: 'Student Portals', href: '/portals' },
-    { label: 'Safeguarding', href: '/safeguarding' },
+    { label: 'Portals', href: '/portals' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/legal/privacy' },

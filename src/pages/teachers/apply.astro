@@ -35,6 +35,12 @@ const jsonLd = {
   description="Join our global faculty of Ijazah-certified Quran scholars. Apply to become a Quranific tutor today."
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer
+    is:inline
+    slot="head"></script>
 
   <Header />
 

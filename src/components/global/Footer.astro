@@ -62,7 +62,7 @@ const headingClass = 'text-emerald-500 mb-5';
   </div>
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-2 md:grid-cols-6 gap-x-8 gap-y-12">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-x-8 gap-y-12">
       <!-- Brand column — real anchor, not a floating tagline -->
       <div class="col-span-2 flex flex-col gap-6">
         <a
@@ -111,10 +111,10 @@ const headingClass = 'text-emerald-500 mb-5';
       </div>
 
       <div>
-        <EyebrowText class={headingClass}>Academy</EyebrowText>
+        <EyebrowText class={headingClass}>Discover</EyebrowText>
         <ul class="space-y-3.5">
           {
-            FOOTER_NAVIGATION.academy.map((link) => (
+            FOOTER_NAVIGATION.discover.map((link) => (
               <li>
                 <a href={link.href} class={linkClass}>
                   {link.label}
@@ -126,25 +126,10 @@ const headingClass = 'text-emerald-500 mb-5';
       </div>
 
       <div>
-        <EyebrowText class={headingClass}>Learn</EyebrowText>
+        <EyebrowText class={headingClass}>Community</EyebrowText>
         <ul class="space-y-3.5">
           {
-            FOOTER_NAVIGATION.learn.map((link) => (
-              <li>
-                <a href={link.href} class={linkClass}>
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
-      <div>
-        <EyebrowText class={headingClass}>Trust</EyebrowText>
-        <ul class="space-y-3.5">
-          {
-            FOOTER_NAVIGATION.trust.map((link) => (
+            FOOTER_NAVIGATION.community.map((link) => (
               <li>
                 <a href={link.href} class={linkClass}>
                   {link.label}
@@ -208,80 +193,23 @@ const headingClass = 'text-emerald-500 mb-5';
               Join
             </button>
           </div>
-          <div
-            class="cf-turnstile mt-3"
-            data-sitekey="0x4AAAAAAD-QWQWhupcuvhbK"
-            data-theme="light"
-            data-size="flexible"
-          >
-          </div>
           <div id="newsletter-message" class="mt-2 text-xs font-medium hidden"></div>
         </form>
       </div>
     </div>
 
-    <!-- Copyright bar & payment trust badges -->
+    <!-- Copyright bar -->
     <div class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
       <p class="text-xs text-emerald-300/35 font-medium text-center sm:text-left">
         &copy; {currentYear}
         {SITE.name}. All rights reserved.
       </p>
-      <!-- Payment trust badges — merchant underwriting compliance -->
-      <div
-        class="flex items-center gap-3 flex-wrap justify-center"
-        aria-label="Accepted payment methods"
-      >
-        <span class="text-[10px] font-semibold text-emerald-500/40 uppercase tracking-widest"
-          >Secure checkout</span
-        >
-        <!-- 256-bit SSL badge -->
-        <span
-          class="inline-flex items-center gap-1 px-2 py-1 rounded border border-emerald-800/40 text-[10px] font-bold text-emerald-400/60"
-          title="256-bit SSL encrypted"
-        >
-          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-            <path
-              fill-rule="evenodd"
-              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-              clip-rule="evenodd"></path>
-          </svg>
-          256-bit SSL
-        </span>
-        <!-- Card brand indicators -->
-        <span
-          class="inline-flex items-center px-2.5 py-1 rounded border border-emerald-800/40 text-[10px] font-bold text-emerald-400/60 tracking-wide"
-          aria-label="Visa accepted">VISA</span
-        >
-        <span
-          class="inline-flex items-center px-2.5 py-1 rounded border border-emerald-800/40 text-[10px] font-bold text-emerald-400/60 tracking-wide"
-          aria-label="Mastercard accepted">MC</span
-        >
-        <span
-          class="inline-flex items-center px-2.5 py-1 rounded border border-emerald-800/40 text-[10px] font-bold text-emerald-400/60 tracking-wide"
-          aria-label="American Express accepted">AMEX</span
-        >
-      </div>
     </div>
   </div>
 </footer>
 
 <script>
-  declare global {
-    interface Window {
-      turnstile: { render: (el: Element) => void };
-    }
-  }
-
   document.addEventListener('astro:page-load', () => {
-    // SPA: Re-render Cloudflare Turnstile on View Transitions
-    if (typeof window !== 'undefined' && 'turnstile' in window) {
-      document.querySelectorAll('.cf-turnstile').forEach((el) => {
-        // Only render if Astro swapped in a fresh, empty container
-        if (el.innerHTML.trim() === '') {
-          window.turnstile.render(el);
-        }
-      });
-    }
     const form = document.getElementById('newsletter-form') as HTMLFormElement;
     const btn = document.getElementById('newsletter-submit-btn') as HTMLButtonElement;
     const input = document.getElementById('footer-email') as HTMLInputElement;
@@ -302,10 +230,6 @@ const headingClass = 'text-emerald-500 mb-5';
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
         input.disabled = true;
-
-        if (!data['cf-turnstile-response']) {
-          throw new Error('Please complete the security check');
-        }
 
         const response = await fetch(form.action, {
           method: 'POST',

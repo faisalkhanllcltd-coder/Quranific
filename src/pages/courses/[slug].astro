@@ -125,40 +125,27 @@ const schema = {
     relatedCourses.length > 0 && (
       <section
         aria-label="Related Courses"
-        class="quranific-section bg-emerald-50/50 border-t border-emerald-100"
+        class="py-8 bg-emerald-50/40 border-t border-emerald-100/60"
       >
-        <div class="quranific-container">
-          <p class="eyebrow-pill text-emerald-600 mb-5">Continue Learning</p>
-          <h2 class="text-2xl md:text-3xl font-black text-emerald-950 tracking-tight mb-8">
-            Related Courses
-          </h2>
-          <div class="flex flex-wrap gap-4">
-            {relatedCourses.map((related) => (
-              <a
-                href={`/courses/${related.slug}`}
-                class="group flex items-center gap-3 px-6 py-4 bg-white rounded-2xl border border-emerald-100 shadow-sm hover:border-emerald-300 hover:shadow-md transition-all duration-200 text-left"
-              >
-                <div class="flex flex-col">
-                  <span class="text-sm font-bold text-emerald-950 group-hover:text-emerald-700 transition-colors">
-                    {related.title}
-                  </span>
-                  <span class="text-xs text-emerald-700/60 font-medium mt-0.5">
-                    {related.level} · {related.ageRange}
-                  </span>
-                </div>
-                <svg
-                  class="w-4 h-4 text-emerald-400 group-hover:text-emerald-600 shrink-0 transition-colors"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  aria-hidden="true"
+        <div class="quranific-container flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm">
+          <span class="font-bold text-emerald-950 shrink-0">Related Courses:</span>
+          <nav aria-label="Related courses" class="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {relatedCourses.map((related, idx) => (
+              <span class="inline-flex items-center gap-4">
+                <a
+                  href={`/courses/${related.slug}`}
+                  class="font-medium text-emerald-800 hover:text-emerald-950 hover:underline transition-colors"
                 >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
+                  {related.title}
+                </a>
+                {idx < relatedCourses.length - 1 && (
+                  <span class="text-emerald-300 select-none" aria-hidden="true">
+                    •
+                  </span>
+                )}
+              </span>
             ))}
-          </div>
+          </nav>
         </div>
       </section>
     )

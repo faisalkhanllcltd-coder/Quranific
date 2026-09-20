@@ -7,15 +7,13 @@ import Header from '../../components/global/Header.astro';
 import Footer from '../../components/global/Footer.astro';
 
 import PageHero from '../../components/blocks/PageHero.astro';
-import TestimonialsVideoCard from './_components/TestimonialsVideoCard.astro';
 import TestimonialsGrid from './_components/TestimonialsGrid.astro';
 import TestimonialsCta from './_components/TestimonialsCta.astro';
-import EyebrowText from '../../components/ui/EyebrowText.astro';
 
 import { testimonials } from '../../data/testimonials';
 
-// Map unified Testimonial interface to the shape TestimonialsGrid expects.
-const TESTIMONIALS = testimonials.map((t) => ({
+// Map unified Testimonial interface to the shape TestimonialsGrid expects (sliced to exactly 6).
+const TESTIMONIALS = testimonials.slice(0, 6).map((t) => ({
   name: t.name,
   role: 'Verified Student',
   location: t.details,
@@ -28,7 +26,6 @@ const jsonLd = {
   '@type': 'Organization',
   name: 'Quranific',
   url: 'https://quranific.com',
-  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', reviewCount: '542' },
   review: TESTIMONIALS.map((t) => ({
     '@type': 'Review',
     author: {
@@ -61,22 +58,7 @@ const jsonLd = {
       title="Don't just take "
       highlightWord="our word for it."
       subtitle="Discover how families on every continent are building meaningful, lifelong connections with the Holy Quran through our dedicated tutors."
-    >
-      <Fragment slot="checklist">
-        <div class="flex flex-wrap justify-center gap-8 lg:gap-16 mt-6">
-          <div class="text-center">
-            <div class="text-4xl font-black text-emerald-800 mb-1">4.9/5</div>
-            <EyebrowText class="text-emerald-600/70"> Rated by parents </EyebrowText>
-          </div>
-          <div class="w-px h-16 bg-emerald-100 hidden sm:block" aria-hidden="true"></div>
-          <div class="text-center flex flex-col justify-center">
-            <div class="text-4xl font-black text-emerald-800 mb-1">3,000+</div>
-            <EyebrowText class="text-emerald-600/70 mt-2"> Students in 22 Countries </EyebrowText>
-          </div>
-        </div>
-      </Fragment>
-    </PageHero>
-    <TestimonialsVideoCard />
+    />
     <TestimonialsGrid testimonials={TESTIMONIALS} />
     <TestimonialsCta />
   </main>
