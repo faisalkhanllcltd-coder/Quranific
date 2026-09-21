@@ -17,6 +17,9 @@ import { howTo } from '../data/howTo';
 
 import { SITE } from '../constants/site';
 
+// Import local asset for build-time Sharp optimization
+import heroImage from '../assets/quranific-hero.webp';
+
 // Structured data: WebSite + EducationalOrganization + FAQPage + HowTo
 const jsonLd = [
   {
@@ -89,7 +92,7 @@ const jsonLd = [
         <div class="w-full max-w-[500px] lg:max-w-none mx-auto drop-shadow-2xl">
           <div class="animate-hero-float w-full flex items-center justify-center">
             <Image
-              src="/images/quranific-hero.webp"
+              src={heroImage}
               alt="Quranific Live Interactive Platform"
               width={1000}
               height={625}

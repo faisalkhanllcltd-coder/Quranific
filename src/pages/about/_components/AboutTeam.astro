@@ -22,7 +22,24 @@ const avatarStyles: Record<string, { letter: string; gradient: string; textClass
     textClass: 'text-amber-600',
   },
 };
+
+// Generate Person schema for the executive leadership team
+const teamSchema = LEADERSHIP.map((member) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: member.name,
+  jobTitle: member.title,
+  description: member.bio,
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Quranific',
+    sameAs: 'https://quranific.com',
+  },
+}));
 ---
+
+<!-- Injects JSON-LD schema so Google parses all team members as verified Persons -->
+<script type="application/ld+json" set:html={JSON.stringify(teamSchema)} is:inline />
 
 <Section class="py-10 md:py-20 lg:py-32 bg-cream-50 border-t border-emerald-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

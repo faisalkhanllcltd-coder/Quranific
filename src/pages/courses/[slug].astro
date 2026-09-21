@@ -1,6 +1,4 @@
 ---
-export const prerender = true;
-
 // src/pages/courses/[slug].astro
 import Page from '../../layouts/Page.astro';
 import TeacherTeaserBanner from '../../components/blocks/TeacherTeaserBanner.astro';
@@ -16,14 +14,9 @@ import CoursePricingSection from './_components/CoursePricingSection.astro';
 
 import { courses } from '../../constants/courses';
 
-export function getStaticPaths() {
-  return courses.map((course) => ({
-    params: { slug: course.slug },
-    props: { course },
-  }));
-}
-
-const { course } = Astro.props;
+// Enforce SSR and Edge Middleware execution by extracting the dynamic param
+const { slug } = Astro.params;
+const course = courses.find((c) => c.slug === slug);
 
 if (!course) {
   return Astro.redirect('/404');
@@ -31,18 +24,21 @@ if (!course) {
 
 // Pre-compute related courses for the SEO linking block
 const relatedCourses = course.relatedSlugs
-  .map((slug) => courses.find((c) => c.slug === slug))
+  .map((s) => courses.find((c) => c.slug === s))
   .filter((c): c is (typeof courses)[number] => c !== undefined);
 
 const imageSrc = `/images/${course.slug}.webp`;
 const testFallback = '/images/basic-qaida.webp';
 
-// Generate JSON-LD Schema
-const schema = {
+// Generate JSON-LD Schemas (Course + FAQ)
+const jsonLdSchemas = [];
+
+// 1. Core Course Schema
+jsonLdSchemas.push({
   '@context': 'https://schema.org',
   '@type': 'Course',
   name: course.title,
-  description: course.longDesc,
+  description: course.longDesc || course.shortDesc,
   provider: {
     '@type': 'Organization',
     name: 'Quranific',
@@ -58,14 +54,37 @@ const schema = {
       availability: 'https://schema.org/InStock',
       price: '40.00',
       priceCurrency: 'USD',
-      url: 'https://quranific.com/tuition-fee',
+      url: `https://quranific.com/courses/${course.slug}`,
     },
   },
-};
+});
+
+// 2. Dynamic FAQPage Schema for Rich Snippets
+if (course.courseFaqs && course.courseFaqs.length > 0) {
+  jsonLdSchemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: course.courseFaqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        // Strip HTML from answers for strict JSON-LD compliance
+        text: faq.answer.replace(/<[^>]*>?/gm, ''),
+      },
+    })),
+  });
+}
 ---
 
 <Page description={course.shortDesc} title={`${course.title} | Quranific`} image={imageSrc}>
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+  <!-- slot="head" forces this script into the <head> of Page.astro where Google expects it -->
+  <script
+    type="application/ld+json"
+    slot="head"
+    set:html={JSON.stringify(jsonLdSchemas)}
+    is:inline
+  />
 
   <!-- layout="split" locks the grid to 50/50 text-to-image ratio -->
   <PageHero
