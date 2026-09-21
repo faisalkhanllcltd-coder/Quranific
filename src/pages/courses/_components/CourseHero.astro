@@ -4,6 +4,7 @@ import Breadcrumb from '../../../components/seo/Breadcrumb.astro';
 import Button from '../../../components/ui/Button.astro';
 import type { Course } from '../../../constants/courses';
 import EyebrowBadge from '../../../components/ui/EyebrowBadge.astro';
+import { Image } from 'astro:assets';
 
 interface Props {
   course: Course;
@@ -12,8 +13,16 @@ interface Props {
 const { course } = Astro.props;
 
 const gradient = 'from-emerald-800 to-emerald-600';
-const imageSrc = `/images/${course.slug}.webp`;
-const testFallback = '/images/basic-qaida.webp';
+
+// Build-time glob: resolves all course images at compile time, eliminating runtime fallbacks
+const courseImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/*.webp',
+  { eager: true }
+);
+
+const targetPath = `/src/assets/images/${course.slug}.webp`;
+const fallbackPath = '/src/assets/images/basic-qaida.webp';
+const optimizedImage = (courseImages[targetPath] ?? courseImages[fallbackPath]).default;
 ---
 
 <!-- DYNAMIC HERO SECTION (Unified Emerald Overlay Engine) -->
@@ -22,9 +31,8 @@ const testFallback = '/images/basic-qaida.webp';
 >
   <!-- DYNAMIC BACKGROUND IMAGE LAYER -->
   <div class={`absolute inset-0 z-0 bg-gradient-to-br ${gradient}`}>
-    <img
-      src={imageSrc}
-      onerror={`this.onerror=null;this.src='${testFallback}';`}
+    <Image
+      src={optimizedImage}
       alt=""
       class="w-full h-full object-cover object-center grayscale mix-blend-overlay opacity-25"
       aria-hidden="true"

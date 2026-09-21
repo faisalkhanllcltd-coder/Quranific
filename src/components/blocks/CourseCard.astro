@@ -2,6 +2,7 @@
 // src/components/blocks/CourseCard.astro
 import type { Course } from '../../constants/courses';
 import MicroTag from '../ui/MicroTag.astro';
+import { Image } from 'astro:assets';
 
 interface Props {
   course: Course;
@@ -9,9 +10,15 @@ interface Props {
 }
 const { course, isPriority = false } = Astro.props;
 
-// Dynamic routing for optimized background images
-const imageSrc = `/images/${course.slug}.webp`;
-const testFallback = '/images/basic-qaida.webp';
+// Build-time glob: resolves all course images at compile time, eliminating runtime fallbacks
+const courseImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/*.webp',
+  { eager: true }
+);
+
+const targetPath = `/src/assets/images/${course.slug}.webp`;
+const fallbackPath = '/src/assets/images/basic-qaida.webp';
+const optimizedImage = (courseImages[targetPath] ?? courseImages[fallbackPath]).default;
 
 // Dynamic prefix mapping to eliminate repetitive "Best for" copy
 const getPrefix = (slug: string) => {
@@ -31,12 +38,11 @@ const getPrefix = (slug: string) => {
 >
   <!-- IMAGE BANNER: Text removed, heavy black gradients and CSS filters stripped for 100% image clarity -->
   <div class="relative overflow-hidden h-48 sm:h-52 bg-emerald-50 shrink-0">
-    <img
-      src={imageSrc}
-      onerror={`this.onerror=null;this.src='${testFallback}';`}
+    <Image
+      src={optimizedImage}
       alt=""
-      width="600"
-      height="400"
+      width={600}
+      height={400}
       class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
       aria-hidden="true"
       loading={isPriority ? 'eager' : 'lazy'}

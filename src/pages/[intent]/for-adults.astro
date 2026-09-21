@@ -16,6 +16,9 @@ import LandingCTA from '../../components/blocks/LandingCTA.astro';
 import LandingFooter from '../../components/blocks/LandingFooter.astro';
 import StickyMobileCTA from '../../components/blocks/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
+import { Image } from 'astro:assets';
+import adultsImg from '../../assets/images/quran-classes-for-adults.webp';
+import appAdultsImg from '../../assets/images/app.quranific-quran-classes-for-adults.webp';
 import { testimonials } from '../../data/testimonials';
 import { landingAdults } from '../../data/faqs';
 import { adultsVettingSteps, adultsOnboardingSteps } from '../../data/features';
@@ -153,8 +156,8 @@ const jsonLd = {
         slot="media"
         class="relative w-full aspect-[4/3] lg:aspect-square rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.4)] ring-1 ring-white/10"
       >
-        <img
-          src="/images/quran-classes-for-adults.webp"
+        <Image
+          src={adultsImg}
           alt="Adult confidently reading the Quran"
           class="relative z-20 rounded-2xl absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
           loading="lazy"
@@ -187,9 +190,9 @@ const jsonLd = {
       ctaLabel="Start Your Free Trial"
       ctaHref="/booking?source=adults_funnel"
     >
-      <img
+      <Image
         slot="media"
-        src="/images/app.quranific-quran-classes-for-adults.webp"
+        src={appAdultsImg}
         alt="Quranific virtual classroom interface for adult learners"
         class="w-full h-auto object-cover object-left"
         loading="lazy"

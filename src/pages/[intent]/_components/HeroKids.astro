@@ -1,6 +1,9 @@
 ---
 // src/components/blocks/heroes/HeroKids.astro
 import Button from '../../../components/ui/Button.astro';
+import { Image } from 'astro:assets';
+import logoGreen from '../../../assets/images/quranific-logo-green.svg';
+import kidsImg from '../../../assets/images/quran-classes-for-kids.webp';
 
 interface Props {
   intent: 'quran-classes' | 'quran-teacher';
@@ -33,11 +36,11 @@ const { intent, h1, highlightWord, subhead } = Astro.props;
         href="/"
         class="inline-flex items-center hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg"
       >
-        <img
-          src="/images/quranific-logo-green.svg"
+        <Image
+          src={logoGreen}
           alt="Quranific Logo"
-          width="160"
-          height="40"
+          width={160}
+          height={40}
           class="h-8 md:h-9 w-auto object-contain"
           loading="eager"
           decoding="async"
@@ -130,11 +133,11 @@ const { intent, h1, highlightWord, subhead } = Astro.props;
 
       <!-- Right: Hero Image -->
       <div class="w-full mt-10 lg:mt-0 relative overflow-hidden rounded-[2rem] lg:rounded-[2.5rem]">
-        <img
-          src="/images/quran-classes-for-kids.webp"
+        <Image
+          src={kidsImg}
           alt="Quran Classes for Kids"
-          width="800"
-          height="600"
+          width={800}
+          height={600}
           class="w-full h-auto object-cover"
           loading="eager"
           decoding="async"

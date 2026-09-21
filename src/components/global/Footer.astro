@@ -3,6 +3,8 @@
 // Global Footer — static HTML/CSS, edge-cacheable, minimal JS (newsletter only).
 import { SITE, FOOTER_NAVIGATION } from '../../constants/site';
 import EyebrowText from '../ui/EyebrowText.astro';
+import { Image } from 'astro:assets';
+import logoGold from '../../assets/images/quranific-logo-gold.svg';
 
 const currentYear = new Date().getFullYear();
 
@@ -69,11 +71,11 @@ const headingClass = 'text-emerald-500 mb-5';
           href="/"
           class="inline-flex items-center gap-2.5 w-fit focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-lg"
         >
-          <img
-            src="/images/quranific-logo-gold.svg"
+          <Image
+            src={logoGold}
             alt="Quranific — Home"
-            width="160"
-            height="40"
+            width={160}
+            height={40}
             loading="lazy"
             decoding="async"
             class="h-9 w-auto object-contain"

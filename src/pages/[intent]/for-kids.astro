@@ -16,6 +16,9 @@ import LandingCTA from '../../components/blocks/LandingCTA.astro';
 import LandingFooter from '../../components/blocks/LandingFooter.astro';
 import StickyMobileCTA from '../../components/blocks/StickyMobileCTA.astro';
 import { SITE } from '../../constants/site';
+import { Image } from 'astro:assets';
+import teacherForKidsImg from '../../assets/images/quran-teacher-for-kids.webp';
+import appKidsImg from '../../assets/images/app.quranific-quran-classes-for-kids.webp';
 import { testimonials } from '../../data/testimonials';
 import { faqs } from '../../data/faqs';
 import { kidsVettingSteps, kidsTrustPoints, kidsOnboardingSteps } from '../../data/features';
@@ -142,8 +145,8 @@ const jsonLd = {
         slot="media"
         class="relative w-full aspect-[4/3] lg:aspect-square rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.4)] ring-1 ring-white/10"
       >
-        <img
-          src="/images/quran-teacher-for-kids.webp"
+        <Image
+          src={teacherForKidsImg}
           alt="Child confidently reciting Quran with online teacher"
           class="relative z-20 rounded-2xl absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
           loading="lazy"
@@ -181,8 +184,8 @@ const jsonLd = {
         slot="media"
         class="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white/5"
       >
-        <img
-          src="/images/app.quranific-quran-classes-for-kids.webp"
+        <Image
+          src={appKidsImg}
           alt="Real class session preview"
           class="w-full h-auto object-cover transform transition-transform hover:scale-[1.02] duration-700 ease-out"
           loading="lazy"

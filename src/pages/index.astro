@@ -5,6 +5,7 @@ import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
 import PageHero from '../components/blocks/PageHero.astro';
 import { Image } from 'astro:assets';
+import heroImg from '../assets/images/quranific-hero.webp';
 import TestimonialGrid from './_home-components/TestimonialGrid.astro';
 import { testimonials } from '../data/testimonials';
 import FAQAccordion from '../components/blocks/FAQAccordion.astro';
@@ -89,7 +90,7 @@ const jsonLd = [
         <div class="w-full max-w-[500px] lg:max-w-none mx-auto drop-shadow-2xl">
           <div class="animate-hero-float w-full flex items-center justify-center">
             <Image
-              src="/images/quranific-hero.webp"
+              src={heroImg}
               alt="Quranific Live Interactive Platform"
               width={1000}
               height={625}

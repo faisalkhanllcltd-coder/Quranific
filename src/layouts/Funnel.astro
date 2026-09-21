@@ -3,6 +3,8 @@
 import Base from './Base.astro';
 import EyebrowText from '../components/ui/EyebrowText.astro';
 import { testimonials } from '../data/testimonials';
+import { Image } from 'astro:assets';
+import logoGold from '../assets/images/quranific-logo-gold.svg';
 
 interface Props {
   title: string;
@@ -37,11 +39,11 @@ const { title, description = 'Complete your registration for Quranific.' } = Ast
           href="/"
           class="group transition-transform active:scale-95 inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded"
         >
-          <img
-            src="/images/quranific-logo-gold.svg"
+          <Image
+            src={logoGold}
             alt="Quranific"
-            width="160"
-            height="40"
+            width={160}
+            height={40}
             class="h-7 sm:h-8 lg:h-9 w-auto object-contain drop-shadow-sm"
           />
         </a>

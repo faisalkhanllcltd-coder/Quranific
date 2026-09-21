@@ -2,6 +2,8 @@
 // src/pages/teachers/_components/TeachersIjazah.astro
 import Section from '../../../components/ui/Section.astro';
 import EyebrowBadge from '../../../components/ui/EyebrowBadge.astro';
+import { Image } from 'astro:assets';
+import ijazahImg from '../../../assets/images/quran-ijazah.webp';
 ---
 
 <Section class="py-16 lg:py-24 bg-white border-b border-emerald-50 px-4 sm:px-6 overflow-hidden">
@@ -45,9 +47,8 @@ import EyebrowBadge from '../../../components/ui/EyebrowBadge.astro';
       <div
         class="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[4/3] rounded-[2rem] overflow-hidden border border-emerald-900/10 shadow-2xl bg-emerald-50"
       >
-        <img
-          src="/images/quran-ijazah.webp"
-          onerror="this.onerror=null;this.style.display='none';"
+        <Image
+          src={ijazahImg}
           alt="Traditional Quranic Ijazah Certification"
           class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
           loading="lazy"
