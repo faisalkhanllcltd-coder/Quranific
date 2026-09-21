@@ -13,6 +13,8 @@ import CourseCurriculum from './_components/CourseCurriculum.astro';
 import CoursePricingSection from './_components/CoursePricingSection.astro';
 
 import { courses } from '../../constants/courses';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 
 // Enforce SSR and Edge Middleware execution by extracting the dynamic param
 const { slug } = Astro.params;
@@ -27,8 +29,18 @@ const relatedCourses = course.relatedSlugs
   .map((s) => courses.find((c) => c.slug === s))
   .filter((c): c is (typeof courses)[number] => c !== undefined);
 
-const imageSrc = `/images/${course.slug}.webp`;
-const testFallback = '/images/basic-qaida.webp';
+// OG image stays as a static public/ path string — needed as an absolute URL for social crawlers
+const ogImageSrc = `/images/${course.slug}.webp`;
+
+// Build-time glob: resolves all course images at compile time, eliminating runtime fallbacks
+const courseImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/*.webp',
+  { eager: true }
+);
+
+const targetPath = `/src/assets/images/${course.slug}.webp`;
+const fallbackPath = '/src/assets/images/basic-qaida.webp';
+const optimizedImage = (courseImages[targetPath] ?? courseImages[fallbackPath]).default;
 
 // Generate JSON-LD Schemas (Course + FAQ)
 const jsonLdSchemas = [];
@@ -77,7 +89,7 @@ if (course.courseFaqs && course.courseFaqs.length > 0) {
 }
 ---
 
-<Page description={course.shortDesc} title={`${course.title} | Quranific`} image={imageSrc}>
+<Page description={course.shortDesc} title={`${course.title} | Quranific`} image={ogImageSrc}>
   <!-- slot="head" forces this script into the <head> of Page.astro where Google expects it -->
   <script
     type="application/ld+json"
@@ -102,9 +114,8 @@ if (course.courseFaqs && course.courseFaqs.length > 0) {
       <div
         class="relative w-full aspect-video sm:aspect-[4/3] lg:aspect-square rounded-[2rem] overflow-hidden shadow-2xl border border-emerald-100 bg-emerald-50 group"
       >
-        <img
-          src={imageSrc}
-          onerror={`this.onerror=null;this.src='${testFallback}';`}
+        <Image
+          src={optimizedImage}
           alt={`Learn ${course.title}`}
           class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
           fetchpriority="high"

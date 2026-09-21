@@ -1,0 +1,903 @@
+{
+  "counts": {
+    "FULL": 52,
+    "PARTIAL": 25,
+    "SCANNED": 102,
+    "NOT_OPENED": 44
+  },
+  "total": 223,
+  "files": [
+    {
+      "file": ".agents/context/context.md",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".agents/skills/agent-skills.md",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".dev.vars",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".editorconfig",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".env",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".env.example",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".github/workflows/ci.yml",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".gitignore",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/pre-commit",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/.gitignore",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/applypatch-msg",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/commit-msg",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/h",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/husky.sh",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/post-applypatch",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/post-checkout",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/post-commit",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/post-merge",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/post-rewrite",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/pre-applypatch",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/pre-auto-gc",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/pre-commit",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/pre-merge-commit",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/pre-push",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/pre-rebase",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".husky/_/prepare-commit-msg",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".node-version",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".nvmrc",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".prettierrc",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": ".vscode/settings.json",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "alarm-worker/.dev.vars",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "alarm-worker/package.json",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "alarm-worker/src/index.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "alarm-worker/wrangler.toml",
+      "status": "FULL"
+    },
+    {
+      "file": "astro.config.mjs",
+      "status": "FULL"
+    },
+    {
+      "file": "compare.md",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "dead_code.cjs",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "DEPLOYMENT.md",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "eslint.config.mjs",
+      "status": "FULL"
+    },
+    {
+      "file": "link_check.cjs",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "owner-actions.md",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "owner-list.md",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "package-lock.json",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "package.json",
+      "status": "FULL"
+    },
+    {
+      "file": "playwright.config.ts",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "public/favicon.ico",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/icons/android-chrome-192x192.png",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/icons/android-chrome-512x512.png",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/icons/apple-touch-icon.png",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/icons/favicon-16x16.png",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/icons/favicon-32x32.png",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/icons/favicon.svg",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/icons/site.webmanifest",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/advanced-tajweed-ijazah.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/app.quranific-quran-classes-for-adults.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/app.quranific-quran-classes-for-kids.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/app.quranific-quran-classes-for-women.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/arabic-language.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/basic-qaida.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/logo.png",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/og/default.png",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quran-classes-for-adults.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quran-classes-for-kids.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quran-classes-for-women.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quran-ijazah.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quran-memorization.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quran-reading-with-tajweed.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quran-teacher-for-kids.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quran-teachers.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quran-translation-with-tafsir.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quranific-hero.webp",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quranific-logo-gold.svg",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/images/quranific-logo-green.svg",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/llms.txt",
+      "status": "SCANNED"
+    },
+    {
+      "file": "public/_headers",
+      "status": "FULL"
+    },
+    {
+      "file": "README.md",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "scripts/smoke-test.mjs",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/components/blocks/CookieBanner.svelte",
+      "status": "FULL"
+    },
+    {
+      "file": "src/components/blocks/CourseCard.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/components/blocks/CourseGrid.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/components/blocks/CoursesFAQ.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/components/blocks/FAQAccordion.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/FinalCTA.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/GuaranteeCard.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/GuaranteeSection.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingCTA.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingFAQ.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingFooter.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingOnboarding.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingOutcome.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingPreview.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingPricing.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingProblem.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingTestimonials.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingTrust.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/LandingVetting.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/PageHero.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/PricingCalculator.svelte",
+      "status": "FULL"
+    },
+    {
+      "file": "src/components/blocks/StickyMobileCTA.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/blocks/TeacherTeaserBanner.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/components/global/Footer.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/global/Header.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/global/MobileMenu.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/seo/Breadcrumb.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/ui/Button.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/ui/EyebrowBadge.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/ui/EyebrowText.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/ui/MicroTag.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/ui/Note.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/components/ui/Section.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/constants/courses.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/constants/pricing.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/constants/site.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/content/blog/hello-world.md",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/content.config.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/data/faqs.ts",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/data/features.ts",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/data/howTo.ts",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/data/team.ts",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/data/testimonials.ts",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/env.d.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/layouts/Base.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/layouts/Funnel.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/layouts/Landing.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/layouts/Page.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/lib/consent.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/lib/email.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/lib/helpers.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/lib/schema.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/middleware.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/404.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/500.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/about/index.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/about/_components/AboutMission.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/about/_components/AboutOriginStory.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/about/_components/AboutPrinciples.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/about/_components/AboutTeachers.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/about/_components/AboutTeam.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/about/_components/AboutVision.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/api/apply-teacher.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/api/complete.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/api/consent-bucket.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/api/contact.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/api/geo-currency.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/api/internal/retry-queue.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/api/newsletter.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/api/register.ts",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/blog/index.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/blog/[slug].astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/contact/index.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/contact/_components/ContactFaq.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/contact/_components/SmartContactForm.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/courses/index.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/courses/[slug].astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/courses/_components/CourseBentoFacts.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/courses/_components/CourseCurriculum.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/courses/_components/CourseHero.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/courses/_components/CoursePricingSection.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/courses/_components/CourseWhyWho.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/faq/index.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/faq/_components/FaqSupportCard.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/faq/_components/FaqTabs.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/getting-started/complete.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/getting-started/signup.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/getting-started/success.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/getting-started/_components/CompleteForm.svelte",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/getting-started/_components/SignupForm.svelte",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/getting-started/_components/StepIndicator.svelte",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/index.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/legal/cookies.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/legal/impressum.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/legal/privacy.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/legal/refund.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/legal/terms.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/llms.txt.ts",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/portals/index.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/portals/_components/PortalsGrid.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/robots.txt.ts",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/rss.xml.ts",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/safeguarding/index.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/teachers/apply.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/teachers/index.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/teachers/_components/TeacherApplicationForm.svelte",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/teachers/_components/TeachersFaculty.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/teachers/_components/TeachersGenderPrivacy.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/teachers/_components/TeachersIjazah.astro",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "src/pages/teachers/_components/TeacherStep1.svelte",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/teachers/_components/TeacherStep2.svelte",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/teachers/_components/TeachersVetting.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/testimonials/index.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/testimonials/_components/TestimonialsCta.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/testimonials/_components/TestimonialsGrid.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/tuition-fee/index.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/tuition-fee/_components/PricingGrid.svelte",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/tuition-fee/_components/SiblingDiscount.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/tuition-fee/_components/TuitionPlans.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/tuition-fee/_components/WhatsIncluded.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/[intent]/for-adults.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/[intent]/for-kids.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/[intent]/for-women.astro",
+      "status": "FULL"
+    },
+    {
+      "file": "src/pages/[intent]/_components/HeroAdults.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/[intent]/_components/HeroKids.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/[intent]/_components/HeroWomen.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/[intent]/_components/LandingGuarantee.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/_home-components/HowItWorks.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/_home-components/PainPoints.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/_home-components/QuranificDifference.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/pages/_home-components/TestimonialGrid.astro",
+      "status": "SCANNED"
+    },
+    {
+      "file": "src/styles/cv.css",
+      "status": "FULL"
+    },
+    {
+      "file": "src/styles/fonts.css",
+      "status": "FULL"
+    },
+    {
+      "file": "src/styles/global.css",
+      "status": "FULL"
+    },
+    {
+      "file": "svelte.config.js",
+      "status": "FULL"
+    },
+    {
+      "file": "test-results/.last-run.json",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "tests/api-contact.spec.ts",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "tests/api-teacher.spec.ts",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "tests/calculator.spec.ts",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "tests/consent-unit.test.ts",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "tests/consent.spec.ts",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "tests/funnel.spec.ts",
+      "status": "PARTIAL"
+    },
+    {
+      "file": "tests/seo-diff.mjs",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "tests/seo-snapshot.mjs",
+      "status": "NOT OPENED"
+    },
+    {
+      "file": "tsconfig.json",
+      "status": "FULL"
+    },
+    {
+      "file": "wrangler.toml",
+      "status": "FULL"
+    }
+  ]
+}

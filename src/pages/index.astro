@@ -5,6 +5,8 @@ import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
 import PageHero from '../components/blocks/PageHero.astro';
 import { Image } from 'astro:assets';
+// Import local asset for build-time Sharp optimization
+import heroImage from '../assets/images/quranific-hero.webp';
 import TestimonialGrid from './_home-components/TestimonialGrid.astro';
 import { testimonials } from '../data/testimonials';
 import FAQAccordion from '../components/blocks/FAQAccordion.astro';
@@ -16,11 +18,6 @@ import HowItWorks from './_home-components/HowItWorks.astro';
 import { howTo } from '../data/howTo';
 
 import { SITE } from '../constants/site';
-
-// Import local asset for build-time Sharp optimization
-import heroImage from '../assets/quranific-hero.webp';
-
-// Structured data: WebSite + EducationalOrganization + FAQPage + HowTo
 const jsonLd = [
   {
     '@context': 'https://schema.org',

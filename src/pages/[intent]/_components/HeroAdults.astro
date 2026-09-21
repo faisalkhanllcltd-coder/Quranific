@@ -2,6 +2,8 @@
 // src/components/blocks/heroes/HeroAdults.astro
 import Button from '../../../components/ui/Button.astro';
 import EyebrowText from '../../../components/ui/EyebrowText.astro';
+import { Image } from 'astro:assets';
+import logoGold from '../../../assets/images/quranific-logo-gold.svg';
 
 interface Props {
   intent: string;
@@ -33,9 +35,11 @@ const { intent, h1, subhead } = Astro.props;
         href="/"
         class="inline-flex items-center hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-lg"
       >
-        <img
-          src="/images/quranific-logo-gold.svg"
+        <Image
+          src={logoGold}
           alt="Quranific Logo"
+          width={160}
+          height={40}
           class="h-8 md:h-9 w-auto object-contain"
           loading="eager"
           decoding="async"

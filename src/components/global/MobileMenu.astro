@@ -3,6 +3,8 @@
 // Flash-free mobile nav. Zero synchronous reflow. GPU-safe backdrop.
 // Hamburger morphs to × via CSS path animation — no swap, no flicker.
 import { SITE, MOBILE_NAVIGATION } from '../../constants/site';
+import { Image } from 'astro:assets';
+import logoGreen from '../../assets/images/quranific-logo-green.svg';
 ---
 
 <div class="lg:hidden">
@@ -94,11 +96,11 @@ import { SITE, MOBILE_NAVIGATION } from '../../constants/site';
           href="/"
           class="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg"
         >
-          <img
-            src="/images/quranific-logo-green.svg"
+          <Image
+            src={logoGreen}
             alt="Quranific — Home"
-            width="160"
-            height="40"
+            width={160}
+            height={40}
             loading="eager"
             decoding="async"
             class="h-8 w-auto object-contain drop-shadow-sm"

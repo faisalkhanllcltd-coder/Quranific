@@ -4,6 +4,8 @@ import MobileMenu from './MobileMenu.astro';
 import Button from '../ui/Button.astro';
 import EyebrowText from '../ui/EyebrowText.astro';
 import { SITE, MAIN_NAVIGATION } from '../../constants/site';
+import { Image } from 'astro:assets';
+import logoGreen from '../../assets/images/quranific-logo-green.svg';
 ---
 
 <script is:inline>
@@ -78,11 +80,11 @@ import { SITE, MAIN_NAVIGATION } from '../../constants/site';
         href="/"
         class="flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-lg"
       >
-        <img
-          src="/images/quranific-logo-green.svg"
+        <Image
+          src={logoGreen}
           alt="Quranific — Home"
-          width="128"
-          height="32"
+          width={128}
+          height={32}
           fetchpriority="high"
           loading="eager"
           decoding="async"

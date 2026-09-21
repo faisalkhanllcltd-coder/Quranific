@@ -2,6 +2,8 @@
 // src/pages/teachers/_components/TeachersGenderPrivacy.astro
 import Section from '../../../components/ui/Section.astro';
 import EyebrowText from '../../../components/ui/EyebrowText.astro';
+import { Image } from 'astro:assets';
+import teachersImg from '../../../assets/images/quran-teachers.webp';
 
 const Icons = {
   checkCircle: `<svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>`,
@@ -75,9 +77,8 @@ const Icons = {
       <div
         class="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[4/3] rounded-[2rem] overflow-hidden border border-emerald-900/10 shadow-2xl bg-emerald-50"
       >
-        <img
-          src="/images/quran-teachers.webp"
-          onerror="this.onerror=null;this.style.display='none';"
+        <Image
+          src={teachersImg}
           alt="Dedicated Male and Female Quran Instructors"
           class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
           loading="lazy"
