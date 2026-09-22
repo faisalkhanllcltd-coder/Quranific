@@ -84,6 +84,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     pathname === '/getting-started/success/';
 
   // Explicit match for dynamic routes whose content is identical for all visitors
+  // Verified: courses/[slug] HTML is currency/geo-independent; PricingCalculator hydrates and fetches /api/geo-currency purely client-side
   const isCacheableRoute =
     !isExplicitlyNotCacheable &&
     (pathname === '/' || /^\/courses\/[a-z0-9-]+(?:\/)?$/i.test(pathname));
