@@ -29,6 +29,10 @@ interface Env {
   // JWT signing secret
   JWT_SECRET: string;
 
+  // Internal worker secrets
+  ALARM_ADMIN_TOKEN?: string;
+  INTERNAL_WORKER_SECRET?: string;
+
   // Site configuration
   SITE: string;
 

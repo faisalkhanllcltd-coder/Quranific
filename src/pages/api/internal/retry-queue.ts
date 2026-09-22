@@ -55,16 +55,39 @@ function normalizeStep1Data(raw: Record<string, unknown>, leadId: string): Step1
   };
 }
 
+async function timingSafeEqual(a: string, b: string): Promise<boolean> {
+  const encoder = new TextEncoder();
+  const aBuf = await crypto.subtle.digest('SHA-256', encoder.encode(a));
+  const bBuf = await crypto.subtle.digest('SHA-256', encoder.encode(b));
+  const aBytes = new Uint8Array(aBuf);
+  const bBytes = new Uint8Array(bBuf);
+  let diff = 0;
+  for (let i = 0; i < aBytes.length; i++) {
+    diff |= aBytes[i] ^ bBytes[i];
+  }
+  return diff === 0;
+}
+
 export const POST: APIRoute = async (context) => {
   try {
-    const authHeader = context.request.headers.get('Authorization');
+    const authHeader = context.request.headers.get('Authorization') || '';
     const runtimeEnv = env as Record<string, unknown>;
-    const jwtSecret = runtimeEnv.JWT_SECRET as string;
+    const internalWorkerSecret = runtimeEnv.INTERNAL_WORKER_SECRET as string | undefined;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string | undefined;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
     const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
 
-    // Validate pre-shared Bearer secret
-    if (!jwtSecret || authHeader !== `Bearer ${jwtSecret}`) {
+    // Validate pre-shared Bearer secret using constant-time comparison
+    let authorized = false;
+    if (internalWorkerSecret) {
+      authorized = await timingSafeEqual(authHeader, `Bearer ${internalWorkerSecret}`);
+    }
+    // TODO(remove after both workers redeployed with new secret)
+    if (!authorized && jwtSecret) {
+      authorized = await timingSafeEqual(authHeader, `Bearer ${jwtSecret}`);
+    }
+
+    if (!authorized) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' },
@@ -274,12 +297,23 @@ export const POST: APIRoute = async (context) => {
 
 export const GET: APIRoute = async (context) => {
   try {
-    const authHeader = context.request.headers.get('Authorization');
+    const authHeader = context.request.headers.get('Authorization') || '';
     const runtimeEnv = env as Record<string, unknown>;
-    const jwtSecret = runtimeEnv.JWT_SECRET as string;
+    const internalWorkerSecret = runtimeEnv.INTERNAL_WORKER_SECRET as string | undefined;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string | undefined;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
 
-    if (!jwtSecret || authHeader !== `Bearer ${jwtSecret}`) {
+    // Validate pre-shared Bearer secret using constant-time comparison
+    let authorized = false;
+    if (internalWorkerSecret) {
+      authorized = await timingSafeEqual(authHeader, `Bearer ${internalWorkerSecret}`);
+    }
+    // TODO(remove after both workers redeployed with new secret)
+    if (!authorized && jwtSecret) {
+      authorized = await timingSafeEqual(authHeader, `Bearer ${jwtSecret}`);
+    }
+
+    if (!authorized) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' },
