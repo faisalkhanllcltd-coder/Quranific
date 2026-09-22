@@ -119,6 +119,7 @@ export const FOOTER_NAVIGATION = {
     { label: 'Contact', href: '/contact' },
     { label: 'Testimonials', href: '/testimonials' },
     { label: 'Portals', href: '/portals' },
+    { label: 'Safeguarding', href: '/safeguarding' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/legal/privacy' },
