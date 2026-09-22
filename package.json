@@ -19,6 +19,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "deploy": "npm run build && wrangler deploy",
+    "deploy:prod": "node scripts/deploy-guard.mjs && npm run check && npm run build && wrangler deploy",
     "test:e2e": "playwright test",
     "test:smoke": "node scripts/smoke-test.mjs",
     "prepare": "husky"
