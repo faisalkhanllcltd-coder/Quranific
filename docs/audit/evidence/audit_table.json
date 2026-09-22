@@ -1,0 +1,135 @@
+[
+  {
+    "name": "@cloudflare/vite-plugin",
+    "severity": "high",
+    "range": "<=0.0.0-fff677e35 || 1.2.3 - 1.54.6",
+    "fixAvailable": true,
+    "directOrTrans": "transitive",
+    "location": "transitive",
+    "ghsas": [
+      {
+        "id": "via miniflare",
+        "url": "",
+        "title": "via miniflare",
+        "severity": "high",
+        "range": "<=0.0.0-fff677e35 || 1.2.3 - 1.54.6"
+      },
+      {
+        "id": "via wrangler",
+        "url": "",
+        "title": "via wrangler",
+        "severity": "high",
+        "range": "<=0.0.0-fff677e35 || 1.2.3 - 1.54.6"
+      }
+    ]
+  },
+  {
+    "name": "astro",
+    "severity": "critical",
+    "range": "<=7.2.7",
+    "fixAvailable": true,
+    "directOrTrans": "direct",
+    "location": "dependencies",
+    "ghsas": [
+      {
+        "id": "GHSA-26w7-cxv4-gfx2",
+        "url": "https://github.com/advisories/GHSA-26w7-cxv4-gfx2",
+        "title": "Astro: Remote code execution through AVIF image optimization",
+        "severity": "critical",
+        "range": "<7.2.8"
+      },
+      {
+        "id": "GHSA-376h-93r7-7g6f",
+        "url": "https://github.com/advisories/GHSA-376h-93r7-7g6f",
+        "title": "Astro: Authorization bypass from missing path-segment boundary check when stripping the configured base",
+        "severity": "moderate",
+        "range": "<=7.2.3"
+      }
+    ]
+  },
+  {
+    "name": "devalue",
+    "severity": "moderate",
+    "range": "<5.9.1",
+    "fixAvailable": true,
+    "directOrTrans": "transitive",
+    "location": "transitive",
+    "ghsas": [
+      {
+        "id": "GHSA-9rgm-9g3h-6x36",
+        "url": "https://github.com/advisories/GHSA-9rgm-9g3h-6x36",
+        "title": "Svelte devalue: DoS via malformed input",
+        "severity": "moderate",
+        "range": "<5.9.1"
+      }
+    ]
+  },
+  {
+    "name": "js-yaml",
+    "severity": "high",
+    "range": "4.0.0 - 4.3.1",
+    "fixAvailable": true,
+    "directOrTrans": "transitive",
+    "location": "transitive",
+    "ghsas": [
+      {
+        "id": "GHSA-2883-xcg3-v3hh",
+        "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+        "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+        "severity": "high",
+        "range": ">=4.0.0 <4.3.2"
+      }
+    ]
+  },
+  {
+    "name": "miniflare",
+    "severity": "high",
+    "range": "<=0.0.0-fec45ed61 || 4.20250508.3 - 5.20260908.0-alpha",
+    "fixAvailable": true,
+    "directOrTrans": "transitive",
+    "location": "transitive",
+    "ghsas": [
+      {
+        "id": "via sharp",
+        "url": "",
+        "title": "via sharp",
+        "severity": "high",
+        "range": "<=0.0.0-fec45ed61 || 4.20250508.3 - 5.20260908.0-alpha"
+      }
+    ]
+  },
+  {
+    "name": "sharp",
+    "severity": "high",
+    "range": "<0.35.4",
+    "fixAvailable": true,
+    "directOrTrans": "transitive",
+    "location": "transitive",
+    "ghsas": [
+      {
+        "id": "GHSA-rgj7-g3m4-5g8c",
+        "url": "https://github.com/advisories/GHSA-rgj7-g3m4-5g8c",
+        "title": "sharp: Vulnerabilities in libheif: GHSA-g89c-p67h-r497 and GHSA-2jg2-4ch7-h545",
+        "severity": "high",
+        "range": "<0.35.4"
+      }
+    ]
+  },
+  {
+    "name": "wrangler",
+    "severity": "high",
+    "range": "<=0.0.0-7ae5dd357 || 4.16.0 - 4.130.0",
+    "fixAvailable": true,
+    "directOrTrans": "transitive",
+    "location": "devDependencies",
+    "ghsas": [
+      {
+        "id": "via miniflare",
+        "url": "",
+        "title": "via miniflare",
+        "severity": "high",
+        "range": "<=0.0.0-7ae5dd357 || 4.16.0 - 4.130.0"
+      }
+    ]
+  }
+]

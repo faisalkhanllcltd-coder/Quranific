@@ -1,0 +1,167 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@cloudflare/vite-plugin": {
+      "name": "@cloudflare/vite-plugin",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["miniflare", "wrangler"],
+      "effects": [],
+      "range": "<=0.0.0-fff677e35 || 1.2.3 - 1.54.6",
+      "nodes": ["node_modules/@cloudflare/vite-plugin"],
+      "fixAvailable": true
+    },
+    "astro": {
+      "name": "astro",
+      "severity": "critical",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1193723,
+          "name": "astro",
+          "dependency": "astro",
+          "title": "Astro: Remote code execution through AVIF image optimization",
+          "url": "https://github.com/advisories/GHSA-26w7-cxv4-gfx2",
+          "severity": "critical",
+          "cwe": ["CWE-125", "CWE-787"],
+          "cvss": {
+            "score": 9.8,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+          },
+          "range": "<7.2.8"
+        },
+        {
+          "source": 1193724,
+          "name": "astro",
+          "dependency": "astro",
+          "title": "Astro: Authorization bypass from missing path-segment boundary check when stripping the configured base",
+          "url": "https://github.com/advisories/GHSA-376h-93r7-7g6f",
+          "severity": "moderate",
+          "cwe": ["CWE-187"],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=7.2.3"
+        }
+      ],
+      "effects": [],
+      "range": "<=7.2.7",
+      "nodes": ["node_modules/astro"],
+      "fixAvailable": true
+    },
+    "devalue": {
+      "name": "devalue",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1237790,
+          "name": "devalue",
+          "dependency": "devalue",
+          "title": "Svelte devalue: DoS via malformed input",
+          "url": "https://github.com/advisories/GHSA-9rgm-9g3h-6x36",
+          "severity": "moderate",
+          "cwe": ["CWE-770"],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+          },
+          "range": "<5.9.1"
+        }
+      ],
+      "effects": [],
+      "range": "<5.9.1",
+      "nodes": ["node_modules/devalue"],
+      "fixAvailable": true
+    },
+    "js-yaml": {
+      "name": "js-yaml",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1193727,
+          "name": "js-yaml",
+          "dependency": "js-yaml",
+          "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+          "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+          "severity": "high",
+          "cwe": ["CWE-400", "CWE-407"],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=4.0.0 <4.3.2"
+        }
+      ],
+      "effects": [],
+      "range": "4.0.0 - 4.3.1",
+      "nodes": ["node_modules/js-yaml"],
+      "fixAvailable": true
+    },
+    "miniflare": {
+      "name": "miniflare",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["sharp"],
+      "effects": ["@cloudflare/vite-plugin", "wrangler"],
+      "range": "<=0.0.0-fec45ed61 || 4.20250508.3 - 5.20260908.0-alpha",
+      "nodes": ["node_modules/miniflare"],
+      "fixAvailable": true
+    },
+    "sharp": {
+      "name": "sharp",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1193725,
+          "name": "sharp",
+          "dependency": "sharp",
+          "title": "sharp: Vulnerabilities in libheif: GHSA-g89c-p67h-r497 and GHSA-2jg2-4ch7-h545",
+          "url": "https://github.com/advisories/GHSA-rgj7-g3m4-5g8c",
+          "severity": "high",
+          "cwe": ["CWE-122"],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<0.35.4"
+        }
+      ],
+      "effects": ["miniflare"],
+      "range": "<0.35.4",
+      "nodes": ["node_modules/sharp"],
+      "fixAvailable": true
+    },
+    "wrangler": {
+      "name": "wrangler",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["miniflare"],
+      "effects": ["@cloudflare/vite-plugin"],
+      "range": "<=0.0.0-7ae5dd357 || 4.16.0 - 4.130.0",
+      "nodes": ["node_modules/@cloudflare/vite-plugin/node_modules/wrangler"],
+      "fixAvailable": true
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 1,
+      "high": 5,
+      "critical": 1,
+      "total": 7
+    },
+    "dependencies": {
+      "prod": 268,
+      "dev": 213,
+      "optional": 218,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 696
+    }
+  }
+}

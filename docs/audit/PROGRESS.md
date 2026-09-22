@@ -1,6 +1,7 @@
 # Audit Progress Tracker
 
 ## Status
+
 - **P0 Baseline**: Completed (audited commit `c3ab2ce`, uncommitted diffs recorded, package versions verified, routes/components/bindings catalogued)
 - **P1 Ledger of the Draft**: Completed (157 draft rows catalogued, discrepancies noted)
 - **P2 Fetch Official Docs**: Completed (Cloudflare Workers Static Assets, CDN-Cache-Control, Platform Limits, Observability, Meta Graph API, Resend, Astro 7, Svelte 5 official docs fetched)
@@ -22,8 +23,7 @@
   - D10 Alarm-Worker: Documented `/force-run` public reachability, JWT secret reuse, and non-constant-time auth.
   - D11 Endpoint Matrix: 8 endpoints catalogued with fail-open lines and KV PII citations.
   - D12 Caching: Measured zero edge caching on SSR `/`; proposed prerendering `/`.
-  - D13 /_image: Verified 0 live images depend on broken endpoint.
+  - D13 /\_image: Verified 0 live images depend on broken endpoint.
   - D14 Delegation: Replaced dashboard paths with read-only CLI commands (`curl.exe` with `$env:CF_API_TOKEN`, `gh api`).
   - D15 Hygiene: Unlinked junction and cleaned temporary export.
   - D16 Rebuild: Reran `_recount.mjs` (185 rows, 113 DONE, 40 PARTIAL, 12 MISSING, 9 NA, 11 UNVERIFIED); fixed percentage arithmetic (Svelte 29/36 = 80.6%); rebuilt master report and revision log.
-

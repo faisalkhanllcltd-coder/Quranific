@@ -1,0 +1,37 @@
+src/components/blocks/CookieBanner.svelte:104:error:Conversion of type 'Window & typeof globalThis' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/components/blocks/CookieBanner.svelte:183:error:Conversion of type 'Window & typeof globalThis' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/components/blocks/CookieBanner.svelte:190:error:Conversion of type 'Window & typeof globalThis' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/components/blocks/PricingCalculator.svelte:70:warning:This reference only captures the initial value of `initialCourseSlug`. Did you mean to reference it inside a derived instead?
+src/components/blocks/PricingCalculator.svelte:71:warning:This reference only captures the initial value of `initialCourseSlug`. Did you mean to reference it inside a derived instead?
+src/components/blocks/PricingCalculator.svelte:88:error:Property 'currency' does not exist on type '{}'. (ts)
+src/components/blocks/PricingCalculator.svelte:89:error:Property 'currency' does not exist on type '{}'. (ts)
+src/components/blocks/PricingCalculator.svelte:91:error:Property 'country' does not exist on type '{}'. (ts)
+src/components/blocks/PricingCalculator.svelte:91:error:Property 'country' does not exist on type '{}'. (ts)
+src/components/blocks/PricingCalculator.svelte:92:error:Property 'country' does not exist on type '{}'. (ts)
+src/components/blocks/PricingCalculator.svelte:139:error:Conversion of type 'Window & typeof globalThis' to type 'Window & { dataLayer: unknown[]; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/components/blocks/PricingCalculator.svelte:158:error:Conversion of type 'Window & typeof globalThis' to type 'Window & { dataLayer: unknown[]; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/pages/getting-started/_components/CompleteForm.svelte:183:warning:A form label must be associated with a control
+src/pages/getting-started/_components/CompleteForm.svelte:208:warning:A form label must be associated with a control
+src/pages/getting-started/_components/CompleteForm.svelte:231:warning:A form label must be associated with a control
+src/pages/getting-started/_components/CompleteForm.svelte:259:warning:A form label must be associated with a control
+src/pages/getting-started/_components/CompleteForm.svelte:284:warning:A form label must be associated with a control
+src/pages/getting-started/_components/CompleteForm.svelte:307:warning:A form label must be associated with a control
+src/pages/getting-started/_components/CompleteForm.svelte:332:warning:A form label must be associated with a control
+src/pages/getting-started/_components/CompleteForm.svelte:354:warning:A form label must be associated with a control
+src/pages/getting-started/_components/CompleteForm.svelte:139:error:'result' is of type 'unknown'. (ts)
+src/pages/getting-started/_components/SignupForm.svelte:146:error:Property 'country' does not exist on type '{}'. (ts)
+src/pages/getting-started/_components/SignupForm.svelte:146:error:Property 'country' does not exist on type '{}'. (ts)
+src/pages/getting-started/_components/SignupForm.svelte:147:error:Property 'country' does not exist on type '{}'. (ts)
+src/pages/getting-started/_components/SignupForm.svelte:214:error:'result' is of type 'unknown'. (ts)
+src/pages/getting-started/_components/SignupForm.svelte:229:error:'result' is of type 'unknown'. (ts)
+src/pages/teachers/_components/TeacherStep1.svelte:17:warning:A form label must be associated with a control
+src/pages/teachers/_components/TeacherStep1.svelte:44:warning:A form label must be associated with a control
+src/pages/teachers/_components/TeacherStep1.svelte:72:warning:A form label must be associated with a control
+src/pages/teachers/_components/TeacherStep1.svelte:106:warning:A form label must be associated with a control
+src/pages/teachers/_components/TeacherStep1.svelte:133:warning:A form label must be associated with a control
+src/pages/tuition-fee/_components/PricingGrid.svelte:21:error:Property 'currency' does not exist on type '{}'. (ts)
+src/pages/tuition-fee/_components/PricingGrid.svelte:22:error:Property 'currency' does not exist on type '{}'. (ts)
+src/pages/tuition-fee/_components/PricingGrid.svelte:24:error:Property 'country' does not exist on type '{}'. (ts)
+src/pages/tuition-fee/_components/PricingGrid.svelte:24:error:Property 'country' does not exist on type '{}'. (ts)
+src/pages/tuition-fee/_components/PricingGrid.svelte:25:error:Property 'country' does not exist on type '{}'. (ts)
+tsconfig.json:10:warning:Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.

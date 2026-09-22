@@ -1,0 +1,372 @@
+{
+  "existing": [
+    {
+      "item": "AboutTeam.astro",
+      "exists": true,
+      "resolvedPath": "src/pages/about/_components/AboutTeam.astro",
+      "files": "00-MASTER-REPORT.md, 04-adjacent.md"
+    },
+    {
+      "item": "Base.astro",
+      "exists": true,
+      "resolvedPath": "src/layouts/Base.astro",
+      "files": "00-MASTER-REPORT.md, 01-cloudflare.md, 02-astro.md, 03-svelte.md, 04-adjacent.md"
+    },
+    {
+      "item": "CompleteForm.svelte",
+      "exists": true,
+      "resolvedPath": "src/pages/getting-started/_components/CompleteForm.svelte",
+      "files": "03-svelte.md, 04-adjacent.md"
+    },
+    {
+      "item": "CookieBanner.svelte",
+      "exists": true,
+      "resolvedPath": "src/components/blocks/CookieBanner.svelte",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "CourseHero.astro",
+      "exists": true,
+      "resolvedPath": "src/pages/courses/_components/CourseHero.astro",
+      "files": "04-adjacent.md"
+    },
+    {
+      "item": "Header.astro",
+      "exists": true,
+      "resolvedPath": "src/components/global/Header.astro",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "PricingCalculator.svelte",
+      "exists": true,
+      "resolvedPath": "src/components/blocks/PricingCalculator.svelte",
+      "files": "00-MASTER-REPORT.md, 03-svelte.md"
+    },
+    {
+      "item": "PricingGrid.svelte",
+      "exists": true,
+      "resolvedPath": "src/pages/tuition-fee/_components/PricingGrid.svelte",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "SignupForm.svelte",
+      "exists": true,
+      "resolvedPath": "src/pages/getting-started/_components/SignupForm.svelte",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "StepIndicator.svelte",
+      "exists": true,
+      "resolvedPath": "src/pages/getting-started/_components/StepIndicator.svelte",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "TeacherApplicationForm.svelte",
+      "exists": true,
+      "resolvedPath": "src/pages/teachers/_components/TeacherApplicationForm.svelte",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "TeacherStep1.svelte",
+      "exists": true,
+      "resolvedPath": "src/pages/teachers/_components/TeacherStep1.svelte",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "TeacherStep2.svelte",
+      "exists": true,
+      "resolvedPath": "src/pages/teachers/_components/TeacherStep2.svelte",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "TeachersIjazah.astro",
+      "exists": true,
+      "resolvedPath": "src/pages/teachers/_components/TeachersIjazah.astro",
+      "files": "04-adjacent.md"
+    },
+    {
+      "item": "alarm-worker/src/index.ts",
+      "exists": true,
+      "resolvedPath": "alarm-worker/src/index.ts",
+      "files": "00-MASTER-REPORT.md, 01-cloudflare.md"
+    },
+    {
+      "item": "alarm-worker/wrangler.toml",
+      "exists": true,
+      "resolvedPath": "alarm-worker/wrangler.toml",
+      "files": "00-MASTER-REPORT.md, 01-cloudflare.md"
+    },
+    {
+      "item": "public/_headers",
+      "exists": true,
+      "resolvedPath": "public/_headers",
+      "files": "00-MASTER-REPORT.md, 01-cloudflare.md, 02-astro.md"
+    },
+    {
+      "item": "public/llms.txt",
+      "exists": true,
+      "resolvedPath": "public/llms.txt",
+      "files": "04-adjacent.md"
+    },
+    {
+      "item": "src/components/blocks/",
+      "exists": true,
+      "resolvedPath": "src/components/blocks/",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "src/components/blocks/PricingCalculator.svelte",
+      "exists": true,
+      "resolvedPath": "src/components/blocks/PricingCalculator.svelte",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "src/constants/site.ts",
+      "exists": true,
+      "resolvedPath": "src/constants/site.ts",
+      "files": "00-MASTER-REPORT.md, 04-adjacent.md"
+    },
+    {
+      "item": "src/content.config.ts",
+      "exists": true,
+      "resolvedPath": "src/content.config.ts",
+      "files": "02-astro.md"
+    },
+    {
+      "item": "src/env.d.ts",
+      "exists": true,
+      "resolvedPath": "src/env.d.ts",
+      "files": "01-cloudflare.md, 02-astro.md, 04-adjacent.md"
+    },
+    {
+      "item": "src/layouts/Base.astro",
+      "exists": true,
+      "resolvedPath": "src/layouts/Base.astro",
+      "files": "00-MASTER-REPORT.md, 01-cloudflare.md, 02-astro.md, 03-svelte.md, 04-adjacent.md"
+    },
+    {
+      "item": "src/lib/",
+      "exists": true,
+      "resolvedPath": "src/lib/",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "src/lib/email.ts",
+      "exists": true,
+      "resolvedPath": "src/lib/email.ts",
+      "files": "04-adjacent.md"
+    },
+    {
+      "item": "src/lib/schema.ts",
+      "exists": true,
+      "resolvedPath": "src/lib/schema.ts",
+      "files": "04-adjacent.md"
+    },
+    {
+      "item": "src/middleware.ts",
+      "exists": true,
+      "resolvedPath": "src/middleware.ts",
+      "files": "00-MASTER-REPORT.md, 01-cloudflare.md, 02-astro.md, 04-adjacent.md"
+    },
+    {
+      "item": "src/pages/",
+      "exists": true,
+      "resolvedPath": "src/pages/",
+      "files": "03-svelte.md, 04-adjacent.md"
+    },
+    {
+      "item": "src/pages/404.astro",
+      "exists": true,
+      "resolvedPath": "src/pages/404.astro",
+      "files": "01-cloudflare.md"
+    },
+    {
+      "item": "src/pages/500.astro",
+      "exists": true,
+      "resolvedPath": "src/pages/500.astro",
+      "files": "01-cloudflare.md"
+    },
+    {
+      "item": "src/pages/about/_components/AboutTeam.astro",
+      "exists": true,
+      "resolvedPath": "src/pages/about/_components/AboutTeam.astro",
+      "files": "00-MASTER-REPORT.md, 04-adjacent.md"
+    },
+    {
+      "item": "src/pages/api/",
+      "exists": true,
+      "resolvedPath": "src/pages/api/",
+      "files": "01-cloudflare.md"
+    },
+    {
+      "item": "src/pages/api/complete.ts",
+      "exists": true,
+      "resolvedPath": "src/pages/api/complete.ts",
+      "files": "00-MASTER-REPORT.md, 04-adjacent.md"
+    },
+    {
+      "item": "src/pages/api/consent-bucket.ts",
+      "exists": true,
+      "resolvedPath": "src/pages/api/consent-bucket.ts",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "src/pages/api/contact.ts",
+      "exists": true,
+      "resolvedPath": "src/pages/api/contact.ts",
+      "files": "04-adjacent.md"
+    },
+    {
+      "item": "src/pages/api/internal/retry-queue.ts",
+      "exists": true,
+      "resolvedPath": "src/pages/api/internal/retry-queue.ts",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "src/pages/api/newsletter.ts",
+      "exists": true,
+      "resolvedPath": "src/pages/api/newsletter.ts",
+      "files": "00-MASTER-REPORT.md, 04-adjacent.md"
+    },
+    {
+      "item": "src/pages/api/register.ts",
+      "exists": true,
+      "resolvedPath": "src/pages/api/register.ts",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "src/pages/courses/",
+      "exists": true,
+      "resolvedPath": "src/pages/courses/",
+      "files": "00-MASTER-REPORT.md, 02-astro.md, 03-svelte.md"
+    },
+    {
+      "item": "src/pages/getting-started/_components/",
+      "exists": true,
+      "resolvedPath": "src/pages/getting-started/_components/",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "src/pages/getting-started/complete.astro",
+      "exists": true,
+      "resolvedPath": "src/pages/getting-started/complete.astro",
+      "files": "00-MASTER-REPORT.md, 01-cloudflare.md, 02-astro.md"
+    },
+    {
+      "item": "src/pages/getting-started/signup.astro",
+      "exists": true,
+      "resolvedPath": "src/pages/getting-started/signup.astro",
+      "files": "02-astro.md, 03-svelte.md, 04-adjacent.md"
+    },
+    {
+      "item": "src/pages/index.astro",
+      "exists": true,
+      "resolvedPath": "src/pages/index.astro",
+      "files": "00-MASTER-REPORT.md, 02-astro.md, 03-svelte.md, 04-adjacent.md"
+    },
+    {
+      "item": "src/pages/robots.txt.ts",
+      "exists": true,
+      "resolvedPath": "src/pages/robots.txt.ts",
+      "files": "02-astro.md"
+    },
+    {
+      "item": "src/pages/teachers/_components/",
+      "exists": true,
+      "resolvedPath": "src/pages/teachers/_components/",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "src/pages/tuition-fee/index.astro",
+      "exists": true,
+      "resolvedPath": "src/pages/tuition-fee/index.astro",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "src/styles/fonts.css",
+      "exists": true,
+      "resolvedPath": "src/styles/fonts.css",
+      "files": "02-astro.md"
+    },
+    {
+      "item": "src/styles/global.css",
+      "exists": true,
+      "resolvedPath": "src/styles/global.css",
+      "files": "02-astro.md, 04-adjacent.md"
+    }
+  ],
+  "missing": [
+    {
+      "item": "AudioPlayer.svelte",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "ConsentBanner.svelte",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "ContactForm.svelte",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "HeroStudentFeedback.svelte",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "TeacherStep3.svelte",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "TeacherStepIndicator.svelte",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "03-svelte.md"
+    },
+    {
+      "item": "TrialBookingModal.svelte",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "src/components/layout/Header.astro",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "src/lib/capi.ts",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "src/lib/csrf.ts",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "src/lib/email-service.ts",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "00-MASTER-REPORT.md"
+    },
+    {
+      "item": "src/lib/security.ts",
+      "exists": false,
+      "resolvedPath": "",
+      "files": "02-astro.md"
+    }
+  ]
+}
