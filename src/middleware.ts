@@ -70,6 +70,41 @@ export const onRequest = defineMiddleware(async (context, next) => {
     });
   }
 
+  // ─── Real Edge Caching for Dynamic Routes (Batch D) ───────────────────────
+  const pathname = url.pathname;
+  const isGet = context.request.method === 'GET';
+
+  // Explicit skip for NOT-CACHEABLE routes (onboarding steps, API, non-GET)
+  const isExplicitlyNotCacheable =
+    !isGet ||
+    pathname.startsWith('/api/') ||
+    pathname === '/getting-started/complete' ||
+    pathname === '/getting-started/complete/' ||
+    pathname === '/getting-started/success' ||
+    pathname === '/getting-started/success/';
+
+  // Explicit match for dynamic routes whose content is identical for all visitors
+  const isCacheableRoute =
+    !isExplicitlyNotCacheable &&
+    (pathname === '/' || /^\/courses\/[a-z0-9-]+(?:\/)?$/i.test(pathname));
+
+  const cache =
+    typeof caches !== 'undefined'
+      ? ((caches as unknown as { default?: Cache }).default ?? null)
+      : null;
+  const cacheKey = isCacheableRoute ? new Request(url.toString(), context.request) : null;
+
+  if (cache && cacheKey) {
+    try {
+      const cachedResponse = await cache.match(cacheKey);
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+    } catch {
+      // Fail open: proceed with dynamic rendering on cache lookup error
+    }
+  }
+
   // ─── LOCAL/DEV: geo override via request headers ──────────────────────────
   // Allows integration-testing / smoke-testing /api/consent-bucket with specific
   // country/region values without a Cloudflare edge deployment.
@@ -127,6 +162,28 @@ export const onRequest = defineMiddleware(async (context, next) => {
         'CDN-Cache-Control',
         'public, max-age=3600, stale-while-revalidate=86400'
       );
+    }
+  }
+
+  // ─── Cache Store for Cacheable Dynamic Routes (Batch D) ───────────────────
+  if (
+    cache &&
+    cacheKey &&
+    !isExplicitlyNotCacheable &&
+    response.status === 200 &&
+    !response.headers.has('Set-Cookie')
+  ) {
+    try {
+      const responseToCache = response.clone();
+      const putPromise = cache.put(cacheKey, responseToCache);
+      const cfContext = (context.locals as { cfContext?: ExecutionContext }).cfContext;
+      if (cfContext?.waitUntil) {
+        cfContext.waitUntil(putPromise);
+      } else {
+        await putPromise;
+      }
+    } catch {
+      // Fail open: return the generated response even if cache.put fails
     }
   }
 
