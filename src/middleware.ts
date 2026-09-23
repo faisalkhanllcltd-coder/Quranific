@@ -74,20 +74,19 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const pathname = url.pathname;
   const isGet = context.request.method === 'GET';
 
-  // Explicit skip for NOT-CACHEABLE routes (onboarding steps, API, non-GET)
+  // Explicit skip for NOT-CACHEABLE routes (onboarding steps, API, non-GET, static prerendered content)
   const isExplicitlyNotCacheable =
     !isGet ||
     pathname.startsWith('/api/') ||
+    pathname.startsWith('/courses/') ||
     pathname === '/getting-started/complete' ||
     pathname === '/getting-started/complete/' ||
     pathname === '/getting-started/success' ||
     pathname === '/getting-started/success/';
 
   // Explicit match for dynamic routes whose content is identical for all visitors
-  // Verified: courses/[slug] HTML is currency/geo-independent; PricingCalculator hydrates and fetches /api/geo-currency purely client-side
-  const isCacheableRoute =
-    !isExplicitlyNotCacheable &&
-    (pathname === '/' || /^\/courses\/[a-z0-9-]+(?:\/)?$/i.test(pathname));
+  // Note: /courses/[slug] is now prerendered static HTML (Batch G); only homepage '/' remains dynamic Cache-API-cached
+  const isCacheableRoute = !isExplicitlyNotCacheable && pathname === '/';
 
   const cache =
     typeof caches !== 'undefined'
