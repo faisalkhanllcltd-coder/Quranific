@@ -95,7 +95,21 @@ export const POST: APIRoute = async (context) => {
       cursor = listRes.list_complete ? undefined : listRes.cursor;
     } while (cursor);
 
-    for (const key of allKeys) {
+    // CIRCUIT BREAKER SETTINGS
+    const MAX_BATCH_SIZE = 15;
+    const MAX_CONSECUTIVE_FAILURES = 3;
+    let consecutiveFailures = 0;
+    let circuitBreakerTripped = false;
+
+    // Isolate batch to protect Resend free-tier quota
+    const keysToProcess = allKeys.slice(0, MAX_BATCH_SIZE);
+
+    for (const key of keysToProcess) {
+      if (circuitBreakerTripped) {
+        console.warn(`[Retry-Queue] Circuit breaker tripped. Skipping remaining key: ${key.name}`);
+        break;
+      }
+
       const dataStr = await kv.get(key.name);
       if (!dataStr) continue;
 
@@ -230,20 +244,30 @@ export const POST: APIRoute = async (context) => {
             timestamp: new Date().toISOString(),
           });
           recoveredCount++;
+          consecutiveFailures = 0; // Reset breaker on success
         }
       } catch (err) {
         console.error(`[Retry-Queue] Processing failed for key ${key.name}:`, err);
         failedKeys.push({ name: key.name, error: String(err) });
-        // Crucial: leave the key intact in KV so subsequent cron cycles retry it!
+
+        consecutiveFailures++;
+        if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
+          circuitBreakerTripped = true;
+          console.error(
+            '[Retry-Queue] CRITICAL: Maximum consecutive failures reached. Circuit breaker engaged.'
+          );
+        }
       }
     }
 
-    if (recoveredCount > 0 && runtimeEnv.ALERT_WEBHOOK_URL) {
+    if ((recoveredCount > 0 || circuitBreakerTripped) && runtimeEnv.ALERT_WEBHOOK_URL) {
+      const remainingTotal = allKeys.length - recoveredCount;
+      const breakerStatus = circuitBreakerTripped ? ' ⚠️ CIRCUIT BREAKER TRIPPED.' : '';
       await fetch(runtimeEnv.ALERT_WEBHOOK_URL as string, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `[Quranific DLQ] Recovered ${recoveredCount} failed email(s). ${failedKeys.length} still failing.`,
+          text: `[Quranific DLQ] Recovered ${recoveredCount} failed email(s). ${remainingTotal} total items remain in queue.${breakerStatus}`,
         }),
       }).catch((err: unknown) => {
         console.error('[DLQ Alert Webhook Failed]:', err);
@@ -255,6 +279,8 @@ export const POST: APIRoute = async (context) => {
         success: true,
         recovered: recoveredCount,
         failed: failedKeys.length,
+        totalRemaining: allKeys.length - recoveredCount,
+        circuitBreakerTripped,
         dispatches: dispatches.length > 0 ? dispatches : undefined,
         failedDetails: failedKeys.length > 0 ? failedKeys : undefined,
       }),
