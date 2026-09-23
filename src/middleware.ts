@@ -157,11 +157,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
       response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
     }
     if (!response.headers.has('CDN-Cache-Control')) {
-      // Tells Cloudflare to cache the SSR render for 1 hour at the edge nodes
-      response.headers.set(
-        'CDN-Cache-Control',
-        'public, max-age=3600, stale-while-revalidate=86400'
-      );
+      // Tells Cloudflare to cache the dynamic SSR render for 5 minutes at the edge nodes.
+      // Balances edge performance during traffic spikes against rapid staleness invalidation on new deploys.
+      response.headers.set('CDN-Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
     }
   }
 
