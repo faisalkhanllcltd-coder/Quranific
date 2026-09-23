@@ -42,8 +42,8 @@
   --color-purple-700: #7e22ce;
 
   /* THE 3-FONT ARCHITECTURE */
-  --font-sans: 'Inter Variable', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Merriweather', 'Merriweather Fallback', Georgia, serif;
+  --font-sans: 'Inter Variable', 'Amiri', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Merriweather', 'Amiri', 'Merriweather Fallback', Georgia, serif;
   --font-arabic: 'Amiri', 'Traditional Arabic', serif;
 }
 
