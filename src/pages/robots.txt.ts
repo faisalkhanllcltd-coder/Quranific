@@ -2,6 +2,8 @@
 import type { APIRoute } from 'astro';
 import { SITE } from '../constants/site';
 
+export const prerender = true;
+
 export const GET: APIRoute = () => {
   const robotsTxt = `
 User-agent: *
