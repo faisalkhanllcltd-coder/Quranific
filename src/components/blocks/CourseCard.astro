@@ -3,6 +3,7 @@
 import type { Course } from '../../constants/courses';
 import MicroTag from '../ui/MicroTag.astro';
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   course: Course;
@@ -11,10 +12,9 @@ interface Props {
 const { course, isPriority = false } = Astro.props;
 
 // Build-time glob: resolves all course images at compile time, eliminating runtime fallbacks
-const courseImages = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/images/*.webp',
-  { eager: true }
-);
+const courseImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*.webp', {
+  eager: true,
+});
 
 const targetPath = `/src/assets/images/${course.slug}.webp`;
 const fallbackPath = '/src/assets/images/basic-qaida.webp';
@@ -81,7 +81,7 @@ const getPrefix = (slug: string) => {
 
     {
       course.cardHook && (
-        <p class="text-[13px] font-bold text-gold-600 mb-2.5 tracking-wide">{course.cardHook}</p>
+        <p class="text-[13px] font-bold text-gold-700 mb-2.5 tracking-wide">{course.cardHook}</p>
       )
     }
 

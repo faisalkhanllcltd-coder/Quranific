@@ -264,7 +264,7 @@
             <div class="absolute top-0 bottom-0 right-0 w-[2px] bg-amber-400"></div>
           </div>
         {/if}
-        <div class="eyebrow-micro text-amber-600 mb-1.5 pt-1 text-left">
+        <div class="eyebrow-micro text-amber-700 mb-1.5 pt-1 text-left">
           Most families choose this
         </div>
 
