@@ -33,10 +33,9 @@ const relatedCourses = course.relatedSlugs
 const ogImageSrc = `/images/${course.slug}.webp`;
 
 // Build-time glob: resolves all course images at compile time, eliminating runtime fallbacks
-const courseImages = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/images/*.webp',
-  { eager: true }
-);
+const courseImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*.webp', {
+  eager: true,
+});
 
 const targetPath = `/src/assets/images/${course.slug}.webp`;
 const fallbackPath = '/src/assets/images/basic-qaida.webp';
@@ -51,6 +50,9 @@ jsonLdSchemas.push({
   '@type': 'Course',
   name: course.title,
   description: course.longDesc || course.shortDesc,
+  courseCode: course.slug,
+  educationalLevel: course.level,
+  inLanguage: course.instructionLanguage,
   provider: {
     '@type': 'Organization',
     name: 'Quranific',
@@ -61,13 +63,6 @@ jsonLdSchemas.push({
     '@type': 'CourseInstance',
     courseMode: 'Online',
     courseWorkload: course.duration,
-    offers: {
-      '@type': 'Offer',
-      availability: 'https://schema.org/InStock',
-      price: '40.00',
-      priceCurrency: 'USD',
-      url: `https://quranific.com/courses/${course.slug}`,
-    },
   },
 });
 
