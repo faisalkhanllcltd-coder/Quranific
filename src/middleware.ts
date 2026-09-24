@@ -74,15 +74,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const pathname = url.pathname;
   const isGet = context.request.method === 'GET';
 
+  const isSessionGatedRoute =
+    pathname === '/getting-started/complete' ||
+    pathname === '/getting-started/complete/' ||
+    pathname === '/getting-started/success' ||
+    pathname === '/getting-started/success/';
+
   // Explicit skip for NOT-CACHEABLE routes (onboarding steps, API, non-GET, static prerendered content)
   const isExplicitlyNotCacheable =
     !isGet ||
     pathname.startsWith('/api/') ||
     pathname.startsWith('/courses/') ||
-    pathname === '/getting-started/complete' ||
-    pathname === '/getting-started/complete/' ||
-    pathname === '/getting-started/success' ||
-    pathname === '/getting-started/success/';
+    isSessionGatedRoute;
 
   // Explicit match for dynamic routes whose content is identical for all visitors
   // Note: /courses/[slug] is now prerendered static HTML (Batch G); only homepage '/' remains dynamic Cache-API-cached
@@ -138,6 +141,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
   context.locals.consentBucket = getConsentBucket(userCountry, userRegionCode, hasGPC);
 
   const response = await next();
+
+  // Defense in depth: instruct search engines never to index private session-gated routes
+  if (isSessionGatedRoute) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+  }
 
   if (cf?.colo) {
     response.headers.set('X-Edge-Location', cf.colo as string);
