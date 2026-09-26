@@ -511,13 +511,31 @@ Verify the 3 UNVERIFIED sub-items (portals routing, funnel dataLayer, mobile tru
 
 ---
 
-### PT-32 — ~~UX/Code: WhatsApp Hardcoded UK Number~~ ✅ DONE
+### PT-32 — UX/Code: WhatsApp Literal String in CourseHero.astro (STILL OPEN)
 
-**C3 evidence:**  
-`Get-ChildItem -Recurse src | Get-Content | Select-String "447477"` → **zero results** across entire `src/` tree.  
-`src/constants/site.ts:12`: `whatsappLink: 'https://wa.me/message/FF4LDK3JR2GPN1'` — the business inbox click-to-chat link, not a private phone number.  
-`src/pages/courses/_components/CourseHero.astro:92`: uses `href="https://wa.me/message/FF4LDK3JR2GPN1"` — consistent with `SITE.whatsappLink`.  
-**No hardcoded `447477` phone number exists anywhere in the codebase. No action needed.**
+**Blocks going live:** NO (correct number, wrong coupling — value is duplicated rather than referenced from `SITE`)  
+**Who does it:** CODE
+
+**Evidence (re-verified 2026-09-26):**  
+Raw output of `Select-String -Path src/pages/courses/_components/CourseHero.astro -Pattern "wa.me" -Context 0,2`:
+
+```
+> src\pages\courses\_components\CourseHero.astro:92:        href="https://wa.me/message/FF4LDK3JR2GPN1"
+  src\pages\courses\_components\CourseHero.astro:93:        variant="ghostDark"
+  src\pages\courses\_components\CourseHero.astro:94:        target="_blank"
+```
+
+Line 92 is a **literal string**, not `href={SITE.whatsappLink}`. The value `FF4LDK3JR2GPN1` happens to be the correct business inbox link (matching `SITE.whatsappLink` in `src/constants/site.ts:12`), so it routes correctly today. However, if the WhatsApp link ever changes, `CourseHero.astro` will not update automatically.
+
+No hardcoded private UK phone number (`447477`) was found — `Get-ChildItem -Recurse src | Get-Content | Select-String "447477"` returned zero results. The risk is maintainability drift, not an active routing bug.
+
+**What to do:**  
+In `src/pages/courses/_components/CourseHero.astro`, import `SITE` and replace line 92:
+
+```diff
+-        href="https://wa.me/message/FF4LDK3JR2GPN1"
++        href={SITE.whatsappLink}
+```
 
 ---
 
