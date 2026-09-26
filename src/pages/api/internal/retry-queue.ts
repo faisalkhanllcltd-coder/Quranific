@@ -72,17 +72,12 @@ export const POST: APIRoute = async (context) => {
     const authHeader = context.request.headers.get('Authorization') || '';
     const runtimeEnv = env as Record<string, unknown>;
     const internalWorkerSecret = runtimeEnv.INTERNAL_WORKER_SECRET as string | undefined;
-    const jwtSecret = runtimeEnv.JWT_SECRET as string | undefined;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
     const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
 
     let authorized = false;
     if (internalWorkerSecret) {
       authorized = await timingSafeEqual(authHeader, `Bearer ${internalWorkerSecret}`);
-    }
-    // TODO(remove after both workers redeployed with new secret)
-    if (!authorized && jwtSecret) {
-      authorized = await timingSafeEqual(authHeader, `Bearer ${jwtSecret}`);
     }
 
     if (!authorized) {
@@ -288,16 +283,11 @@ export const GET: APIRoute = async (context) => {
     const authHeader = context.request.headers.get('Authorization') || '';
     const runtimeEnv = env as Record<string, unknown>;
     const internalWorkerSecret = runtimeEnv.INTERNAL_WORKER_SECRET as string | undefined;
-    const jwtSecret = runtimeEnv.JWT_SECRET as string | undefined;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
 
     let authorized = false;
     if (internalWorkerSecret) {
       authorized = await timingSafeEqual(authHeader, `Bearer ${internalWorkerSecret}`);
-    }
-    // TODO(remove after both workers redeployed with new secret)
-    if (!authorized && jwtSecret) {
-      authorized = await timingSafeEqual(authHeader, `Bearer ${jwtSecret}`);
     }
 
     if (!authorized) {
