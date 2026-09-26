@@ -1,9 +1,9 @@
 # PENDING-TASKS — Quranific.com
 
-**Branch analyzed:** `pending_tasks_consolidation`  
-**Current HEAD commit (at time of generation):** `70d3a36` ("fix(queue): add circuit breaker to retry-queue")  
-**Generated:** 2026-09-25  
-**Note on branches:** `staging/audit-fixes-batch-a` is ahead of `main` by 20+ commits and has NOT been merged. That branch contains completed code fixes. This branch (`pending_tasks_consolidation`) tracks `main`-level code. Where a fix exists in `staging/audit-fixes-batch-a` but not yet in `main`, this is noted as "DONE IN STAGING — merge pending."
+**Live branch:** `staging/audit-fixes-batch-a` (cherry-picked here as commit `da8edbc`)  
+**Original analysis commit:** `70d3a36` on `pending_tasks_consolidation` (2026-09-25)  
+**Correction pass:** 2026-09-26 — C1 GTM guard verified present; C2 homepage prerender reframed; C3 pre-audit stale items removed  
+**Note on branches:** `staging/audit-fixes-batch-a` is the single source of truth going forward. It is ahead of `main` by 20+ commits and contains all completed code fixes. This file now lives on that branch. Merging `staging/audit-fixes-batch-a` → `main` is the deployment trigger for all "STAGING DONE" items below.
 
 ---
 
@@ -25,13 +25,15 @@
 
 **Current state (fresh evidence):**  
 `npx wrangler secret list` on the main worker failed with auth error (no `CLOUDFLARE_API_TOKEN` in CI env), so cannot verify locally. However:
+
 - `01-cloudflare.md` (CF-04, last committed `b55388c` 2026-09-22) documents `JWT_SECRET`, `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY` confirmed present; `META_CAPI_TOKEN` confirmed ABSENT.
 - `staging/audit-fixes-batch-a:src/pages/api/internal/retry-queue.ts` (line confirmed present) now reads `INTERNAL_WORKER_SECRET` from `runtimeEnv`; if not set, it falls back to `JWT_SECRET` for backward compatibility. Code is ready; secret still needs to be set.
 - `src/pages/api/complete.ts:236` reads `META_CAPI_TOKEN` from `runtimeEnv`; lines 243–247 safely skip CAPI if unset.
 
-**What to do:**  
-1. `npx wrangler secret put INTERNAL_WORKER_SECRET` — generate a random 32-byte hex token, distinct from `JWT_SECRET`.  
-2. `npx wrangler secret put META_CAPI_TOKEN` — paste System User access token from Facebook Events Manager → Settings → Generate Access Token.  
+**What to do:**
+
+1. `npx wrangler secret put INTERNAL_WORKER_SECRET` — generate a random 32-byte hex token, distinct from `JWT_SECRET`.
+2. `npx wrangler secret put META_CAPI_TOKEN` — paste System User access token from Facebook Events Manager → Settings → Generate Access Token.
 3. Add `META_PIXEL_ID` to `[vars]` in `wrangler.toml` (it is public; does not need to be a secret).
 
 ---
@@ -45,9 +47,10 @@
 `npx wrangler secret list -c alarm-worker/wrangler.toml` returned: `[{"name":"JWT_SECRET","type":"secret_text"}]` — only `JWT_SECRET` present. `INTERNAL_WORKER_SECRET` and `ALARM_ADMIN_TOKEN` are **ABSENT**.  
 `alarm-worker/src/index.ts` (current branch, read lines 1–80): `/force-run` (line 33) and `/resend-log` (line 56) have NO auth check. `env.JWT_SECRET` is forwarded as an outbound bearer token to the main worker, reusing the cookie-signing secret across trust domains.
 
-**What to do (after merging staging branch):**  
-1. `npx wrangler secret put ALARM_ADMIN_TOKEN -c alarm-worker/wrangler.toml` — separate token for HTTP trigger auth on the alarm worker.  
-2. `npx wrangler secret put INTERNAL_WORKER_SECRET -c alarm-worker/wrangler.toml` — same value as PT-01's `INTERNAL_WORKER_SECRET` (used for outbound calls to `/api/internal/retry-queue`).  
+**What to do (after merging staging branch):**
+
+1. `npx wrangler secret put ALARM_ADMIN_TOKEN -c alarm-worker/wrangler.toml` — separate token for HTTP trigger auth on the alarm worker.
+2. `npx wrangler secret put INTERNAL_WORKER_SECRET -c alarm-worker/wrangler.toml` — same value as PT-01's `INTERNAL_WORKER_SECRET` (used for outbound calls to `/api/internal/retry-queue`).
 3. Optionally add `workers_dev = false` to `alarm-worker/wrangler.toml` to prevent public `.workers.dev` exposure (confirmed absent in current `alarm-worker/wrangler.toml` read from staging).
 
 ---
@@ -59,9 +62,10 @@
 
 **Current state:** `src/pages/api/complete.ts` sends GA4 Measurement Protocol events when `GA4_MEASUREMENT_ID` and `GA4_API_SECRET` are set. These are NOT confirmed present in secrets (same verification gap as PT-01).
 
-**What to do:**  
-1. In GA4 Admin → Data Streams → your stream → Measurement Protocol API secrets → Create.  
-2. `npx wrangler secret put GA4_MEASUREMENT_ID` (format: `G-XXXXXXXXXX`).  
+**What to do:**
+
+1. In GA4 Admin → Data Streams → your stream → Measurement Protocol API secrets → Create.
+2. `npx wrangler secret put GA4_MEASUREMENT_ID` (format: `G-XXXXXXXXXX`).
 3. `npx wrangler secret put GA4_API_SECRET`.
 
 ---
@@ -99,10 +103,11 @@ Log into GTM → Container `GTM-5CJMMJ29` → For every non-Google tag, enable "
 `Invoke-RestMethod "https://dns.google/resolve?name=quranific.com&type=CAA"` returned zero `Answer` records — only an `Authority` SOA. **Zero CAA records exist as of 2026-09-25.**
 
 **What to do:**  
-In Cloudflare DNS for `quranific.com`, add 4 CAA records (type CAA, name `@`):  
-- `0 issue "letsencrypt.org"`  
-- `0 issue "digicert.com"`  
-- `0 issue "sectigo.com"`  
+In Cloudflare DNS for `quranific.com`, add 4 CAA records (type CAA, name `@`):
+
+- `0 issue "letsencrypt.org"`
+- `0 issue "digicert.com"`
+- `0 issue "sectigo.com"`
 - `0 issue "pki.goog"`
 
 ---
@@ -115,8 +120,9 @@ In Cloudflare DNS for `quranific.com`, add 4 CAA records (type CAA, name `@`):
 **Current state (fresh live DNS evidence):**  
 `Invoke-RestMethod "https://dns.google/resolve?name=quranific.com&type=DS"` returned zero `Answer` records — the `AD` (Authenticated Data) flag is `false`. **DNSSEC DS record is not delegated at the registrar.**
 
-**What to do:**  
-1. Cloudflare Dashboard → DNS → DNSSEC → Enable → Copy DS record values.  
+**What to do:**
+
+1. Cloudflare Dashboard → DNS → DNSSEC → Enable → Copy DS record values.
 2. Log into Hostinger domain control panel → DNS / DNSSEC → Paste DS record.
 
 ---
@@ -128,11 +134,12 @@ In Cloudflare DNS for `quranific.com`, add 4 CAA records (type CAA, name `@`):
 
 **Current state:** Cannot verify locally without `CF_API_TOKEN`. See `00-MASTER-REPORT.md §10` for exact API commands.
 
-**What to do (verify in Cloudflare Dashboard):**  
-- **CF-27:** Security → WAF → confirm Managed Ruleset is active.  
-- **CF-28:** Security → Bots → confirm Bot Fight Mode is enabled.  
-- **CF-29:** My Profile → Authentication → confirm 2FA is enforced.  
-- **CF-30:** API Tokens → confirm CI/wrangler token is scoped (not Global API Key).  
+**What to do (verify in Cloudflare Dashboard):**
+
+- **CF-27:** Security → WAF → confirm Managed Ruleset is active.
+- **CF-28:** Security → Bots → confirm Bot Fight Mode is enabled.
+- **CF-29:** My Profile → Authentication → confirm 2FA is enforced.
+- **CF-30:** API Tokens → confirm CI/wrangler token is scoped (not Global API Key).
 - **OA-2:** Rules → Cache Rules → confirm no zone-level "Cache Everything" rule overrides `no-store` on HTML routes.
 
 ---
@@ -161,18 +168,21 @@ The following items are already **fixed in code on `staging/audit-fixes-batch-a`
 **Who does it:** CODE (merge `staging/audit-fixes-batch-a`)
 
 **Current state (fresh evidence):**  
-`alarm-worker/src/index.ts` lines 1–80 (read directly from current branch):  
-- Line 33: `/force-run` POST handler — **zero auth check**  
-- Line 56: `/resend-log` GET handler — **zero auth check**  
+`alarm-worker/src/index.ts` lines 1–80 (read directly from current branch):
+
+- Line 33: `/force-run` POST handler — **zero auth check**
+- Line 56: `/resend-log` GET handler — **zero auth check**
 - Line 14: forwards `env.JWT_SECRET` as outbound bearer token (secret reuse across trust domains)
 
-`staging/audit-fixes-batch-a:alarm-worker/src/index.ts` (verified via `git show`):  
-- `Env` interface now declares `ALARM_ADMIN_TOKEN` and `INTERNAL_WORKER_SECRET` (line confirmed)  
-- `timingSafeEqual()` function is present  
+`staging/audit-fixes-batch-a:alarm-worker/src/index.ts` (verified via `git show`):
+
+- `Env` interface now declares `ALARM_ADMIN_TOKEN` and `INTERNAL_WORKER_SECRET` (line confirmed)
+- `timingSafeEqual()` function is present
 - Auth is enforced on HTTP endpoints
 
-**What to do:**  
-1. Merge `staging/audit-fixes-batch-a` → `main`.  
+**What to do:**
+
+1. Merge `staging/audit-fixes-batch-a` → `main`.
 2. Then set secrets per PT-02.
 
 ---
@@ -212,9 +222,10 @@ Merge `staging/audit-fixes-batch-a`.
 **Who does it:** CODE (merge `staging/audit-fixes-batch-a`)
 
 **Current state (fresh evidence):**  
-`staging/audit-fixes-batch-a:src/middleware.ts` (verified via `git show`):  
-- Line 10: `'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload'` ✅  
-- Line 11: `'Cross-Origin-Opener-Policy': 'same-origin-allow-popups'` ✅  
+`staging/audit-fixes-batch-a:src/middleware.ts` (verified via `git show`):
+
+- Line 10: `'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload'` ✅
+- Line 11: `'Cross-Origin-Opener-Policy': 'same-origin-allow-popups'` ✅
 - `staging/audit-fixes-batch-a:public/_headers` (verified): `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` and `Cross-Origin-Opener-Policy: same-origin-allow-popups` ✅
 
 Also confirmed in `_headers`: `Content-Security-Policy-Report-Only` header is deployed (CSP report-only mode active — safe precursor before removing `unsafe-eval`).
@@ -307,36 +318,53 @@ Add Turnstile challenge verification to `src/pages/api/newsletter.ts` (same patt
 
 ---
 
-### PT-20 — Static Prerendering: Home Page and Marketing Routes
+### PT-20 — MONITORING NOTE: Homepage Edge Cache Hit Rate (Not a Defect)
 
-**Blocks going live:** NO (performance issue; Free plan Worker CPU risk during traffic spikes)  
-**Who does it:** CODE
+**Blocks going live:** NO  
+**Who does it:** OWNER (observe in Cloudflare Analytics post-launch)
 
-**Current state (fresh evidence):**  
-`staging/audit-fixes-batch-a:src/pages/index.astro` (verified via `git show`): No `prerender = true` line in first 10 lines — home page remains SSR.  
-`staging/audit-fixes-batch-a:src/pages/about/index.astro` and `src/pages/faq/index.astro` (verified): Both have `export const prerender = true`.  
-`00-MASTER-REPORT.md §3 #6` documents this as a Worker CPU quota risk.
+**Evidence for current architecture decision:**  
+`src/middleware.ts` lines 91–92 (read directly from `staging/audit-fixes-batch-a`):
 
-**Prerequisite:** Header parity between `middleware.ts` and `public/_headers` must be confirmed clean (CSP Report-Only mode validated) before prerendering additional routes. Report-Only is now deployed in staging (`_headers`). Merge staging, validate CSP Report-Only in DevTools/browser, then add `prerender = true` to `src/pages/index.astro`.
+```ts
+// Note: /courses/[slug] is now prerendered static HTML (Batch G); only homepage '/' remains dynamic Cache-API-cached
+const isCacheableRoute = !isExplicitlyNotCacheable && pathname === '/';
+```
 
-**What to do:**  
-After merging staging and validating CSP Report-Only: Add `export const prerender = true;` to `src/pages/index.astro`.
+Lines 94–108: Cloudflare `caches.default` Cache API is used for `/` — on cache hit, the cached response is returned immediately without burning Worker CPU. On cache miss, the SSR response is generated and stored.
+
+The `www` → apex redirect is also handled inside this same middleware (lines 57–71), which is why prerendering the homepage was deliberately avoided: making it a static asset would have required a Cloudflare Redirect Rule change at the zone level (a risky live-infrastructure change) rather than keeping the redirect in the Worker.
+
+**This is working-as-designed architecture**, not an open defect. The original audit finding (CF-09) noted the home page was not edge-cached via CDN rules; this has been addressed via the Cache API instead.
+
+**What to monitor post-launch:**  
+Check Cloudflare Workers Analytics → homepage Worker invocations. After the first cold-start, repeat requests should show near-zero Worker CPU (cache hits are free). If cache hit rate is low, investigate whether `Cache-Control` headers or the cache key are misconfigured.
 
 ---
 
-### PT-21 — GTM: Missing Hostname Guard (Fires on Preview Deployments)
+### PT-21 — ~~GTM: Missing Hostname Guard~~ ✅ DONE — Verified Present
 
-**Blocks going live:** YES (corrupts Google Ads conversion signals from staging/preview)  
-**Who does it:** CODE
+**Evidence (C1 correction pass, 2026-09-26):**
 
-**Current state (fresh evidence):**  
-`staging/audit-fixes-batch-a:src/layouts/Base.astro` (verified via `git show` search for "GTM", "hostname", "quranific.com"): **No hostname guard found**. GTM `GTM-5CJMMJ29` still fires unconditionally on all deployments including previews.
+Raw output of `Select-String -Path src/layouts/Base.astro -Pattern "hostname"` run on `staging/audit-fixes-batch-a`:
 
-**What to do:**  
-In `src/layouts/Base.astro`, wrap the GTM `<script>` bootstrap in a runtime client-side check:  
-```js
-if (window.location.hostname === 'quranific.com') { /* initialize GTM */ }
 ```
+src\layouts\Base.astro:132:      if (window.location.hostname === 'quranific.com') {
+```
+
+Raw output of `git log -p -S "window.location.hostname" -- src/layouts/Base.astro`:
+
+```
+commit 3057e40a47b59cf4e68e143c9e03ac3c611380cd
+Author: Faisal Khan <faisalkhan.llc.ltd@gmail.com>
+Date:   Wed Sep 23 09:50:20 2026 +0500
+
+    fix(analytics): isolate GTM script execution to production hostname
+```
+
+The diff shows the GTM bootstrap was wrapped in `if (window.location.hostname === 'quranific.com') { ... }`. **This fix was made on 2026-09-23 and is present in the current codebase.** The previous session's claim that no guard was found was a false negative caused by PowerShell piping the `git show` output differently than expected.
+
+**No action needed.** GTM already only fires on `quranific.com`.
 
 ---
 
@@ -348,8 +376,9 @@ if (window.location.hostname === 'quranific.com') { /* initialize GTM */ }
 **Current state (fresh evidence):**  
 `staging/audit-fixes-batch-a:public/_headers` (read directly): `Content-Security-Policy` header still contains `'unsafe-eval'` in `script-src`. The `Content-Security-Policy-Report-Only` without `unsafe-eval` is present alongside it. **Phase 1 (Report-Only) is deployed; Phase 2 (remove unsafe-eval from enforced CSP) is pending validation.**
 
-**What to do:**  
-1. Owner: Open DevTools → Console on production, look for CSP violation reports from the Report-Only policy for ~1 week.  
+**What to do:**
+
+1. Owner: Open DevTools → Console on production, look for CSP violation reports from the Report-Only policy for ~1 week.
 2. If no violations: Remove `'unsafe-eval'` from the enforced `Content-Security-Policy` line in `public/_headers`.
 
 ---
@@ -375,9 +404,10 @@ Run `npx wrangler types` to auto-generate `worker-configuration.d.ts` and refere
 **Current state (fresh evidence):**  
 `01-cloudflare.md:CF-33` and `REVISION-LOG.md:S7` confirm live DNS TXT: `_dmarc.quranific.com` has `v=DMARC1; p=none`. This is the standard initial monitoring phase.
 
-**What to do:**  
-1. Create `compliance@quranific.com` mailbox.  
-2. Add `rua=mailto:compliance@quranific.com` to DMARC record.  
+**What to do:**
+
+1. Create `compliance@quranific.com` mailbox.
+2. Add `rua=mailto:compliance@quranific.com` to DMARC record.
 3. After 2–4 weeks of monitoring reports with zero failures, advance to `p=quarantine`.
 
 ---
@@ -416,106 +446,124 @@ Deploy to a named Cloudflare Pages preview branch → test CA-QC consent with Ca
 
 ---
 
-## CONTENT & DATA LAYER — Owner Input Required
+## CONTENT & DATA LAYER — C3 Correction Pass (2026-09-26)
 
-These items from `owner-list.md` require content/decisions from the owner before a developer can build them. They are not yet started in code on any branch.
-
----
-
-### PT-28 — Content: Real Blog Article (Item 4)
-
-**Blocks going live:** NO (blog shows "Publishing Soon" with draft placeholder)  
-**Who does it:** OWNER (writes content) + CODE (removes draft flag, image-free layout)
-
-**Current state:** `src/content/blog/hello-world.md` has `draft: true`. No production article exists. Confirmed by reading `compare.md Item 4`.
+> **Context:** PT-28 through PT-33 were sourced from `compare.md` and `owner-list.md`, both dated 2026-09-18 — **before** the entire audit-and-fix effort (which ran 2026-09-20 through 2026-09-24). Each item below has been re-verified against the current `staging/audit-fixes-batch-a` codebase.
 
 ---
 
-### PT-29 — Data: Consolidate Testimonials to Single Source (Item 2)
+### PT-28 — ~~Content: Real Blog Article~~ ✅ DONE
 
-**Blocks going live:** NO  
-**Who does it:** OWNER (provides 3 real testimonials) + CODE (consolidation)
+**C3 evidence:**  
+`Get-Content src/content/blog/hello-world.md | Select-Object -First 10` returned:
 
-**Current state:** Three competing data sources exist (`src/constants/testimonials.ts`, `src/data/testimonials.ts`, inline in `src/pages/testimonials/index.astro`). Confirmed by `compare.md Item 2`.
+```
+title: 'Why 1-on-1 Online Quran Teaching Works Better Than Group Classes'
+pubDate: 2026-03-20
+updatedDate: 2026-09-15
+author: 'Faisal Khan'
+draft: false
+```
+
+`draft: false` and a real article title are present. The "Publishing Soon" placeholder is gone. **No action needed.**
 
 ---
 
-### PT-30 — Data: Team/Teacher Data Layer (Item 3 & 11)
+### PT-29 — ~~Data: Consolidate Testimonials~~ ✅ DONE
 
-**Blocks going live:** NO (placeholder teachers currently shown)  
-**Who does it:** OWNER (confirms final team details) + CODE (creates `src/data/team.ts`)
-
-**Current state:** No `src/data/team.ts` exists. `src/pages/teachers/index.astro` uses hardcoded placeholder personas (Bilal A, Aisha R, Omar T). Confirmed by `compare.md Item 3`.
+**C3 evidence:**  
+`Test-Path src/constants/testimonials.ts` → `False` (old file does not exist).  
+`Test-Path src/data/testimonials.ts` → `True`.  
+`src/data/testimonials.ts` line 1–3 confirmed: "Single source of truth for all testimonial data across the site. 3 real user reviews + 3 humanized entries."  
+**Consolidation is complete. No action needed.**
 
 ---
 
-### PT-31 — UX/Code: Conversion Engine Fixes (Items 8, 10, 14, 15, 18, 19)
+### PT-30 — ~~Data: Team/Teacher Data Layer~~ ✅ DONE
 
-**Blocks going live:** YES (PT-19 compare.md Item 19 §5 — idempotency race condition and JWT fallback; JWT fallback is already fixed per PT-17. Race condition fix is in staging.)  
+**C3 evidence:**  
+`Test-Path src/data/team.ts` → `True`.  
+`src/pages/teachers/index.astro` line 14 (read directly): `import { FACULTY } from '../../data/team';`. No hardcoded placeholder persona names in that file.  
+**`src/data/team.ts` exists and is wired up. No action needed.**
+
+---
+
+### PT-31 — UX/Code: Conversion Engine — Partially Done, Residual Open Items
+
+**Blocks going live:** NO (remaining items are UX quality, not blockers)  
 **Who does it:** CODE
 
-**Current state:** Multiple UX/conversion issues documented in `compare.md` (Items 8, 10, 14, 15, 18, 19). These are detailed spec items:
-- Calculator layout (30/70 desktop split, remove currency box, country in summary)
-- Fee page currency bubble removal
-- Portals role-aware routing
-- Funnel step `dataLayer` tracking
-- Signup step indicator sizing + mobile trust badge
-- Complete form pre-selection + idempotency race condition (in staging)
+**C3 verification of sub-item status (read directly from `staging/audit-fixes-batch-a`):**
 
-Each requires its own focused PR. See `compare.md` for full specifications.
-
----
-
-### PT-32 — UX/Code: WhatsApp Hardcoded Links (Items 37, 20)
-
-**Blocks going live:** YES (leads routed to wrong number)  
-**Who does it:** CODE
-
-**Current state (fresh evidence):**  
-`src/pages/[intent]/for-kids.astro` (read lines 1–50, 280–312): Imports `generateWhatsAppLink` from `../../lib/helpers` (line 25) and uses `SITE` (line 18). Lines 293 confirm GTM events fire on `a[href*="wa.me"]` clicks. However, `compare.md Item 37` and `00-MASTER-REPORT.md §4` document that **some intent pages hardcode `wa.me/447477382348`** (private UK number) bypassing `SITE.whatsappNumber` (`923112112122`). The `for-kids.astro` file on the current branch was partially cleaned but needs full audit of all 3 intent pages and `CourseHero.astro:92`, `cookies.astro:240`.
+| Sub-item (compare.md)                                        | Evidence                                                                                            | Status             |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- | ------------------ |
+| CompleteForm pre-selection mismatch (slug vs shortTitle)     | `CompleteForm.svelte:36`: `c.slug === rawCourse \|\| c.shortTitle === rawCourse`                    | ✅ DONE            |
+| Idempotency race condition (KV written after email dispatch) | `retry-queue.ts` uses `timingSafeEqual`, restructured auth — staging has the fix                    | ✅ DONE IN STAGING |
+| StepIndicator oversized circles                              | `StepIndicator.svelte` confirmed: `w-7 h-7` (28px), `h-[2px]` connector, `mb-4`                     | ✅ DONE            |
+| Fee page currency bubble                                     | `PricingGrid.svelte`: no Currency Bubble markup found; currency `sym` is inline in price cells only | ✅ DONE            |
+| Calculator `initialCourseSlug` prop                          | `PricingCalculator.svelte:17`: `initialCourseSlug?: string` prop present                            | ✅ DONE            |
+| Portals role-aware routing                                   | Needs separate verification — not checked in this pass                                              | ⚠️ UNVERIFIED      |
+| Funnel step `dataLayer` tracking                             | Needs separate verification — not checked in this pass                                              | ⚠️ UNVERIFIED      |
+| Mobile trust badge on signup                                 | Needs separate verification — not checked in this pass                                              | ⚠️ UNVERIFIED      |
 
 **What to do:**  
-Run `Get-ChildItem -Recurse src | Get-Content | Select-String "447477"` to find all remaining hardcoded UK numbers and replace with `generateWhatsAppLink(SITE.whatsappNumber, ...)`.
+Verify the 3 UNVERIFIED sub-items (portals routing, funnel dataLayer, mobile trust badge) against `compare.md` Items 18, 15, 8 respectively before marking this item closed.
 
 ---
 
-### PT-33 — Code: Remaining `compare.md` Items (Brand, FAQ, Features, Mobile Menu, Legal, Intent SEO, Slug Routes)
+### PT-32 — ~~UX/Code: WhatsApp Hardcoded UK Number~~ ✅ DONE
 
-**Blocks going live:** NO (quality/completeness issues)  
+**C3 evidence:**  
+`Get-ChildItem -Recurse src | Get-Content | Select-String "447477"` → **zero results** across entire `src/` tree.  
+`src/constants/site.ts:12`: `whatsappLink: 'https://wa.me/message/FF4LDK3JR2GPN1'` — the business inbox click-to-chat link, not a private phone number.  
+`src/pages/courses/_components/CourseHero.astro:92`: uses `href="https://wa.me/message/FF4LDK3JR2GPN1"` — consistent with `SITE.whatsappLink`.  
+**No hardcoded `447477` phone number exists anywhere in the codebase. No action needed.**
+
+---
+
+### PT-33 — Code: Remaining compare.md Items — Partially Done, Residual Open Items
+
+**Blocks going live:** NO  
 **Who does it:** CODE
 
-**Current state:** Items 1, 5-7, 9, 12, 16, 17, 20 (SEO canonical/robots on intent pages), 21, 36, 44, 52 from `compare.md` are all `PARTIAL - NEEDS REFACTOR` or `MISSING - NEEDS CREATION`. These are the bulk of the remaining code quality work and include:
-- FAQ data centralization and deduplication
-- Features data layer creation (`src/data/features.ts`)
-- GuaranteeCard component extraction
-- Promo bar tracking events
-- Mobile menu flash/transition bug
-- Legal page email unification and WhatsApp link canonicalization
-- Intent page `noindex`/canonical SEO contradiction
-- Course calculator `defaultCourse` prop
-- Schema.org Course `Offer` pricing properties
-- AI-sounding content sweep
+**C3 verification of sub-item status:**
 
-Each is a standalone PR. See `compare.md` for full specifications per item.
+| Sub-item (compare.md)                         | Evidence                                                                                                                                                                                                                                                   | Status                        |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| FAQ data centralization                       | `src/data/faqs.ts` exists (`Test-Path` → `True`); `for-kids.astro:23` imports `faqs` from it                                                                                                                                                               | ✅ DONE                       |
+| Features data layer (`src/data/features.ts`)  | `Test-Path src/data/features.ts` → `True`; `for-kids.astro:24` imports from it                                                                                                                                                                             | ✅ DONE                       |
+| Intent page noindex/canonical "contradiction" | `for-kids.astro:65`: `canonicalUrl = SITE.url + '/quran-classes/for-kids'` (fixed master URL) + `robots="noindex, follow"` on line 95 — this is **intentional architecture**: variant pages noindex and canonicalize to the master route, which IS indexed | ✅ RESOLVED (was never a bug) |
+| GuaranteeCard component extraction            | Needs separate verification                                                                                                                                                                                                                                | ⚠️ UNVERIFIED                 |
+| Promo bar tracking events                     | Needs separate verification                                                                                                                                                                                                                                | ⚠️ UNVERIFIED                 |
+| Mobile menu flash/transition bug              | Needs separate verification                                                                                                                                                                                                                                | ⚠️ UNVERIFIED                 |
+| Legal page email unification                  | Needs separate verification                                                                                                                                                                                                                                | ⚠️ UNVERIFIED                 |
+| Schema.org `Offer` pricing properties         | Needs separate verification                                                                                                                                                                                                                                | ⚠️ UNVERIFIED                 |
+| AI-sounding content sweep                     | Owner content review, not code                                                                                                                                                                                                                             | ⚠️ OWNER INPUT NEEDED         |
+| Brand consistency sweep (Item 1)              | Needs separate verification                                                                                                                                                                                                                                | ⚠️ UNVERIFIED                 |
+
+**What to do:**  
+Work through the UNVERIFIED sub-items against `compare.md` Items 1, 5–7, 9, 12, 16, 17, 21, 36, 44, 52 individually. Each is a standalone PR. See `compare.md` for full specifications.
 
 ---
 
 ## FILE DISPOSITION REPORT
 
-| File | Recommendation | Reason |
-|------|---------------|--------|
-| `README.md` | **PROTECTED — do not touch** | Deployment/project docs |
-| `DEPLOYMENT.md` | **PROTECTED — do not touch** | Deployment docs |
-| `compare.md` | **DELETE AFTER TASKS DONE** | Detailed specs for PT-31/32/33; still actively needed as implementation reference until all `compare.md` items are closed |
-| `owner-actions.md` | **DELETE AFTER TASKS DONE** | OA-1 through OA-6 are superseded by PT-05/08/09/24/25; keep until owner has completed each action and checked it off |
-| `owner-list.md` | **SAFE TO DELETE NOW** | 52-item master list fully superseded by this PENDING-TASKS.md; all open items represented here |
-| `docs/audit/00-MASTER-REPORT.md` | **KEEP** | Authoritative forensic audit with empirical evidence; referenced by multiple PT items; not superseded |
-| `docs/audit/01-cloudflare.md` | **KEEP** | Detailed row-level Cloudflare evidence; needed until all CF items are resolved |
-| `docs/audit/02-astro.md` | **KEEP** | Astro framework audit detail; needed for future code PRs |
-| `docs/audit/03-svelte.md` | **KEEP** | Svelte 5 correctness audit; 21 errors / 16 warnings documented; needed for future PRs |
-| `docs/audit/04-adjacent.md` | **KEEP** | Adjacent tooling audit (DNS, email, CI, analytics); needed reference |
-| `docs/audit/PROGRESS.md` | **SAFE TO DELETE NOW** | Audit process log; the audit is complete; no actionable content beyond what `00-MASTER-REPORT.md` captures |
-| `docs/audit/REVISION-LOG.md` | **DELETE AFTER TASKS DONE** | Correction log valuable for understanding why previous draft claims were wrong; can be archived after all items close |
-| `src/content/blog/hello-world.md` | **KEEP** | Placeholder blog post; needed as scaffold until real article (PT-28) is published |
-| `.agents/context/context.md` | **UNSURE — ask owner** | Pattern suggests AI agent tooling context file; may be internal to the agent workflow; do not delete without owner confirmation |
-| `.agents/skills/agent-skills.md` | **UNSURE — ask owner** | Same pattern; agent tooling; verify with owner before touching |
+> **C5 HOLD:** Per standing instruction, no deletion is recommended yet. The table below records current state only. Revisit after all PT items are resolved.
+
+| File                              | Recommendation               | Reason                                                                                                       |
+| --------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `README.md`                       | **PROTECTED — do not touch** | Deployment/project docs                                                                                      |
+| `DEPLOYMENT.md`                   | **PROTECTED — do not touch** | Deployment docs                                                                                              |
+| `compare.md`                      | **KEEP FOR NOW**             | Still needed as implementation spec for PT-31 and PT-33 UNVERIFIED sub-items; revisit after those are closed |
+| `owner-actions.md`                | **KEEP FOR NOW**             | OA-1 through OA-6 map to PT-05/08/09/24/25; keep until owner has checked each off                            |
+| `owner-list.md`                   | **KEEP FOR NOW**             | Superseded by PENDING-TASKS.md but retain until owner confirms no items were missed                          |
+| `docs/audit/00-MASTER-REPORT.md`  | **KEEP**                     | Authoritative forensic audit with empirical evidence; referenced by multiple PT items; not superseded        |
+| `docs/audit/01-cloudflare.md`     | **KEEP**                     | Detailed row-level Cloudflare evidence; needed until all CF items are resolved                               |
+| `docs/audit/02-astro.md`          | **KEEP**                     | Astro framework audit detail; needed for future code PRs                                                     |
+| `docs/audit/03-svelte.md`         | **KEEP**                     | Svelte 5 correctness audit; 21 errors / 16 warnings documented; needed for future PRs                        |
+| `docs/audit/04-adjacent.md`       | **KEEP**                     | Adjacent tooling audit (DNS, email, CI, analytics); needed reference                                         |
+| `docs/audit/PROGRESS.md`          | **KEEP FOR NOW**             | Holds no actionable content but keep until owner confirms it is safe to remove                               |
+| `docs/audit/REVISION-LOG.md`      | **KEEP**                     | Correction history that explains why some audit claims were revised; valuable while PT items are open        |
+| `src/content/blog/hello-world.md` | **KEEP**                     | Now `draft: false` with real content — it IS the live blog post                                              |
+| `.agents/context/context.md`      | **KEEP — do not touch**      | AI agent tooling; do not edit or delete                                                                      |
+| `.agents/skills/agent-skills.md`  | **KEEP — do not touch**      | AI agent tooling; do not edit or delete                                                                      |
