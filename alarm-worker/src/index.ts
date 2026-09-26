@@ -1,6 +1,21 @@
 export interface Env {
   TARGET_URL: string;
-  JWT_SECRET: string;
+  JWT_SECRET?: string;
+  ALARM_ADMIN_TOKEN: string;
+  INTERNAL_WORKER_SECRET: string;
+}
+
+async function timingSafeEqual(a: string, b: string): Promise<boolean> {
+  const encoder = new TextEncoder();
+  const aBuf = await crypto.subtle.digest('SHA-256', encoder.encode(a));
+  const bBuf = await crypto.subtle.digest('SHA-256', encoder.encode(b));
+  const aBytes = new Uint8Array(aBuf);
+  const bBytes = new Uint8Array(bBuf);
+  let diff = 0;
+  for (let i = 0; i < aBytes.length; i++) {
+    diff |= aBytes[i] ^ bBytes[i];
+  }
+  return diff === 0;
 }
 
 export default {
@@ -11,7 +26,7 @@ export default {
         const response = await fetch(env.TARGET_URL, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${env.JWT_SECRET}`,
+            Authorization: `Bearer ${env.INTERNAL_WORKER_SECRET}`,
             'Content-Type': 'application/json',
           },
         });
@@ -29,13 +44,23 @@ export default {
   async fetch(request: Request, env: Env) {
     const url = new URL(request.url);
 
+    if (url.pathname === '/') {
+      return new Response('Quranific Alarm Worker Active', { status: 200 });
+    }
+
+    const authHeader = request.headers.get('Authorization') || '';
+    const expectedAuth = env.ALARM_ADMIN_TOKEN ? `Bearer ${env.ALARM_ADMIN_TOKEN}` : '';
+    if (!expectedAuth || !(await timingSafeEqual(authHeader, expectedAuth))) {
+      return new Response(null, { status: 401 });
+    }
+
     // Allow manual triggering via HTTP POST for testing
     if (url.pathname === '/force-run' && request.method === 'POST') {
       try {
         const response = await fetch(env.TARGET_URL, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${env.JWT_SECRET}`,
+            Authorization: `Bearer ${env.INTERNAL_WORKER_SECRET}`,
             'Content-Type': 'application/json',
           },
         });
@@ -63,7 +88,7 @@ export default {
         const response = await fetch(target, {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${env.JWT_SECRET}`,
+            Authorization: `Bearer ${env.INTERNAL_WORKER_SECRET}`,
             'Content-Type': 'application/json',
           },
         });
@@ -80,6 +105,6 @@ export default {
       }
     }
 
-    return new Response('Quranific Alarm Worker Active', { status: 200 });
+    return new Response('Not Found', { status: 404 });
   },
 };

@@ -3,6 +3,8 @@ import type { APIRoute } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { SITE } from '../constants/site';
 
+export const prerender = true;
+
 export const GET: APIRoute = async () => {
   // SEO FIX (L-03): Dynamically fetches blog posts instead of returning a dead stub.
   // Fails gracefully if the collection is empty.

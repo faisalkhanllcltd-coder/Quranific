@@ -7,7 +7,9 @@ const SECURITY_HEADERS: Record<string, string> = {
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
-  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+  'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+  'Reporting-Endpoints': 'csp-endpoint="/api/csp-report"',
   'Content-Security-Policy': [
     "default-src 'self'",
     "script-src 'self' https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://tagassistant.google.com 'unsafe-inline'",
@@ -21,6 +23,22 @@ const SECURITY_HEADERS: Record<string, string> = {
     "base-uri 'self'",
     "form-action 'self'",
     'upgrade-insecure-requests',
+  ].join('; '),
+  'Content-Security-Policy-Report-Only': [
+    "default-src 'self'",
+    "script-src 'self' https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://tagassistant.google.com 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: https:",
+    "font-src 'self' data:",
+    "connect-src 'self' https://api.resend.com https://challenges.cloudflare.com https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://graph.facebook.com",
+    "frame-src 'self' https://challenges.cloudflare.com https://www.googletagmanager.com",
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    'upgrade-insecure-requests',
+    'report-uri /api/csp-report',
+    'report-to csp-endpoint',
   ].join('; '),
 };
 
@@ -50,6 +68,44 @@ export const onRequest = defineMiddleware(async (context, next) => {
         Location: `https://quranific.com${url.pathname}${url.search}`,
       },
     });
+  }
+
+  // ─── Real Edge Caching for Dynamic Routes (Batch D) ───────────────────────
+  const pathname = url.pathname;
+  const isGet = context.request.method === 'GET';
+
+  const isSessionGatedRoute =
+    pathname === '/getting-started/complete' ||
+    pathname === '/getting-started/complete/' ||
+    pathname === '/getting-started/success' ||
+    pathname === '/getting-started/success/';
+
+  // Explicit skip for NOT-CACHEABLE routes (onboarding steps, API, non-GET, static prerendered content)
+  const isExplicitlyNotCacheable =
+    !isGet ||
+    pathname.startsWith('/api/') ||
+    pathname.startsWith('/courses/') ||
+    isSessionGatedRoute;
+
+  // Explicit match for dynamic routes whose content is identical for all visitors
+  // Note: /courses/[slug] is now prerendered static HTML (Batch G); only homepage '/' remains dynamic Cache-API-cached
+  const isCacheableRoute = !isExplicitlyNotCacheable && pathname === '/';
+
+  const cache =
+    typeof caches !== 'undefined'
+      ? ((caches as unknown as { default?: Cache }).default ?? null)
+      : null;
+  const cacheKey = isCacheableRoute ? new Request(url.toString(), context.request) : null;
+
+  if (cache && cacheKey) {
+    try {
+      const cachedResponse = await cache.match(cacheKey);
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+    } catch {
+      // Fail open: proceed with dynamic rendering on cache lookup error
+    }
   }
 
   // ─── LOCAL/DEV: geo override via request headers ──────────────────────────
@@ -86,6 +142,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   const response = await next();
 
+  // Defense in depth: instruct search engines never to index private session-gated routes
+  if (isSessionGatedRoute) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+  }
+
   if (cf?.colo) {
     response.headers.set('X-Edge-Location', cf.colo as string);
   }
@@ -104,11 +165,31 @@ export const onRequest = defineMiddleware(async (context, next) => {
       response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
     }
     if (!response.headers.has('CDN-Cache-Control')) {
-      // Tells Cloudflare to cache the SSR render for 1 hour at the edge nodes
-      response.headers.set(
-        'CDN-Cache-Control',
-        'public, max-age=3600, stale-while-revalidate=86400'
-      );
+      // Tells Cloudflare to cache the dynamic SSR render for 5 minutes at the edge nodes.
+      // Balances edge performance during traffic spikes against rapid staleness invalidation on new deploys.
+      response.headers.set('CDN-Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
+    }
+  }
+
+  // ─── Cache Store for Cacheable Dynamic Routes (Batch D) ───────────────────
+  if (
+    cache &&
+    cacheKey &&
+    !isExplicitlyNotCacheable &&
+    response.status === 200 &&
+    !response.headers.has('Set-Cookie')
+  ) {
+    try {
+      const responseToCache = response.clone();
+      const putPromise = cache.put(cacheKey, responseToCache);
+      const cfContext = (context.locals as { cfContext?: ExecutionContext }).cfContext;
+      if (cfContext?.waitUntil) {
+        cfContext.waitUntil(putPromise);
+      } else {
+        await putPromise;
+      }
+    } catch {
+      // Fail open: return the generated response even if cache.put fails
     }
   }
 

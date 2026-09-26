@@ -31,26 +31,25 @@ export default defineConfig({
   integrations: [
     svelte(),
     sitemap({
-      // Exclude internal API routes, signup funnel, legacy ad aliases,
-      // AND all intent/landing pages (noindex) — /quran-classes/*, /quran-teacher/*
+      // Exclude internal API routes, session-gated onboarding steps, error pages,
+      // portal chooser, and paid-traffic landing pages (which carry robots="noindex, follow").
+      // Note: /getting-started/signup is intentionally INCLUDED as the public trial signup page.
       filter: (page) => {
         try {
           const url = new URL(page);
           const path = url.pathname;
           return !(
             path.startsWith('/api/') ||
-            path.startsWith('/getting-started/') ||
-            path.startsWith('/ads/') ||
+            path.startsWith('/getting-started/complete') ||
+            path.startsWith('/getting-started/success') ||
             path.startsWith('/quran-classes/') ||
             path.startsWith('/quran-teacher/') ||
             path === '/404' ||
+            path === '/404/' ||
+            path === '/500' ||
+            path === '/500/' ||
             path === '/portals' ||
-            path === '/for-kids' ||
-            path === '/for-adults' ||
-            path === '/for-women' ||
-            path === '/for-kids/' ||
-            path === '/for-adults/' ||
-            path === '/for-women/'
+            path === '/portals/'
           );
         } catch {
           return true;

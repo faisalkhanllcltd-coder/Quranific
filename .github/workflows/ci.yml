@@ -26,7 +26,8 @@ jobs:
         run: npm ci
 
       - name: Security Audit
-        run: npm audit --audit-level=critical || true
+        # Open transitive advisories (build-tooling only, nested inside @cloudflare/vite-plugin's miniflare/sharp/wrangler: GHSA-rgj7-g3m4-5g8c; plus js-yaml: GHSA-2883-xcg3-v3hh, devalue: GHSA-9rgm-9g3h-6x36)
+        run: npm audit --omit=dev --audit-level=critical
 
       - name: Type Validation
         run: npm run check

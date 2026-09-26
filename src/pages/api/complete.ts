@@ -271,7 +271,7 @@ export const POST: APIRoute = async (context) => {
           };
 
           await fetch(
-            `https://graph.facebook.com/v19.0/${metaPixel}/events?access_token=${metaToken}`,
+            `https://graph.facebook.com/v26.0/${metaPixel}/events?access_token=${metaToken}`,
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -281,6 +281,8 @@ export const POST: APIRoute = async (context) => {
         } catch (err) {
           console.error('[Meta CAPI Failed]:', err);
         }
+      } else {
+        console.log('[Meta CAPI]: Skipped (missing META_PIXEL_ID or META_CAPI_TOKEN)');
       }
 
       // 2. GA4 Measurement Protocol

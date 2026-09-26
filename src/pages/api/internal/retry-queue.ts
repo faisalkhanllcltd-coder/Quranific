@@ -19,7 +19,6 @@ import {
 
 export const prerender = false;
 
-// ─── Types ──────────────────────────────────────────────────────────────────
 type KVNamespace = {
   list(options?: { prefix?: string; cursor?: string }): Promise<{
     keys: { name: string }[];
@@ -55,16 +54,38 @@ function normalizeStep1Data(raw: Record<string, unknown>, leadId: string): Step1
   };
 }
 
+async function timingSafeEqual(a: string, b: string): Promise<boolean> {
+  const encoder = new TextEncoder();
+  const aBuf = await crypto.subtle.digest('SHA-256', encoder.encode(a));
+  const bBuf = await crypto.subtle.digest('SHA-256', encoder.encode(b));
+  const aBytes = new Uint8Array(aBuf);
+  const bBytes = new Uint8Array(bBuf);
+  let diff = 0;
+  for (let i = 0; i < aBytes.length; i++) {
+    diff |= aBytes[i] ^ bBytes[i];
+  }
+  return diff === 0;
+}
+
 export const POST: APIRoute = async (context) => {
   try {
-    const authHeader = context.request.headers.get('Authorization');
+    const authHeader = context.request.headers.get('Authorization') || '';
     const runtimeEnv = env as Record<string, unknown>;
-    const jwtSecret = runtimeEnv.JWT_SECRET as string;
+    const internalWorkerSecret = runtimeEnv.INTERNAL_WORKER_SECRET as string | undefined;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string | undefined;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
     const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
 
-    // Validate pre-shared Bearer secret
-    if (!jwtSecret || authHeader !== `Bearer ${jwtSecret}`) {
+    let authorized = false;
+    if (internalWorkerSecret) {
+      authorized = await timingSafeEqual(authHeader, `Bearer ${internalWorkerSecret}`);
+    }
+    // TODO(remove after both workers redeployed with new secret)
+    if (!authorized && jwtSecret) {
+      authorized = await timingSafeEqual(authHeader, `Bearer ${jwtSecret}`);
+    }
+
+    if (!authorized) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' },
@@ -83,7 +104,6 @@ export const POST: APIRoute = async (context) => {
     const failedKeys: { name: string; error: string }[] = [];
     const dispatches: { key: string; id?: string; timestamp: string }[] = [];
 
-    // Scan all dead-letter keys starting with 'FAILED' (covers both 'FAILED_' and legacy 'FAILED:')
     let cursor: string | undefined = undefined;
     const allKeys: { name: string }[] = [];
 
@@ -101,7 +121,6 @@ export const POST: APIRoute = async (context) => {
     let consecutiveFailures = 0;
     let circuitBreakerTripped = false;
 
-    // Isolate batch to protect Resend free-tier quota
     const keysToProcess = allKeys.slice(0, MAX_BATCH_SIZE);
 
     for (const key of keysToProcess) {
@@ -118,27 +137,20 @@ export const POST: APIRoute = async (context) => {
         let delivered = false;
         let res: { success: boolean; id?: string } | undefined;
 
-        // 1. FAILED_LEAD_STEP1: Producer writes { failedAt, step1: validData, reason }
         if (key.name.startsWith('FAILED_LEAD_STEP1:')) {
           const leadId = key.name.replace('FAILED_LEAD_STEP1:', '');
           const rawStep1 = data.step1 || data;
           const step1Data = normalizeStep1Data(rawStep1, leadId);
           res = await sendStep1AdminNotification(step1Data, resendApiKey, adminEmail);
           delivered = true;
-        }
-
-        // 2. FAILED_LEAD_STEP2: Producer writes { failedAt, step1: step1Data, step2: parsed.data, reason }
-        else if (key.name.startsWith('FAILED_LEAD_STEP2:')) {
+        } else if (key.name.startsWith('FAILED_LEAD_STEP2:')) {
           const leadId = key.name.replace('FAILED_LEAD_STEP2:', '');
           const rawStep1 = data.step1 || {};
           const step1Data = normalizeStep1Data(rawStep1, leadId);
           const step2Data: Step2Data = data.step2 || {};
           res = await sendFullAdminNotification(step1Data, step2Data, resendApiKey, adminEmail);
           delivered = true;
-        }
-
-        // 3. FAILED_LEAD_WELCOME: Producer writes { failedAt, step1: step1Data, step2: parsed.data, reason }
-        else if (key.name.startsWith('FAILED_LEAD_WELCOME:')) {
+        } else if (key.name.startsWith('FAILED_LEAD_WELCOME:')) {
           const rawStep1 = data.step1 || {};
           const email = rawStep1.e || rawStep1.email;
           const name = rawStep1.n || rawStep1.fullName || rawStep1.name || 'Student';
@@ -147,20 +159,14 @@ export const POST: APIRoute = async (context) => {
           }
           res = await sendWelcomeEmail(email, name, resendApiKey);
           delivered = true;
-        }
-
-        // 4. FAILED_CONTACT_ADMIN or legacy FAILED_CONTACT: { failedAt, payload: parsed.data, reason }
-        else if (
+        } else if (
           key.name.startsWith('FAILED_CONTACT_ADMIN:') ||
           key.name.startsWith('FAILED_CONTACT:')
         ) {
           const payload = (data.payload || data) as ContactNotificationData;
           res = await sendContactAdminNotification(payload, resendApiKey, adminEmail);
           delivered = true;
-        }
-
-        // 5. FAILED_CONTACT_USER: { failedAt, payload: parsed.data, reason }
-        else if (key.name.startsWith('FAILED_CONTACT_USER:')) {
+        } else if (key.name.startsWith('FAILED_CONTACT_USER:')) {
           const payload = data.payload || data;
           const email = payload.email;
           const firstName = payload.firstName || 'Student';
@@ -169,10 +175,7 @@ export const POST: APIRoute = async (context) => {
           }
           res = await sendContactAutoResponder(email, firstName, resendApiKey);
           delivered = true;
-        }
-
-        // 6. FAILED_NEWSLETTER_ADMIN: { failedAt, email, reason }
-        else if (key.name.startsWith('FAILED_NEWSLETTER_ADMIN:')) {
+        } else if (key.name.startsWith('FAILED_NEWSLETTER_ADMIN:')) {
           const email = data.email;
           if (!email) {
             throw new Error(
@@ -181,30 +184,21 @@ export const POST: APIRoute = async (context) => {
           }
           res = await sendNewsletterAdminNotification(email, resendApiKey, adminEmail);
           delivered = true;
-        }
-
-        // 7. FAILED_NEWSLETTER_USER: { failedAt, email, reason }
-        else if (key.name.startsWith('FAILED_NEWSLETTER_USER:')) {
+        } else if (key.name.startsWith('FAILED_NEWSLETTER_USER:')) {
           const email = data.email;
           if (!email) {
             throw new Error(`Missing email in FAILED_NEWSLETTER_USER payload for key: ${key.name}`);
           }
           res = await sendNewsletterWelcome(email, resendApiKey);
           delivered = true;
-        }
-
-        // 8. FAILED_TEACHER_ADMIN or FAILED_TEACHER: { failedAt, payload: TeacherData, reason }
-        else if (
+        } else if (
           key.name.startsWith('FAILED_TEACHER_ADMIN:') ||
           key.name.startsWith('FAILED_TEACHER:')
         ) {
           const payload = (data.payload || data) as TeacherData;
           res = await sendTeacherAdminNotification(payload, resendApiKey, adminEmail);
           delivered = true;
-        }
-
-        // 9. FAILED_TEACHER_USER: { failedAt, payload: { email, fullName }, reason }
-        else if (key.name.startsWith('FAILED_TEACHER_USER:')) {
+        } else if (key.name.startsWith('FAILED_TEACHER_USER:')) {
           const payload = data.payload || data;
           const email = payload.email;
           const fullName = payload.fullName || 'Teacher';
@@ -213,10 +207,7 @@ export const POST: APIRoute = async (context) => {
           }
           res = await sendTeacherAutoResponder(email, fullName, resendApiKey);
           delivered = true;
-        }
-
-        // 10. Legacy FAILED_LEAD: { taskIndex: 0 | 1, step1, step2 }
-        else if (key.name.startsWith('FAILED_LEAD:')) {
+        } else if (key.name.startsWith('FAILED_LEAD:')) {
           if (data.taskIndex === 0) {
             const leadId = key.name.replace('FAILED_LEAD:', '');
             const step1Data = normalizeStep1Data(data.step1 || {}, leadId);
@@ -238,17 +229,14 @@ export const POST: APIRoute = async (context) => {
 
         if (delivered) {
           await kv.delete(key.name);
-          dispatches.push({
-            key: key.name,
-            id: res?.id,
-            timestamp: new Date().toISOString(),
-          });
+          dispatches.push({ key: key.name, id: res?.id, timestamp: new Date().toISOString() });
           recoveredCount++;
           consecutiveFailures = 0; // Reset breaker on success
         }
       } catch (err) {
         console.error(`[Retry-Queue] Processing failed for key ${key.name}:`, err);
         failedKeys.push({ name: key.name, error: String(err) });
+        // Crucial: leave the key intact in KV so subsequent cron cycles retry it!
 
         consecutiveFailures++;
         if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
@@ -284,10 +272,7 @@ export const POST: APIRoute = async (context) => {
         dispatches: dispatches.length > 0 ? dispatches : undefined,
         failedDetails: failedKeys.length > 0 ? failedKeys : undefined,
       }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      }
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
     console.error('[CRON Critical Error]:', error);
@@ -300,12 +285,22 @@ export const POST: APIRoute = async (context) => {
 
 export const GET: APIRoute = async (context) => {
   try {
-    const authHeader = context.request.headers.get('Authorization');
+    const authHeader = context.request.headers.get('Authorization') || '';
     const runtimeEnv = env as Record<string, unknown>;
-    const jwtSecret = runtimeEnv.JWT_SECRET as string;
+    const internalWorkerSecret = runtimeEnv.INTERNAL_WORKER_SECRET as string | undefined;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string | undefined;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
 
-    if (!jwtSecret || authHeader !== `Bearer ${jwtSecret}`) {
+    let authorized = false;
+    if (internalWorkerSecret) {
+      authorized = await timingSafeEqual(authHeader, `Bearer ${internalWorkerSecret}`);
+    }
+    // TODO(remove after both workers redeployed with new secret)
+    if (!authorized && jwtSecret) {
+      authorized = await timingSafeEqual(authHeader, `Bearer ${jwtSecret}`);
+    }
+
+    if (!authorized) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' },
@@ -327,10 +322,7 @@ export const GET: APIRoute = async (context) => {
 
     const resendRes = await fetch(resendUrl, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: `Bearer ${resendApiKey}`, 'Content-Type': 'application/json' },
     });
 
     const resendBody = await resendRes.text();
