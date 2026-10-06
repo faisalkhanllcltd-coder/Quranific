@@ -14,6 +14,22 @@
 
 ---
 
+### CRITICAL SURFACED DEBT (Audit Reconciliation)
+
+- [ ] 1. **Deploy Command Failure:** `package.json` uses `wrangler pages deploy ./dist` instead of `wrangler deploy`. KV bindings are completely bypassing production.
+- [ ] 2. **Svelte Build Blocker:** `svelte-check` throws 21 errors and 16 warnings across 7 files. Must be fixed before `npm run check` will pass a deploy.
+- [ ] 3. **UK WhatsApp Hijack:** `for-kids.astro`, `for-adults.astro`, and `for-women.astro` hardcode `+44 7477 382348`. Must replace with `SITE.whatsappNumber` (`923112112122`).
+- [ ] 4. **Pricing Suspension Risk:** `courses.ts` lists $39/$49/$59. Must be updated to match `pricing.ts` billing reality ($40/$50/$55/$60) to avoid Google Ads ban.
+- [ ] 5. **Newsletter Black Hole:** `/api/newsletter.ts` has no Turnstile AND does not store emails in DB/Resend.
+- [ ] 6. **CORS Leak:** `consent-bucket.ts` and `geo-currency.ts` use `Access-Control-Allow-Origin: *`.
+- [ ] 7. **Admin Email Hardcodes:** 7 files hardcode a personal Gmail instead of `admin@quranific.com`.
+- [ ] 8. **Latency Bug:** `apply-teacher.ts` blocks on `Promise.all` instead of using `ctx.waitUntil`.
+- [ ] 9. **Missing Analytics:** Zero `dataLayer` events in the signup funnel.
+- [ ] 10. **Idempotency Bug:** The idempotency check in `complete.ts` checks Cloudflare KV using `jti` instead of checking the database by email. The read (line 168) and write (line 229) are far apart, leaving a race condition window for concurrent double-submits.
+- [ ] 11. **Meta CAPI Purge:** Remove all Facebook `graph.facebook.com` fetch logic from `complete.ts`.
+
+---
+
 ## INFRASTRUCTURE & SECRETS (Cloudflare Dashboard / Wrangler)
 
 ---
