@@ -2,7 +2,7 @@
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
-import { sendContactAutoResponder } from '../../lib/email';
+import { sendContactAutoResponder, sendContactAdminNotification } from '../../lib/email';
 
 const contactSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -116,21 +116,11 @@ export const POST: APIRoute = async (context) => {
     const sendEmailTask = async () => {
       if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
         try {
-          const res = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${resendApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              from: 'System <onboarding@quranific.com>',
-              to: adminEmail,
-              reply_to: email,
-              subject: `New Contact Inquiry from ${firstName} ${lastName}`,
-              text: `Name: ${firstName} ${lastName}\nEmail: ${email}\n\nMessage:\n${message}`,
-            }),
-          });
-          if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+          await sendContactAdminNotification(
+            { firstName, lastName, email, message },
+            resendApiKey,
+            adminEmail
+          );
         } catch (adminErr) {
           console.error('[Contact Admin Notification Failed]:', adminErr);
           if (kv) {

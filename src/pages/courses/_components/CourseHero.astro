@@ -5,6 +5,8 @@ import Button from '../../../components/ui/Button.astro';
 import type { Course } from '../../../constants/courses';
 import EyebrowBadge from '../../../components/ui/EyebrowBadge.astro';
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { SITE } from '../../../constants/site';
 
 interface Props {
   course: Course;
@@ -15,10 +17,9 @@ const { course } = Astro.props;
 const gradient = 'from-emerald-800 to-emerald-600';
 
 // Build-time glob: resolves all course images at compile time, eliminating runtime fallbacks
-const courseImages = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/images/*.webp',
-  { eager: true }
-);
+const courseImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*.webp', {
+  eager: true,
+});
 
 const targetPath = `/src/assets/images/${course.slug}.webp`;
 const fallbackPath = '/src/assets/images/basic-qaida.webp';
@@ -89,7 +90,7 @@ const optimizedImage = (courseImages[targetPath] ?? courseImages[fallbackPath]).
         Start Free Trial
       </Button>
       <Button
-        href="https://wa.me/message/FF4LDK3JR2GPN1"
+        href={SITE.whatsappLink}
         variant="ghostDark"
         target="_blank"
         rel="noopener noreferrer"

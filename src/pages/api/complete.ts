@@ -5,14 +5,6 @@ import { completeSchema } from '../../lib/schema';
 import { sendFullAdminNotification, sendWelcomeEmail } from '../../lib/email';
 import { jwtVerify } from 'jose';
 
-async function hashData(data: string): Promise<string> {
-  const buffer = new TextEncoder().encode((data || '').toLowerCase().trim());
-  const hash = await crypto.subtle.digest('SHA-256', buffer);
-  return Array.from(new Uint8Array(hash))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
 export const prerender = false;
 
 // ─── HEAD & GET: Pre-flight session check ─────────────────────────────────────────
@@ -154,10 +146,6 @@ export const POST: APIRoute = async (context) => {
       if (!parsed.data.price && step1Data.prc) parsed.data.price = step1Data.prc;
     }
 
-    const clientIp = context.request.headers.get('CF-Connecting-IP') || '';
-    const userAgent = context.request.headers.get('User-Agent') || '';
-    const fbp = getCookieValue(cookieHeader, '_fbp') || '';
-
     // Extract GA Client ID (format is usually GA1.1.123456789.123456789, we need the last two parts)
     const rawGa = getCookieValue(cookieHeader, '_ga') || '';
     const gaClientId = rawGa.split('.').slice(-2).join('.') || step1Data.lid || 'unknown';
@@ -173,6 +161,13 @@ export const POST: APIRoute = async (context) => {
           headers: { 'Content-Type': 'application/json' },
         });
       }
+
+      // P1 FIX — Write idempotency key BEFORE handing off to waitUntil.
+      // This closes the race window where two simultaneous requests both pass
+      // the check above before either has written the key.
+      await kv
+        .put(`IDEMPOTENCY:${jti}`, '1', { expirationTtl: 960 })
+        .catch((e: unknown) => console.error('[Idempotency KV Write Failed]:', e));
     }
 
     // 4. Process emails asynchronously using waitUntil
@@ -222,68 +217,11 @@ export const POST: APIRoute = async (context) => {
       }
     };
 
-    // P1 FIX — Write idempotency key BEFORE handing off to waitUntil.
-    // This closes the race window where two simultaneous requests both pass
-    // the check above before either has written the key.
-    if (kv && jti) {
-      await kv
-        .put(`IDEMPOTENCY:${jti}`, '1', { expirationTtl: 960 })
-        .catch((e: unknown) => console.error('[Idempotency KV Write Failed]:', e));
-    }
-
     const dispatchTrackingTask = async () => {
-      const metaPixel = runtimeEnv.META_PIXEL_ID as string;
-      const metaToken = runtimeEnv.META_CAPI_TOKEN as string;
       const gaId = runtimeEnv.GA4_MEASUREMENT_ID as string;
       const gaSecret = runtimeEnv.GA4_API_SECRET as string;
 
-      const unixTime = Math.floor(Date.now() / 1000);
-
-      // 1. Meta Conversions API
-      if (metaPixel && metaToken) {
-        try {
-          const hashedEmail = await hashData(step1Data.e);
-          const hashedPhone = await hashData(step1Data.w.replace(/\D/g, '')); // Strip non-digits
-
-          const metaPayload = {
-            data: [
-              {
-                event_name: 'CompleteRegistration',
-                event_time: unixTime,
-                action_source: 'website',
-                event_id: step1Data.lid, // Deduplication key
-                user_data: {
-                  em: [hashedEmail],
-                  ph: [hashedPhone],
-                  client_ip_address: clientIp,
-                  client_user_agent: userAgent,
-                  fbc: step1Data.fb ? `fb.1.${unixTime}.${step1Data.fb}` : undefined,
-                  fbp: fbp || undefined,
-                  country: await hashData(step1Data.c),
-                },
-                custom_data: {
-                  currency: parsed.data.currency || 'USD',
-                  value: parsed.data.price ? parseFloat(parsed.data.price) : 0,
-                  content_name: parsed.data.course,
-                },
-              },
-            ],
-          };
-
-          await fetch(
-            `https://graph.facebook.com/v26.0/${metaPixel}/events?access_token=${metaToken}`,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(metaPayload),
-            }
-          );
-        } catch (err) {
-          console.error('[Meta CAPI Failed]:', err);
-        }
-      } else {
-        console.log('[Meta CAPI]: Skipped (missing META_PIXEL_ID or META_CAPI_TOKEN)');
-      }
+      // 1. Meta Conversions API (Removed)
 
       // 2. GA4 Measurement Protocol
       if (gaId && gaSecret) {

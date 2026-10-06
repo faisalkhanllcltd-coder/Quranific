@@ -2,12 +2,43 @@
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
-import { sendNewsletterWelcome } from '../../lib/email';
-import { SITE } from '../../constants/site';
+import { sendNewsletterWelcome, sendNewsletterAdminNotification } from '../../lib/email';
 
 const newsletterSchema = z.object({
   email: z.email({ error: 'Invalid email address' }),
+  'cf-turnstile-response': z.string().min(1, 'Please complete the security check.'),
 });
+
+// ─── Cloudflare Turnstile Verification ──────────────────────────────────────
+async function verifyTurnstile(token: string, secret: string, remoteip?: string): Promise<boolean> {
+  try {
+    const body = new URLSearchParams({
+      secret: secret,
+      response: token,
+    });
+    if (remoteip && remoteip !== 'unknown') {
+      body.set('remoteip', remoteip);
+    }
+
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: body.toString(),
+    });
+
+    const data = (await res.json()) as { success: boolean; 'error-codes'?: string[] };
+    if (!data.success) {
+      console.error('[Turnstile Edge Rejection] Error codes:', data['error-codes']);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('[Turnstile Fetch Exception]:', error);
+    return false;
+  }
+}
 
 export const prerender = false;
 
@@ -56,8 +87,29 @@ export const POST: APIRoute = async (context) => {
     }
 
     const { email } = parsed.data;
+    const turnstileToken = parsed.data['cf-turnstile-response'];
 
-    // 2. Dispatch to Resend Audiences + email tasks in the background
+    const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
+      runtimeEnv.TURNSTILE_SECRET_KEY) as string;
+
+    if (!turnstileSecret) {
+      console.error('[Configuration Error]: Missing Turnstile Secret');
+      return new Response(JSON.stringify({ error: 'Internal Configuration Error' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // 2. Server-side Turnstile verification — hard reject if it fails
+    const isHuman = await verifyTurnstile(turnstileToken, turnstileSecret, cfConnectingIp);
+    if (!isHuman) {
+      return new Response(
+        JSON.stringify({ error: 'Security check failed. Please refresh and try again.' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // 3. Dispatch to Resend Audiences + email tasks in the background
     const resendAudienceId = runtimeEnv.RESEND_AUDIENCE_ID as string | undefined;
 
     const sendEmailTask = async () => {
@@ -96,20 +148,7 @@ export const POST: APIRoute = async (context) => {
 
         // ── Step B: Admin notification ────────────────────────────────────────
         try {
-          const res = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${resendApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              from: `Quranific System <${SITE.emails.support}>`,
-              to: adminEmail || SITE.emails.admin,
-              subject: `New Newsletter Subscriber!`,
-              text: `A new user has subscribed to the newsletter.\n\nEmail: ${email}`,
-            }),
-          });
-          if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+          await sendNewsletterAdminNotification(email, resendApiKey, adminEmail);
         } catch (adminErr) {
           console.error('[Newsletter Admin Notification Failed]:', adminErr);
           if (kv) {
