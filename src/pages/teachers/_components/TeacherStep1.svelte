@@ -14,7 +14,7 @@
   <div class="grid sm:grid-cols-2 gap-6 mb-6">
     <!-- Ijazah -->
     <div class="space-y-3">
-      <label class="block text-emerald-950 font-bold text-sm">1. Do you hold an Ijazah?</label>
+      <span class="block text-emerald-950 font-bold text-sm">1. Do you hold an Ijazah?</span>
       <div class="grid grid-cols-2 gap-3">
         <button
           type="button"
@@ -41,7 +41,7 @@
 
     <!-- Alim/Alima -->
     <div class="space-y-3">
-      <label class="block text-emerald-950 font-bold text-sm">2. Are you an Alim/Alima?</label>
+      <span class="block text-emerald-950 font-bold text-sm">2. Are you an Alim/Alima?</span>
       <div class="grid grid-cols-2 gap-3">
         <button
           type="button"
@@ -69,7 +69,7 @@
 
   <!-- Experience -->
   <div class="space-y-3 mb-6 bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100/50">
-    <label class="block text-emerald-950 font-bold text-sm">3. Active teaching experience?</label>
+    <span class="block text-emerald-950 font-bold text-sm">3. Active teaching experience?</span>
     <div class="grid grid-cols-2 gap-4">
       <button
         type="button"
@@ -103,7 +103,7 @@
     <div class="grid sm:grid-cols-2 gap-6 mb-6 animate-in fade-in slide-in-from-top-4 duration-500">
       <!-- English -->
       <div class="space-y-3">
-        <label class="block text-emerald-950 font-bold text-sm">4. Fluent in English?</label>
+        <span class="block text-emerald-950 font-bold text-sm">4. Fluent in English?</span>
         <div class="grid grid-cols-2 gap-3">
           <button
             type="button"
@@ -130,7 +130,7 @@
 
       <!-- Arabic -->
       <div class="space-y-3">
-        <label class="block text-emerald-950 font-bold text-sm">5. Fluent in Arabic?</label>
+        <span class="block text-emerald-950 font-bold text-sm">5. Fluent in Arabic?</span>
         <div class="grid grid-cols-2 gap-3">
           <button
             type="button"

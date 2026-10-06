@@ -66,6 +66,7 @@
   let sess = $state('3');
   let currency = $state<Currency>('USD');
   let detectedCountry = $state('');
+  // svelte-ignore state_referenced_locally
   let selectedCourse = $state(
     initialCourseSlug && COURSE_LIST.find((c) => c.slug === initialCourseSlug)
       ? initialCourseSlug
@@ -83,7 +84,9 @@
   $effect(() => {
     if (typeof window !== 'undefined') {
       fetch('/api/geo-currency')
-        .then((res) => (res.ok ? res.json() : null))
+        .then(async (res) =>
+          res.ok ? ((await res.json()) as { currency?: Currency; country?: string }) : null
+        )
         .then((data) => {
           if (data?.currency) {
             currency = data.currency;
@@ -111,7 +114,7 @@
   let perClass = $derived(sessPerMonth > 0 ? (finalPrice / sessPerMonth).toFixed(2) : '—');
   let formattedFinalPrice = $derived(formatPrice(finalPrice, currency));
   // Billing context line: "Billed in USD ($) • United States"
-  let billingContext = $derived(() => {
+  let billingContext = $derived.by(() => {
     const meta = CURRENCY_META.find((c) => c.code === currency);
     const sym_ = meta?.symbol ?? currency;
     const parts = [`Billed in ${currency} (${sym_})`];
@@ -134,9 +137,9 @@
     if (!hasInteracted) return;
     if (
       typeof window !== 'undefined' &&
-      Array.isArray((window as Window & { dataLayer?: unknown[] }).dataLayer)
+      Array.isArray((window as unknown as Window & { dataLayer?: unknown[] }).dataLayer)
     ) {
-      (window as Window & { dataLayer: unknown[] }).dataLayer.push({
+      (window as unknown as Window & { dataLayer: unknown[] }).dataLayer.push({
         event: 'calculate_price',
         course: _course,
         duration: _dur,
@@ -153,9 +156,9 @@
     // GTM: click_book_trial fires on calculator CTA click
     if (
       typeof window !== 'undefined' &&
-      Array.isArray((window as Window & { dataLayer?: unknown[] }).dataLayer)
+      Array.isArray((window as unknown as Window & { dataLayer?: unknown[] }).dataLayer)
     ) {
-      (window as Window & { dataLayer: unknown[] }).dataLayer.push({
+      (window as unknown as Window & { dataLayer: unknown[] }).dataLayer.push({
         event: 'click_book_trial',
         course: selectedCourse,
         duration: dur,
@@ -360,9 +363,9 @@
           <span class="text-sm font-medium {resultFeeSub}">/mo</span>
         </div>
         <!-- Geo billing context — injected dynamically, empty during SSR -->
-        {#if billingContext()}
+        {#if billingContext}
           <p class="mt-2 text-[11px] font-medium text-emerald-800/50 leading-snug">
-            {billingContext()}
+            {billingContext}
           </p>
         {/if}
       </div>

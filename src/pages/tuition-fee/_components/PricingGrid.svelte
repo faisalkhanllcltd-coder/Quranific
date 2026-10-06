@@ -16,7 +16,9 @@
   $effect(() => {
     if (typeof window !== 'undefined') {
       fetch('/api/geo-currency')
-        .then((res) => (res.ok ? res.json() : null))
+        .then(async (res) =>
+          res.ok ? ((await res.json()) as { currency?: Currency; country?: string }) : null
+        )
         .then((data) => {
           if (data?.currency) {
             currency = data.currency;
@@ -36,7 +38,7 @@
   let sym = $derived(CURRENCY_SYMBOLS[currency] ?? currency);
 
   // Billing context: "Billed in USD ($) • United States"
-  let billingContext = $derived(() => {
+  let billingContext = $derived.by(() => {
     const meta = CURRENCY_META.find((c) => c.code === currency);
     const sym_ = meta?.symbol ?? currency;
     const parts = [`Billed in ${currency} (${sym_})`];
@@ -326,9 +328,9 @@
           </span>
         </div>
         <!-- Geo billing context -->
-        {#if billingContext()}
+        {#if billingContext}
           <p class="mt-1 text-[11px] font-medium text-emerald-700/60 leading-snug">
-            {billingContext()}
+            {billingContext}
           </p>
         {/if}
       </div>

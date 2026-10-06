@@ -129,7 +129,7 @@
 
     try {
       const response = await fetch('/api/complete', { method: 'POST', body: formData });
-      const result = await response.json();
+      const result = (await response.json()) as { error?: string };
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -180,8 +180,8 @@
 
   <!-- Course select -->
   <div class="space-y-3">
-    <label class="block text-sm font-semibold text-emerald-950"
-      >Select Course <span class="text-red-500">*</span></label
+    <span class="block text-sm font-semibold text-emerald-950"
+      >Select Course <span class="text-red-500">*</span></span
     >
     <div class="flex flex-wrap gap-2 {fieldErrors.course ? errorRing : ''}">
       {#each COURSE_LIST as course (course.slug)}
@@ -205,8 +205,8 @@
   <!-- Student Gender & Teacher Preference -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <div class="space-y-3">
-      <label class="block text-sm font-semibold text-emerald-950"
-        >Student Gender <span class="text-red-500">*</span></label
+      <span class="block text-sm font-semibold text-emerald-950"
+        >Student Gender <span class="text-red-500">*</span></span
       >
       <div class="flex flex-wrap gap-2 {fieldErrors.gender ? errorRing : ''}">
         {#each GENDERS as opt (opt.value)}
@@ -228,8 +228,8 @@
     </div>
 
     <div class="space-y-3">
-      <label class="block text-sm font-semibold text-emerald-950"
-        >Teacher Preference <span class="text-red-500">*</span></label
+      <span class="block text-sm font-semibold text-emerald-950"
+        >Teacher Preference <span class="text-red-500">*</span></span
       >
       <div class="flex flex-wrap gap-2 {fieldErrors.teacherGender ? errorRing : ''}">
         {#each teacherOptions as opt (opt)}
@@ -256,8 +256,8 @@
 
   <!-- Current Level -->
   <div class="space-y-3">
-    <label class="block text-sm font-semibold text-emerald-950"
-      >Current Level <span class="text-red-500">*</span></label
+    <span class="block text-sm font-semibold text-emerald-950"
+      >Current Level <span class="text-red-500">*</span></span
     >
     <div class="flex flex-wrap gap-2 {fieldErrors.level ? errorRing : ''}">
       {#each LEVELS as opt (opt.value)}
@@ -281,8 +281,8 @@
   <!-- Days per week & Preferred Time -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <div class="space-y-3">
-      <label class="block text-sm font-semibold text-emerald-950"
-        >Days per week <span class="text-red-500">*</span></label
+      <span class="block text-sm font-semibold text-emerald-950"
+        >Days per week <span class="text-red-500">*</span></span
       >
       <div class="flex flex-wrap gap-2 {fieldErrors.days ? errorRing : ''}">
         {#each DAYS as opt (opt.value)}
@@ -304,8 +304,8 @@
     </div>
 
     <div class="space-y-3">
-      <label class="block text-sm font-semibold text-emerald-950"
-        >Preferred Time <span class="text-red-500">*</span></label
+      <span class="block text-sm font-semibold text-emerald-950"
+        >Preferred Time <span class="text-red-500">*</span></span
       >
       <div class="flex flex-wrap gap-2 {fieldErrors.schedule ? errorRing : ''}">
         {#each SCHEDULES as opt (opt.value)}
@@ -329,7 +329,7 @@
 
   <!-- Session Length (Optional — full width grid like other sections) -->
   <div class="space-y-3">
-    <label class="block text-sm font-semibold text-emerald-950">Session Length</label>
+    <span class="block text-sm font-semibold text-emerald-950">Session Length</span>
     <div class="flex flex-wrap gap-2">
       {#each durationOptions as opt (opt)}
         <label class={labelBase}>
@@ -351,8 +351,9 @@
 
   <!-- Additional Notes -->
   <div class="space-y-3">
-    <label class="block text-sm font-semibold text-emerald-950">Additional Notes</label>
+    <label for="note" class="block text-sm font-semibold text-emerald-950">Additional Notes</label>
     <textarea
+      id="note"
       bind:value={selectedNote}
       name="note"
       rows="3"

@@ -101,7 +101,7 @@
     // PATH A: inline script already resolved + stored bucket before we mounted
     // (common with client:idle — inline script fires synchronously at page load,
     //  Svelte hydrates later when browser is idle; we may have missed the event)
-    const w = window as Record<string, unknown>;
+    const w = window as unknown as Record<string, unknown>;
     if (w.__resolvedBucket) {
       bucket = w.__resolvedBucket as ConsentBucket;
       visible = true;
@@ -180,14 +180,14 @@
 
   $effect(() => {
     if (typeof window !== 'undefined') {
-      (window as Record<string, unknown>).__reopenConsentBanner = () => {
+      (window as unknown as Record<string, unknown>).__reopenConsentBanner = () => {
         // Wipe the consent cookie completely (flags must match creation)
         document.cookie = 'cf_consent_v1=; max-age=0; path=/; SameSite=Lax; Secure';
         // Hard reload to instantly kill any running GTM/Meta scripts in memory
         window.location.reload();
       };
       return () => {
-        delete (window as Record<string, unknown>).__reopenConsentBanner;
+        delete (window as unknown as Record<string, unknown>).__reopenConsentBanner;
       };
     }
   });

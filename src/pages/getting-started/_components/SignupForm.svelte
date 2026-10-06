@@ -141,7 +141,9 @@
       // Geo country autofill — only pre-populate if user hasn't manually filled country
       if (!country) {
         fetch('/api/geo-currency')
-          .then((res) => (res.ok ? res.json() : null))
+          .then(async (res) =>
+            res.ok ? ((await res.json()) as { currency?: string; country?: string }) : null
+          )
           .then((data) => {
             if (data?.country && data.country !== 'Unknown' && !country) {
               country = data.country;
@@ -209,7 +211,7 @@
 
     try {
       const response = await fetch('/api/register', { method: 'POST', body: formData });
-      const result = await response.json();
+      const result = (await response.json()) as { success?: boolean; error?: string };
 
       if (response.ok || result.success) {
         ['name', 'email', 'whatsapp', 'country'].forEach((k) =>
