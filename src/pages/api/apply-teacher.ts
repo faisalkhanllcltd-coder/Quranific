@@ -83,7 +83,7 @@ export const POST: APIRoute = async (context) => {
     const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
       runtimeEnv.TURNSTILE_SECRET_KEY) as string;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
-    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
+    const adminEmail = runtimeEnv.ADMIN_EMAIL as string;
 
     if (!turnstileSecret) {
       console.error('[Configuration Error]: Missing Turnstile Secret');

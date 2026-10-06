@@ -73,7 +73,7 @@ export const POST: APIRoute = async (context) => {
     const runtimeEnv = env as Record<string, unknown>;
     const internalWorkerSecret = runtimeEnv.INTERNAL_WORKER_SECRET as string | undefined;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
-    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
+    const adminEmail = runtimeEnv.ADMIN_EMAIL as string;
 
     let authorized = false;
     if (internalWorkerSecret) {
