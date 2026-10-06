@@ -9,6 +9,7 @@ export const SITE = {
   themeColor: '#047857',
   defaultImage: '/images/og/default.png', // Optimized for Edge CDN delivery
   whatsappNumber: '923112112122',
+  phone: '+92 311 2112122',
   whatsappLink: 'https://wa.me/message/FF4LDK3JR2GPN1',
   email: 'support@quranific.com',
 
@@ -17,10 +18,8 @@ export const SITE = {
   // in environment variables and is never committed to the repository.
   turnstileSiteKey: '0x4AAAAAAD-QWQWhupcuvhbK',
 
-  // G-5 FIX: phone and address added so pages that access SITE.phone / SITE.address
+  // G-5 FIX: address added so pages that access SITE.address
   // resolve to a real value instead of undefined. Fill in real details before go-live.
-  // If no phone number exists, remove SITE.phone references from contact.astro and impressum.astro.
-  phone: '+92 3112112122',
   address:
     'House No 1 KR-2 Area, Gulshan Askari, Quaidabad Malir, Bin Qasim Town, Karachi 75120, Pakistan',
 

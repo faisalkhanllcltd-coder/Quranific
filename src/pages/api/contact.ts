@@ -3,6 +3,7 @@ import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
 import { sendContactAutoResponder, sendContactAdminNotification } from '../../lib/email';
+import { verifyTurnstile } from '../../lib/turnstile';
 
 const contactSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -14,37 +15,6 @@ const contactSchema = z.object({
 });
 
 export const prerender = false;
-
-// ─── Cloudflare Turnstile Verification ──────────────────────────────────────
-async function verifyTurnstile(token: string, secret: string, remoteip?: string): Promise<boolean> {
-  try {
-    const body = new URLSearchParams({
-      secret: secret,
-      response: token,
-    });
-    if (remoteip && remoteip !== 'unknown') {
-      body.set('remoteip', remoteip);
-    }
-
-    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: body.toString(),
-    });
-
-    const data = (await res.json()) as { success: boolean; 'error-codes'?: string[] };
-    if (!data.success) {
-      console.error('[Turnstile Edge Rejection] Error codes:', data['error-codes']);
-      return false;
-    }
-    return true;
-  } catch (error) {
-    console.error('[Turnstile Fetch Exception]:', error);
-    return false;
-  }
-}
 
 // ─── KV Helper ──────────────────────────────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
