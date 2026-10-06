@@ -75,7 +75,7 @@ export const POST: APIRoute = async (context) => {
       runtimeEnv.TURNSTILE_SECRET_KEY) as string;
     const jwtSecret = runtimeEnv.JWT_SECRET as string;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
-    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
 
     if (!turnstileSecret || !jwtSecret) {
       console.error(

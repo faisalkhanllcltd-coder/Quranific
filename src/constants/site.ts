@@ -44,7 +44,7 @@ export const SITE = {
     contact: 'contact@quranific.com',
     compliance: 'compliance@quranific.com',
     // Private — never rendered in HTML. Fallback when ADMIN_EMAIL env var is absent.
-    admin: 'faisalkhan.llc.ltd@gmail.com',
+    admin: 'admin@quranific.com',
   },
 
   social: {

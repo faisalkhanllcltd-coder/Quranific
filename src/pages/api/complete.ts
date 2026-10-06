@@ -63,7 +63,7 @@ export const POST: APIRoute = async (context) => {
     const runtimeEnv = env as Record<string, unknown>;
     const jwtSecret = runtimeEnv.JWT_SECRET as string;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
-    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
 
     if (!jwtSecret) {
       console.error('[Configuration Error]: Missing Secrets in Edge Env');

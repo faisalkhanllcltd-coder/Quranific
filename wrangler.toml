@@ -1,6 +1,7 @@
 name = "quranific"
 compatibility_date = "2026-03-25"
 compatibility_flags = ["nodejs_compat"]
+workers_dev = false
 
 [assets]
 directory = "dist"

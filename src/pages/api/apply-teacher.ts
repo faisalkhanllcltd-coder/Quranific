@@ -83,7 +83,7 @@ export const POST: APIRoute = async (context) => {
     const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
       runtimeEnv.TURNSTILE_SECRET_KEY) as string;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
-    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
 
     if (!turnstileSecret) {
       console.error('[Configuration Error]: Missing Turnstile Secret');
@@ -103,7 +103,7 @@ export const POST: APIRoute = async (context) => {
     }
 
     // 4. Dispatch Emails in background via waitUntil — never block the response
-    const sendEmailTask = async () => {
+    const emailPromise = (async () => {
       try {
         await Promise.all([
           sendTeacherAdminNotification(teacherData, resendApiKey, adminEmail),
@@ -126,16 +126,14 @@ export const POST: APIRoute = async (context) => {
           }
         }
       }
-    };
+    })();
 
-    // Use Cloudflare's waitUntil for background fire-and-forget execution
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const locals = context.locals as any;
     if (locals.cfContext?.waitUntil) {
-      locals.cfContext.waitUntil(sendEmailTask());
+      locals.cfContext.waitUntil(emailPromise);
     } else {
-      // Local dev fallback — run without blocking
-      sendEmailTask().catch(console.error);
+      emailPromise.catch(console.error);
     }
 
     return new Response(JSON.stringify({ success: true }), {

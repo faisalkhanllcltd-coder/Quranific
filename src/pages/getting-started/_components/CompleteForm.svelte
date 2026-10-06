@@ -148,6 +148,10 @@
         course: selectedCourse || undefined,
       });
 
+      const win = window as unknown as Window & { dataLayer: unknown[] };
+      win.dataLayer = win.dataLayer || [];
+      win.dataLayer.push({ event: 'generate_lead' });
+
       window.location.assign('/getting-started/success');
     } catch (err: unknown) {
       globalError =

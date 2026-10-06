@@ -45,7 +45,7 @@ export const POST: APIRoute = async (context) => {
     const data = (await context.request.json()) as Record<string, unknown>;
 
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
-    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'faisalkhan.llc.ltd@gmail.com';
+    const adminEmail = (runtimeEnv.ADMIN_EMAIL as string) || 'admin@quranific.com';
 
     // 1. Validate incoming data with Zod
     const parsed = newsletterSchema.safeParse(data);
