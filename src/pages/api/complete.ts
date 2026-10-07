@@ -221,8 +221,6 @@ export const POST: APIRoute = async (context) => {
       const gaId = runtimeEnv.GA4_MEASUREMENT_ID as string;
       const gaSecret = runtimeEnv.GA4_API_SECRET as string;
 
-      // 1. Meta Conversions API (Removed)
-
       // 2. GA4 Measurement Protocol
       if (gaId && gaSecret) {
         try {
