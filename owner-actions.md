@@ -24,7 +24,7 @@
 | :-------- | :-------------------------------------------------- | :--------------- | :------------------: | :--------------------------------------------------------------------- |
 | **OA-01** | Provision `INTERNAL_WORKER_SECRET`                  | Tier 1 (Blocker) |    ❌ Still Open     | `wrangler secret list` (missing on both workers)                       |
 | **OA-02** | Provision `ALARM_ADMIN_TOKEN`                       | Tier 1 (Blocker) |    ❌ Still Open     | `wrangler secret list -c alarm-worker/wrangler.toml` (missing)         |
-| **OA-03** | Provision `META_CAPI_TOKEN` & `META_PIXEL_ID`       | Tier 1 (Blocker) |    ❌ Still Open     | `wrangler secret list` (missing on root worker)                        |
+| **OA-03** | Provision `META_CAPI_TOKEN` & `META_PIXEL_ID`       | N/A (Removed)    |     ➖ Obsolete      | Meta CAPI removed from codebase, this task is no longer applicable     |
 | **OA-04** | Update SPF DNS Record for Resend                    | Tier 1 (Blocker) |    ❌ Still Open     | DNS TXT: `v=spf1 include:_spf.mx.cloudflare.net ~all` (missing Resend) |
 | **OA-05** | Add Universal SSL CAA DNS Records                   | Tier 1 (Blocker) |    ❌ Still Open     | DNS CAA: 0 records returned via DoH                                    |
 | **OA-06** | Verify Resend DKIM DNS Record                       | Tier 1 (Blocker) |       ✅ Done        | DNS TXT `resend._domainkey.quranific.com`: `p=MIGf...` active          |
@@ -100,23 +100,16 @@
 
 ### OA-03 — Configure Server-Side Tracking Secrets (`META_CAPI_TOKEN` & `META_PIXEL_ID`)
 
-- **Status:** ❌ **Still Open**
+- **Status:** ➖ **No Longer Applicable** (Meta CAPI removed from codebase)
 - **Urgency:** **Tier 1 (Blocks Going Live)**
 - **Platform:** Cloudflare Pages Dashboard or Wrangler CLI
 - **Dashboard URL:** `https://dash.cloudflare.com/?to=/:account/pages/view/quranific/settings/environment-variables`
 - **Empirical Proof:** Neither `META_CAPI_TOKEN` nor `META_PIXEL_ID` exists in live secrets/vars. `api/complete.ts` currently bypasses server-side conversion dispatch safely.
 - **Risk:** Meta Conversions API (CAPI) events will not fire from the server upon lead completion; ad attribution will rely solely on browser pixels subject to ad blockers.
 - **Exact Steps:**
-  1. Obtain your Meta Pixel ID and generate a Conversions API Access Token from **Facebook Events Manager** → Settings → Generate Access Token.
-  2. Set the encrypted secret:
-     ```powershell
-     npx wrangler secret put META_CAPI_TOKEN
-     ```
-  3. Add `META_PIXEL_ID` as a public environment variable in Cloudflare Pages Settings or under `[vars]` in `wrangler.toml`:
-     ```toml
-     [vars]
-     META_PIXEL_ID = "YOUR_NUMERIC_PIXEL_ID"
-     ```
+  1. Meta CAPI removed from codebase, this task is no longer applicable.
+  2. `npx wrangler secret put META_CAPI_TOKEN` — Meta CAPI removed from codebase, this task is no longer applicable.
+  3. `META_PIXEL_ID` — Meta CAPI removed from codebase, this task is no longer applicable.
   4. Optional: If server-side GA4 Measurement Protocol is desired, also provision `GA4_MEASUREMENT_ID` and `GA4_API_SECRET`.
 
 ---
@@ -436,7 +429,7 @@
 
 ## 5-Line Plain-English Summary of What's Still Open
 
-1. **4 Secrets Missing in Cloudflare:** `INTERNAL_WORKER_SECRET` (both workers), `ALARM_ADMIN_TOKEN` (`alarm-worker`), and `META_CAPI_TOKEN` / `META_PIXEL_ID` (`quranific`) must be provisioned via `wrangler secret put`.
+1. **2 Secrets Missing in Cloudflare:** `INTERNAL_WORKER_SECRET` (both workers) and `ALARM_ADMIN_TOKEN` (`alarm-worker`) must be provisioned via `wrangler secret put` (`META_CAPI_TOKEN` / `META_PIXEL_ID`: Meta CAPI removed from codebase, this task is no longer applicable).
 2. **SPF Email Record Missing Resend:** The live DNS TXT record on `quranific.com` only permits Cloudflare MX; `include:resend.com` must be added immediately so transactional emails don't go to spam.
 3. **Universal SSL CAA Records Missing:** No CAA records exist in DNS; 4 records (`letsencrypt.org`, `digicert.com`, `sectigo.com`, `pki.goog`) must be added in Cloudflare DNS.
 4. **Alarm Worker Public URL Open:** `quranific-alarm...workers.dev` is publicly reachable and should have its `workers.dev` trigger disabled in the Cloudflare dashboard.

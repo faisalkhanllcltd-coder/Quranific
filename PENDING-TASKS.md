@@ -49,8 +49,8 @@
 **What to do:**
 
 1. `npx wrangler secret put INTERNAL_WORKER_SECRET` — generate a random 32-byte hex token, distinct from `JWT_SECRET`.
-2. `npx wrangler secret put META_CAPI_TOKEN` — paste System User access token from Facebook Events Manager → Settings → Generate Access Token.
-3. Add `META_PIXEL_ID` to `[vars]` in `wrangler.toml` (it is public; does not need to be a secret).
+2. `npx wrangler secret put META_CAPI_TOKEN` — Meta CAPI removed from codebase, this task is no longer applicable.
+3. `META_PIXEL_ID` — Meta CAPI removed from codebase, this task is no longer applicable.
 
 ---
 
@@ -261,7 +261,7 @@ Merge `staging/audit-fixes-batch-a`. Note: HSTS preload registry submission at `
 `staging/audit-fixes-batch-a:src/pages/api/complete.ts:274` (verified via `git show`): `https://graph.facebook.com/v26.0/` — **updated**.
 
 **What to do:**  
-Merge `staging/audit-fixes-batch-a`. Then set `META_CAPI_TOKEN` secret per PT-01.
+Merge `staging/audit-fixes-batch-a`. Note: setting `META_CAPI_TOKEN` secret per PT-01 is no longer applicable (Meta CAPI removed from codebase).
 
 ---
 
