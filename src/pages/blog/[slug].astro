@@ -6,6 +6,7 @@ import Footer from '../../components/global/Footer.astro';
 import Section from '../../components/ui/Section.astro';
 import EyebrowText from '../../components/ui/EyebrowText.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { courses } from '../../constants/courses';
 
 export const prerender = true;
 
@@ -61,6 +62,26 @@ const jsonLd = {
     name: 'Quranific',
   },
 };
+
+// Related courses recommendation engine
+const postTags = (post.data.tags || []).map((t) => t.toLowerCase());
+let matchedCourses = courses.filter((c) => {
+  const matchSlug = postTags.some(
+    (t) => c.slug.toLowerCase().includes(t) || t.includes(c.slug.toLowerCase())
+  );
+  const matchCategory = postTags.some((t) => c.category.toLowerCase().includes(t));
+  const matchTitle = postTags.some(
+    (t) => c.title.toLowerCase().includes(t) || c.shortTitle.toLowerCase().includes(t)
+  );
+  return matchSlug || matchCategory || matchTitle;
+});
+
+// Fallback to foundational courses if no tags matched or fewer than 2 matches
+if (matchedCourses.length < 2) {
+  const fallbackSlugs = ['basic-qaida', 'quran-reading-with-tajweed', 'quran-memorization'];
+  matchedCourses = courses.filter((c) => fallbackSlugs.includes(c.slug));
+}
+const relatedCourses = matchedCourses.slice(0, 3);
 ---
 
 <Base title={`${post.data.title} | Quranific Blog`} description={post.data.description}>
@@ -130,6 +151,46 @@ const jsonLd = {
       >
         <Content />
       </Section>
+
+      <!-- Related Courses Recommendation Block -->
+      {
+        relatedCourses.length > 0 && (
+          <div class="mt-16 pt-10 border-t border-emerald-100">
+            <div class="text-center mb-8">
+              <p class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-2">
+                Recommended For You
+              </p>
+              <h3 class="text-2xl sm:text-3xl font-black text-emerald-950 tracking-tight">
+                Related Quran Courses
+              </h3>
+            </div>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+              {relatedCourses.map((c) => (
+                <a
+                  href={`/courses/${c.slug}`}
+                  class="bg-white border border-emerald-100 rounded-2xl p-5 hover:border-emerald-300 hover:shadow-md transition-all flex flex-col justify-between group text-left"
+                >
+                  <div>
+                    <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full uppercase tracking-wider mb-2.5 inline-block">
+                      {c.level}
+                    </span>
+                    <h4 class="font-bold text-emerald-950 text-base mb-1.5 group-hover:text-emerald-700 transition-colors leading-snug">
+                      {c.shortTitle || c.title}
+                    </h4>
+                    <p class="text-xs text-emerald-800/70 line-clamp-2 leading-relaxed">
+                      {c.shortDesc}
+                    </p>
+                  </div>
+                  <div class="mt-4 pt-3 border-t border-emerald-50 flex items-center justify-between text-xs font-bold text-emerald-700">
+                    <span>View Course</span>
+                    <span class="group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
 
       <!-- Post-article CTA — drives readers into the funnel instead of bouncing -->
       <div class="mt-16 pt-10 border-t border-emerald-100">
