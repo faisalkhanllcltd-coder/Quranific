@@ -64,14 +64,14 @@ const jsonLd = {
 };
 
 // Related courses recommendation engine
-const postTags = (post.data.tags || []).map((t) => t.toLowerCase());
+const postTags: string[] = ((post.data.tags as string[]) || []).map((t: string) => t.toLowerCase());
 let matchedCourses = courses.filter((c) => {
   const matchSlug = postTags.some(
-    (t) => c.slug.toLowerCase().includes(t) || t.includes(c.slug.toLowerCase())
+    (t: string) => c.slug.toLowerCase().includes(t) || t.includes(c.slug.toLowerCase())
   );
-  const matchCategory = postTags.some((t) => c.category.toLowerCase().includes(t));
+  const matchCategory = postTags.some((t: string) => c.category.toLowerCase().includes(t));
   const matchTitle = postTags.some(
-    (t) => c.title.toLowerCase().includes(t) || c.shortTitle.toLowerCase().includes(t)
+    (t: string) => c.title.toLowerCase().includes(t) || c.shortTitle.toLowerCase().includes(t)
   );
   return matchSlug || matchCategory || matchTitle;
 });
