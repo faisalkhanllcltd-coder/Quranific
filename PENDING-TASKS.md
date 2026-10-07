@@ -32,143 +32,22 @@
 
 ## INFRASTRUCTURE & SECRETS (Cloudflare Dashboard / Wrangler)
 
----
+> **CONSOLIDATION NOTE:** All owner infrastructure, secret provisioning, Cloudflare dashboard, and DNS configuration tasks (formerly PT-01 through PT-09) have been consolidated into [`owner-actions.md`](./owner-actions.md).  
+> **`owner-actions.md` is now the single authoritative source of truth for all owner-managed items.**
 
-### PT-01 — Cloudflare Worker Secrets: Main Worker (INTERNAL_WORKER_SECRET, META_CAPI_TOKEN)
+### Quick Reference: Mapping to `owner-actions.md`
 
-**Blocks going live:** YES (META_CAPI_TOKEN: no, conversion tracking dead | INTERNAL_WORKER_SECRET: yes, retry-queue auth depends on it)  
-**Who does it:** OWNER (Cloudflare Dashboard)
-
-**Current state (fresh evidence):**  
-`npx wrangler secret list` on the main worker failed with auth error (no `CLOUDFLARE_API_TOKEN` in CI env), so cannot verify locally. However:
-
-- `01-cloudflare.md` (CF-04, last committed `b55388c` 2026-09-22) documents `JWT_SECRET`, `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY` confirmed present; `META_CAPI_TOKEN` confirmed ABSENT.
-- `staging/audit-fixes-batch-a:src/pages/api/internal/retry-queue.ts` (line confirmed present) now reads `INTERNAL_WORKER_SECRET` from `runtimeEnv`; if not set, it falls back to `JWT_SECRET` for backward compatibility. Code is ready; secret still needs to be set.
-- `src/pages/api/complete.ts:236` reads `META_CAPI_TOKEN` from `runtimeEnv`; lines 243–247 safely skip CAPI if unset.
-
-**What to do:**
-
-1. `npx wrangler secret put INTERNAL_WORKER_SECRET` — generate a random 32-byte hex token, distinct from `JWT_SECRET`.
-2. `npx wrangler secret put META_CAPI_TOKEN` — Meta CAPI removed from codebase, this task is no longer applicable.
-3. `META_PIXEL_ID` — Meta CAPI removed from codebase, this task is no longer applicable.
-
----
-
-### PT-02 — Cloudflare Worker Secrets: Alarm-Worker (INTERNAL_WORKER_SECRET, ALARM_ADMIN_TOKEN)
-
-**Blocks going live:** YES — `alarm-worker/src/index.ts` lines 33 and 56 expose `/force-run` and `/resend-log` HTTP endpoints. On the current `main`-branch code these have zero authentication. On `staging/audit-fixes-batch-a`, authentication uses `ALARM_ADMIN_TOKEN`; the `Env` interface declares both `ALARM_ADMIN_TOKEN` and `INTERNAL_WORKER_SECRET`.  
-**Who does it:** OWNER (Cloudflare Dashboard) + CODE (merge staging branch first)
-
-**Current state (fresh evidence):**  
-`npx wrangler secret list -c alarm-worker/wrangler.toml` returned: `[{"name":"JWT_SECRET","type":"secret_text"}]` — only `JWT_SECRET` present. `INTERNAL_WORKER_SECRET` and `ALARM_ADMIN_TOKEN` are **ABSENT**.  
-`alarm-worker/src/index.ts` (current branch, read lines 1–80): `/force-run` (line 33) and `/resend-log` (line 56) have NO auth check. `env.JWT_SECRET` is forwarded as an outbound bearer token to the main worker, reusing the cookie-signing secret across trust domains.
-
-**What to do (after merging staging branch):**
-
-1. `npx wrangler secret put ALARM_ADMIN_TOKEN -c alarm-worker/wrangler.toml` — separate token for HTTP trigger auth on the alarm worker.
-2. `npx wrangler secret put INTERNAL_WORKER_SECRET -c alarm-worker/wrangler.toml` — same value as PT-01's `INTERNAL_WORKER_SECRET` (used for outbound calls to `/api/internal/retry-queue`).
-3. Optionally add `workers_dev = false` to `alarm-worker/wrangler.toml` to prevent public `.workers.dev` exposure (confirmed absent in current `alarm-worker/wrangler.toml` read from staging).
-
----
-
-### PT-03 — Owner Action: Configure GA4 Server-Side Tracking Secrets
-
-**Blocks going live:** NO (degrades analytics accuracy but does not break the site)  
-**Who does it:** OWNER (Cloudflare Pages / GA4 Admin)
-
-**Current state:** `src/pages/api/complete.ts` sends GA4 Measurement Protocol events when `GA4_MEASUREMENT_ID` and `GA4_API_SECRET` are set. These are NOT confirmed present in secrets (same verification gap as PT-01).
-
-**What to do:**
-
-1. In GA4 Admin → Data Streams → your stream → Measurement Protocol API secrets → Create.
-2. `npx wrangler secret put GA4_MEASUREMENT_ID` (format: `G-XXXXXXXXXX`).
-3. `npx wrangler secret put GA4_API_SECRET`.
-
----
-
-### PT-04 — Owner Action: Configure DLQ Alert Webhook
-
-**Blocks going live:** NO  
-**Who does it:** OWNER (Cloudflare Dashboard)
-
-**Current state:** `src/pages/api/complete.ts` references `ALERT_WEBHOOK_URL` for Dead Letter Queue failure alerts. Not confirmed set.
-
-**What to do:**  
-Create a Discord/Slack webhook URL and run: `npx wrangler secret put ALERT_WEBHOOK_URL`.
-
----
-
-### PT-05 — Owner Action: GTM Tag Consent Configuration
-
-**Blocks going live:** YES (legal/GDPR — ad tags fire for all visitors without this)  
-**Who does it:** OWNER (Google Tag Manager dashboard)
-
-**Current state:** `src/components/blocks/CookieBanner.svelte` correctly fires `gtag('consent','update',...)`. GTM container `GTM-5CJMMJ29` must be configured to gate each tag on these signals. No code change needed — pure GTM dashboard work. Documented in `owner-actions.md` OA-1.
-
-**What to do:**  
-Log into GTM → Container `GTM-5CJMMJ29` → For every non-Google tag, enable "Require additional consent checks" with the appropriate consent types per the table in `owner-actions.md:OA-1`.
-
----
-
-### PT-06 — DNS: Add CAA Records for Universal SSL
-
-**Blocks going live:** NO (current SSL works; CAA prevents future mis-issuance and mis-renewal)  
-**Who does it:** OWNER (Cloudflare DNS dashboard)
-
-**Current state (fresh live DNS evidence):**  
-`Invoke-RestMethod "https://dns.google/resolve?name=quranific.com&type=CAA"` returned zero `Answer` records — only an `Authority` SOA. **Zero CAA records exist as of 2026-09-25.**
-
-**What to do:**  
-In Cloudflare DNS for `quranific.com`, add 4 CAA records (type CAA, name `@`):
-
-- `0 issue "letsencrypt.org"`
-- `0 issue "digicert.com"`
-- `0 issue "sectigo.com"`
-- `0 issue "pki.goog"`
-
----
-
-### PT-07 — DNS: Submit DNSSEC DS Record at Hostinger
-
-**Blocks going live:** NO (DNSSEC is defense-in-depth; site works without it)  
-**Who does it:** OWNER (Cloudflare Dashboard + Hostinger Registrar)
-
-**Current state (fresh live DNS evidence):**  
-`Invoke-RestMethod "https://dns.google/resolve?name=quranific.com&type=DS"` returned zero `Answer` records — the `AD` (Authenticated Data) flag is `false`. **DNSSEC DS record is not delegated at the registrar.**
-
-**What to do:**
-
-1. Cloudflare Dashboard → DNS → DNSSEC → Enable → Copy DS record values.
-2. Log into Hostinger domain control panel → DNS / DNSSEC → Paste DS record.
-
----
-
-### PT-08 — Owner Action: Cloudflare Zone Dashboard Verifications
-
-**Blocks going live:** NO (cannot be verified locally; best-practice checks)  
-**Who does it:** OWNER (Cloudflare Dashboard)
-
-**Current state:** Cannot verify locally without `CF_API_TOKEN`. See `00-MASTER-REPORT.md §10` for exact API commands.
-
-**What to do (verify in Cloudflare Dashboard):**
-
-- **CF-27:** Security → WAF → confirm Managed Ruleset is active.
-- **CF-28:** Security → Bots → confirm Bot Fight Mode is enabled.
-- **CF-29:** My Profile → Authentication → confirm 2FA is enforced.
-- **CF-30:** API Tokens → confirm CI/wrangler token is scoped (not Global API Key).
-- **OA-2:** Rules → Cache Rules → confirm no zone-level "Cache Everything" rule overrides `no-store` on HTML routes.
-
----
-
-### PT-09 — Owner Action: Add Secondary Emergency Admin Account
-
-**Blocks going live:** NO  
-**Who does it:** OWNER (Cloudflare Dashboard)
-
-**Current state:** Single account `faisalkhan.llc.ltd@gmail.com` controls all Cloudflare infrastructure. Documented in `owner-actions.md:OA-5`.
-
-**What to do:**  
-Cloudflare Dashboard → Manage Account → Members → Invite recovery email with Administrator role.
+| Legacy Task ID | Description                                                                             | Primary Status       | Authoritative Runbook Reference                                                                                                                |
+| :------------- | :-------------------------------------------------------------------------------------- | :------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+| **PT-01**      | Cloudflare Worker Secrets: Root Worker (`INTERNAL_WORKER_SECRET`)                       | ❌ Still Open        | [`owner-actions.md#oa-01`](./owner-actions.md)                                                                                                 |
+| **PT-02**      | Cloudflare Worker Secrets: Alarm Worker (`INTERNAL_WORKER_SECRET`, `ALARM_ADMIN_TOKEN`) | ❌ Still Open        | [`owner-actions.md#oa-01`](./owner-actions.md), [`#oa-02`](./owner-actions.md)                                                                 |
+| **PT-03**      | Server-Side Ad Secrets (`META_CAPI` purged, optional GA4 Measurement Protocol)          | ➖ Purged / Optional | [`owner-actions.md#oa-03`](./owner-actions.md)                                                                                                 |
+| **PT-04**      | DLQ Alert Webhook (`ALERT_WEBHOOK_URL`) on Alarm Worker                                 | ❌ Still Open        | [`owner-actions.md#oa-11`](./owner-actions.md)                                                                                                 |
+| **PT-05**      | GTM Tag Additional Consent Configuration (`GTM-5CJMMJ29`)                               | ⚠️ Owner Must Check  | [`owner-actions.md#oa-07`](./owner-actions.md)                                                                                                 |
+| **PT-06**      | Universal SSL CAA DNS Records                                                           | ❌ Still Open        | [`owner-actions.md#oa-05`](./owner-actions.md)                                                                                                 |
+| **PT-07**      | Submit DNSSEC DS Record at Hostinger Registrar                                          | ⚠️ Owner Must Check  | [`owner-actions.md#oa-12`](./owner-actions.md)                                                                                                 |
+| **PT-08**      | Cloudflare Zone Dashboard Verifications (WAF, Bots, 2FA, Scoped Tokens, Cache Rules)    | ⚠️ Owner Must Check  | [`owner-actions.md#oa-08`](./owner-actions.md), [`#oa-13`](./owner-actions.md), [`#oa-14`](./owner-actions.md), [`#oa-17`](./owner-actions.md) |
+| **PT-09**      | Secondary Emergency Admin Member & 2FA Enforcement                                      | ⚠️ Owner Must Check  | [`owner-actions.md#oa-16`](./owner-actions.md)                                                                                                 |
 
 ---
 
@@ -414,29 +293,13 @@ Run `npx wrangler types` to auto-generate `worker-configuration.d.ts` and refere
 
 ### PT-24 — DMARC: Advance from `p=none` Monitoring to `p=quarantine`
 
-**Blocks going live:** NO (monitoring mode is safe; advancement improves email security posture)  
-**Who does it:** OWNER (after reviewing DMARC aggregate reports)
-
-**Current state (fresh evidence):**  
-`01-cloudflare.md:CF-33` and `REVISION-LOG.md:S7` confirm live DNS TXT: `_dmarc.quranific.com` has `v=DMARC1; p=none`. This is the standard initial monitoring phase.
-
-**What to do:**
-
-1. Create `compliance@quranific.com` mailbox.
-2. Add `rua=mailto:compliance@quranific.com` to DMARC record.
-3. After 2–4 weeks of monitoring reports with zero failures, advance to `p=quarantine`.
+> Consolidated into [`owner-actions.md#oa-19`](./owner-actions.md). See `owner-actions.md` for rollout instructions and timelines.
 
 ---
 
-### PT-25 — Owner Actions: OA-6 Real-Edge CA-QC and GPC Validation
+### PT-25 — Real-Edge CA-QC and GPC Validation
 
-**Blocks going live:** YES (provisional — cookie consent bucket logic verified locally but not at real Cloudflare edge)  
-**Who does it:** OWNER (Cloudflare Pages Preview URL)
-
-**Current state:** Documented in `owner-actions.md:OA-6`. Local unit tests (7/7 PASS) and Playwright E2E (17/17 PASS) pass, but `cf.regionCode` in `wrangler pages dev` may not populate from real Cloudflare CF headers.
-
-**What to do:**  
-Deploy to a named Cloudflare Pages preview branch → test CA-QC consent with Canadian VPN (Quebec) → test GPC with Firefox `Sec-GPC: 1` header.
+> Consolidated into [`owner-actions.md#oa-23`](./owner-actions.md). Test via Cloudflare Pages preview deployment.
 
 ---
 
@@ -446,19 +309,13 @@ Deploy to a named Cloudflare Pages preview branch → test CA-QC consent with Ca
 
 ### PT-26 — Core Web Vitals (LCP, INP) — Requires Google Search Console
 
-**Blocks going live:** NO (cannot measure from CLI; must check Google Search Console → Core Web Vitals report)  
-**Who does it:** OWNER
-
-**Current state:** `00-MASTER-REPORT.md §9` and `REVISION-LOG.md:Q-08/Q-10` document PageSpeed API returned HTTP 429 during audit. Cannot verify LCP/INP from this environment.
+> Consolidated into [`owner-actions.md#oa-24`](./owner-actions.md). Check Google Search Console post-launch.
 
 ---
 
 ### PT-27 — Partytown/GTM Conversion Attribution — Requires Live Tag Assistant
 
-**Blocks going live:** NO (unverifiable without running ads)  
-**Who does it:** OWNER
-
-**Current state:** `REVISION-LOG.md:S23` notes Partytown executes GTM in a web worker and some ad platform conversion linkers may fail. Must verify via Google Tag Assistant / GA4 DebugView with live test conversions.
+> Consolidated into [`owner-actions.md#oa-24`](./owner-actions.md). Validate via GA4 DebugView and live test conversions.
 
 ---
 
