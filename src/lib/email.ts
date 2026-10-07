@@ -324,8 +324,25 @@ export async function sendContactAutoResponder(email: string, name: string, apiK
   }
 }
 
-export async function sendNewsletterWelcome(email: string, apiKey: string) {
+export async function sendNewsletterWelcome(
+  email: string,
+  apiKey: string,
+  unsubscribeUrl?: string
+) {
   if (!apiKey || apiKey === 're_123456789') return { success: true, mock: true };
+
+  const unsubscribeHtml = unsubscribeUrl
+    ? `
+      <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 11px; color: #6b7280; text-align: center;">
+        <p style="margin: 0;">You received this email because you subscribed to Quranific updates.</p>
+        <p style="margin: 4px 0 0 0;"><a href="${unsubscribeUrl}" style="color: #047857; text-decoration: underline;">Unsubscribe from newsletter</a></p>
+      </div>
+    `
+    : '';
+
+  const unsubscribeText = unsubscribeUrl
+    ? `\n\nTo unsubscribe from Quranific newsletter updates:\n${unsubscribeUrl}`
+    : '';
 
   try {
     const res = await fetch('https://api.resend.com/emails', {
@@ -340,15 +357,16 @@ export async function sendNewsletterWelcome(email: string, apiKey: string) {
         reply_to: 'support@quranific.com',
         subject: 'Thank you for subscribing to Quranific',
         html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
             <h2>As-salamu alaykum!</h2>
             <p>Thank you for subscribing to Quranific updates.</p>
             <p>You will now receive our latest news, articles, and special offers directly in your inbox.</p>
             <br/>
             <p>Warm regards,<br/>The Quranific Team</p>
+            ${unsubscribeHtml}
           </div>
         `,
-        text: `As-salamu alaykum!\n\nThank you for subscribing to Quranific updates.\n\nYou will now receive our latest news, articles, and special offers directly in your inbox.\n\nWarm regards,\nThe Quranific Team`,
+        text: `As-salamu alaykum!\n\nThank you for subscribing to Quranific updates.\n\nYou will now receive our latest news, articles, and special offers directly in your inbox.\n\nWarm regards,\nThe Quranific Team${unsubscribeText}`,
       }),
     });
 
