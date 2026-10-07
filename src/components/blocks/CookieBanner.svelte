@@ -262,7 +262,7 @@
             <span>
               <span class="font-semibold text-emerald-950">Advertising</span>
               <span class="text-emerald-700/70 block text-[11px]"
-                >Google Ads, Meta Pixel, remarketing tags (via GTM).</span
+                >Google Ads, remarketing tags (via GTM).</span
               >
             </span>
           </label>
