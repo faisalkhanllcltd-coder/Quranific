@@ -2,6 +2,7 @@
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
+import { SignJWT } from 'jose';
 import { sendNewsletterWelcome, sendNewsletterAdminNotification } from '../../lib/email';
 import { verifyTurnstile } from '../../lib/turnstile';
 
@@ -46,6 +47,7 @@ export const POST: APIRoute = async (context) => {
 
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
     const adminEmail = runtimeEnv.ADMIN_EMAIL as string;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string;
 
     // 1. Validate incoming data with Zod
     const parsed = newsletterSchema.safeParse(data);
@@ -84,6 +86,8 @@ export const POST: APIRoute = async (context) => {
 
     const sendEmailTask = async () => {
       if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
+        let isExistingSubscriber = false;
+
         // ── Step A: Push contact to Resend Audiences for list management ──────
         // Handles duplicate/uniqueness at the Resend level (upsert by email).
         if (resendAudienceId) {
@@ -104,8 +108,10 @@ export const POST: APIRoute = async (context) => {
             );
             if (!audienceRes.ok) {
               const errText = await audienceRes.text();
-              // 422 = duplicate contact — treat as success (idempotent upsert)
-              if (audienceRes.status !== 422) {
+              // 422 = duplicate contact — mark as existing subscriber
+              if (audienceRes.status === 422) {
+                isExistingSubscriber = true;
+              } else {
                 console.error(`[Resend Audiences Error]: ${audienceRes.status} ${errText}`);
               }
             }
@@ -114,6 +120,29 @@ export const POST: APIRoute = async (context) => {
           }
         } else {
           console.warn('[Newsletter]: RESEND_AUDIENCE_ID not set — skipping contact upsert');
+        }
+
+        // Deduplication: If already subscribed, skip duplicate welcome and admin emails
+        if (isExistingSubscriber) {
+          console.log(
+            `[Newsletter]: Contact ${email} already subscribed (422) — skipping duplicate notifications`
+          );
+          return;
+        }
+
+        // Generate signed unsubscribe link using existing jose library
+        let unsubscribeUrl: string | undefined;
+        if (jwtSecret) {
+          try {
+            const token = await new SignJWT({ email, action: 'newsletter_unsubscribe' })
+              .setProtectedHeader({ alg: 'HS256' })
+              .setIssuedAt()
+              .setExpirationTime('365d')
+              .sign(new TextEncoder().encode(jwtSecret));
+            unsubscribeUrl = `https://quranific.com/api/newsletter/unsubscribe?token=${encodeURIComponent(token)}`;
+          } catch (tokenErr) {
+            console.error('[Newsletter Unsubscribe Token Gen Error]:', tokenErr);
+          }
         }
 
         // ── Step B: Admin notification ────────────────────────────────────────
@@ -138,7 +167,7 @@ export const POST: APIRoute = async (context) => {
 
         // ── Step C: Welcome email to subscriber ───────────────────────────────
         try {
-          await sendNewsletterWelcome(email, resendApiKey);
+          await sendNewsletterWelcome(email, resendApiKey, unsubscribeUrl);
         } catch (userErr) {
           console.error('[Newsletter User Welcome Failed]:', userErr);
           if (kv) {
