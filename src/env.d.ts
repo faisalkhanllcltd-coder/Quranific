@@ -40,8 +40,6 @@ interface Env {
   GA_ID?: string;
 
   // Server-side tracking (optional)
-  META_PIXEL_ID?: string;
-  META_CAPI_TOKEN?: string;
   GA4_MEASUREMENT_ID?: string;
   GA4_API_SECRET?: string;
 
