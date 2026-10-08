@@ -16,6 +16,7 @@ import {
   type ContactNotificationData,
   type TeacherData,
 } from '../../../lib/email';
+import { addContact } from '../../../lib/resend-contacts';
 
 export const prerender = false;
 
@@ -185,6 +186,15 @@ export const POST: APIRoute = async (context) => {
             throw new Error(`Missing email in FAILED_NEWSLETTER_USER payload for key: ${key.name}`);
           }
           res = await sendNewsletterWelcome(email, resendApiKey);
+          delivered = true;
+        } else if (key.name.startsWith('FAILED_NEWSLETTER:')) {
+          const email = data.email;
+          if (!email) {
+            throw new Error(`Missing email in FAILED_NEWSLETTER payload for key: ${key.name}`);
+          }
+          const audienceId = (runtimeEnv.RESEND_AUDIENCE_ID as string) || data.audienceId;
+          const contactRes = await addContact(email, resendApiKey, audienceId);
+          res = { success: contactRes.success, id: contactRes.id };
           delivered = true;
         } else if (
           key.name.startsWith('FAILED_TEACHER_ADMIN:') ||

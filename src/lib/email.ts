@@ -324,6 +324,58 @@ export async function sendContactAutoResponder(email: string, name: string, apiK
   }
 }
 
+export async function sendNewsletterConfirmation(
+  email: string,
+  confirmUrl: string,
+  apiKey: string
+) {
+  if (!apiKey || apiKey === 're_123456789') return { success: true, mock: true };
+
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: `Quranific Updates <${SITE.emails.support}>`,
+        to: email,
+        reply_to: 'support@quranific.com',
+        subject: 'Confirm your subscription to Quranific Updates',
+        html: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b; line-height: 1.6; padding: 24px;">
+            <h2 style="color: #065f46; font-size: 22px; margin-bottom: 16px;">Confirm Your Subscription</h2>
+            <p>As-salamu alaykum,</p>
+            <p>Thank you for requesting to subscribe to Quranific updates. Please click the button below within 48 hours to confirm your subscription:</p>
+            <div style="margin: 28px 0;">
+              <a href="${confirmUrl}" style="background-color: #059669; color: #ffffff; padding: 12px 24px; border-radius: 9999px; font-weight: 600; text-decoration: none; display: inline-block;">Confirm Subscription</a>
+            </div>
+            <p style="font-size: 13px; color: #64748b;">If the button above does not work, copy and paste this link into your browser:<br/><a href="${confirmUrl}" style="color: #059669; word-break: break-all;">${confirmUrl}</a></p>
+            <p style="font-size: 13px; color: #64748b; margin-top: 24px;">If you did not request this subscription, no further action is required.</p>
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;" />
+            <p style="font-size: 12px; color: #94a3b8; text-align: center;">Quranific &bull; Quran &amp; Arabic Studies</p>
+          </div>
+        `,
+        text: `As-salamu alaykum,\n\nThank you for requesting to subscribe to Quranific updates. Please visit the link below within 48 hours to confirm your subscription:\n\n${confirmUrl}\n\nIf you did not request this subscription, no further action is required.\n\nWarm regards,\nThe Quranific Team`,
+      }),
+    });
+
+    if (!res.ok) throw new Error(`Resend API error: ${res.status} ${await res.text()}`);
+    let id: string | undefined;
+    try {
+      const data = (await res.json()) as { id?: string };
+      id = data.id;
+    } catch {
+      // Ignore JSON parse errors if response body is empty or malformed
+    }
+    return { success: true, id };
+  } catch (error) {
+    console.error('sendNewsletterConfirmation failed:', error);
+    throw error;
+  }
+}
+
 export async function sendNewsletterWelcome(
   email: string,
   apiKey: string,
@@ -344,6 +396,14 @@ export async function sendNewsletterWelcome(
     ? `\n\nTo unsubscribe from Quranific newsletter updates:\n${unsubscribeUrl}`
     : '';
 
+  // Resend send-email documentation lines 103-105:
+  // <ParamField body="headers" type="object">Custom headers to add to the email.</ParamField>
+  const customHeaders: Record<string, string> = {};
+  if (unsubscribeUrl) {
+    customHeaders['List-Unsubscribe'] = `<${unsubscribeUrl}>`;
+    customHeaders['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
+  }
+
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -356,6 +416,7 @@ export async function sendNewsletterWelcome(
         to: email,
         reply_to: 'support@quranific.com',
         subject: 'Thank you for subscribing to Quranific',
+        headers: Object.keys(customHeaders).length > 0 ? customHeaders : undefined,
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
             <h2>As-salamu alaykum!</h2>

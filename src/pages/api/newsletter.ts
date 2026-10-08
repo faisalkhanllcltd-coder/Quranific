@@ -2,9 +2,10 @@
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
-import { SignJWT } from 'jose';
-import { sendNewsletterWelcome, sendNewsletterAdminNotification } from '../../lib/email';
+import { sendNewsletterConfirmation } from '../../lib/email';
 import { verifyTurnstile } from '../../lib/turnstile';
+import { createNewsletterConfirmUrl } from '../../lib/newsletter-token';
+import { getContact } from '../../lib/resend-contacts';
 
 const newsletterSchema = z.object({
   email: z.email({ error: 'Invalid email address' }),
@@ -13,13 +14,16 @@ const newsletterSchema = z.object({
 
 export const prerender = false;
 
-// CRITICAL: This cannot be a static file
+const SECURITY_HEADERS = {
+  'Content-Type': 'application/json',
+  'Cache-Control': 'no-store',
+  'X-Robots-Tag': 'noindex, nofollow',
+  'Referrer-Policy': 'no-referrer',
+};
 
 export const POST: APIRoute = async (context) => {
   try {
     // 1. Safe Edge Context Extraction
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const locals = context.locals as any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const runtimeEnv = env as Record<string, any>;
     const kv = runtimeEnv.SESSION;
@@ -34,7 +38,7 @@ export const POST: APIRoute = async (context) => {
       if (attempts >= 4) {
         return new Response(
           JSON.stringify({ error: 'Too many requests. Please wait a minute before trying again.' }),
-          { status: 429, headers: { 'Content-Type': 'application/json' } }
+          { status: 429, headers: SECURITY_HEADERS }
         );
       }
       // Lock the IP for 60 seconds
@@ -46,19 +50,18 @@ export const POST: APIRoute = async (context) => {
     const data = (await context.request.json()) as Record<string, unknown>;
 
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
-    const adminEmail = runtimeEnv.ADMIN_EMAIL as string;
     const jwtSecret = runtimeEnv.JWT_SECRET as string;
 
-    // 1. Validate incoming data with Zod
+    // 3. Validate incoming data with Zod
     const parsed = newsletterSchema.safeParse(data);
     if (!parsed.success) {
       return new Response(JSON.stringify({ error: parsed.error.issues[0].message }), {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
+        headers: SECURITY_HEADERS,
       });
     }
 
-    const { email } = parsed.data;
+    const cleanEmail = parsed.data.email.toLowerCase().trim();
     const turnstileToken = parsed.data['cf-turnstile-response'];
 
     const turnstileSecret = (runtimeEnv.TURNSTILE_SECRET ??
@@ -68,150 +71,105 @@ export const POST: APIRoute = async (context) => {
       console.error('[Configuration Error]: Missing Turnstile Secret');
       return new Response(JSON.stringify({ error: 'Internal Configuration Error' }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: SECURITY_HEADERS,
       });
     }
 
-    // 2. Server-side Turnstile verification — hard reject if it fails
+    // 4. Server-side Turnstile verification — hard reject if it fails
     const isHuman = await verifyTurnstile(turnstileToken, turnstileSecret, cfConnectingIp);
     if (!isHuman) {
       return new Response(
         JSON.stringify({ error: 'Security check failed. Please refresh and try again.' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
+        { status: 400, headers: SECURITY_HEADERS }
       );
     }
 
-    // 3. Dispatch to Resend Audiences + email tasks in the background
-    const resendAudienceId = runtimeEnv.RESEND_AUDIENCE_ID as string | undefined;
-
-    const sendEmailTask = async () => {
-      if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
-        let isExistingSubscriber = false;
-
-        // ── Step A: Push contact to Resend Audiences for list management ──────
-        // Handles duplicate/uniqueness at the Resend level (upsert by email).
-        if (resendAudienceId) {
-          try {
-            const audienceRes = await fetch(
-              `https://api.resend.com/audiences/${resendAudienceId}/contacts`,
-              {
-                method: 'POST',
-                headers: {
-                  Authorization: `Bearer ${resendApiKey}`,
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  email,
-                  unsubscribed: false,
-                }),
-              }
-            );
-            if (!audienceRes.ok) {
-              const errText = await audienceRes.text();
-              // 422 = duplicate contact — mark as existing subscriber
-              if (audienceRes.status === 422) {
-                isExistingSubscriber = true;
-              } else {
-                console.error(`[Resend Audiences Error]: ${audienceRes.status} ${errText}`);
-              }
-            }
-          } catch (audienceErr) {
-            console.error('[Resend Audiences Fetch Failed]:', audienceErr);
-          }
-        } else {
-          console.warn('[Newsletter]: RESEND_AUDIENCE_ID not set — skipping contact upsert');
-        }
-
-        // Deduplication: If already subscribed, skip duplicate welcome and admin emails
-        if (isExistingSubscriber) {
-          console.log(
-            `[Newsletter]: Contact ${email} already subscribed (422) — skipping duplicate notifications`
-          );
-          return;
-        }
-
-        // Generate signed unsubscribe link using existing jose library
-        let unsubscribeUrl: string | undefined;
-        if (jwtSecret) {
-          try {
-            const token = await new SignJWT({ email, action: 'newsletter_unsubscribe' })
-              .setProtectedHeader({ alg: 'HS256' })
-              .setIssuedAt()
-              .setExpirationTime('365d')
-              .sign(new TextEncoder().encode(jwtSecret));
-            unsubscribeUrl = `https://quranific.com/api/newsletter/unsubscribe?token=${encodeURIComponent(token)}`;
-          } catch (tokenErr) {
-            console.error('[Newsletter Unsubscribe Token Gen Error]:', tokenErr);
-          }
-        }
-
-        // ── Step B: Admin notification ────────────────────────────────────────
-        try {
-          await sendNewsletterAdminNotification(email, resendApiKey, adminEmail);
-        } catch (adminErr) {
-          console.error('[Newsletter Admin Notification Failed]:', adminErr);
-          if (kv) {
-            const deadLetterKey = `FAILED_NEWSLETTER_ADMIN:${Date.now()}`;
-            const deadLetterPayload = JSON.stringify({
-              failedAt: new Date().toISOString(),
-              email: email,
-              reason: String(adminErr),
-            });
-            try {
-              await kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 });
-            } catch (e: unknown) {
-              console.error('[Dead-Letter KV Write Failed]:', e);
-            }
-          }
-        }
-
-        // ── Step C: Welcome email to subscriber ───────────────────────────────
-        try {
-          await sendNewsletterWelcome(email, resendApiKey, unsubscribeUrl);
-        } catch (userErr) {
-          console.error('[Newsletter User Welcome Failed]:', userErr);
-          if (kv) {
-            const deadLetterKey = `FAILED_NEWSLETTER_USER:${Date.now()}`;
-            const deadLetterPayload = JSON.stringify({
-              failedAt: new Date().toISOString(),
-              email: email,
-              reason: String(userErr),
-            });
-            try {
-              await kv.put(deadLetterKey, deadLetterPayload, { expirationTtl: 2592000 });
-            } catch (e: unknown) {
-              console.error('[Dead-Letter KV Write Failed]:', e);
-            }
-          }
-        }
-      } else {
-        // Local Mock Mode
-        console.log('\n====== 📬 MOCK NEWSLETTER SUB ======');
-        console.log(`New Subscriber: ${email}`);
-        console.log(`Audience ID: ${resendAudienceId ?? 'NOT SET'}`);
-        console.log(`Notification sent to: ${adminEmail}`);
-        console.log('====================================\n');
+    // 5. Per-email KV throttle (key NL_REQ:<lowercased email>, TTL 600s)
+    if (kv) {
+      const emailThrottleKey = `NL_REQ:${cleanEmail}`;
+      const existingReq = await kv.get(emailThrottleKey);
+      if (existingReq) {
+        // Return generic success without emailing repeatedly
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200,
+          headers: SECURITY_HEADERS,
+        });
       }
-    };
-
-    // 3. Background Task Execution (Safe)
-    if (locals.cfContext?.waitUntil) {
-      locals.cfContext.waitUntil(sendEmailTask());
-    } else {
-      sendEmailTask().catch(console.error);
+      await kv
+        .put(emailThrottleKey, '1', { expirationTtl: 600 })
+        .catch((e: unknown) => console.error('[KV Email Throttle Failed]:', e));
     }
 
-    // 4. Return success immediately
+    // 6. Check if contact is already an active subscriber
+    if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
+      try {
+        const contact = await getContact(cleanEmail, resendApiKey);
+        if (contact && !contact.unsubscribed) {
+          // Never reveal who is subscribed: return generic success without sending anything
+          return new Response(JSON.stringify({ success: true }), {
+            status: 200,
+            headers: SECURITY_HEADERS,
+          });
+        }
+      } catch (checkErr) {
+        console.error('[Resend Check Contact Failed]:', checkErr);
+      }
+    }
+
+    // 7. Verify JWT secret is present before generating confirm token
+    if (!jwtSecret || !jwtSecret.trim()) {
+      console.error('[Configuration Error]: Missing JWT_SECRET for newsletter token generation');
+      return new Response(JSON.stringify({ error: 'Internal Configuration Error' }), {
+        status: 500,
+        headers: SECURITY_HEADERS,
+      });
+    }
+
+    // 8. Generate signed confirmation URL (48h expiry)
+    let confirmUrl: string;
+    try {
+      confirmUrl = await createNewsletterConfirmUrl(cleanEmail, jwtSecret);
+    } catch (tokenErr) {
+      console.error('[Newsletter Token Generation Failed]:', tokenErr);
+      return new Response(JSON.stringify({ error: 'Internal Configuration Error' }), {
+        status: 500,
+        headers: SECURITY_HEADERS,
+      });
+    }
+
+    // 9. Send Confirmation Email (awaited)
+    if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
+      try {
+        await sendNewsletterConfirmation(cleanEmail, confirmUrl, resendApiKey);
+      } catch (emailErr) {
+        console.error('[Newsletter Confirmation Send Failed]:', emailErr);
+        return new Response(
+          JSON.stringify({
+            error:
+              "Couldn't send the confirmation email, please try again or message us on WhatsApp",
+          }),
+          { status: 500, headers: SECURITY_HEADERS }
+        );
+      }
+    } else {
+      // Local Mock Mode
+      console.log('\n====== 📬 MOCK NEWSLETTER CONFIRMATION ======');
+      console.log(`Subscriber: ${cleanEmail}`);
+      console.log(`Confirmation URL: ${confirmUrl}`);
+      console.log('=============================================\n');
+    }
+
+    // 10. Return success response
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: SECURITY_HEADERS,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[Newsletter Fatal 500]:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     return new Response(JSON.stringify({ error: `System Crash: ${errorMessage}` }), {
       status: 500,
+      headers: SECURITY_HEADERS,
     });
   }
 };
