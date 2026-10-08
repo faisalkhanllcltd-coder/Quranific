@@ -1,4 +1,4 @@
-﻿# Quranific
+# Quranific
 
 > **Online Quran Academy** — Private 1-on-1 Quran classes, live at [quranific.com](https://quranific.com)
 
@@ -364,7 +364,7 @@ Edit `.env` and populate:
 ```env
 RESEND_API_KEY="re_..."            # From resend.com dashboard
 TURNSTILE_SECRET_KEY="0x..."       # From Cloudflare Turnstile (secret key)
-ADMIN_EMAIL="admin@quranific.com"
+ADMIN_EMAIL="faisalkhan.llc.ltd@gmail.com" # Internal notifications recipient (personal Gmail). admin@quranific.com is only a correspondence mailbox.
 JWT_SECRET="<random-256-bit-string>"
 SITE="http://localhost:4321"
 PROD=false

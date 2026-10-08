@@ -92,7 +92,7 @@ Every row below represents an item from the original audit that was NOT marked `
 | **S-37**  |`03-svelte.md`    | Svelte component unit testing suite                                    | ❌ MISSING       | **STILL OPEN, FIXABLE IN CODE**                 | Playwright E2E suite exists; Vitest unit tests for pricing calculator and cookie banner can be added.                                                                                                                                      |
 | **T-07**  |`04-adjacent.md`   | Logical properties / RTL utilities                                     | ⚠️ PARTIAL       | **STILL OPEN, FIXABLE IN CODE**                 | Shared components use physical margin/padding (`ml-`, `mr-`). Can be migrated to logical CSS (`ms-`, `me-`).                                                                                                                               |
 | **T-08**  | `04-adjacent.md`   | Dark mode                                                              | ➖ N/A           | **SUPERSEDED / CONFIRMED N/A**                  | Light mode only (`meta name="color-scheme" content="light"`). No dark mode required.                                                                                                                                                       |
-| **R-03**  | `04-adjacent.md`  |`from`domain matches verified Resend domain                           | ⚠️ PARTIAL       | **STILL OPEN, FIXABLE IN CODE**                 |`src/pages/api/contact.ts:126`uses hardcoded`'System <onboarding@quranific.com>'`while`email.ts:97`uses`SITE.emails.support`.                                                                                                        |
+| **R-03**  | `04-adjacent.md` |`from`domain matches verified Resend domain                           | ✅ DONE          | **VERIFIED IN CODE**                            | Outbound transactional emails standardize on`SITE.emails.support` (`support@quranific.com`).                                                                                                        |
 | **R-06**  | `04-adjacent.md`   | No PII in console.error logs                                           | ⚠️ PARTIAL       | **STILL OPEN, FIXABLE IN CODE**                 | Full unencrypted PII is written to KV dead-letter queue keys upon delivery failure (`FAILED\_\*`keys in`SESSION`). Sensitive fields should be encrypted/hashed.                                                                            |
 | **Q-01**  | `04-adjacent.md`  | Arabic text:`lang="ar"`and`dir="rtl"`on Quranic elements           | ⚠️ PARTIAL       | **STILL OPEN, FIXABLE IN CODE**                 | 14 Arabic character occurrences across 7 files (e.g.`about/index.astro:144`) lack enclosing `<span dir="rtl" lang="ar">`.                                                                                                                 |
 | **Q-05**  | `04-adjacent.md`   | Hardcoded WhatsApp number: single source of truth                      | ⚠️ PARTIAL       | **STILL OPEN, FIXABLE IN CODE**                 | 2 hardcoded URLs (`CourseHero.astro:92`, `cookies.astro:240`) and 2 fallback literals (`contact/index.astro:81`, `SmartContactForm.astro:9`) should be unified to `SITE.whatsappLink`/`SITE.whatsappNumber`.                             |
@@ -182,7 +182,7 @@ A full scan of `src/` for `wa.me`, `api.whatsapp.com`, and digit pattern `923112
 
 - **R-01 (API Key Server-Only):** ✅ DONE. Declared in `src/env.d.ts:19`; 0 leaks into client bundles.
 - **R-02 (Direct Fetch Approach):** ✅ DONE. `src/lib/email.ts:2` uses lightweight zero-dependency `fetch`.
-- **R-03 (`from` Domain Match):** ⚠️ PARTIAL (STILL OPEN, FIXABLE IN CODE). `src/pages/api/contact.ts:126` uses hardcoded `'System <onboarding@quranific.com>'`, while `email.ts:97` uses `SITE.emails.support` (`support@quranific.com`).
+- **R-03 (`from` Domain Match):** ✅ DONE. Outbound transactional emails standardize on `SITE.emails.support` (`support@quranific.com`) on the verified sending domain.
 - **R-04 (API Key Validity Check):** ✅ DONE. `src/lib/email.ts:62` mocks safely in dev mode.
 - **R-05 (Dead-Letter Queue Pattern):** ✅ DONE. Failed email dispatches are persisted to Cloudflare KV with 30-day TTL (`expirationTtl: 2592000`).
 - **R-06 (No PII in Logs / DLQ Encryption):** ⚠️ PARTIAL (STILL OPEN, FIXABLE IN CODE). Console logs omit plain emails (`complete.ts` logs JTI only). However, full unencrypted PII is written to KV dead-letter queue keys upon delivery failure (`FAILED_*` keys in `SESSION`).
@@ -255,7 +255,7 @@ Prioritized checklist of every remaining open item before turning on Google Ads 
 - [ ] **Configure Universal SSL CAA Records in Cloudflare DNS:**
   - Add CAA records for `letsencrypt.org`, `digicert.com`, `sectigo.com`, `pki.goog`.
 - [ ] **Add Turnstile to Newsletter Form (`CF-15`):** Update `src/pages/api/newsletter.ts` to verify Turnstile tokens before accepting subscriptions.
-- [ ] **Standardize Contact Form Outbound Email (`R-03`):** Change `src/pages/api/contact.ts:126` from `onboarding@quranific.com` to `SITE.emails.support`.
+- [x] **Standardize Outbound Email Sender (`R-03`):** Outbound emails use `SITE.emails.support` (`support@quranific.com`).
 
 ### Tier 2 — High Priority Pre-Scale Actions (First 48 Hours)
 

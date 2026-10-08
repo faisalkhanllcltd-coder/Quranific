@@ -1,4 +1,4 @@
-﻿# Quranific — Deployment Guide
+# Quranific — Deployment Guide
 
 > Infrastructure reference for deploying and operating the Quranific platform on Cloudflare Pages + Workers.
 
@@ -70,18 +70,18 @@ custom_domain = true
 
 Set via Cloudflare Pages dashboard: **Settings → Environment Variables → Secrets** (or `wrangler secret put`).
 
-| Secret / Variable      | Required               | Description                                                                                             |
-| ---------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------- |
-| `RESEND_API_KEY`       | **Required**           | Resend API key (format: `re_...`). Used by all email dispatch functions.                                |
-| `TURNSTILE_SECRET_KEY` | **Required**           | Cloudflare Turnstile **secret** key. Server-side bot verification for all forms.                        |
-| `TURNSTILE_SECRET`     | Optional               | Legacy alias for `TURNSTILE_SECRET_KEY`. Code reads whichever is present (`??` fallback).               |
-| `JWT_SECRET`           | **Required**           | Random 256-bit string. Signs and verifies HS256 session JWTs. Must match `alarm-worker`'s `JWT_SECRET`. |
-| `ADMIN_EMAIL`          | **Required**           | Destination email for all admin notifications. Defaults to `faisalkhan.llc.ltd@gmail.com` if missing.   |
-| `ENVIRONMENT`          | Set in `wrangler.toml` | `"production"` — declared as a plain var, not a secret.                                                 |
-| `SITE`                 | Optional               | Base URL for the site. Used as a hint; canonical URLs are derived from `Astro.site`.                    |
-| `GA_ID`                | Optional               | Google Analytics tracking ID (if using direct gtag without GTM). Currently GTM handles this.            |
-| `SHEET_WEBHOOK_URL`    | Optional               | Legacy Google Sheets webhook. Not used in current code paths.                                           |
-| `ZAPIER_WEBHOOK_URL`   | Optional               | If set, `/api/complete` posts a `Lead_Complete` JSON payload to this URL on each Step 2 submission.     |
+| Secret / Variable      | Required               | Description                                                                                                                                                            |
+| ---------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RESEND_API_KEY`       | **Required**           | Resend API key (format: `re_...`). Used by all email dispatch functions.                                                                                               |
+| `TURNSTILE_SECRET_KEY` | **Required**           | Cloudflare Turnstile **secret** key. Server-side bot verification for all forms.                                                                                       |
+| `TURNSTILE_SECRET`     | Optional               | Legacy alias for `TURNSTILE_SECRET_KEY`. Code reads whichever is present (`??` fallback).                                                                              |
+| `JWT_SECRET`           | **Required**           | Random 256-bit string. Signs and verifies HS256 session JWTs. Must match `alarm-worker`'s `JWT_SECRET`.                                                                |
+| `ADMIN_EMAIL`          | **Required**           | Destination email for all internal admin notifications (set to personal Gmail `faisalkhan.llc.ltd@gmail.com`). `admin@quranific.com` is only a correspondence mailbox. |
+| `ENVIRONMENT`          | Set in `wrangler.toml` | `"production"` — declared as a plain var, not a secret.                                                                                                                |
+| `SITE`                 | Optional               | Base URL for the site. Used as a hint; canonical URLs are derived from `Astro.site`.                                                                                   |
+| `GA_ID`                | Optional               | Google Analytics tracking ID (if using direct gtag without GTM). Currently GTM handles this.                                                                           |
+| `SHEET_WEBHOOK_URL`    | Optional               | Legacy Google Sheets webhook. Not used in current code paths.                                                                                                          |
+| `ZAPIER_WEBHOOK_URL`   | Optional               | If set, `/api/complete` posts a `Lead_Complete` JSON payload to this URL on each Step 2 submission.                                                                    |
 
 > **Critical:** `TURNSTILE_SITE_KEY` (the public key `0x4AAAAAAD-QWQWhupcuvhbK`) is hardcoded in `src/constants/site.ts` and **must not** be added as a secret. Only the `TURNSTILE_SECRET_KEY` is private.
 
@@ -117,7 +117,7 @@ Set in the `quranific-alarm` Worker's environment (separate from the Pages proje
 ```env
 RESEND_API_KEY="re_<your-key>"
 TURNSTILE_SECRET_KEY="0x<your-turnstile-secret>"
-ADMIN_EMAIL="admin@quranific.com"
+ADMIN_EMAIL="faisalkhan.llc.ltd@gmail.com" # Internal notifications recipient (personal Gmail). admin@quranific.com is only a correspondence mailbox.
 JWT_SECRET="<random-256-bit-string>"
 SITE="http://localhost:4321"
 PROD=false
@@ -453,7 +453,7 @@ All email is dispatched via Resend (`https://api.resend.com/emails`). The `src/l
 | `sendTeacherAdminNotification`    | `/api/apply-teacher` success | `ADMIN_EMAIL`    |
 | `sendTeacherAutoResponder`        | `/api/apply-teacher` success | Applicant email  |
 
-**From address:** `System <onboarding@quranific.com>` — the `onboarding@quranific.com` domain must be verified in Resend.
+**From address:** `Quranific Support <support@quranific.com>` (or `System <support@quranific.com>`) — customer-facing emails use `support@quranific.com` (`SITE.emails.support`) on the verified domain.
 
 **Local mock mode:** When `RESEND_API_KEY` is absent, empty, not prefixed with `re_`, or equals `re_123456789`, all email functions fall back to `console.log` output. No actual emails are sent. This is the default local dev behaviour.
 

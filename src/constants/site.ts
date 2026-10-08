@@ -11,7 +11,6 @@ export const SITE = {
   whatsappNumber: '923112112122',
   phone: '+92 311 2112122',
   whatsappLink: 'https://wa.me/message/FF4LDK3JR2GPN1',
-  email: 'support@quranific.com',
 
   // B-2 FIX: Turnstile site key exposed at build time for the funnel widget.
   // This is the PUBLIC site key (safe to embed in HTML). The SECRET key stays
