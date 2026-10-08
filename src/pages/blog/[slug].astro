@@ -64,16 +64,24 @@ const jsonLd = {
 };
 
 // Related courses recommendation engine
-const postTags: string[] = ((post.data.tags as string[]) || []).map((t: string) => t.toLowerCase());
+const postTags: string[] = ((post.data.tags as string[]) || [])
+  .map((t: string) => t.toLowerCase().trim())
+  .filter((t: string) => t.length >= 3);
+
+const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 let matchedCourses = courses.filter((c) => {
-  const matchSlug = postTags.some(
-    (t: string) => c.slug.toLowerCase().includes(t) || t.includes(c.slug.toLowerCase())
-  );
-  const matchCategory = postTags.some((t: string) => c.category.toLowerCase().includes(t));
-  const matchTitle = postTags.some(
-    (t: string) => c.title.toLowerCase().includes(t) || c.shortTitle.toLowerCase().includes(t)
-  );
-  return matchSlug || matchCategory || matchTitle;
+  return postTags.some((t: string) => {
+    const cleanTag = t.replace(/-/g, ' ');
+    const pattern = new RegExp(`\\b${escapeRegex(cleanTag)}\\b`, 'i');
+    const slugText = c.slug.replace(/-/g, ' ');
+    return (
+      pattern.test(slugText) ||
+      pattern.test(c.category) ||
+      pattern.test(c.title) ||
+      pattern.test(c.shortTitle)
+    );
+  });
 });
 
 // Fallback to foundational courses if no tags matched or fewer than 2 matches
