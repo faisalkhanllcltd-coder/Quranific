@@ -210,35 +210,35 @@ The following 32 automated commands verify the operational and architectural sta
 
 ```powershell
 # 1. Verify no placeholder-32b secrets anywhere in repository
-(Get-ChildItem -File -Recurse | Where-Object { $_.FullName -notmatch '\\(\.git|node_modules|\.astro|dist)\\' } | Select-String "placeholder-32b").Count
+(git grep -nIi "placeholder-32b" -- ":(exclude)PENDING-TASKS.md").Count
 # Expected: 0
 
 # 2. Verify no Meta CAPI or graph.facebook references in source code
-(Get-ChildItem -Path "src" -Recurse -File | Select-String "graph.facebook|META_CAPI|fbq").Count
+(git grep -nIiE "graph\.facebook|META_CAPI|fbq" -- src public).Count
 # Expected: 0
 
 # 3. Verify no unsafe-eval in enforced CSP headers
-(Select-String -Path "public/_headers", "src/middleware.ts" -Pattern "unsafe-eval").Count
+(git grep -nIi "unsafe-eval" -- public/_headers src/middleware.ts).Count
 # Expected: 0
 
 # 4. Verify CourseHero uses centralized SITE.whatsappLink
-Select-String -Path "src/pages/courses/_components/CourseHero.astro" -Pattern "SITE\.whatsappLink"
+git grep -nIi "SITE\.whatsappLink" -- src/pages/courses/_components/CourseHero.astro
 # Expected: Match on line 93
 
 # 5. Verify no hardcoded 447477 UK phone numbers in src
-(Get-ChildItem -Path "src" -Recurse -File | Select-String "447477").Count
+(git grep -nIi "447477" -- src).Count
 # Expected: 0
 
 # 6. Verify legacy SITE.email field is removed from constants
-Select-String -Path "src/constants/site.ts" -Pattern "^\s*email\s*:"
-# Expected: 0 matches
+git grep -nIiE "^\s*email\s*:" -- src/constants/site.ts
+# Expected: 0 matches (exit code 1)
 
 # 7. Verify all five approved email addresses exist in site constants
-Select-String -Path "src/constants/site.ts" -Pattern "support@|admin@|compliance@|contact@|faisalkhan\.llc\.ltd@gmail\.com"
+git grep -nIiE "support@|admin@|compliance@|contact@|faisalkhan\.llc\.ltd@gmail\.com" -- src/constants/site.ts
 # Expected: Matches for all 5 mailboxes
 
 # 8. Verify deploy:alarm npm script exists in package.json
-Select-String -Path "package.json" -Pattern '"deploy:alarm"'
+git grep -nIi '"deploy:alarm"' -- package.json
 # Expected: Match with "wrangler deploy -c alarm-worker/wrangler.toml"
 
 # 9. Verify dry-run deployment for alarm-worker succeeds
@@ -249,76 +249,76 @@ npx wrangler deploy -c alarm-worker/wrangler.toml --dry-run
 npx wrangler deploy --dry-run
 # Expected: Exit code 0, Total Upload reported, KV SESSION binding
 
-# 11. Verify newsletter token test executes and passes natively
-node --experimental-strip-types tests/newsletter-token.test.ts
-# Expected: 11 passing assertions, exit code 0
+# 11. Verify newsletter token test executes and passes
+npx tsx tests/newsletter-token.test.ts
+# Expected: 14 passing assertions, exit code 0
 
-# 12. Verify consent unit test executes and passes natively
-node --experimental-strip-types tests/consent-unit.test.ts
+# 12. Verify consent unit test executes and passes
+npx tsx tests/consent-unit.test.ts
 # Expected: 19 passing assertions, exit code 0
 
 # 13. Verify retry-queue timing-safe comparison exists
-Select-String -Path "src/pages/api/internal/retry-queue.ts" -Pattern "timingSafeEqual"
+git grep -nIi "timingSafeEqual" -- src/pages/api/internal/retry-queue.ts
 # Expected: Match present
 
 # 14. Verify retry-queue rejects when INTERNAL_WORKER_SECRET is unset
-Select-String -Path "src/pages/api/internal/retry-queue.ts" -Pattern "if\s*\(!authorized\)"
+git grep -nIi "if\s*\(!authorized\)" -- src/pages/api/internal/retry-queue.ts
 # Expected: Returns 401 Unauthorized
 
 # 15. Verify alarm-worker timing-safe comparison exists
-Select-String -Path "alarm-worker/src/index.ts" -Pattern "timingSafeEqual"
+git grep -nIi "timingSafeEqual" -- alarm-worker/src/index.ts
 # Expected: Match present
 
 # 16. Verify quranific-container utility in global.css drops xl:px-12
-Select-String -Path "src/styles/global.css" -Pattern "@utility quranific-container" -Context 0, 1
+git grep -nIi -C 1 "@utility quranific-container" -- src/styles/global.css
 # Expected: @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 
 # 17. Verify no hardcoded 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8' remains
-(Get-ChildItem -Path "src" -Recurse -File | Select-String "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8").Count
+(git grep -nIi "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" -- src).Count
 # Expected: 0
 
 # 18. Verify blog slug filters tags < 3 characters
-Select-String -LiteralPath "src/pages/blog/[slug].astro" -Pattern "t\.length >= 3"
+git grep -nIi "t\.length >= 3" -- "src/pages/blog/[slug].astro"
 # Expected: Match present
 
 # 19. Verify blog slug matches whole words with word boundary regex
-Select-String -LiteralPath "src/pages/blog/[slug].astro" -Pattern "\\\\b\$\{escapeRegex"
+git grep -nIi "\\\\b\${escapeRegex" -- "src/pages/blog/[slug].astro"
 # Expected: Match present
 
 # 20. Verify no stone- color classes in blog slug
-(Select-String -LiteralPath "src/pages/blog/[slug].astro" -Pattern "stone-").Count
+(git grep -nIi "stone-" -- "src/pages/blog/[slug].astro").Count
 # Expected: 0
 
 # 21. Verify Turnstile validation imported in newsletter API
-Select-String -Path "src/pages/api/newsletter.ts" -Pattern "validateTurnstile"
+git grep -nIi "validateTurnstile" -- src/pages/api/newsletter.ts
 # Expected: Match present
 
 # 22. Verify double opt-in confirm endpoint exists and prerender = false
-Select-String -Path "src/pages/api/newsletter/confirm.ts" -Pattern "prerender = false"
+git grep -nIi "prerender = false" -- src/pages/api/newsletter/confirm.ts
 # Expected: Match present
 
 # 23. Verify unsubscribe endpoint exists and prerender = false
-Select-String -Path "src/pages/api/newsletter/unsubscribe.ts" -Pattern "prerender = false"
+git grep -nIi "prerender = false" -- src/pages/api/newsletter/unsubscribe.ts
 # Expected: Match present
 
 # 24. Verify old KV key UNSUBSCRIBED:NEWSLETTER is no longer written
-(Get-ChildItem -Path "src" -Recurse -File | Select-String "UNSUBSCRIBED:NEWSLETTER").Count
+(git grep -nIi "UNSUBSCRIBED:NEWSLETTER" -- src).Count
 # Expected: 0
 
 # 25. Verify footer visible success text matches double opt-in instruction
-Select-String -Path "src/components/global/Footer.astro" -Pattern "Check your inbox to confirm your subscription\."
+git grep -nIi "Check your inbox to confirm your subscription\." -- src/components/global/Footer.astro
 # Expected: Match present
 
 # 26. Verify RFC 8058 one-click headers in welcome email
-Select-String -Path "src/lib/email.ts" -Pattern "List-Unsubscribe-Post"
+git grep -nIi "List-Unsubscribe-Post" -- src/lib/email.ts
 # Expected: Match present with 'List-Unsubscribe=One-Click'
 
 # 27. Verify generate_lead dataLayer event in CompleteForm
-Select-String -Path "src/pages/getting-started/_components/CompleteForm.svelte" -Pattern "generate_lead"
+git grep -nIi "generate_lead" -- src/pages/getting-started/_components/CompleteForm.svelte
 # Expected: Match present
 
 # 28. Verify GTM production hostname guard in Base.astro
-Select-String -Path "src/layouts/Base.astro" -Pattern "window\.location\.hostname === 'quranific\.com'"
+git grep -nIi "window\.location\.hostname === 'quranific\.com'" -- src/layouts/Base.astro
 # Expected: Match present
 
 # 29. Verify apex DoH SPF record for quranific.com
