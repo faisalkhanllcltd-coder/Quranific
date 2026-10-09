@@ -16,7 +16,8 @@ import {
   type ContactNotificationData,
   type TeacherData,
 } from '../../../lib/email';
-import { addContact } from '../../../lib/resend-contacts';
+import { ensureSubscribed } from '../../../lib/resend-contacts';
+import { createNewsletterUnsubscribeUrl } from '../../../lib/newsletter-token';
 
 export const prerender = false;
 
@@ -75,6 +76,7 @@ export const POST: APIRoute = async (context) => {
     const internalWorkerSecret = runtimeEnv.INTERNAL_WORKER_SECRET as string | undefined;
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
     const adminEmail = runtimeEnv.ADMIN_EMAIL as string;
+    const jwtSecret = runtimeEnv.JWT_SECRET as string | undefined;
 
     let authorized = false;
     if (internalWorkerSecret) {
@@ -193,8 +195,19 @@ export const POST: APIRoute = async (context) => {
             throw new Error(`Missing email in FAILED_NEWSLETTER payload for key: ${key.name}`);
           }
           const audienceId = (runtimeEnv.RESEND_AUDIENCE_ID as string) || data.audienceId;
-          const contactRes = await addContact(email, resendApiKey, audienceId);
-          res = { success: contactRes.success, id: contactRes.id };
+          const subResult = await ensureSubscribed(email, resendApiKey, audienceId);
+          if (subResult === 'created' || subResult === 'resubscribed') {
+            if (jwtSecret && jwtSecret.trim()) {
+              try {
+                const unsubscribeUrl = await createNewsletterUnsubscribeUrl(email, jwtSecret);
+                await sendNewsletterWelcome(email, resendApiKey, unsubscribeUrl);
+              } catch (tokenErr) {
+                console.error('[Retry-Queue Newsletter Welcome Error]:', tokenErr);
+              }
+            }
+            await sendNewsletterAdminNotification(email, resendApiKey, adminEmail);
+          }
+          res = { success: true };
           delivered = true;
         } else if (
           key.name.startsWith('FAILED_TEACHER_ADMIN:') ||
