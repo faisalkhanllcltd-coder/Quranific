@@ -84,9 +84,9 @@ export const POST: APIRoute = async (context) => {
       );
     }
 
-    // 5. Per-email KV throttle (key NL_REQ:<lowercased email>, TTL 600s)
+    // 5. Per-email KV throttle check (key NL_REQ:<lowercased email>, TTL 600s)
+    const emailThrottleKey = `NL_REQ:${cleanEmail}`;
     if (kv) {
-      const emailThrottleKey = `NL_REQ:${cleanEmail}`;
       const existingReq = await kv.get(emailThrottleKey);
       if (existingReq) {
         // Return generic success without emailing repeatedly
@@ -95,9 +95,6 @@ export const POST: APIRoute = async (context) => {
           headers: SECURITY_HEADERS,
         });
       }
-      await kv
-        .put(emailThrottleKey, '1', { expirationTtl: 600 })
-        .catch((e: unknown) => console.error('[KV Email Throttle Failed]:', e));
     }
 
     // 6. Check if contact is already an active subscriber
@@ -159,15 +156,21 @@ export const POST: APIRoute = async (context) => {
       console.log('=============================================\n');
     }
 
-    // 10. Return success response
+    // 10. Write per-email KV throttle key only after successful send / mock log
+    if (kv) {
+      await kv
+        .put(emailThrottleKey, '1', { expirationTtl: 600 })
+        .catch((e: unknown) => console.error('[KV Email Throttle Failed]:', e));
+    }
+
+    // 11. Return success response
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: SECURITY_HEADERS,
     });
   } catch (error: unknown) {
     console.error('[Newsletter Fatal 500]:', error);
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    return new Response(JSON.stringify({ error: `System Crash: ${errorMessage}` }), {
+    return new Response(JSON.stringify({ error: 'Something went wrong. Please try again.' }), {
       status: 500,
       headers: SECURITY_HEADERS,
     });
