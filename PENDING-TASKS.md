@@ -407,7 +407,7 @@ git grep -nF "INTERNAL_WORKER_SECRET" -- DEPLOYMENT.md
 # Expected: 0
 
 # 32. Verify no openssl rand instructions remain in any markdown file
-(git grep -nF "openssl rand" -- "*.md").Count
+(git grep -nF "openssl rand" -- "*.md" ":(exclude)PENDING-TASKS.md").Count
 # Expected: 0
 
 # 33. Verify 'System Crash' wording is absent from newsletter.ts
@@ -428,5 +428,5 @@ git grep -nF "RESEND_AUDIENCE_ID" -- .env.example
 
 # 37. Verify ALARM_ADMIN_TOKEN is documented in DEPLOYMENT.md
 git grep -nF "ALARM_ADMIN_TOKEN" -- DEPLOYMENT.md
-# Expected: 6 matches
+# Expected: Matches on lines 109, 223, 228, 257
 ```
