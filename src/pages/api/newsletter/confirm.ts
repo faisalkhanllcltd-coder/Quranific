@@ -6,7 +6,7 @@ import {
   verifyNewsletterToken,
   createNewsletterUnsubscribeUrl,
 } from '../../../lib/newsletter-token';
-import { getContact, addContact, setUnsubscribed } from '../../../lib/resend-contacts';
+import { ensureSubscribed } from '../../../lib/resend-contacts';
 import { sendNewsletterWelcome, sendNewsletterAdminNotification } from '../../../lib/email';
 
 export const prerender = false;
@@ -297,19 +297,31 @@ export const POST: APIRoute = async (context) => {
     );
   }
 
-  // 1. Add / update contact in Resend
+  // 1. Store consent record in KV FIRST (no TTL, only if none exists; never overwrite the first confirmedAt)
+  if (kv) {
+    const consentKey = `NL_CONSENT:${email}`;
+    try {
+      const existingConsent = await kv.get(consentKey);
+      if (!existingConsent) {
+        const consentRecord = JSON.stringify({
+          confirmedAt: new Date().toISOString(),
+          ip: cfConnectingIp,
+          source: 'footer',
+        });
+        await kv.put(consentKey, consentRecord);
+      }
+    } catch (e: unknown) {
+      console.error('[KV NL_CONSENT write failed]:', e);
+    }
+  }
+
+  // 2. Ensure contact is subscribed in Resend
+  let subResult: 'created' | 'resubscribed' | 'already';
   if (resendApiKey && resendApiKey.startsWith('re_') && resendApiKey !== 're_123456789') {
     try {
-      const existing = await getContact(email, resendApiKey);
-      if (existing) {
-        if (existing.unsubscribed) {
-          await setUnsubscribed(email, false, resendApiKey);
-        }
-      } else {
-        await addContact(email, resendApiKey, resendAudienceId);
-      }
+      subResult = await ensureSubscribed(email, resendApiKey, resendAudienceId);
     } catch (resendErr) {
-      console.error('[Newsletter Confirm addContact Failed]:', resendErr);
+      console.error('[Newsletter Confirm ensureSubscribed Failed]:', resendErr);
 
       // Write payload to KV with key FAILED_NEWSLETTER:<timestamp> (TTL 30 days = 2592000s)
       if (kv) {
@@ -338,42 +350,34 @@ export const POST: APIRoute = async (context) => {
         { status: 200, headers: HTML_HEADERS }
       );
     }
-  }
-
-  // 2. Store consent record in KV (no TTL)
-  if (kv) {
-    const consentKey = `NL_CONSENT:${email}`;
-    const consentRecord = JSON.stringify({
-      confirmedAt: new Date().toISOString(),
-      ip: cfConnectingIp,
-      source: 'footer',
-    });
-    await kv.put(consentKey, consentRecord).catch((e: unknown) => {
-      console.error('[KV NL_CONSENT write failed]:', e);
-    });
-  }
-
-  // 3. Dispatch welcome email and admin notification in background via waitUntil
-  const sendBackgroundTasks = async () => {
-    try {
-      const unsubscribeUrl = await createNewsletterUnsubscribeUrl(email, jwtSecret);
-      await Promise.all([
-        sendNewsletterWelcome(email, resendApiKey, unsubscribeUrl),
-        sendNewsletterAdminNotification(email, resendApiKey, adminEmail),
-      ]);
-    } catch (bgErr) {
-      console.error('[Newsletter Welcome/Admin Background Dispatch Failed]:', bgErr);
-    }
-  };
-
-  const waitUntil =
-    locals.cfContext?.waitUntil?.bind(locals.cfContext) ??
-    locals.runtime?.ctx?.waitUntil?.bind(locals.runtime?.ctx);
-
-  if (waitUntil) {
-    waitUntil(sendBackgroundTasks());
   } else {
-    sendBackgroundTasks().catch(console.error);
+    // Local mock mode: treat as created to trigger mock welcome/admin notifications
+    subResult = 'created';
+  }
+
+  // 3. Dispatch welcome email and admin notification in background via waitUntil ONLY if created or resubscribed
+  if (subResult === 'created' || subResult === 'resubscribed') {
+    const sendBackgroundTasks = async () => {
+      try {
+        const unsubscribeUrl = await createNewsletterUnsubscribeUrl(email, jwtSecret);
+        await Promise.all([
+          sendNewsletterWelcome(email, resendApiKey, unsubscribeUrl),
+          sendNewsletterAdminNotification(email, resendApiKey, adminEmail),
+        ]);
+      } catch (bgErr) {
+        console.error('[Newsletter Welcome/Admin Background Dispatch Failed]:', bgErr);
+      }
+    };
+
+    const waitUntil =
+      locals.cfContext?.waitUntil?.bind(locals.cfContext) ??
+      locals.runtime?.ctx?.waitUntil?.bind(locals.runtime?.ctx);
+
+    if (waitUntil) {
+      waitUntil(sendBackgroundTasks());
+    } else {
+      sendBackgroundTasks().catch(console.error);
+    }
   }
 
   return new Response(
