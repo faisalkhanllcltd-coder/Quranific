@@ -34,6 +34,7 @@ export interface ContactOperationResult {
   success: boolean;
   id?: string;
   mock?: boolean;
+  notFound?: boolean;
 }
 
 /**
@@ -131,6 +132,10 @@ export async function setUnsubscribed(
     }),
   });
 
+  if (res.status === 404) {
+    return { success: true, notFound: true };
+  }
+
   if (!res.ok) {
     const errText = await res.text();
     throw new Error(`Resend setUnsubscribed failed (${res.status}): ${errText}`);
@@ -138,4 +143,29 @@ export async function setUnsubscribed(
 
   const data = (await res.json().catch(() => ({}))) as { id?: string };
   return { success: true, id: data.id };
+}
+
+/**
+ * Ensures the contact is active in Resend.
+ * - If contact does not exist, creates it via addContact -> returns 'created'
+ * - If contact exists and is unsubscribed, re-subscribes via setUnsubscribed(false) -> returns 'resubscribed'
+ * - If contact exists and is already subscribed, does nothing -> returns 'already'
+ */
+export async function ensureSubscribed(
+  email: string,
+  apiKey: string,
+  segmentId?: string
+): Promise<'created' | 'resubscribed' | 'already'> {
+  const contact = await getContact(email, apiKey);
+  if (!contact) {
+    await addContact(email, apiKey, segmentId);
+    return 'created';
+  }
+
+  if (contact.unsubscribed) {
+    await setUnsubscribed(email, false, apiKey);
+    return 'resubscribed';
+  }
+
+  return 'already';
 }
