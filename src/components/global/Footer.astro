@@ -242,20 +242,10 @@ const headingClass = 'text-emerald-500 mb-5';
         const result = await response.json().catch((): { error?: string } => ({}));
 
         if (!response.ok) {
-          if (response.status === 400) {
-            const errorText = ((result as { error?: string }).error || '').toLowerCase();
-            if (
-              errorText.includes('duplicate') ||
-              errorText.includes('already') ||
-              errorText.includes('exists')
-            ) {
-              throw new Error('DUPLICATE_EMAIL');
-            }
-          }
           throw new Error((result as { error?: string }).error || 'Subscription failed');
         }
 
-        btn.innerText = 'Joined ✓';
+        btn.innerText = 'Check your inbox';
         btn.classList.replace('bg-amber-500', 'bg-emerald-600');
         btn.classList.replace('hover:bg-amber-400', 'hover:bg-emerald-500');
         btn.classList.replace('text-emerald-950', 'text-white');
@@ -268,17 +258,11 @@ const headingClass = 'text-emerald-500 mb-5';
         console.error('Newsletter error:', error);
         const errMsg = error instanceof Error ? error.message : '';
 
-        if (errMsg === 'DUPLICATE_EMAIL') {
-          btn.innerText = 'Joined ✓';
-          message.textContent = "You're already subscribed! Check your inbox.";
-          message.className = 'mt-2 text-xs font-medium text-amber-400 block';
-        } else {
-          btn.innerText = originalBtnText;
-          btn.disabled = false;
-          input.disabled = false;
-          message.textContent = errMsg || 'Network error. Please try again.';
-          message.className = 'mt-2 text-xs font-medium text-red-400 block';
-        }
+        btn.innerText = originalBtnText;
+        btn.disabled = false;
+        input.disabled = false;
+        message.textContent = errMsg || 'Network error. Please try again.';
+        message.className = 'mt-2 text-xs font-medium text-red-400 block';
       }
     });
   });
