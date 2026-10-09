@@ -249,18 +249,18 @@ The signup funnel uses a **stateless JWT session** to bridge Step 1 and Step 2 w
 
 ### API Endpoints (all SSR, prerender = false)
 
-| Method     | Endpoint                    | Auth              | Description                                       |
-| ---------- | --------------------------- | ----------------- | ------------------------------------------------- |
-| `POST`     | `/api/register`             | Turnstile         | Step 1: validate, mint JWT, fire Step 1 email     |
-| `POST`     | `/api/complete`             | JWT cookie        | Step 2: validate, send admin + welcome email      |
-| `GET/HEAD` | `/api/complete`             | JWT cookie        | Pre-flight session validity check                 |
-| `POST`     | `/api/contact`              | Turnstile         | Contact form submission                           |
-| `POST`     | `/api/newsletter`           | Turnstile         | Newsletter subscription                           |
-| `POST`     | `/api/apply-teacher`        | Turnstile         | Teacher job application                           |
-| `GET`      | `/api/consent-bucket`       | None              | Per-visitor consent bucket (no-store)             |
-| `GET`      | `/api/geo-currency`         | None              | Per-visitor currency from CF geo (no-store)       |
-| `POST`     | `/api/internal/retry-queue` | Bearer JWT_SECRET | Drain KV dead-letter queue, re-send failed emails |
-| `GET`      | `/api/internal/retry-queue` | Bearer JWT_SECRET | Proxy Resend email log audit                      |
+| Method     | Endpoint                    | Auth                          | Description                                       |
+| ---------- | --------------------------- | ----------------------------- | ------------------------------------------------- |
+| `POST`     | `/api/register`             | Turnstile                     | Step 1: validate, mint JWT, fire Step 1 email     |
+| `POST`     | `/api/complete`             | JWT cookie                    | Step 2: validate, send admin + welcome email      |
+| `GET/HEAD` | `/api/complete`             | JWT cookie                    | Pre-flight session validity check                 |
+| `POST`     | `/api/contact`              | Turnstile                     | Contact form submission                           |
+| `POST`     | `/api/newsletter`           | Turnstile                     | Newsletter subscription                           |
+| `POST`     | `/api/apply-teacher`        | Turnstile                     | Teacher job application                           |
+| `GET`      | `/api/consent-bucket`       | None                          | Per-visitor consent bucket (no-store)             |
+| `GET`      | `/api/geo-currency`         | None                          | Per-visitor currency from CF geo (no-store)       |
+| `POST`     | `/api/internal/retry-queue` | Bearer INTERNAL_WORKER_SECRET | Drain KV dead-letter queue, re-send failed emails |
+| `GET`      | `/api/internal/retry-queue` | Bearer INTERNAL_WORKER_SECRET | Proxy Resend email log audit                      |
 
 ---
 
@@ -366,6 +366,7 @@ RESEND_API_KEY="re_..."            # From resend.com dashboard
 TURNSTILE_SECRET_KEY="0x..."       # From Cloudflare Turnstile (secret key)
 ADMIN_EMAIL="faisalkhan.llc.ltd@gmail.com" # Internal notifications recipient (personal Gmail). admin@quranific.com is only a correspondence mailbox.
 JWT_SECRET="<random-256-bit-string>"
+INTERNAL_WORKER_SECRET="<random-256-bit-string>"
 SITE="http://localhost:4321"
 PROD=false
 ```
@@ -416,18 +417,20 @@ npm run preview  # wrangler pages dev ./dist
 
 ## Alarm Worker (Dead-Letter Queue Daemon)
 
-The `alarm-worker/` directory contains a **separate Cloudflare Worker** (`quranific-alarm`) deployed independently from the main Pages project.
+The `alarm-worker/` directory contains a **separate Cloudflare Worker** (`quranific-alarm`) deployed independently from the main site.
 
 **Purpose:** Hourly cron that drains the KV dead-letter queue by POSTing to `/api/internal/retry-queue`. Recovers failed email deliveries automatically without manual intervention.
 
 **Cron schedule:** `0 * * * *` (every hour, on the hour)
 
-**Environment variables required (alarm-worker secrets):**
+**Deployment & Secrets:**
+Set `INTERNAL_WORKER_SECRET` (same value as the main worker) and `ALARM_ADMIN_TOKEN` on the alarm worker, NOT `JWT_SECRET`; deploy with `npm run deploy:alarm`; main site with `npm run deploy:prod`; set secrets before deploying.
 
-| Variable     | Description                                                                            |
-| ------------ | -------------------------------------------------------------------------------------- |
-| `TARGET_URL` | `https://quranific.com/api/internal/retry-queue` (set in `alarm-worker/wrangler.toml`) |
-| `JWT_SECRET` | Must match the main site's `JWT_SECRET` (used as Bearer token for auth)                |
+| Variable                 | Description                                                                                                            |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `TARGET_URL`             | `https://quranific.com/api/internal/retry-queue` (set in `alarm-worker/wrangler.toml`)                                 |
+| `INTERNAL_WORKER_SECRET` | Must match the main site's `INTERNAL_WORKER_SECRET` (used as Bearer token for auth). Set secrets before deploying.     |
+| `ALARM_ADMIN_TOKEN`      | Secret token required to authenticate incoming calls to alarm worker endpoints (such as `/force-run`). NOT JWT_SECRET. |
 
 **Manual trigger (for testing):**
 

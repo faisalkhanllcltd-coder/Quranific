@@ -8,12 +8,12 @@
 
 The platform consists of **two independently deployed Cloudflare resources**:
 
-| Resource    | Name              | Type                               | Description                      |
-| ----------- | ----------------- | ---------------------------------- | -------------------------------- |
-| Main site   | `quranific`       | Cloudflare Pages (Workers runtime) | SSR web application              |
-| Cron daemon | `quranific-alarm` | Cloudflare Worker                  | Hourly dead-letter queue drainer |
+| Resource    | Name              | Type              | Description                      |
+| ----------- | ----------------- | ----------------- | -------------------------------- |
+| Main site   | `quranific`       | Cloudflare Worker | SSR web application              |
+| Cron daemon | `quranific-alarm` | Cloudflare Worker | Hourly dead-letter queue drainer |
 
-Both share the `JWT_SECRET` secret for Bearer-token authentication on the internal retry endpoint.
+Both share the `INTERNAL_WORKER_SECRET` secret for Bearer-token authentication on the internal retry endpoint.
 
 ### Cloudflare Configuration (`wrangler.toml`)
 
@@ -70,18 +70,19 @@ custom_domain = true
 
 Set via Cloudflare Pages dashboard: **Settings → Environment Variables → Secrets** (or `wrangler secret put`).
 
-| Secret / Variable      | Required               | Description                                                                                                                                                            |
-| ---------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RESEND_API_KEY`       | **Required**           | Resend API key (format: `re_...`). Used by all email dispatch functions.                                                                                               |
-| `TURNSTILE_SECRET_KEY` | **Required**           | Cloudflare Turnstile **secret** key. Server-side bot verification for all forms.                                                                                       |
-| `TURNSTILE_SECRET`     | Optional               | Legacy alias for `TURNSTILE_SECRET_KEY`. Code reads whichever is present (`??` fallback).                                                                              |
-| `JWT_SECRET`           | **Required**           | Random 256-bit string. Signs and verifies HS256 session JWTs. Must match `alarm-worker`'s `JWT_SECRET`.                                                                |
-| `ADMIN_EMAIL`          | **Required**           | Destination email for all internal admin notifications (set to personal Gmail `faisalkhan.llc.ltd@gmail.com`). `admin@quranific.com` is only a correspondence mailbox. |
-| `ENVIRONMENT`          | Set in `wrangler.toml` | `"production"` — declared as a plain var, not a secret.                                                                                                                |
-| `SITE`                 | Optional               | Base URL for the site. Used as a hint; canonical URLs are derived from `Astro.site`.                                                                                   |
-| `GA_ID`                | Optional               | Google Analytics tracking ID (if using direct gtag without GTM). Currently GTM handles this.                                                                           |
-| `SHEET_WEBHOOK_URL`    | Optional               | Legacy Google Sheets webhook. Not used in current code paths.                                                                                                          |
-| `ZAPIER_WEBHOOK_URL`   | Optional               | If set, `/api/complete` posts a `Lead_Complete` JSON payload to this URL on each Step 2 submission.                                                                    |
+| Secret / Variable        | Required               | Description                                                                                                                                                            |
+| ------------------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RESEND_API_KEY`         | **Required**           | Resend API key (format: `re_...`). Used by all email dispatch functions. Needs access to Contacts API.                                                                 |
+| `TURNSTILE_SECRET_KEY`   | **Required**           | Cloudflare Turnstile **secret** key. Server-side bot verification for all forms.                                                                                       |
+| `TURNSTILE_SECRET`       | Optional               | Legacy alias for `TURNSTILE_SECRET_KEY`. Code reads whichever is present (`??` fallback).                                                                              |
+| `JWT_SECRET`             | **Required**           | Random 256-bit string. Signs and verifies HS256 session JWTs and newsletter tokens.                                                                                    |
+| `INTERNAL_WORKER_SECRET` | **Required**           | Shared secret for Bearer-token authentication on `/api/internal/retry-queue`. Must match `alarm-worker`'s `INTERNAL_WORKER_SECRET`. Set secrets before deploying.      |
+| `ADMIN_EMAIL`            | **Required**           | Destination email for all internal admin notifications (set to personal Gmail `faisalkhan.llc.ltd@gmail.com`). `admin@quranific.com` is only a correspondence mailbox. |
+| `ENVIRONMENT`            | Set in `wrangler.toml` | `"production"` — declared as a plain var, not a secret.                                                                                                                |
+| `SITE`                   | Optional               | Base URL for the site. Used as a hint; canonical URLs are derived from `Astro.site`.                                                                                   |
+| `GA_ID`                  | Optional               | Google Analytics tracking ID (if using direct gtag without GTM). Currently GTM handles this.                                                                           |
+| `SHEET_WEBHOOK_URL`      | Optional               | Legacy Google Sheets webhook. Not used in current code paths.                                                                                                          |
+| `ZAPIER_WEBHOOK_URL`     | Optional               | If set, `/api/complete` posts a `Lead_Complete` JSON payload to this URL on each Step 2 submission.                                                                    |
 
 > **Critical:** `TURNSTILE_SITE_KEY` (the public key `0x4AAAAAAD-QWQWhupcuvhbK`) is hardcoded in `src/constants/site.ts` and **must not** be added as a secret. Only the `TURNSTILE_SECRET_KEY` is private.
 
@@ -100,11 +101,14 @@ This single KV namespace serves four purposes:
 
 ### Alarm Worker Secrets
 
-Set in the `quranific-alarm` Worker's environment (separate from the Pages project):
+Set in the `quranific-alarm` Worker's environment (separate from the main site Worker):
 
-| Secret       | Required     | Description                                                                                                                               |
-| ------------ | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `JWT_SECRET` | **Required** | Must be **identical** to the main site's `JWT_SECRET`. Used as `Bearer <JWT_SECRET>` to authenticate POST to `/api/internal/retry-queue`. |
+| Secret                   | Required     | Description                                                                                                                                                       |
+| ------------------------ | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `INTERNAL_WORKER_SECRET` | **Required** | Must be **identical** to the main site's `INTERNAL_WORKER_SECRET`. Used as `Bearer <INTERNAL_WORKER_SECRET>` to authenticate POST to `/api/internal/retry-queue`. |
+| `ALARM_ADMIN_TOKEN`      | **Required** | Secret token required to authenticate incoming calls to alarm worker endpoints (such as `/force-run`). NOT JWT_SECRET.                                            |
+
+Deploy with `npm run deploy:alarm`; main site with `npm run deploy:prod`; set secrets before deploying.
 
 `TARGET_URL` is a plain var in `alarm-worker/wrangler.toml`, defaulting to `https://quranific.com/api/internal/retry-queue`.
 
@@ -119,6 +123,7 @@ RESEND_API_KEY="re_<your-key>"
 TURNSTILE_SECRET_KEY="0x<your-turnstile-secret>"
 ADMIN_EMAIL="faisalkhan.llc.ltd@gmail.com" # Internal notifications recipient (personal Gmail). admin@quranific.com is only a correspondence mailbox.
 JWT_SECRET="<random-256-bit-string>"
+INTERNAL_WORKER_SECRET="<random-256-bit-string>"
 SITE="http://localhost:4321"
 PROD=false
 ```
@@ -215,16 +220,18 @@ Pushes to the connected branch trigger automatic builds and deploys.
 
 ### Alarm Worker
 
+The alarm-worker section requires setting `INTERNAL_WORKER_SECRET` (same value as the main worker) and `ALARM_ADMIN_TOKEN` on the alarm worker, NOT `JWT_SECRET`. Set secrets before deploying.
+
 ```bash
-cd alarm-worker
+# Set secrets before deploying
+wrangler secret put INTERNAL_WORKER_SECRET -c alarm-worker/wrangler.toml
+wrangler secret put ALARM_ADMIN_TOKEN -c alarm-worker/wrangler.toml
 
-# Deploy the hourly cron worker
-wrangler deploy
-
-# Add the JWT_SECRET secret (must match the main site)
-wrangler secret put JWT_SECRET
+# Deploy with npm script
+npm run deploy:alarm
 ```
 
+Main site deploys with `npm run deploy:prod`.
 The `TARGET_URL` is defined as a plain var in `alarm-worker/wrangler.toml` — no secret needed for it.
 
 ---
@@ -240,15 +247,14 @@ The `TARGET_URL` is defined as a plain var in `alarm-worker/wrangler.toml` — n
 [ ] 4. Create Resend account, verify quranific.com sending domain
         - Generate API key with Send access
 [ ] 5. Create Pages project (connect git repo or use wrangler pages deploy)
-[ ] 6. Set all production secrets in Cloudflare Pages dashboard:
+[ ] 6. Set all production secrets in Cloudflare dashboard (set secrets before deploying):
         - RESEND_API_KEY
         - TURNSTILE_SECRET_KEY
         - JWT_SECRET
+        - INTERNAL_WORKER_SECRET
         - ADMIN_EMAIL
 [ ] 7. Add custom domains: quranific.com and www.quranific.com
-[ ] 8. Deploy alarm-worker:
-        cd alarm-worker && wrangler deploy
-        wrangler secret put JWT_SECRET   (same value as main site JWT_SECRET)
+[ ] 8. Set secrets on alarm-worker (INTERNAL_WORKER_SECRET, ALARM_ADMIN_TOKEN), NOT JWT_SECRET; deploy with npm run deploy:alarm; main site with npm run deploy:prod; set secrets before deploying.
 [ ] 9. Verify cron trigger is active in alarm-worker dashboard
 ```
 
@@ -379,8 +385,8 @@ curl https://<alarm-worker-url>/
 The alarm-worker drains failed emails hourly. To inspect the current queue:
 
 ```bash
-# Via alarm-worker HTTP endpoint
-curl -H "Authorization: Bearer <JWT_SECRET>" \
+# Via internal retry endpoint
+curl -H "Authorization: Bearer <INTERNAL_WORKER_SECRET>" \
   https://quranific.com/api/internal/retry-queue \
   -X POST
 # Response: { success: true, recovered: N, failed: M }
@@ -389,7 +395,7 @@ curl -H "Authorization: Bearer <JWT_SECRET>" \
 To manually inspect a specific Resend email delivery:
 
 ```bash
-curl -H "Authorization: Bearer <JWT_SECRET>" \
+curl -H "Authorization: Bearer <INTERNAL_WORKER_SECRET>" \
   "https://quranific.com/api/internal/retry-queue?id=<resend-email-id>"
 ```
 
@@ -417,9 +423,18 @@ If `JWT_SECRET` must be rotated:
 
 1. All existing `q_session` cookies (15-minute TTL) and `IDEMPOTENCY:{jti}` KV keys (16-minute TTL) will be invalidated.
 2. Users mid-funnel will be redirected back to `/getting-started/signup` on their next request.
-3. The alarm-worker's `JWT_SECRET` must be updated to the same new value **simultaneously** to maintain dead-letter queue access.
-4. Update in Cloudflare Pages secrets → redeploy.
-5. Update alarm-worker: `wrangler secret put JWT_SECRET` in the `alarm-worker/` directory.
+3. Pending newsletter confirmation and unsubscribe tokens generated under the old secret will become invalid.
+4. Update in Cloudflare secrets: `wrangler secret put JWT_SECRET`.
+
+### Rotating INTERNAL_WORKER_SECRET
+
+If `INTERNAL_WORKER_SECRET` must be rotated:
+
+1. Update on both workers simultaneously to maintain dead-letter queue access:
+   ```bash
+   wrangler secret put INTERNAL_WORKER_SECRET
+   wrangler secret put INTERNAL_WORKER_SECRET -c alarm-worker/wrangler.toml
+   ```
 
 ### Rotating RESEND_API_KEY
 
