@@ -448,7 +448,7 @@ git grep -nF "ALARM_ADMIN_TOKEN" -- DEPLOYMENT.md
 # Expected: Matches present (ALARM_ADMIN_TOKEN documented in deployment runbook)
 
 # 38. Run newsletter token unit tests
-node --experimental-strip-types tests/newsletter-token.test.ts
+npx tsx tests/newsletter-token.test.ts
 # Expected: 14 passing
 
 # 39. Run consent engine unit tests
