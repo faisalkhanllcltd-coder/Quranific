@@ -3,12 +3,12 @@
 > **Purpose:** Single consolidated, authoritative runbook for all manual tasks that require Cloudflare dashboard access, registrar management, business decisions, external credentials, or third-party platform configuration.  
 > **Authoritative Source:** This document is the single source of truth for owner-level operational actions. `PENDING-TASKS.md` defers to this file for all owner items.  
 > **Branch:** `staging/security-and-arch-fixes`  
-> **Last Audited & Probed:** 2026-10-09T16:01:34Z  
+> **Last Audited & Probed:** 2026-10-10T17:03:44Z  
 > **Methodology:** Every checkable item was verified against live production (`quranific.com`), Google Public DNS-over-HTTPS (DoH), live HTTP probes (`curl.exe -sI`), and local Cloudflare Wrangler dry-run tooling.
 
 ---
 
-## Live Probe Baseline (Recorded 2026-10-09 16:01 UTC)
+## Live Probe Baseline (Recorded 2026-10-10 17:03 UTC)
 
 The following empirical baseline was probed live and directly informs the statuses in this runbook:
 
@@ -44,10 +44,10 @@ The following empirical baseline was probed live and directly informs the status
 | Category / Urgency                                   | Total Items | ✅ Done | ❌ Still Open | ⚠️ Owner Action / Monitoring |
 | :--------------------------------------------------- | :---------: | :-----: | :-----------: | :--------------------------: |
 | **Tier 1: Critical Pre-Deploy Blockers**             |     10      |    1    |       5       |              4               |
-| **Tier 2: Do Soon (First 48h / Pre-Scale)**          |     10      |    2    |       2       |              6               |
+| **Tier 2: Do Soon (First 48h / Pre-Scale)**          |     11      |    2    |       2       |              7               |
 | **Tier 3: Later (Hygiene, Monitoring & Governance)** |     13      |    0    |       0       |              13              |
 | **Obsolete / Merged Items**                          |      2      |    0    |       0       |    2 (➖ Excluded/Merged)    |
-| **Total Actionable Items**                           |   **33**    |  **3**  |     **7**     |            **23**            |
+| **Total Actionable Items**                           |   **34**    |  **3**  |     **7**     |            **24**            |
 
 ---
 
@@ -84,12 +84,13 @@ The following empirical baseline was probed live and directly informs the status
 | **OA-27** | Confirm `ADMIN_EMAIL` Cloudflare Variable           | Tier 1 (Blocker) |    ❌ Still Open    | Verify equals personal Gmail, never `admin@` (Worker deploy)                                          |
 | **OA-28** | Post-Deploy CSP & GTM Console Verification          | Tier 1 (Blocker) |    ❌ Still Open    | Test `/courses/` & `/` in DevTools for zero CSP errors                                                |
 | **OA-29** | Geo-Pricing Display Verification (UK vs PK)         | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Verify GBP (£) in UK vs USD ($40 floor) in Pakistan                                                   |
-| **OA-30** | Container Padding Visual Inspection (1280+)         | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Check 19 URLs (intent, courses, legal, home, faq, tuition) at 1280px+; converted px-8 pages unchanged |
+| **OA-30** | Container Padding Visual Inspection (1280+)         | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Check 21 URLs (intent, courses, legal, home, faq, tuition) at 1280px+; converted px-8 pages unchanged |
 | **OA-31** | Newsletter Double Opt-In End-to-End Live Test       | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Test 10-min throttle, "Check your inbox", confirm, welcome, legal 2b check                            |
 | **OA-32** | Legal Review: Consent Records & Footer Address      | Tier 3 (Later)   | ⚠️ Owner Must Check | Review KV consent log and marketing physical address                                                  |
 | **OA-33** | [Merged into OA-22]                                 | N/A              |      ➖ Merged      | See OA-22 (excluded from counts)                                                                      |
 | **OA-34** | SEO Track Owner Inputs (Branch `seo_audit_staging`) | Tier 3 (Later)   | ⚠️ Owner Must Check | Pointer to content/credential tasks on SEO branch                                                     |
 | **OA-35** | Confirm Resend Contacts API Access & Segment ID     | Tier 1 (Blocker) | ⚠️ Owner Must Check | Confirm Contacts API access and copy Segment ID for `RESEND_AUDIENCE_ID`                              |
+| **OA-36** | Impressum Registration Text                         | Tier 2 (Do Soon) | ⚠️ Owner to Decide  | Legal counsel & owner decision on sole proprietor registration text in impressum.astro lines 94, 100  |
 
 ---
 
@@ -119,7 +120,11 @@ The following empirical baseline was probed live and directly informs the status
      ```powershell
      npx wrangler secret put INTERNAL_WORKER_SECRET -c alarm-worker/wrangler.toml
      ```
-  4. Verify both show `INTERNAL_WORKER_SECRET` in their secret lists.
+  4. Verify both show `INTERNAL_WORKER_SECRET` in their secret lists:
+     ```powershell
+     npx wrangler secret list
+     npx wrangler secret list -c alarm-worker/wrangler.toml
+     ```
 
 ---
 
@@ -139,6 +144,20 @@ The following empirical baseline was probed live and directly informs the status
      ```powershell
      npx wrangler secret put ALARM_ADMIN_TOKEN -c alarm-worker/wrangler.toml
      ```
+  3. Verify `ALARM_ADMIN_TOKEN` is listed on the alarm worker:
+     ```powershell
+     npx wrangler secret list -c alarm-worker/wrangler.toml
+     ```
+
+---
+
+### OA-03 — Server-Side Ad Secrets (`META_CAPI` Purged; Optional GA4)
+
+- **Status:** ➖ **Obsolete / Optional**
+- **Urgency:** **N/A (Purged)**
+- **Platform:** N/A / Cloudflare Secrets
+- **Context:** Meta CAPI (`graph.facebook.com`, `META_CAPI`, `fbq`) has been completely purged from the codebase. The site deploys as a Cloudflare Worker.
+- **Optional Server-Side GA4:** `GA4_MEASUREMENT_ID` and `GA4_API_SECRET` enable server-side GA4 events in `src/pages/api/complete.ts`; skipped safely when unset.
 
 ---
 
@@ -164,7 +183,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ✅ **Done**
 - **Urgency:** **Tier 1 (Blocks Going Live)**
-- **Empirical Proof (Probed 2026-10-08 12:21 UTC):**
+- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
   - `resend._domainkey.quranific.com` TXT returned valid public key: `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD3MVXo+TwMmAGKtjMMGLoeV6WXkSphCYVv5LUxgYGue7hOmUCJ60NBNnjZpSBSNkHkFoUvijB2S+cSexCBnpxX2Ln5eya9svO4LUVnDy6uq8XvXXTnkIMYNKdiEaZWZLKDVuxS/yfXX30r/DzT+AsgB2EV4DMunitR/MMjtmsxHQIDAQAB`.
 
 ---
@@ -201,7 +220,16 @@ The following empirical baseline was probed live and directly informs the status
 - **Platform:** GitHub & Cloudflare CLI
 - **Strict Execution Order:**
   1. **Provision Secrets First:** Set `INTERNAL_WORKER_SECRET` on both workers and `ALARM_ADMIN_TOKEN` on alarm worker, plus `RESEND_AUDIENCE_ID` if configured (OA-01, OA-02, OA-35).
-  2. **Merge PR:** Merge `staging/security-and-arch-fixes` into `main`.
+  2. **Merge PR & Prepare Local Main:**
+     - Merge `staging/security-and-arch-fixes` into `main` on GitHub.
+     - Switch local environment to updated `main`:
+       ```powershell
+       git checkout main
+       git pull
+       git status
+       ```
+     - `git status` must be completely clean with zero uncommitted or untracked changes.
+     - _Deploy-Guard Enforcement:_ `scripts/deploy-guard.mjs` executes before every deployment command; it validates that the active branch is strictly `main` (`git branch --show-current === 'main'`) and that `git status --porcelain` is empty. The deployment script aborts immediately if any dirty files exist or if run on any other branch.
   3. **Deploy Root Worker:** Run production deploy:
      ```powershell
      npm run deploy:prod
@@ -253,10 +281,18 @@ The following empirical baseline was probed live and directly informs the status
 - **Urgency:** **Tier 1 (Blocks Going Live)**
 - **Platform:** Resend Dashboard (`https://resend.com/contacts`) & Cloudflare Secrets
 - **Context & Architecture:** The double opt-in newsletter confirmation flow calls Resend's Contacts API to manage subscriptions and assign contacts to a segment.
+- **Where to Check the API Key:**
+  - Navigate to **Resend > API Keys** (`https://resend.com/api-keys`).
+  - The API key used by the Worker in Cloudflare must be configured with **Full access** (allowing management of Contacts and Audiences/Segments), not a restricted "Sending access" key.
+  - Verify key permissions in the Resend documentation; if unsure whether the key has contacts permissions, run the OA-31 live test.
 - **Exact Steps:**
-  1. In the Resend dashboard, confirm the API key used in Cloudflare has access to the Contacts API.
-  2. Open **Segments**, copy the Segment ID (a Resend Segment ID, not an old deprecated Audience ID).
-  3. Set `RESEND_AUDIENCE_ID` in Cloudflare Worker secrets to that Segment ID, or leave it unset if unsure.
+  1. In the Resend dashboard, confirm the API key used in Cloudflare has Full access permissions.
+  2. Open **Audiences / Segments** (`https://resend.com/audiences`), copy the target Segment ID (e.g. `seg_...`).
+  3. Set `RESEND_AUDIENCE_ID` in Cloudflare Worker secrets **before** receiving the first real subscribers:
+     ```powershell
+     npx wrangler secret put RESEND_AUDIENCE_ID
+     ```
+     Paste the Segment ID when prompted. (Set this before announcing or opening the newsletter to subscribers).
   4. **Symptom of a Problem:** If misconfigured or unauthorized, the newsletter confirmation page displays "We’ll Complete This Shortly" (deferred page) rather than instant confirmation.
 
 ---
@@ -267,7 +303,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ❌ **Still Open**
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Empirical Proof (Probed 2026-10-08 12:21 UTC):**
+- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
   - `curl.exe -sI https://quranific-alarm.faisalkhan-llc-ltd.workers.dev` returned `HTTP/1.1 200 OK`.
 - **Context & Fix:** `alarm-worker/wrangler.toml` has `workers_dev = false`. Cloudflare documentation notes that redeploying the worker applies this configuration and deactivates the route. The live 200 confirms the worker has not yet been redeployed since that setting was configured.
 - **Exact Steps:**
@@ -281,7 +317,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ✅ **Done**
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Empirical Proof (Probed 2026-10-08 12:21 UTC):**
+- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
   - `curl.exe -sI https://quranific.faisalkhan-llc-ltd.workers.dev` returned `HTTP/1.1 404 Not Found`. Apex custom domain routing is active.
 
 ---
@@ -300,7 +336,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ⚠️ **Owner Must Check**
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Empirical Proof (Probed 2026-10-08 12:21 UTC):**
+- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
   - `dns.google/resolve?name=quranific.com&type=DS` returned NO ANSWER.
 - **Steps:**
   1. Enable DNSSEC in Cloudflare DNS dashboard.
@@ -330,7 +366,8 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ✅ **Done**
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Proof:** `curl.exe -sI https://www.quranific.com` returns HTTP 301 redirecting to `https://quranific.com/`.
+- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
+  - `curl.exe -sI https://www.quranific.com` returns HTTP 301 redirecting to `https://quranific.com/`.
 
 ---
 
@@ -345,20 +382,35 @@ The following empirical baseline was probed live and directly informs the status
 
 ---
 
-### OA-30 — Container Padding Visual Inspection (1280px / 1440px / 1920px)
+### OA-30 — Container Padding Visual Inspection (21 URLs at 1280px+)
 
 - **Status:** ⚠️ **Owner Must Check**
 - **Urgency:** **Tier 2 (Do Soon)**
 - **Platform:** Desktop Browser DevTools Device Mode
 - **Context:** The `quranific-container` utility (`@utility quranific-container` in `src/styles/global.css`) is unified to `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`. Components utilizing `quranific-container` gain 16px per side above 1280px. Pages converted from hardcoded `px-8` do not visibly change.
-- **Real URLs to Inspect (19 URLs):**
-  - **Intent Landing Pages (4 URLs):** `/[intent]/for-adults`, `/[intent]/for-kids`, `/[intent]/for-women`, `/[intent]`
-  - **Course Catalog & Detail Pages (8 URLs):**
-    - Catalog: `/courses`
-    - Courses: `/courses/learn-noorani-qaida-online`, `/courses/quran-reading-with-tajweed-online`, `/courses/quran-memorization-online`, `/courses/islamic-studies-for-kids-online`, `/courses/learn-arabic-online`, `/courses/ten-qirat-course-online`, `/courses/quran-translation-course-online`
-  - **Legal Pages (5 URLs):** `/legal/cookies`, `/legal/impressum`, `/legal/privacy`, `/legal/refund`, `/legal/terms`
-  - **Shared Pages with FAQAccordion (3 URLs):** `/` (Homepage), `/faq`, `/tuition-fee`
-- **Steps:** Visually inspect page layout at 1280px, 1440px, and 1920px across these URLs to verify container margins remain balanced.
+- **Real URLs to Inspect (21 URLs):**
+  - `/quran-classes/for-adults`
+  - `/quran-classes/for-kids`
+  - `/quran-classes/for-women`
+  - `/quran-teacher/for-adults`
+  - `/quran-teacher/for-kids`
+  - `/quran-teacher/for-women`
+  - `/courses`
+  - `/courses/basic-qaida`
+  - `/courses/quran-reading-with-tajweed`
+  - `/courses/quran-memorization`
+  - `/courses/quran-translation-with-tafsir`
+  - `/courses/advanced-tajweed-ijazah`
+  - `/courses/arabic-language`
+  - `/legal/cookies`
+  - `/legal/impressum`
+  - `/legal/privacy`
+  - `/legal/refund`
+  - `/legal/terms`
+  - `/`
+  - `/faq`
+  - `/tuition-fee`
+- **Steps:** Visually inspect page layout at 1280px, 1440px, and 1920px across these 21 URLs to verify container margins remain balanced.
 
 ---
 
@@ -376,8 +428,25 @@ The following empirical baseline was probed live and directly informs the status
   7. Check inbox: welcome email arrives with unsubscribe footer and RFC 8058 one-click headers.
   8. Check admin Gmail: admin alert notification received at `faisalkhan.llc.ltd@gmail.com`.
   9. **Rate Limit / Throttle Note:** There is a 10-minute per-email KV throttle (`NL_REQ:<email>`). Wait 10 minutes before re-testing duplicate submissions, otherwise the submission is throttled to prevent spam.
-  10. Click unsubscribe link: confirm page unsubs contact and updates Resend dashboard.
-- **Legal Review Pointer:** Review item 2b flagged placeholder text in `src/pages/legal/impressum.astro:100` ("Provided upon formal request or during merchant underwriting") for business registration / VAT number.
+  10. Click unsubscribe link: confirm page displays; click the Unsubscribe button to unsubscribe contact and update Resend dashboard.
+
+---
+
+### OA-36 — Impressum Registration Text
+
+- **Status:** ⚠️ **Owner to Decide**
+- **Urgency:** **Tier 2 (Do Soon)**
+- **Platform:** Legal Counsel & Site Content (`src/pages/legal/impressum.astro`)
+- **Context & Problem:** The German Telemediengesetz (TMG) / Digitale-Dienste-Gesetz (DDG) requires a legally compliant Impressum for traffic targeted in DACH regions (e.g. running Google/Meta ads in Germany). In `src/pages/legal/impressum.astro`, placeholder-style legal text sits on a page used for German ads on lines 94 and 100:
+  - Line 94:
+    > `"Operating as a registered sole proprietor/entity in Pakistan."`
+  - Line 100:
+    > `"Provided upon formal request or during merchant underwriting."`
+- **Owner & Legal Counsel Decisions:**
+  1. **Option A (Real Details):** Replace line 100 with the real registration or tax identifier / NTN in Pakistan.
+  2. **Option B (Remove the Row):** Remove the "Registration Number" list item from the Impressum table if not applicable to a sole proprietorship.
+  3. **Option C (Wait for Quranific Ltd):** Leave sole proprietor disclosures until the UK entity (Quranific Ltd) formation is completed, then update with the UK Companies House registration number.
+- **Action Required:** Business owner and counsel decide which option to implement before scaling German ad spend.
 
 ---
 
@@ -419,7 +488,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ⚠️ **Monitoring**
 - **Urgency:** **Tier 3 (Later)**
-- **Empirical Proof (Probed 2026-10-09 16:01 UTC):**
+- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
   - `_dmarc.quranific.com IN TXT "v=DMARC1; p=none"` is active (currently has no `rua` configured).
 - **Context & Architecture:** The DMARC record currently has no `rua` reporting tag. Without `rua`, mail receivers do not send aggregate reports, making it impossible to audit SPF/DKIM alignment.
 - **Exact Steps:**
@@ -503,4 +572,4 @@ See [OA-22](#oa-22--submit-domain-to-hsts-preload-list). (Excluded from action c
 
 - **Status:** ⚠️ **Owner Must Check**
 - **Urgency:** **Tier 3 (Later)**
-- **Reference:** Dedicated content and analytics requirements (GA4 measurement ID, SEMrush search console exports, tutor credentials documentation, 4.9 rating source accreditation) are tracked on branch `seo_audit_staging`.
+- **Reference:** Dedicated content and analytics requirements (GA4 measurement ID, SEMrush exports (keywords, competitors, backlinks), tutor credentials documentation, 4.9 rating source accreditation) are tracked on branch `seo_audit_staging`.
