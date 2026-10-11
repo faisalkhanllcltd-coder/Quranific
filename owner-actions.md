@@ -3,12 +3,12 @@
 > **Purpose:** Single consolidated, authoritative runbook for all manual tasks that require Cloudflare dashboard access, registrar management, business decisions, external credentials, or third-party platform configuration.  
 > **Authoritative Source:** This document is the single source of truth for owner-level operational actions. `PENDING-TASKS.md` defers to this file for all owner items.  
 > **Branch:** `staging/security-and-arch-fixes`  
-> **Last Audited & Probed:** 2026-10-10T17:03:44Z  
+> **Last Audited & Probed:** 2026-10-11T09:23:47Z  
 > **Methodology:** Every checkable item was verified against live production (`quranific.com`), Google Public DNS-over-HTTPS (DoH), live HTTP probes (`curl.exe -sI`), and local Cloudflare Wrangler dry-run tooling.
 
 ---
 
-## Live Probe Baseline (Recorded 2026-10-10 17:03 UTC)
+## Live Probe Baseline (Recorded 2026-10-11 09:23 UTC)
 
 The following empirical baseline was probed live and directly informs the statuses in this runbook:
 
@@ -183,7 +183,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ✅ **Done**
 - **Urgency:** **Tier 1 (Blocks Going Live)**
-- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
+- **Empirical Proof (Probed 2026-10-11 09:23 UTC):**
   - `resend._domainkey.quranific.com` TXT returned valid public key: `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD3MVXo+TwMmAGKtjMMGLoeV6WXkSphCYVv5LUxgYGue7hOmUCJ60NBNnjZpSBSNkHkFoUvijB2S+cSexCBnpxX2Ln5eya9svO4LUVnDy6uq8XvXXTnkIMYNKdiEaZWZLKDVuxS/yfXX30r/DzT+AsgB2EV4DMunitR/MMjtmsxHQIDAQAB`.
 
 ---
@@ -303,7 +303,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ❌ **Still Open**
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
+- **Empirical Proof (Probed 2026-10-11 09:23 UTC):**
   - `curl.exe -sI https://quranific-alarm.faisalkhan-llc-ltd.workers.dev` returned `HTTP/1.1 200 OK`.
 - **Context & Fix:** `alarm-worker/wrangler.toml` has `workers_dev = false`. Cloudflare documentation notes that redeploying the worker applies this configuration and deactivates the route. The live 200 confirms the worker has not yet been redeployed since that setting was configured.
 - **Exact Steps:**
@@ -317,7 +317,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ✅ **Done**
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
+- **Empirical Proof (Probed 2026-10-11 09:23 UTC):**
   - `curl.exe -sI https://quranific.faisalkhan-llc-ltd.workers.dev` returned `HTTP/1.1 404 Not Found`. Apex custom domain routing is active.
 
 ---
@@ -336,7 +336,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ⚠️ **Owner Must Check**
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
+- **Empirical Proof (Probed 2026-10-11 09:23 UTC):**
   - `dns.google/resolve?name=quranific.com&type=DS` returned NO ANSWER.
 - **Steps:**
   1. Enable DNSSEC in Cloudflare DNS dashboard.
@@ -366,7 +366,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ✅ **Done**
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
+- **Empirical Proof (Probed 2026-10-11 09:23 UTC):**
   - `curl.exe -sI https://www.quranific.com` returns HTTP 301 redirecting to `https://quranific.com/`.
 
 ---
@@ -482,7 +482,7 @@ The following empirical baseline was probed live and directly informs the status
 
 - **Status:** ⚠️ **Monitoring**
 - **Urgency:** **Tier 3 (Later)**
-- **Empirical Proof (Probed 2026-10-10 17:03 UTC):**
+- **Empirical Proof (Probed 2026-10-11 09:23 UTC):**
   - `_dmarc.quranific.com IN TXT "v=DMARC1; p=none"` is active (currently has no `rua` configured).
 - **Context & Architecture:** The DMARC record currently has no `rua` reporting tag. Without `rua`, mail receivers do not send aggregate reports, making it impossible to audit SPF/DKIM alignment.
 - **Exact Steps:**
