@@ -1,6 +1,6 @@
 # Quranific — Deployment Guide
 
-> Infrastructure reference for deploying and operating the Quranific platform on Cloudflare Pages + Workers.
+> Infrastructure reference for deploying and operating the Quranific platform on Cloudflare Workers.
 
 ---
 
@@ -68,11 +68,12 @@ custom_domain = true
 
 ### Main Site Secrets
 
-Set via Cloudflare Pages dashboard: **Settings → Environment Variables → Secrets** (or `wrangler secret put`).
+Set via Cloudflare dashboard: **Workers & Pages → quranific → Settings → Variables and Secrets** (or `npx wrangler secret put`).
 
 | Secret / Variable        | Required               | Description                                                                                                                                                            |
 | ------------------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RESEND_API_KEY`         | **Required**           | Resend API key (format: `re_...`). Used by all email dispatch functions. Needs access to Contacts API.                                                                 |
+| `RESEND_API_KEY`         | **Required**           | Resend API key (format: `re_...`). Used by all email dispatch functions. Needs access to Contacts API (Full access).                                                   |
+| `RESEND_AUDIENCE_ID`     | Optional               | Segment ID copied from Resend > Segments (not an old Audience ID); leave unset if unsure. Requires Contacts access.                                                    |
 | `TURNSTILE_SECRET_KEY`   | **Required**           | Cloudflare Turnstile **secret** key. Server-side bot verification for all forms.                                                                                       |
 | `TURNSTILE_SECRET`       | Optional               | Legacy alias for `TURNSTILE_SECRET_KEY`. Code reads whichever is present (`??` fallback).                                                                              |
 | `JWT_SECRET`             | **Required**           | Random 256-bit string. Signs and verifies HS256 session JWTs and newsletter tokens.                                                                                    |
@@ -130,11 +131,11 @@ PROD=false
 
 Copy `.env.example` to `.env` and populate. Never commit `.env`.
 
-For local KV simulation, `wrangler pages dev ./dist` uses the Wrangler KV preview store automatically. No additional setup is needed.
+For local KV simulation, `npm run preview` (`wrangler dev`) uses the Wrangler KV preview store automatically. No additional setup is needed.
 
 ### Production (Cloudflare Dashboard)
 
-Navigate to: **Cloudflare Dashboard → Pages → quranific → Settings → Environment Variables**
+Navigate to: **Cloudflare Dashboard → Workers & Pages → quranific → Settings → Variables and Secrets**
 
 Add each secret under the **Production** environment. Use "Encrypt" for all sensitive values (API keys, secrets).
 
@@ -175,7 +176,7 @@ Both apex and www are registered as custom domains in `wrangler.toml`. The `www`
 | -------------------- | ------------------ | ------------------------------------------------------ |
 | Cloudflare Turnstile | Yes                | Create widget at dash.cloudflare.com → Turnstile       |
 | Cloudflare KV        | Yes                | Create namespace; bind as `SESSION` in `wrangler.toml` |
-| Cloudflare Pages     | Yes                | Deploy target                                          |
+| Cloudflare Workers   | Yes                | Deploy target (main site SSR worker)                   |
 | Cloudflare Workers   | Yes (alarm-worker) | Separate worker for cron                               |
 | Custom Domains       | Yes                | `quranific.com` and `www.quranific.com`                |
 | Smart Placement      | Yes                | Enabled in `wrangler.toml`                             |
@@ -195,15 +196,15 @@ npm install
 # 2. Build (type-checks then builds to dist/)
 npm run build
 
-# 3. Deploy to Cloudflare Pages
-wrangler pages deploy ./dist
+# 3. Deploy Cloudflare Worker
+npm run deploy:prod
 ```
 
-This is equivalent to running `npm run deploy` which executes both steps.
+This is equivalent to running `node scripts/deploy-guard.mjs && npm run check && npm run build && wrangler deploy`.
 
-#### Option B: Git-Connected Pages (CI/CD)
+#### Option B: Git-Connected Worker (CI/CD)
 
-Connect the repository to Cloudflare Pages via the dashboard:
+Connect the repository to Cloudflare Workers via the dashboard:
 
 - **Build command:** `npm run build`
 - **Build output directory:** `dist`
@@ -218,20 +219,23 @@ Pushes to the connected branch trigger automatic builds and deploys.
 1. `astro check` — TypeScript + Astro diagnostics. Fails build on type errors.
 2. `astro build` — compiles to `dist/`. SSR routes become Cloudflare Worker scripts; prerendered pages become static HTML assets in `dist/_astro/`.
 
-### Alarm Worker
+### Production Deployment Order Execution (Matching OA-26)
 
-The alarm-worker section requires setting `INTERNAL_WORKER_SECRET` (same value as the main worker) and `ALARM_ADMIN_TOKEN` on the alarm worker, NOT `JWT_SECRET`. Set secrets before deploying.
+Strict execution order: secrets first on both workers, then main site deploy, then alarm worker deploy. All commands run from the repo root (no `cd alarm-worker`):
 
 ```bash
-# Set secrets before deploying
-wrangler secret put INTERNAL_WORKER_SECRET -c alarm-worker/wrangler.toml
-wrangler secret put ALARM_ADMIN_TOKEN -c alarm-worker/wrangler.toml
+# 1. Set secrets before deploying (from repo root)
+npx wrangler secret put INTERNAL_WORKER_SECRET
+npx wrangler secret put INTERNAL_WORKER_SECRET -c alarm-worker/wrangler.toml
+npx wrangler secret put ALARM_ADMIN_TOKEN -c alarm-worker/wrangler.toml
 
-# Deploy with npm script
+# 2. Deploy main site first
+npm run deploy:prod
+
+# 3. Deploy alarm worker second
 npm run deploy:alarm
 ```
 
-Main site deploys with `npm run deploy:prod`.
 The `TARGET_URL` is defined as a plain var in `alarm-worker/wrangler.toml` — no secret needed for it.
 
 ---
@@ -246,7 +250,7 @@ The `TARGET_URL` is defined as a plain var in `alarm-worker/wrangler.toml` — n
         - Copy the KV ID into wrangler.toml [[kv_namespaces]] id
 [ ] 4. Create Resend account, verify quranific.com sending domain
         - Generate API key with Send access
-[ ] 5. Create Pages project (connect git repo or use wrangler pages deploy)
+[ ] 5. Create Worker project (connect git repo or deploy via CLI with npm run deploy:prod)
 [ ] 6. Set all production secrets in Cloudflare dashboard (set secrets before deploying):
         - RESEND_API_KEY
         - TURNSTILE_SECRET_KEY
@@ -254,7 +258,7 @@ The `TARGET_URL` is defined as a plain var in `alarm-worker/wrangler.toml` — n
         - INTERNAL_WORKER_SECRET
         - ADMIN_EMAIL
 [ ] 7. Add custom domains: quranific.com and www.quranific.com
-[ ] 8. Set secrets on alarm-worker (INTERNAL_WORKER_SECRET, ALARM_ADMIN_TOKEN), NOT JWT_SECRET; deploy with npm run deploy:alarm; main site with npm run deploy:prod; set secrets before deploying.
+[ ] 8. Deployment Order (OA-26): Set secrets on both workers from repo root (`npx wrangler secret put INTERNAL_WORKER_SECRET -c alarm-worker/wrangler.toml`, `npx wrangler secret put ALARM_ADMIN_TOKEN -c alarm-worker/wrangler.toml`); deploy main site with `npm run deploy:prod`; then deploy alarm worker with `npm run deploy:alarm`.
 [ ] 9. Verify cron trigger is active in alarm-worker dashboard
 ```
 
@@ -424,7 +428,8 @@ If `JWT_SECRET` must be rotated:
 1. All existing `q_session` cookies (15-minute TTL) and `IDEMPOTENCY:{jti}` KV keys (16-minute TTL) will be invalidated.
 2. Users mid-funnel will be redirected back to `/getting-started/signup` on their next request.
 3. Pending newsletter confirmation and unsubscribe tokens generated under the old secret will become invalid.
-4. Update in Cloudflare secrets: `wrangler secret put JWT_SECRET`.
+   > **Warning:** Rotating `JWT_SECRET` also invalidates every newsletter confirm/unsubscribe link already emailed to subscribers.
+4. Update in Cloudflare secrets: `npx wrangler secret put JWT_SECRET`.
 
 ### Rotating INTERNAL_WORKER_SECRET
 
@@ -439,14 +444,14 @@ If `INTERNAL_WORKER_SECRET` must be rotated:
 ### Rotating RESEND_API_KEY
 
 1. Generate new key in Resend dashboard.
-2. Update in Cloudflare Pages secrets.
-3. Redeploy (`npm run deploy`).
+2. Update in Cloudflare Worker secrets: `npx wrangler secret put RESEND_API_KEY`.
+3. Redeploy (`npm run deploy:prod`).
 4. No downtime — new key takes effect on next Worker invocation.
 
 ### Rotating TURNSTILE_SECRET_KEY
 
 1. Regenerate in Cloudflare Turnstile dashboard.
-2. Update in Cloudflare Pages secrets.
+2. Update in Cloudflare Worker secrets: `npx wrangler secret put TURNSTILE_SECRET_KEY`.
 3. Redeploy.
 4. Note: The public `TURNSTILE_SITE_KEY` (`0x4AAAAAAD-QWQWhupcuvhbK`) is hardcoded in `src/constants/site.ts` — update it there if you regenerate a new widget with a different site key, then rebuild and redeploy.
 
@@ -489,7 +494,7 @@ npm run build
 
 ### Node.js Version
 
-The project requires Node.js `>=20.0.0`. Both `.nvmrc` and `.node-version` pin this for nvm / fnm compatibility. Cloudflare Pages build environment should be configured to use Node 20.
+The project requires Node.js `>=20.0.0`. Both `.nvmrc` and `.node-version` pin this for nvm / fnm compatibility. Cloudflare Worker build environment should be configured to use Node 20.
 
 ### Vite Optimizations Active
 

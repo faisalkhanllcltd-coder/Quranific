@@ -14,7 +14,7 @@ A fully server-rendered, Cloudflare-native web application built with Astro 7, S
 | UI Components   | Svelte                    | `^5.0.0`       | Interactive islands (runes syntax)                       |
 | Styling         | Tailwind CSS              | `^4.0.0`       | Utility-first CSS via `@tailwindcss/vite` (Oxide engine) |
 | Runtime Adapter | `@astrojs/cloudflare`     | `^14.2.0`      | Cloudflare Workers edge adapter                          |
-| Deployment      | Cloudflare Pages          | —              | Edge hosting with Workers runtime                        |
+| Deployment      | Cloudflare Worker         | —              | Edge hosting with Workers runtime                        |
 | Email           | Resend                    | REST API       | Transactional email (`api.resend.com`)                   |
 | Bot Protection  | Cloudflare Turnstile      | v0             | CAPTCHA-free human verification on all forms             |
 | Analytics       | Google Tag Manager        | `GTM-5CJMMJ29` | Container for GA4, ads; fires under Consent Mode v2      |
@@ -31,7 +31,7 @@ A fully server-rendered, Cloudflare-native web application built with Astro 7, S
 ## Architecture Map
 
 ```
-quranific.com (Cloudflare Pages)
+quranific.com (Cloudflare Worker)
 │
 ├── Cloudflare Edge (smart placement, global PoP routing)
 │   ├── src/middleware.ts        ← runs on every request
@@ -393,25 +393,25 @@ These headers are tree-shaken out of production builds by Vite (`import.meta.env
 
 ```bash
 npm run build    # astro check + astro build
-npm run preview  # wrangler pages dev ./dist
+npm run preview  # wrangler dev
 ```
 
 `npm run preview` uses Wrangler to serve the built `dist/` directory with full Cloudflare Workers runtime, KV bindings, and environment variable simulation.
 
 ### Available Scripts
 
-| Script      | Command                                         | Description                                   |
-| ----------- | ----------------------------------------------- | --------------------------------------------- |
-| `dev`       | `astro dev`                                     | Local dev server with HMR                     |
-| `build`     | `astro check && astro build`                    | Type-check then build to `dist/`              |
-| `preview`   | `wrangler pages dev ./dist`                     | Local Cloudflare edge preview of built output |
-| `clean`     | `rimraf dist .astro node_modules/.vite`         | Wipe build artifacts                          |
-| `check`     | `astro check`                                   | TypeScript / Astro diagnostics                |
-| `typecheck` | `tsc --noEmit`                                  | Strict TypeScript check only                  |
-| `lint`      | `eslint .`                                      | Lint all source files                         |
-| `lint:fix`  | `eslint . --fix`                                | Auto-fix linting issues                       |
-| `format`    | `prettier --write .`                            | Format all files                              |
-| `deploy`    | `npm run build && wrangler pages deploy ./dist` | Full build + deploy to Cloudflare Pages       |
+| Script      | Command                                 | Description                                   |
+| ----------- | --------------------------------------- | --------------------------------------------- |
+| `dev`       | `astro dev`                             | Local dev server with HMR                     |
+| `build`     | `astro check && astro build`            | Type-check then build to `dist/`              |
+| `preview`   | `wrangler dev`                          | Local Cloudflare edge preview of built output |
+| `clean`     | `rimraf dist .astro node_modules/.vite` | Wipe build artifacts                          |
+| `check`     | `astro check`                           | TypeScript / Astro diagnostics                |
+| `typecheck` | `tsc --noEmit`                          | Strict TypeScript check only                  |
+| `lint`      | `eslint .`                              | Lint all source files                         |
+| `lint:fix`  | `eslint . --fix`                        | Auto-fix linting issues                       |
+| `format`    | `prettier --write .`                    | Format all files                              |
+| `deploy`    | `npm run build && wrangler deploy`      | Full build + deploy to Cloudflare Worker      |
 
 ---
 
@@ -490,7 +490,7 @@ quranific/
 ├── public/                  # Static assets (images, icons, webmanifest)
 ├── tests/                   # Playwright E2E tests
 ├── astro.config.mjs         # Astro + Cloudflare adapter + Vite config
-├── wrangler.toml            # Main Cloudflare Pages config (KV, routes, placement)
+├── wrangler.toml            # Main Cloudflare Worker config (KV, routes, placement)
 ├── svelte.config.js
 ├── tsconfig.json
 ├── .env.example
