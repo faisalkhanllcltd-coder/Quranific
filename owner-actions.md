@@ -432,21 +432,15 @@ The following empirical baseline was probed live and directly informs the status
 
 ---
 
-### OA-36 — Impressum Registration Text
+### OA-36 — Impressum registration text
 
-- **Status:** ⚠️ **Owner to Decide**
+- **Status:** ⚠️ **Owner Must Decide (with counsel)**
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Platform:** Legal Counsel & Site Content (`src/pages/legal/impressum.astro`)
-- **Context & Problem:** The German Telemediengesetz (TMG) / Digitale-Dienste-Gesetz (DDG) requires a legally compliant Impressum for traffic targeted in DACH regions (e.g. running Google/Meta ads in Germany). In `src/pages/legal/impressum.astro`, placeholder-style legal text sits on a page used for German ads on lines 94 and 100:
-  - Line 94:
-    > `"Operating as a registered sole proprietor/entity in Pakistan."`
-  - Line 100:
-    > `"Provided upon formal request or during merchant underwriting."`
-- **Owner & Legal Counsel Decisions:**
-  1. **Option A (Real Details):** Replace line 100 with the real registration or tax identifier / NTN in Pakistan.
-  2. **Option B (Remove the Row):** Remove the "Registration Number" list item from the Impressum table if not applicable to a sole proprietorship.
-  3. **Option C (Wait for Quranific Ltd):** Leave sole proprietor disclosures until the UK entity (Quranific Ltd) formation is completed, then update with the UK Companies House registration number.
-- **Action Required:** Business owner and counsel decide which option to implement before scaling German ad spend.
+- **Where:** `src/pages/legal/impressum.astro`, lines 94 and 100 (page `/legal/impressum`)
+- **Current text:** line 94: "Operating as a registered sole proprietor/entity in Pakistan." Line 100, under "Registration Number": "Provided upon formal request or during merchant underwriting."
+- **Why it matters:** no placeholder text is allowed on the site; line 100 gives no registration number, and line 94 says "registered", which must be true. The page is linked from pages that run ads in Germany and other EU countries.
+- **Options (owner decision, ideally with counsel):** (1) replace both lines with your real registration details, if you have them; (2) remove the "Registration Number" row and the word "registered" until Quranific Ltd exists; (3) update the page when Quranific Ltd is incorporated (country and registry not decided yet).
+- **Not a code decision:** give the agent the exact final text to put there.
 
 ---
 
