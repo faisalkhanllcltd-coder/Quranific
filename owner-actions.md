@@ -390,25 +390,25 @@ The following empirical baseline was probed live and directly informs the status
 - **Context:** The `quranific-container` utility (`@utility quranific-container` in `src/styles/global.css`) is unified to `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`. Components utilizing `quranific-container` gain 16px per side above 1280px. Pages converted from hardcoded `px-8` do not visibly change.
 - **Real URLs to Inspect (21 URLs):**
   - `/quran-classes/for-adults`
-  - `/quran-classes/for-kids`
-  - `/quran-classes/for-women`
   - `/quran-teacher/for-adults`
+  - `/quran-classes/for-kids`
   - `/quran-teacher/for-kids`
+  - `/quran-classes/for-women`
   - `/quran-teacher/for-women`
-  - `/courses`
   - `/courses/basic-qaida`
   - `/courses/quran-reading-with-tajweed`
   - `/courses/quran-memorization`
   - `/courses/quran-translation-with-tafsir`
   - `/courses/advanced-tajweed-ijazah`
   - `/courses/arabic-language`
+  - `/courses`
+  - `/faq`
+  - `/`
   - `/legal/cookies`
   - `/legal/impressum`
   - `/legal/privacy`
   - `/legal/refund`
   - `/legal/terms`
-  - `/`
-  - `/faq`
   - `/tuition-fee`
 - **Steps:** Visually inspect page layout at 1280px, 1440px, and 1920px across these 21 URLs to verify container margins remain balanced.
 
