@@ -43,54 +43,54 @@ The following empirical baseline was probed live and directly informs the status
 
 | Category / Urgency                                   | Total Items | ✅ Done | ❌ Still Open | ⚠️ Owner Action / Monitoring |
 | :--------------------------------------------------- | :---------: | :-----: | :-----------: | :--------------------------: |
-| **Tier 1: Critical Pre-Deploy Blockers**             |     10      |    1    |       5       |              4               |
-| **Tier 2: Do Soon (First 48h / Pre-Scale)**          |     11      |    2    |       2       |              7               |
+| **Tier 1: Critical Pre-Deploy Blockers**             |     10      |    6    |       2       |              2               |
+| **Tier 2: Do Soon (First 48h / Pre-Scale)**          |     11      |    5    |       2       |              4               |
 | **Tier 3: Later (Hygiene, Monitoring & Governance)** |     13      |    0    |       0       |              13              |
 | **Obsolete / Merged Items**                          |      2      |    0    |       0       |    2 (➖ Excluded/Merged)    |
-| **Total Actionable Items**                           |   **34**    |  **3**  |     **7**     |            **24**            |
+| **Total Actionable Items**                           |   **34**    | **11**  |     **4**     |            **19**            |
 
 ---
 
 ## Quick Reference Status Matrix
 
-| ID        | Item Description                                    | Urgency Tier     |       Status        | Verification Method / Proof                                                                           |
-| :-------- | :-------------------------------------------------- | :--------------- | :-----------------: | :---------------------------------------------------------------------------------------------------- |
-| **OA-01** | Provision `INTERNAL_WORKER_SECRET` on Both Workers  | Tier 1 (Blocker) |    ❌ Still Open    | Code fail-closed; secrets must be set before deploy                                                   |
-| **OA-02** | Provision `ALARM_ADMIN_TOKEN` on Alarm Worker       | Tier 1 (Blocker) |    ❌ Still Open    | Code fail-closed (returns 401); must set before deploy                                                |
-| **OA-03** | Server-Side Ad Secrets (`META_CAPI` purged)         | N/A (Purged)     |     ➖ Obsolete     | Meta CAPI completely purged. Optional GA4 note. Deploys as Worker.                                    |
-| **OA-04** | Confirm Resend Domain Verification ("Verified")     | Tier 1 (Blocker) | ⚠️ Owner Must Check | Resend dashboard > Domains > quranific.com must show Verified; do NOT edit root SPF                   |
-| **OA-05** | Universal SSL CAA DNS Records                       | Tier 3 (Later)   | ⚠️ Owner to Decide  | Optional hardening; Cloudflare auto-manages SSL CAs                                                   |
-| **OA-06** | Verify Resend DKIM DNS Record                       | Tier 1 (Blocker) |       ✅ Done       | Probed: `resend._domainkey.quranific.com` TXT active                                                  |
-| **OA-07** | GTM Tag Consent Settings (`GTM-5CJMMJ29`)           | Tier 1 (Blocker) | ⚠️ Owner Must Check | Verify tag triggers in Google Tag Manager container                                                   |
-| **OA-08** | Verify No Overriding Zone Cache Rules               | Tier 1 (Blocker) | ⚠️ Owner Must Check | Check Cloudflare Rules → Cache Rules                                                                  |
-| **OA-09** | Disable Public `workers.dev` on Alarm Worker        | Tier 2 (Do Soon) |    ❌ Still Open    | Live returns HTTP 200; redeploy alarm worker with `workers_dev=false`                                 |
-| **OA-10** | Verify Root Worker `workers.dev` Disabled           | Tier 2 (Do Soon) |       ✅ Done       | Probed: returns HTTP 404 Not Found                                                                    |
-| **OA-11** | Configure DLQ `ALERT_WEBHOOK_URL` Secret            | Tier 2 (Do Soon) |    ❌ Still Open    | Missing on `alarm-worker`                                                                             |
-| **OA-12** | Enable DNSSEC Signing & Submit DS Record            | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Probed: 0 DS records at registrar                                                                     |
-| **OA-13** | Verify SSL/TLS Encryption Mode (Full Strict)        | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Check Cloudflare Dashboard: SSL/TLS Overview                                                          |
-| **OA-14** | Verify Cloudflare WAF & Bot Fight Mode              | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Check Cloudflare Security → WAF / Bot Fight Mode                                                      |
-| **OA-15** | Verify Canonical HTTPS & www Redirects              | Tier 2 (Do Soon) |       ✅ Done       | Verified: HTTP 301 to `https://quranific.com/`                                                        |
-| **OA-16** | Account 2FA & Secondary Emergency Admin             | Tier 3 (Later)   | ⚠️ Owner Must Check | Check Cloudflare Dashboard: Manage Account → Members                                                  |
-| **OA-17** | Scoped Cloudflare API Tokens (No Global Key)        | Tier 3 (Later)   | ⚠️ Owner Must Check | Check Cloudflare Dashboard: API Tokens                                                                |
-| **OA-18** | GitHub `main` Branch Protection Rules               | Tier 3 (Later)   | ⚠️ Owner Must Check | Check GitHub repository settings                                                                      |
-| **OA-19** | DMARC Policy Progression (`p=none` to `quarantine`) | Tier 3 (Later)   |    ⚠️ Monitoring    | Probed: `p=none`; add `rua=mailto:compliance@quranific.com`; watch reports                            |
-| **OA-20** | External Synthetic Uptime Monitor                   | Tier 3 (Later)   | ⚠️ Owner Must Check | Set up third-party uptime ping                                                                        |
-| **OA-21** | Legal Counsel Review: Children's Data / COPPA       | Tier 3 (Later)   | ⚠️ Owner Must Check | Review student onboarding flow                                                                        |
-| **OA-22** | Submit Domain to HSTS Preload List                  | Tier 3 (Later)   | ⚠️ Owner to Decide  | Proceed only after all subdomains are verified HTTPS (includes OA-33 checklist)                       |
-| **OA-23** | Cloudflare Worker Preview & Edge Validation         | Tier 3 (Later)   | ⚠️ Owner Must Check | Validate Worker preview deployment (deploys as Worker)                                                |
-| **OA-24** | Core Web Vitals & Live Conversion Attribution       | Tier 3 (Later)   | ⚠️ Owner Must Check | Check GSC and GA4 DebugView                                                                           |
-| **OA-25** | Homepage Edge Cache Hit Rate Monitoring             | Tier 3 (Later)   | ⚠️ Owner Must Check | Inspect Cloudflare Workers Analytics                                                                  |
-| **OA-26** | Production Deployment Order Execution               | Tier 1 (Blocker) |    ❌ Still Open    | Run order: secrets -> merge -> deploy:prod -> deploy:alarm -> OA-09 -> OA-28 -> OA-31 -> signup test  |
-| **OA-27** | Confirm `ADMIN_EMAIL` Cloudflare Variable           | Tier 1 (Blocker) |    ❌ Still Open    | Verify equals personal Gmail, never `admin@` (Worker deploy)                                          |
-| **OA-28** | Post-Deploy CSP & GTM Console Verification          | Tier 1 (Blocker) |    ❌ Still Open    | Test `/courses/` & `/` in DevTools for zero CSP errors                                                |
-| **OA-29** | Geo-Pricing Display Verification (UK vs PK)         | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Verify GBP (£) in UK vs USD ($40 floor) in Pakistan                                                   |
-| **OA-30** | Container Padding Visual Inspection (1280+)         | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Check 21 URLs (intent, courses, legal, home, faq, tuition) at 1280px+; converted px-8 pages unchanged |
-| **OA-31** | Newsletter Double Opt-In End-to-End Live Test       | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Test 10-min throttle, "Check your inbox", confirm, welcome, legal 2b check                            |
-| **OA-32** | Legal Review: Consent Records & Footer Address      | Tier 3 (Later)   | ⚠️ Owner Must Check | Review KV consent log and marketing physical address                                                  |
-| **OA-33** | [Merged into OA-22]                                 | N/A              |      ➖ Merged      | See OA-22 (excluded from counts)                                                                      |
-| **OA-34** | SEO Track Owner Inputs (Branch `seo_audit_staging`) | Tier 3 (Later)   | ⚠️ Owner Must Check | Pointer to content/credential tasks on SEO branch                                                     |
-| **OA-35** | Confirm Resend Contacts API Access & Segment ID     | Tier 1 (Blocker) | ⚠️ Owner Must Check | Confirm Contacts API access and copy Segment ID for `RESEND_AUDIENCE_ID`                              |
-| **OA-36** | Impressum Registration Text                         | Tier 2 (Do Soon) | ⚠️ Owner to Decide  | Legal counsel & owner decision on sole proprietor registration text in impressum.astro lines 94, 100  |
+| ID        | Item Description                                    | Urgency Tier     |       Status        | Verification Method / Proof                                                                                                                                                                                                |
+| :-------- | :-------------------------------------------------- | :--------------- | :-----------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **OA-01** | Provision `INTERNAL_WORKER_SECRET` on Both Workers  | Tier 1 (Blocker) |       ✅ Done       | Completed by owner 2026-10-11. Secret names confirmed on both workers via `wrangler secret list`; equal values are only provable by the first hourly alarm run (alarm worker Logs must show no 401).                       |
+| **OA-02** | Provision `ALARM_ADMIN_TOKEN` on Alarm Worker       | Tier 1 (Blocker) |       ✅ Done       | Completed by owner 2026-10-11. Secret confirmed on alarm worker via `wrangler secret list`; equal values are only provable by the first hourly alarm run (alarm worker Logs must show no 401).                             |
+| **OA-03** | Server-Side Ad Secrets (`META_CAPI` purged)         | N/A (Purged)     |     ➖ Obsolete     | Meta CAPI completely purged. Optional GA4 note. Deploys as Worker.                                                                                                                                                         |
+| **OA-04** | Confirm Resend Domain Verification ("Verified")     | Tier 1 (Blocker) |       ✅ Done       | Completed by owner 2026-10-11. Resend dashboard shows Verified; root SPF untouched.                                                                                                                                        |
+| **OA-05** | Universal SSL CAA DNS Records                       | Tier 3 (Later)   | ⚠️ Owner to Decide  | Optional hardening; Cloudflare auto-manages SSL CAs                                                                                                                                                                        |
+| **OA-06** | Verify Resend DKIM DNS Record                       | Tier 1 (Blocker) |       ✅ Done       | Probed: `resend._domainkey.quranific.com` TXT active                                                                                                                                                                       |
+| **OA-07** | GTM Tag Consent Settings (`GTM-5CJMMJ29`)           | Tier 1 (Blocker) | ⚠️ Owner Must Check | Verify tag triggers in Google Tag Manager container                                                                                                                                                                        |
+| **OA-08** | Verify No Overriding Zone Cache Rules               | Tier 1 (Blocker) |       ✅ Done       | Completed by owner 2026-10-11. Zone cache rules verified; no override on dynamic routes.                                                                                                                                   |
+| **OA-09** | Disable Public `workers.dev` on Alarm Worker        | Tier 2 (Do Soon) |    ❌ Still Open    | Live returns HTTP 200; redeploy alarm worker with `workers_dev=false`                                                                                                                                                      |
+| **OA-10** | Verify Root Worker `workers.dev` Disabled           | Tier 2 (Do Soon) |       ✅ Done       | Probed: returns HTTP 404 Not Found                                                                                                                                                                                         |
+| **OA-11** | Configure DLQ `ALERT_WEBHOOK_URL` Secret            | Tier 2 (Do Soon) |    ❌ Still Open    | Missing on `alarm-worker`                                                                                                                                                                                                  |
+| **OA-12** | Enable DNSSEC Signing & Submit DS Record            | Tier 2 (Do Soon) |       ✅ Done       | Completed by owner 2026-10-11. DNSSEC active, DoH `AD true`; rollback = delete the DS record at Hostinger.                                                                                                                 |
+| **OA-13** | Verify SSL/TLS Encryption Mode (Full Strict)        | Tier 2 (Do Soon) |       ✅ Done       | Completed by owner 2026-10-11. SSL/TLS Full (strict) verified.                                                                                                                                                             |
+| **OA-14** | Verify Cloudflare WAF & Bot Fight Mode              | Tier 2 (Do Soon) |       ✅ Done       | Completed by owner 2026-10-11. Bot Fight Mode ON; Email Address Obfuscation OFF (if ON: turn off in Cloudflare Scrape Shield).                                                                                             |
+| **OA-15** | Verify Canonical HTTPS & www Redirects              | Tier 2 (Do Soon) |       ✅ Done       | Verified: HTTP 301 to `https://quranific.com/`                                                                                                                                                                             |
+| **OA-16** | Account 2FA & Secondary Emergency Admin             | Tier 3 (Later)   | ⚠️ Owner Must Check | Check Cloudflare Dashboard: Manage Account → Members                                                                                                                                                                       |
+| **OA-17** | Scoped Cloudflare API Tokens (No Global Key)        | Tier 3 (Later)   | ⚠️ Owner Must Check | Check Cloudflare Dashboard: API Tokens                                                                                                                                                                                     |
+| **OA-18** | GitHub `main` Branch Protection Rules               | Tier 3 (Later)   | ⚠️ Owner Must Check | Check GitHub repository settings                                                                                                                                                                                           |
+| **OA-19** | DMARC Policy Progression (`p=none` to `quarantine`) | Tier 3 (Later)   |    ⚠️ Monitoring    | Probed: `p=none`; add `rua=mailto:compliance@quranific.com`; watch reports                                                                                                                                                 |
+| **OA-20** | External Synthetic Uptime Monitor                   | Tier 3 (Later)   | ⚠️ Owner Must Check | Set up third-party uptime ping                                                                                                                                                                                             |
+| **OA-21** | Legal Counsel Review: Children's Data / COPPA       | Tier 3 (Later)   | ⚠️ Owner Must Check | Review student onboarding flow                                                                                                                                                                                             |
+| **OA-22** | Submit Domain to HSTS Preload List                  | Tier 3 (Later)   | ⚠️ Owner to Decide  | Proceed only after all subdomains are verified HTTPS (includes OA-33 checklist)                                                                                                                                            |
+| **OA-23** | Cloudflare Worker Preview & Edge Validation         | Tier 3 (Later)   | ⚠️ Owner Must Check | Validate Worker preview deployment (deploys as Worker)                                                                                                                                                                     |
+| **OA-24** | Core Web Vitals & Live Conversion Attribution       | Tier 3 (Later)   | ⚠️ Owner Must Check | Check GSC and GA4 DebugView                                                                                                                                                                                                |
+| **OA-25** | Homepage Edge Cache Hit Rate Monitoring             | Tier 3 (Later)   | ⚠️ Owner Must Check | Inspect Cloudflare Workers Analytics                                                                                                                                                                                       |
+| **OA-26** | Production Deployment Order Execution               | Tier 1 (Blocker) |    ❌ Still Open    | Run order: secrets -> merge -> deploy:prod -> deploy:alarm -> OA-09 -> OA-28 -> OA-31 -> signup test                                                                                                                       |
+| **OA-27** | Confirm `ADMIN_EMAIL` Cloudflare Variable           | Tier 1 (Blocker) |       ✅ Done       | Completed by owner 2026-10-11. ADMIN_EMAIL unset in dashboard, COVERED 6/6.                                                                                                                                                |
+| **OA-28** | Post-Deploy CSP & GTM Console Verification          | Tier 1 (Blocker) |    ❌ Still Open    | Test `/courses/` & `/` in DevTools for zero CSP errors                                                                                                                                                                     |
+| **OA-29** | Geo-Pricing Display Verification (UK vs PK)         | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Verify GBP (£) in UK vs USD ($40 floor) in Pakistan                                                                                                                                                                        |
+| **OA-30** | Container Padding Visual Inspection (1280+)         | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Check 21 URLs (intent, courses, legal, home, faq, tuition) at 1280px+; converted px-8 pages unchanged                                                                                                                      |
+| **OA-31** | Newsletter Double Opt-In End-to-End Live Test       | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Test 10-min throttle, "Check your inbox", confirm, welcome, legal 2b check                                                                                                                                                 |
+| **OA-32** | Legal Review: Consent Records & Footer Address      | Tier 3 (Later)   | ⚠️ Owner Must Check | Review KV consent log and marketing physical address                                                                                                                                                                       |
+| **OA-33** | [Merged into OA-22]                                 | N/A              |      ➖ Merged      | See OA-22 (excluded from counts)                                                                                                                                                                                           |
+| **OA-34** | SEO Track Owner Inputs (Branch `seo_audit_staging`) | Tier 3 (Later)   | ⚠️ Owner Must Check | Pointer to content/credential tasks on SEO branch                                                                                                                                                                          |
+| **OA-35** | Confirm Resend Contacts API Access & Segment ID     | Tier 1 (Blocker) | ⚠️ Owner Must Check | API key is Full access; RESEND_AUDIENCE_ID set to the General segment ID; proven only by the OA-31 live test; if the confirm page shows 'We'll Complete This Shortly', run `npx wrangler secret delete RESEND_AUDIENCE_ID` |
+| **OA-36** | Impressum Registration Text                         | Tier 2 (Do Soon) | ⚠️ Owner to Decide  | Legal counsel & owner decision on sole proprietor registration text in impressum.astro lines 94, 100                                                                                                                       |
 
 ---
 
@@ -102,9 +102,11 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-01 — Provision `INTERNAL_WORKER_SECRET` on Both Workers
 
-- **Status:** ❌ **Still Open**
+- **Status:** ✅ **Done**
+  Completed by owner 2026-10-11
 - **Urgency:** **Tier 1 (Blocks Going Live)**
 - **Platform:** Cloudflare CLI (`wrangler secret put`) or Cloudflare Dashboard
+- **Note:** Secret names confirmed on both workers via `wrangler secret list`; equal values are only provable by the first hourly alarm run (alarm worker Logs must show no 401).
 - **Context & Architecture:** Fallback to `JWT_SECRET` was intentionally removed in commit `6932956`. After deployment, retries cannot authenticate until `INTERNAL_WORKER_SECRET` is provisioned on **both** workers. If missing, both workers fail closed (return 401 Unauthorized). Secrets must be set **BEFORE** deploying workers.
   > **Critical:** Without INTERNAL_WORKER_SECRET on BOTH workers, retries cannot authenticate (secrets before deploy).
 - **Exact Steps:**
@@ -130,9 +132,11 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-02 — Provision `ALARM_ADMIN_TOKEN` on Alarm Worker
 
-- **Status:** ❌ **Still Open**
+- **Status:** ✅ **Done**
+  Completed by owner 2026-10-11
 - **Urgency:** **Tier 1 (Blocks Going Live)**
 - **Platform:** Cloudflare CLI (`wrangler secret put`) or Cloudflare Dashboard
+- **Note:** Secret confirmed on alarm worker via `wrangler secret list`; equal values are only provable by the first hourly alarm run (alarm worker Logs must show no 401).
 - **Context & Architecture:** Endpoints `/force-run` and `/resend-log` in `alarm-worker/src/index.ts` require admin authentication. If `ALARM_ADMIN_TOKEN` is missing, the worker returns 401 Unauthorized to all callers (fails closed, no security hole). Must be set before manual administrative triggers can be performed.
   > **Critical:** Without ALARM_ADMIN_TOKEN the alarm endpoints return 401 to everyone (safe, just unusable).
 - **Exact Steps:**
@@ -163,7 +167,8 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-04 — Confirm Resend Dashboard Shows Domain "Verified" (Do NOT Edit Root SPF)
 
-- **Status:** ⚠️ **Owner Must Check**
+- **Status:** ✅ **Done**
+  Completed by owner 2026-10-11
 - **Urgency:** **Tier 1 (Blocks Going Live)**
 - **Platform:** Resend Dashboard (`https://resend.com/domains`) & Cloudflare DNS
 - **Context & Architecture:** Resend routes all transactional emails through its dedicated sending subdomain `send.quranific.com`. Live DoH probing confirms:
@@ -203,7 +208,8 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-08 — Verify No Overriding Zone Cache Rules
 
-- **Status:** ⚠️ **Owner Must Check**
+- **Status:** ✅ **Done**
+  Completed by owner 2026-10-11
 - **Urgency:** **Tier 1 (Blocks Going Live)**
 - **Platform:** Cloudflare Dashboard: Rules → Cache Rules
 - **Context & Architecture:** The site relies on Worker-level caching (homepage Cache API) and exact `Cache-Control` response headers. Zone-level rules must not cache dynamic API routes (`/api/*`).
@@ -247,8 +253,10 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-27 — Confirm `ADMIN_EMAIL` Cloudflare Variable
 
-- **Status:** ❌ **Still Open**
+- **Status:** ✅ **Done**
+  Completed by owner 2026-10-11
 - **Urgency:** **Tier 1 (Blocks Going Live)**
+- **Note:** ADMIN_EMAIL unset in dashboard, COVERED 6/6.
 - **Platform:** Cloudflare Dashboard → Workers & Pages → `quranific` (Worker) → Settings → Variables
 - **Context & Architecture:** The site deploys as a Cloudflare Worker (not Pages). `ADMIN_EMAIL` designates the destination inbox for all internal transactional notifications (contact form, newsletter, signup, teacher applications). Per locked architecture decisions, internal notifications go **ONLY** to the personal Gmail `faisalkhan.llc.ltd@gmail.com`. The mailbox `admin@quranific.com` is strictly a correspondence mailbox.
 - **Exact Steps:**
@@ -280,6 +288,7 @@ The following empirical baseline was probed live and directly informs the status
 - **Status:** ⚠️ **Owner Must Check**
 - **Urgency:** **Tier 1 (Blocks Going Live)**
 - **Platform:** Resend Dashboard (`https://resend.com/contacts`) & Cloudflare Secrets
+- **Note:** API key is Full access; RESEND_AUDIENCE_ID set to the General segment ID; proven only by the OA-31 live test; if the confirm page shows 'We'll Complete This Shortly', run `npx wrangler secret delete RESEND_AUDIENCE_ID`.
 - **Context & Architecture:** The double opt-in newsletter confirmation flow calls Resend's Contacts API to manage subscriptions and assign contacts to a segment.
 - **Where to Check the API Key:**
   - Navigate to **Resend > API Keys** (`https://resend.com/api-keys`).
@@ -334,10 +343,12 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-12 — Enable DNSSEC Signing & Submit DS Record
 
-- **Status:** ⚠️ **Owner Must Check**
+- **Status:** ✅ **Done**
+  Completed by owner 2026-10-11
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Empirical Proof (Probed 2026-10-11 09:23 UTC):**
-  - `dns.google/resolve?name=quranific.com&type=DS` returned NO ANSWER.
+- **Note:** DNSSEC active, DoH `AD true`; rollback = delete the DS record at Hostinger.
+- **Empirical Proof:**
+  - `dns.google/resolve?name=quranific.com&type=A` returns `0 True` (Authenticated Data).
 - **Steps:**
   1. Enable DNSSEC in Cloudflare DNS dashboard.
   2. Copy DS record (Key Tag, Algorithm, Digest Type, Digest) and submit to Hostinger domain registrar.
@@ -346,7 +357,8 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-13 — Verify SSL/TLS Encryption Mode (Full Strict)
 
-- **Status:** ⚠️ **Owner Must Check**
+- **Status:** ✅ **Done**
+  Completed by owner 2026-10-11
 - **Urgency:** **Tier 2 (Do Soon)**
 - **Platform:** Cloudflare Dashboard → SSL/TLS Overview
 - **Steps:** Ensure SSL/TLS encryption mode is set to **Full (strict)**.
@@ -355,8 +367,10 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-14 — Verify Cloudflare WAF & Bot Fight Mode
 
-- **Status:** ⚠️ **Owner Must Check**
+- **Status:** ✅ **Done**
+  Completed by owner 2026-10-11
 - **Urgency:** **Tier 2 (Do Soon)**
+- **Note:** Bot Fight Mode ON; Email Address Obfuscation OFF (if ON: turn off in Cloudflare Scrape Shield).
 - **Platform:** Cloudflare Dashboard → Security → WAF / Bots
 - **Steps:** Enable Bot Fight Mode and review standard managed rulesets.
 
