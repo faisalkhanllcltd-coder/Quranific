@@ -11,11 +11,18 @@
 
 ### 1. Production Deployment Status
 
-- **Status:** ❌ **NOT YET DEPLOYED TO PRODUCTION**
-- **Blockers:**
-  1. Owner must provision Cloudflare Worker secrets (`INTERNAL_WORKER_SECRET` on both workers, `ALARM_ADMIN_TOKEN` on alarm-worker; see [`owner-actions.md#oa-01`](./owner-actions.md), [`#oa-02`](./owner-actions.md)) before deploy.
-  2. Branch `staging/security-and-arch-fixes` must be merged to `main`.
-  3. Deploy commands must be executed in order: `npm run deploy:prod` followed by `npm run deploy:alarm` (see [`owner-actions.md#oa-26`](./owner-actions.md)).
+- **Status:** ✅ **DEPLOYED 2026-10-12, main 154c8ef, root version 845c4fe7-b81d-49ce-8b33-15dc5b1795ec, alarm version ba2677fe-86ea-4b04-a911-e0985e00b8c5**
+- **Remaining Owner Items:**
+  - `OA-07`: GTM Tag Consent Settings (`GTM-5CJMMJ29`)
+  - `OA-11`: Configure DLQ `ALERT_WEBHOOK_URL` Secret on `alarm-worker`
+  - `OA-19`: DMARC Policy Progression (`p=none` to `quarantine`)
+  - `OA-28`: Post-Deploy CSP & GTM Console Verification
+  - `OA-29`: Geo-Pricing Display Verification (UK vs PK)
+  - `OA-30`: Container Padding Visual Inspection (1280px+)
+  - `OA-31`: Newsletter Double Opt-In End-to-End Live Validation
+  - `OA-35`: Confirm Resend Contacts API Access & Segment ID (`RESEND_AUDIENCE_ID`)
+  - `OA-36`: Impressum Registration Text
+  - Owner signup test: verify customer mail from `support@quranific.com` and notification to personal Gmail `faisalkhan.llc.ltd@gmail.com`
 
 ---
 

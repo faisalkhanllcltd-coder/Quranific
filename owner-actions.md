@@ -43,11 +43,11 @@ The following empirical baseline was probed live and directly informs the status
 
 | Category / Urgency                                   | Total Items | ✅ Done | ❌ Still Open | ⚠️ Owner Action / Monitoring |
 | :--------------------------------------------------- | :---------: | :-----: | :-----------: | :--------------------------: |
-| **Tier 1: Critical Pre-Deploy Blockers**             |     10      |    6    |       2       |              2               |
-| **Tier 2: Do Soon (First 48h / Pre-Scale)**          |     11      |    5    |       2       |              4               |
+| **Tier 1: Critical Pre-Deploy Blockers**             |     10      |    7    |       0       |              3               |
+| **Tier 2: Do Soon (First 48h / Pre-Scale)**          |     11      |    6    |       1       |              4               |
 | **Tier 3: Later (Hygiene, Monitoring & Governance)** |     13      |    0    |       0       |              13              |
 | **Obsolete / Merged Items**                          |      2      |    0    |       0       |    2 (➖ Excluded/Merged)    |
-| **Total Actionable Items**                           |   **34**    | **11**  |     **4**     |            **19**            |
+| **Total Actionable Items**                           |   **34**    | **13**  |     **1**     |            **20**            |
 
 ---
 
@@ -63,7 +63,7 @@ The following empirical baseline was probed live and directly informs the status
 | **OA-06** | Verify Resend DKIM DNS Record                       | Tier 1 (Blocker) |       ✅ Done       | Probed: `resend._domainkey.quranific.com` TXT active                                                                                                                                                                       |
 | **OA-07** | GTM Tag Consent Settings (`GTM-5CJMMJ29`)           | Tier 1 (Blocker) | ⚠️ Owner Must Check | Verify tag triggers in Google Tag Manager container                                                                                                                                                                        |
 | **OA-08** | Verify No Overriding Zone Cache Rules               | Tier 1 (Blocker) |       ✅ Done       | Completed by owner 2026-10-11. Zone cache rules verified; no override on dynamic routes.                                                                                                                                   |
-| **OA-09** | Disable Public `workers.dev` on Alarm Worker        | Tier 2 (Do Soon) |    ❌ Still Open    | Live returns HTTP 200; redeploy alarm worker with `workers_dev=false`                                                                                                                                                      |
+| **OA-09** | Disable Public `workers.dev` on Alarm Worker        | Tier 2 (Do Soon) |       ✅ Done       | Deployed with workers_dev=false; live probe returned HTTP 404 Not Found.                                                                                                                                                   |
 | **OA-10** | Verify Root Worker `workers.dev` Disabled           | Tier 2 (Do Soon) |       ✅ Done       | Probed: returns HTTP 404 Not Found                                                                                                                                                                                         |
 | **OA-11** | Configure DLQ `ALERT_WEBHOOK_URL` Secret            | Tier 2 (Do Soon) |    ❌ Still Open    | Missing on `alarm-worker`                                                                                                                                                                                                  |
 | **OA-12** | Enable DNSSEC Signing & Submit DS Record            | Tier 2 (Do Soon) |       ✅ Done       | Completed by owner 2026-10-11. DNSSEC active, DoH `AD true`; rollback = delete the DS record at Hostinger.                                                                                                                 |
@@ -80,9 +80,9 @@ The following empirical baseline was probed live and directly informs the status
 | **OA-23** | Cloudflare Worker Preview & Edge Validation         | Tier 3 (Later)   | ⚠️ Owner Must Check | Validate Worker preview deployment (deploys as Worker)                                                                                                                                                                     |
 | **OA-24** | Core Web Vitals & Live Conversion Attribution       | Tier 3 (Later)   | ⚠️ Owner Must Check | Check GSC and GA4 DebugView                                                                                                                                                                                                |
 | **OA-25** | Homepage Edge Cache Hit Rate Monitoring             | Tier 3 (Later)   | ⚠️ Owner Must Check | Inspect Cloudflare Workers Analytics                                                                                                                                                                                       |
-| **OA-26** | Production Deployment Order Execution               | Tier 1 (Blocker) |    ❌ Still Open    | Run order: secrets -> merge -> deploy:prod -> deploy:alarm -> OA-09 -> OA-28 -> OA-31 -> signup test                                                                                                                       |
+| **OA-26** | Production Deployment Order Execution               | Tier 1 (Blocker) |       ✅ Done       | Deployed main 154c8ef; root worker: 845c4fe7-b81d-49ce-8b33-15dc5b1795ec; alarm worker: ba2677fe-86ea-4b04-a911-e0985e00b8c5.                                                                                              |
 | **OA-27** | Confirm `ADMIN_EMAIL` Cloudflare Variable           | Tier 1 (Blocker) |       ✅ Done       | Completed by owner 2026-10-11. ADMIN_EMAIL unset in dashboard, COVERED 6/6.                                                                                                                                                |
-| **OA-28** | Post-Deploy CSP & GTM Console Verification          | Tier 1 (Blocker) |    ❌ Still Open    | Test `/courses/` & `/` in DevTools for zero CSP errors                                                                                                                                                                     |
+| **OA-28** | Post-Deploy CSP & GTM Console Verification          | Tier 1 (Blocker) | ⚠️ Owner Must Check | headers verified by script; DevTools console check is the owner's.                                                                                                                                                         |
 | **OA-29** | Geo-Pricing Display Verification (UK vs PK)         | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Verify GBP (£) in UK vs USD ($40 floor) in Pakistan                                                                                                                                                                        |
 | **OA-30** | Container Padding Visual Inspection (1280+)         | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Check 21 URLs (intent, courses, legal, home, faq, tuition) at 1280px+; converted px-8 pages unchanged                                                                                                                      |
 | **OA-31** | Newsletter Double Opt-In End-to-End Live Test       | Tier 2 (Do Soon) | ⚠️ Owner Must Check | Test 10-min throttle, "Check your inbox", confirm, welcome, legal 2b check                                                                                                                                                 |
@@ -221,7 +221,8 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-26 — Production Deployment Order Execution
 
-- **Status:** ❌ **Still Open**
+- **Status:** ✅ **Done**
+  Completed 2026-10-12: main 154c8ef, root version 845c4fe7-b81d-49ce-8b33-15dc5b1795ec, alarm version ba2677fe-86ea-4b04-a911-e0985e00b8c5
 - **Urgency:** **Tier 1 (Blocks Going Live)**
 - **Platform:** GitHub & Cloudflare CLI
 - **Strict Execution Order:**
@@ -268,8 +269,9 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-28 — Post-Deploy CSP & GTM Console Verification
 
-- **Status:** ❌ **Still Open**
+- **Status:** ⚠️ **Owner Must Check**
 - **Urgency:** **Tier 1 (Blocks Going Live)**
+- **Note:** headers verified by script; DevTools console check is the owner's.
 - **Platform:** Chrome / Firefox DevTools Console on Live Production
 - **Context & Architecture:** The enforced Content-Security-Policy in `public/_headers` and `src/middleware.ts` contains no `'unsafe-eval'`. It now applies to prerendered static pages (such as `/courses/`) as well as dynamic SSR routes.
 - **Exact Steps:**
@@ -310,11 +312,10 @@ The following empirical baseline was probed live and directly informs the status
 
 ### OA-09 — Disable Public `workers.dev` Route on Alarm Worker
 
-- **Status:** ❌ **Still Open**
+- **Status:** ✅ **Done**
 - **Urgency:** **Tier 2 (Do Soon)**
-- **Empirical Proof (Probed 2026-10-11 09:23 UTC):**
-  - `curl.exe -sI https://quranific-alarm.faisalkhan-llc-ltd.workers.dev` returned `HTTP/1.1 200 OK`.
-- **Context & Fix:** `alarm-worker/wrangler.toml` has `workers_dev = false`. Cloudflare documentation notes that redeploying the worker applies this configuration and deactivates the route. The live 200 confirms the worker has not yet been redeployed since that setting was configured.
+- **Empirical Proof:** Deployed with `workers_dev = false`; `https://quranific-alarm.faisalkhan-llc-ltd.workers.dev` returned HTTP 404 Not Found.
+- **Context & Fix:** `alarm-worker/wrangler.toml` has `workers_dev = false`. Redeployed alarm worker successfully deactivating the route.
 - **Exact Steps:**
   1. Deploy alarm worker via `npm run deploy:alarm`.
   2. Run `curl.exe -sI https://quranific-alarm.faisalkhan-llc-ltd.workers.dev` and confirm it returns `HTTP 404`.
