@@ -391,6 +391,7 @@ The alarm-worker drains failed emails hourly. To inspect the current queue:
 ```bash
 # Via internal retry endpoint
 curl -H "Authorization: Bearer <INTERNAL_WORKER_SECRET>" \
+  -H "Content-Type: application/json" \
   https://quranific.com/api/internal/retry-queue \
   -X POST
 # Response: { success: true, recovered: N, failed: M }
