@@ -41,7 +41,11 @@ const tabCategories = [
     {
       tabCategories.map((category) => (
         <div data-tab-panel={category.id} class={category.id === 'home' ? 'block' : 'hidden'}>
-          <FAQAccordion hideLeftColumn={true} questions={faqs[category.id] || []} />
+          <FAQAccordion
+            hideLeftColumn={true}
+            questions={faqs[category.id] || []}
+            id={category.id === 'home' ? 'faq' : `faq-${category.id}`}
+          />
         </div>
       ))
     }

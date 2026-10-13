@@ -10,6 +10,7 @@ interface Props {
   highlightWord?: string;
   subtitle?: string;
   hideLeftColumn?: boolean;
+  id?: string;
 }
 const {
   questions,
@@ -18,10 +19,11 @@ const {
   highlightWord = 'about it?',
   subtitle = "These are the real questions parents ask us before they book. We've answered every one honestly.",
   hideLeftColumn = false,
+  id = 'faq',
 } = Astro.props;
 ---
 
-<section class="quranific-section bg-[#fefdf9]" id="faq">
+<section class="quranific-section bg-[#fefdf9]" id={id}>
   <div class="quranific-container">
     <!-- Grid ratio inverted to 1fr_1.4fr to give the accordion the wider right column -->
     <div
