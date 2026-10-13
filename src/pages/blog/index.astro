@@ -141,60 +141,62 @@ const jsonLd = {
               </a>
             )}
 
-            <Section height={800}>
-              <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {regularPosts.map((post) => (
-                  <a
-                    href={`/blog/${post.id}`}
-                    class="group flex flex-col bg-white rounded-3xl border border-emerald-100 shadow-sm hover:shadow-xl transition-all duration-300 p-4"
-                  >
-                    <div class="aspect-video w-full bg-emerald-50 border border-emerald-100/50 rounded-2xl mb-6 overflow-hidden relative shrink-0">
-                      {post.data.heroImage ? (
-                        <img
-                          src={post.data.heroImage}
-                          alt={post.data.title}
-                          width="800"
-                          height="450"
-                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div
-                          class="absolute inset-0 bg-emerald-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-500"
-                          aria-hidden="true"
-                        >
-                          <span set:html={Icons.imagePlaceholder} />
-                        </div>
-                      )}
-                    </div>
-                    <div class="flex-1 flex flex-col px-2">
-                      <EyebrowText class="text-emerald-700/70 mb-3">
-                        {new Date(post.data.pubDate).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
-                      </EyebrowText>
-                      <h3 class="text-xl font-bold text-emerald-950 mb-3 group-hover:text-emerald-700 transition-colors leading-snug">
-                        {post.data.title}
-                      </h3>
-                      <p class="text-emerald-800/80 text-sm font-medium leading-relaxed mb-6 line-clamp-2">
-                        {post.data.description}
-                      </p>
-                      <div class="mt-auto font-bold text-emerald-950 text-sm flex items-center gap-2">
-                        Read Article{' '}
-                        <span
-                          class="group-hover:translate-x-1 transition-transform text-emerald-600"
-                          aria-hidden="true"
-                        >
-                          →
-                        </span>
+            {regularPosts.length > 0 && (
+              <Section height={800}>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {regularPosts.map((post) => (
+                    <a
+                      href={`/blog/${post.id}`}
+                      class="group flex flex-col bg-white rounded-3xl border border-emerald-100 shadow-sm hover:shadow-xl transition-all duration-300 p-4"
+                    >
+                      <div class="aspect-video w-full bg-emerald-50 border border-emerald-100/50 rounded-2xl mb-6 overflow-hidden relative shrink-0">
+                        {post.data.heroImage ? (
+                          <img
+                            src={post.data.heroImage}
+                            alt={post.data.title}
+                            width="800"
+                            height="450"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div
+                            class="absolute inset-0 bg-emerald-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-500"
+                            aria-hidden="true"
+                          >
+                            <span set:html={Icons.imagePlaceholder} />
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </Section>
+                      <div class="flex-1 flex flex-col px-2">
+                        <EyebrowText class="text-emerald-700/70 mb-3">
+                          {new Date(post.data.pubDate).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </EyebrowText>
+                        <h3 class="text-xl font-bold text-emerald-950 mb-3 group-hover:text-emerald-700 transition-colors leading-snug">
+                          {post.data.title}
+                        </h3>
+                        <p class="text-emerald-800/80 text-sm font-medium leading-relaxed mb-6 line-clamp-2">
+                          {post.data.description}
+                        </p>
+                        <div class="mt-auto font-bold text-emerald-950 text-sm flex items-center gap-2">
+                          Read Article{' '}
+                          <span
+                            class="group-hover:translate-x-1 transition-transform text-emerald-600"
+                            aria-hidden="true"
+                          >
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </Section>
+            )}
           </>
         )
       }
