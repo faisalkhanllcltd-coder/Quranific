@@ -13,12 +13,22 @@ import FaqSupportCard from './_components/FaqSupportCard.astro';
 import { faqs } from '../../data/faqs';
 
 // --- 110% SEO: DYNAMIC GOOGLE FAQ SCHEMA ---
-// This automatically transforms your array into Google's required Rich Snippet format.
-const allFaqs = Object.values(faqs).flat();
+// Generate FAQPage JSON-LD only from the categories rendered by FaqTabs
+const tabCategories = [
+  'home',
+  'pricing',
+  'courses',
+  'teachers',
+  'safeguarding',
+  'technical',
+  'contact',
+  'legal',
+];
+const visibleFaqs = tabCategories.flatMap((id) => faqs[id] || []);
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: allFaqs.map((faq) => ({
+  mainEntity: visibleFaqs.map((faq) => ({
     '@type': 'Question',
     name: faq.question,
     acceptedAnswer: {
