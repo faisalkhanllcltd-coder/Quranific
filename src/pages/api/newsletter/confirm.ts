@@ -363,6 +363,10 @@ export const POST: APIRoute = async (context) => {
     const sendBackgroundTasks = async () => {
       try {
         const unsubscribeUrl = await createNewsletterUnsubscribeUrl(email, jwtSecret);
+        if (!resendApiKey || resendApiKey === 're_123456789') {
+          console.log(`[Mock Mode]: Sent email to ${email} (welcome)`);
+          console.log(`[Mock Mode]: Sent email to ${adminEmail || 'admin'} (admin)`);
+        }
         await Promise.all([
           sendNewsletterWelcome(email, resendApiKey, unsubscribeUrl),
           sendNewsletterAdminNotification(email, resendApiKey, adminEmail),

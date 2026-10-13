@@ -309,6 +309,9 @@ export const POST: APIRoute = async (context) => {
 
     // Call Resend to mark unsubscribed
     try {
+      if (!resendApiKey || resendApiKey === 're_123456789') {
+        console.log(`[Mock Mode]: Contact ${email} marked unsubscribed`);
+      }
       await setUnsubscribed(email, true, resendApiKey);
     } catch (resendErr) {
       console.error('[Newsletter Unsubscribe Resend Failed]:', resendErr);
