@@ -45,7 +45,12 @@ export const POST: APIRoute = async (context) => {
         .catch((e: unknown) => console.error('[KV RL Failed]:', e));
     }
 
-    const data = (await context.request.json()) as Record<string, unknown>;
+    let data: Record<string, unknown> = {};
+    try {
+      data = (await context.request.json()) as Record<string, unknown>;
+    } catch {
+      data = {};
+    }
 
     // 2. Validate all fields including the Turnstile token
     const parsed = contactSchema.safeParse(data);

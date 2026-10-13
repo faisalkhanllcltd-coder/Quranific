@@ -39,8 +39,18 @@ export const POST: APIRoute = async (context) => {
         .catch((e: unknown) => console.error('[KV RL Failed]:', e));
     }
 
-    const data = await context.request.formData();
-    const formData = Object.fromEntries(data);
+    let formData: Record<string, unknown> = {};
+    try {
+      const contentType = context.request.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        formData = (await context.request.json()) as Record<string, unknown>;
+      } else {
+        const data = await context.request.formData();
+        formData = Object.fromEntries(data);
+      }
+    } catch {
+      formData = {};
+    }
 
     const trk = {
       fb: (formData.fbclid as string) || '',

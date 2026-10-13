@@ -57,8 +57,18 @@ function getKV(): KVNamespace | null {
 
 export const POST: APIRoute = async (context) => {
   try {
-    const data = await context.request.formData();
-    const formData = Object.fromEntries(data);
+    let formData: Record<string, unknown> = {};
+    try {
+      const contentType = context.request.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        formData = (await context.request.json()) as Record<string, unknown>;
+      } else {
+        const data = await context.request.formData();
+        formData = Object.fromEntries(data);
+      }
+    } catch {
+      formData = {};
+    }
 
     const runtimeEnv = env as Record<string, unknown>;
     const jwtSecret = runtimeEnv.JWT_SECRET as string;

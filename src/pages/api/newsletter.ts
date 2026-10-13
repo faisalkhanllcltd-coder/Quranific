@@ -47,7 +47,12 @@ export const POST: APIRoute = async (context) => {
         .catch((e: unknown) => console.error('[KV RL Failed]:', e));
     }
 
-    const data = (await context.request.json()) as Record<string, unknown>;
+    let data: Record<string, unknown> = {};
+    try {
+      data = (await context.request.json()) as Record<string, unknown>;
+    } catch {
+      data = {};
+    }
 
     const resendApiKey = runtimeEnv.RESEND_API_KEY as string;
     const jwtSecret = runtimeEnv.JWT_SECRET as string;
