@@ -75,7 +75,18 @@ export const POST: APIRoute = async (context) => {
 
     const parsedRaw = completeSchema.safeParse(formData);
     if (!parsedRaw.success) {
-      return new Response(JSON.stringify({ error: parsedRaw.error.issues[0].message }), {
+      const issue = parsedRaw.error.issues[0];
+      const field = issue?.path?.[0];
+      let friendlyMsg = 'Please check your input and try again.';
+      if (field === 'course') friendlyMsg = 'Please select a course.';
+      else if (field === 'gender') friendlyMsg = 'Please select student gender.';
+      else if (field === 'teacherGender') friendlyMsg = 'Please select teacher preference.';
+      else if (field === 'level') friendlyMsg = 'Please select a level.';
+      else if (field === 'days') friendlyMsg = 'Please select days per week.';
+      else if (field === 'schedule') friendlyMsg = 'Please select preferred time.';
+      else if (issue?.message) friendlyMsg = issue.message;
+
+      return new Response(JSON.stringify({ error: friendlyMsg }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });

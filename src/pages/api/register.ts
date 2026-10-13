@@ -53,7 +53,20 @@ export const POST: APIRoute = async (context) => {
 
     const parsed = signupSchema.safeParse(formData);
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: parsed.error.issues[0].message }), {
+      const hasTokenIssue = parsed.error.issues.find((i) => i.path[0] === 'turnstileToken');
+      const issue = parsed.error.issues[0];
+      const field = issue?.path?.[0];
+      let friendlyMsg = 'Please check your input and try again.';
+      if (hasTokenIssue) friendlyMsg = 'Please complete the security check.';
+      else if (field === 'email') friendlyMsg = 'Please enter a valid email address.';
+      else if (field === 'name') friendlyMsg = 'Please enter your name.';
+      else if (field === 'whatsapp') friendlyMsg = 'Please enter a valid WhatsApp number.';
+      else if (field === 'country') friendlyMsg = 'Please select your country.';
+      else if (field === 'guardianConsent')
+        friendlyMsg = 'Parent or guardian confirmation is required to register.';
+      else if (issue?.message) friendlyMsg = issue.message;
+
+      return new Response(JSON.stringify({ error: friendlyMsg }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });

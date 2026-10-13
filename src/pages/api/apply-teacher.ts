@@ -60,7 +60,16 @@ export const POST: APIRoute = async (context) => {
     // 2. Validate all fields including Turnstile token
     const parsed = teacherSchema.safeParse(data);
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: parsed.error.issues[0].message }), {
+      const hasTokenIssue = parsed.error.issues.find((i) => i.path[0] === 'cf-turnstile-response');
+      const issue = parsed.error.issues[0];
+      const field = issue?.path?.[0];
+      let friendlyMsg = 'Please check your input and try again.';
+      if (hasTokenIssue) friendlyMsg = 'Please complete the security check.';
+      else if (field === 'email') friendlyMsg = 'Please enter a valid email address.';
+      else if (field === 'resumeLink') friendlyMsg = 'Please enter a valid resume/CV URL.';
+      else if (field === 'fullName') friendlyMsg = 'Full name is required.';
+      else if (field === 'whatsapp') friendlyMsg = 'Please enter a valid WhatsApp number.';
+      return new Response(JSON.stringify({ error: friendlyMsg }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });

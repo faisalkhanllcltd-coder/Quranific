@@ -195,6 +195,13 @@ const headingClass = 'text-emerald-500 mb-5';
               Join
             </button>
           </div>
+          <!-- Turnstile container: unconstrained so interactive challenge can show -->
+          <div
+            id="newsletter-turnstile"
+            data-sitekey={SITE.turnstileSiteKey}
+            style="min-height: 0; overflow: visible;"
+          >
+          </div>
           <div id="newsletter-message" class="mt-2 text-xs font-medium hidden"></div>
         </form>
       </div>
@@ -211,6 +218,176 @@ const headingClass = 'text-emerald-500 mb-5';
 </footer>
 
 <script>
+  // F1: Footer newsletter with lazy-loaded Turnstile (interaction-only, explicit execution)
+  // api.js is loaded once on first focusin/pointerdown of the email input, reusing
+  // window.turnstile if already loaded by another form on the page.
+
+  interface TurnstileApi {
+    render: (container: HTMLElement | string, options: Record<string, unknown>) => string;
+    reset: (widgetId?: string) => void;
+    remove: (widgetId?: string) => void;
+    execute: (widgetId?: string) => void;
+  }
+  declare global {
+    interface Window {
+      turnstile?: TurnstileApi;
+    }
+  }
+
+  const TURNSTILE_API = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+  const TOKEN_TIMEOUT_MS = 15000;
+
+  let turnstileWidgetId: string | null = null;
+  let turnstileToken: string | null = null;
+  let apiLoaded = false;
+  let apiLoading = false;
+
+  function getSiteKey(): string {
+    const container = document.getElementById('newsletter-turnstile');
+    return container?.dataset.sitekey || '';
+  }
+
+  function loadTurnstileApi(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (apiLoaded && typeof window.turnstile !== 'undefined') {
+        resolve();
+        return;
+      }
+      if (typeof window.turnstile !== 'undefined') {
+        apiLoaded = true;
+        resolve();
+        return;
+      }
+      if (apiLoading) {
+        const check = setInterval(() => {
+          if (typeof window.turnstile !== 'undefined') {
+            clearInterval(check);
+            apiLoaded = true;
+            resolve();
+          }
+        }, 50);
+        return;
+      }
+
+      const existingScript = document.querySelector<HTMLScriptElement>(
+        'script[src*="challenges.cloudflare.com/turnstile"]'
+      );
+      if (existingScript) {
+        apiLoading = true;
+        existingScript.addEventListener('load', () => {
+          apiLoaded = true;
+          apiLoading = false;
+          resolve();
+        });
+        existingScript.addEventListener('error', () => {
+          apiLoading = false;
+          reject(new Error('Failed to load Turnstile'));
+        });
+        return;
+      }
+
+      apiLoading = true;
+      const script = document.createElement('script');
+      script.src = TURNSTILE_API;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        apiLoaded = true;
+        apiLoading = false;
+        resolve();
+      };
+      script.onerror = () => {
+        apiLoading = false;
+        reject(new Error('Failed to load Turnstile'));
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  function renderTurnstile(): void {
+    const container = document.getElementById('newsletter-turnstile');
+    if (!container || turnstileWidgetId !== null || typeof window.turnstile === 'undefined') return;
+
+    const sitekey = getSiteKey();
+    if (!sitekey) return;
+
+    turnstileWidgetId = window.turnstile.render(container, {
+      sitekey,
+      appearance: 'interaction-only',
+      execution: 'execute',
+      callback: (token: string) => {
+        turnstileToken = token;
+      },
+      'error-callback': () => {
+        turnstileToken = null;
+      },
+      'expired-callback': () => {
+        turnstileToken = null;
+      },
+    });
+  }
+
+  function executeAndWaitForToken(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (turnstileToken) {
+        resolve(turnstileToken);
+        return;
+      }
+
+      const container = document.getElementById('newsletter-turnstile');
+      if (!container || typeof window.turnstile === 'undefined' || turnstileWidgetId === null) {
+        reject(new Error('Turnstile not ready'));
+        return;
+      }
+
+      // Set up a one-time callback override to capture the token
+      let resolved = false;
+      const originalCallback = (token: string) => {
+        if (!resolved) {
+          resolved = true;
+          turnstileToken = token;
+          resolve(token);
+        }
+      };
+
+      const timer = setTimeout(() => {
+        if (!resolved) {
+          resolved = true;
+          reject(new Error('timeout'));
+        }
+      }, TOKEN_TIMEOUT_MS);
+
+      // Re-render with the callback wired to our resolver
+      if (turnstileWidgetId !== null) {
+        window.turnstile.remove(turnstileWidgetId);
+        turnstileWidgetId = null;
+      }
+
+      const sitekey = getSiteKey();
+      turnstileWidgetId = window.turnstile.render(container, {
+        sitekey,
+        appearance: 'interaction-only',
+        execution: 'execute',
+        callback: (token: string) => {
+          clearTimeout(timer);
+          originalCallback(token);
+        },
+        'error-callback': () => {
+          clearTimeout(timer);
+          if (!resolved) {
+            resolved = true;
+            reject(new Error('error'));
+          }
+        },
+      });
+
+      // Execute immediately
+      if (turnstileWidgetId !== null) {
+        window.turnstile.execute(turnstileWidgetId);
+      }
+    });
+  }
+
   document.addEventListener('astro:page-load', () => {
     const form = document.getElementById('newsletter-form') as HTMLFormElement;
     const btn = document.getElementById('newsletter-submit-btn') as HTMLButtonElement;
@@ -220,6 +397,25 @@ const headingClass = 'text-emerald-500 mb-5';
     if (!form || !btn || !input || !message || form.dataset.bound) return;
     form.dataset.bound = 'true';
 
+    // Reset state on page load
+    turnstileWidgetId = null;
+    turnstileToken = null;
+    apiLoaded = typeof window.turnstile !== 'undefined';
+    apiLoading = false;
+
+    // Lazy-load Turnstile on first interaction with the email input
+    async function ensureTurnstileReady() {
+      try {
+        await loadTurnstileApi();
+        renderTurnstile();
+      } catch {
+        // Non-fatal: form still submits, server will reject without token
+      }
+    }
+
+    input.addEventListener('focusin', ensureTurnstileReady, { once: true });
+    input.addEventListener('pointerdown', ensureTurnstileReady, { once: true });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -228,18 +424,49 @@ const headingClass = 'text-emerald-500 mb-5';
       btn.disabled = true;
       message.className = 'mt-2 text-xs font-medium hidden';
 
+      let token = turnstileToken;
+
       try {
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+        // Ensure Turnstile is loaded and rendered
+        await loadTurnstileApi();
+        renderTurnstile();
+
+        if (!token) {
+          // Execute and wait up to 15s for the callback
+          try {
+            token = await executeAndWaitForToken();
+          } catch {
+            message.textContent = 'Please complete the security check and try again.';
+            message.className = 'mt-2 text-xs font-medium text-red-400 block';
+            btn.innerText = originalBtnText;
+            btn.disabled = false;
+            // Reset widget for next attempt
+            if (turnstileWidgetId !== null && typeof window.turnstile !== 'undefined') {
+              window.turnstile.reset(turnstileWidgetId);
+            }
+            turnstileToken = null;
+            return;
+          }
+        }
+
         input.disabled = true;
 
         const response = await fetch(form.action, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            email: input.value,
+            'cf-turnstile-response': token,
+          }),
         });
 
         const result = await response.json().catch((): { error?: string } => ({}));
+
+        // Reset token after use (tokens are single-use)
+        turnstileToken = null;
+        if (turnstileWidgetId !== null && typeof window.turnstile !== 'undefined') {
+          window.turnstile.reset(turnstileWidgetId);
+        }
 
         if (!response.ok) {
           throw new Error((result as { error?: string }).error || 'Subscription failed');

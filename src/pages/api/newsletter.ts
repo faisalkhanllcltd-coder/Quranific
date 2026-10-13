@@ -55,7 +55,16 @@ export const POST: APIRoute = async (context) => {
     // 3. Validate incoming data with Zod
     const parsed = newsletterSchema.safeParse(data);
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: parsed.error.issues[0].message }), {
+      // Sanitize: never return raw Zod internal messages to visitors
+      const hasTokenIssue = parsed.error.issues.find((i) => i.path[0] === 'cf-turnstile-response');
+      const hasEmailIssue = parsed.error.issues.find((i) => i.path[0] === 'email');
+      let friendlyMsg = 'Please check your input and try again.';
+      if (hasTokenIssue) {
+        friendlyMsg = 'Please complete the security check.';
+      } else if (hasEmailIssue) {
+        friendlyMsg = 'Please enter a valid email address.';
+      }
+      return new Response(JSON.stringify({ error: friendlyMsg }), {
         status: 400,
         headers: SECURITY_HEADERS,
       });

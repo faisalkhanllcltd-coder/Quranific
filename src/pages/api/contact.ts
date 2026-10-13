@@ -50,7 +50,16 @@ export const POST: APIRoute = async (context) => {
     // 2. Validate all fields including the Turnstile token
     const parsed = contactSchema.safeParse(data);
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: parsed.error.issues[0].message }), {
+      const hasTokenIssue = parsed.error.issues.find((i) => i.path[0] === 'cf-turnstile-response');
+      const issue = parsed.error.issues[0];
+      const field = issue?.path?.[0];
+      let friendlyMsg = 'Please check your input and try again.';
+      if (hasTokenIssue) friendlyMsg = 'Please complete the security check.';
+      else if (field === 'email') friendlyMsg = 'Please enter a valid email address.';
+      else if (field === 'firstName') friendlyMsg = 'First name is required.';
+      else if (field === 'lastName') friendlyMsg = 'Last name is required.';
+      else if (field === 'message') friendlyMsg = 'Message is required.';
+      return new Response(JSON.stringify({ error: friendlyMsg }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
