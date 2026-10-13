@@ -388,7 +388,7 @@ const headingClass = 'text-emerald-500 mb-5';
     });
   }
 
-  document.addEventListener('astro:page-load', () => {
+  function initFooterNewsletter() {
     const form = document.getElementById('newsletter-form') as HTMLFormElement;
     const btn = document.getElementById('newsletter-submit-btn') as HTMLButtonElement;
     const input = document.getElementById('footer-email') as HTMLInputElement;
@@ -494,5 +494,12 @@ const headingClass = 'text-emerald-500 mb-5';
         message.className = 'mt-2 text-xs font-medium text-red-400 block';
       }
     });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFooterNewsletter);
+  } else {
+    initFooterNewsletter();
+  }
+  document.addEventListener('astro:page-load', initFooterNewsletter);
 </script>
