@@ -223,6 +223,8 @@
           </div>
         {:else}
           <select
+            id="calculator-course-select"
+            aria-label="Select Course"
             bind:value={selectedCourse}
             onchange={() => (hasInteracted = true)}
             class="w-full px-4 py-2.5 bg-cream-50 border rounded-lg text-sm font-bold {selectInput} transition-colors cursor-pointer truncate"

@@ -23,9 +23,7 @@ import { SITE } from '../../constants/site';
       <h1 class="text-2xl lg:text-3xl font-black text-emerald-950 tracking-tight mb-1">
         Start Your Journey
       </h1>
-      <p class="text-sm lg:text-base text-emerald-700/80 font-medium">
-        Step 1: Let's get to know you
-      </p>
+      <p class="text-sm lg:text-base text-emerald-800 font-medium">Step 1: Let's get to know you</p>
     </div>
 
     <div class="w-full">
@@ -33,12 +31,7 @@ import { SITE } from '../../constants/site';
            time from the server-side SITE constant (not directly from ENV, since
            this is an Astro template rendered at the edge). The widget token is
            appended to the FormData inside SignupForm.svelte's handleSubmit. -->
-      <div
-        class="cf-turnstile mb-4"
-        data-sitekey={SITE.turnstileSiteKey}
-        aria-label="Security check"
-      >
-      </div>
+      <div class="cf-turnstile mb-4" data-sitekey={SITE.turnstileSiteKey}></div>
       <!-- Turnstile JS loaded once at page level in Funnel.astro layout -->
       <SignupForm client:load />
     </div>

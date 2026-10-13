@@ -388,7 +388,7 @@
   </button>
 
   <div
-    class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-emerald-900/70 font-medium text-center"
+    class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-emerald-900/80 font-medium text-center"
   >
     <span class="flex items-center gap-1">
       <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"

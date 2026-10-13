@@ -67,16 +67,18 @@ const { title, description = 'Complete your registration for Quranific.' } = Ast
       </div>
 
       <div
+        tabindex="0"
+        aria-label="Course highlights and testimonial"
         class="relative z-10 hidden lg:flex flex-col p-8 xl:p-10 mt-auto overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         <blockquote class="mb-8">
           <p class="text-2xl xl:text-3xl font-serif font-bold text-white mb-4 leading-snug">
             "The best among you are those who learn the Quran and teach it."
           </p>
-          <footer class="flex items-center gap-4 text-emerald-300/60">
+          <footer class="flex items-center gap-4 text-emerald-300">
             <div class="h-px bg-emerald-800 flex-grow" aria-hidden="true"></div>
             <cite class="not-italic">
-              <EyebrowText class="inline">Sahih Al-Bukhari</EyebrowText>
+              <EyebrowText class="inline text-emerald-300">Sahih Al-Bukhari</EyebrowText>
             </cite>
           </footer>
         </blockquote>
