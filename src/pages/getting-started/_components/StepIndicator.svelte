@@ -58,7 +58,7 @@
 
         <span
           class={`text-[10px] font-bold text-center leading-tight transition-colors duration-300 ease-in-out ${
-            step.num <= currentStep ? 'text-emerald-950' : 'text-emerald-800/75'
+            step.num <= currentStep ? 'text-emerald-950' : 'text-emerald-800'
           }`}
         >
           {step.label}

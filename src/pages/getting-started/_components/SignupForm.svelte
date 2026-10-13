@@ -364,7 +364,7 @@
       {#if phoneError}
         <p class="text-xs text-red-500 mt-1">{phoneError}</p>
       {/if}
-      <p class="text-xs text-gray-500 mt-1">
+      <p class="text-xs text-emerald-800 mt-1">
         We'll message you here to confirm your child's trial time.
       </p>
     </div>
