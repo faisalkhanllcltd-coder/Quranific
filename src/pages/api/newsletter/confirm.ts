@@ -15,7 +15,7 @@ const HTML_HEADERS = {
   'Content-Type': 'text/html; charset=utf-8',
   'Cache-Control': 'no-store',
   'X-Robots-Tag': 'noindex, nofollow',
-  'Referrer-Policy': 'no-referrer',
+  'Referrer-Policy': 'same-origin',
 };
 
 function renderPage(options: {
@@ -77,7 +77,7 @@ function renderPage(options: {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="referrer" content="no-referrer">
+  <meta name="referrer" content="same-origin">
   <title>${title} | Quranific</title>
   <style>
     body {
@@ -298,11 +298,14 @@ export const POST: APIRoute = async (context) => {
   }
 
   // 1. Store consent record in KV FIRST (no TTL, only if none exists; never overwrite the first confirmedAt)
+  let isAlreadyConfirmed = false;
   if (kv) {
     const consentKey = `NL_CONSENT:${email}`;
     try {
       const existingConsent = await kv.get(consentKey);
-      if (!existingConsent) {
+      if (existingConsent) {
+        isAlreadyConfirmed = true;
+      } else {
         const consentRecord = JSON.stringify({
           confirmedAt: new Date().toISOString(),
           ip: cfConnectingIp,
@@ -351,8 +354,8 @@ export const POST: APIRoute = async (context) => {
       );
     }
   } else {
-    // Local mock mode: treat as created to trigger mock welcome/admin notifications
-    subResult = 'created';
+    // Local mock mode: treat as created on first confirmation; on replay treat as already to avoid duplicate mail
+    subResult = isAlreadyConfirmed ? 'already' : 'created';
   }
 
   // 3. Dispatch welcome email and admin notification in background via waitUntil ONLY if created or resubscribed

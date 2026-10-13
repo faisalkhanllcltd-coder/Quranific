@@ -7,6 +7,13 @@ import { setUnsubscribed } from '../../../lib/resend-contacts';
 
 export const prerender = false;
 
+const HTML_HEADERS = {
+  'Content-Type': 'text/html; charset=utf-8',
+  'Cache-Control': 'no-store',
+  'X-Robots-Tag': 'noindex, nofollow',
+  'Referrer-Policy': 'same-origin',
+};
+
 const SECURITY_HEADERS = {
   'Cache-Control': 'no-store',
   'X-Robots-Tag': 'noindex, nofollow',
@@ -65,7 +72,7 @@ function renderHtml(options: {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="referrer" content="no-referrer">
+  <meta name="referrer" content="same-origin">
   <title>${title} | Quranific</title>
   <style>
     body {
@@ -172,10 +179,7 @@ export const GET: APIRoute = async (context) => {
       }),
       {
         status: 400,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          ...SECURITY_HEADERS,
-        },
+        headers: HTML_HEADERS,
       }
     );
   }
@@ -191,10 +195,7 @@ export const GET: APIRoute = async (context) => {
       }),
       {
         status: 500,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          ...SECURITY_HEADERS,
-        },
+        headers: HTML_HEADERS,
       }
     );
   }
@@ -211,10 +212,7 @@ export const GET: APIRoute = async (context) => {
       }),
       {
         status: 200,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          ...SECURITY_HEADERS,
-        },
+        headers: HTML_HEADERS,
       }
     );
   } catch (err) {
@@ -229,10 +227,7 @@ export const GET: APIRoute = async (context) => {
       }),
       {
         status: 400,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          ...SECURITY_HEADERS,
-        },
+        headers: HTML_HEADERS,
       }
     );
   }
@@ -281,10 +276,7 @@ export const POST: APIRoute = async (context) => {
       }),
       {
         status: 400,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          ...SECURITY_HEADERS,
-        },
+        headers: HTML_HEADERS,
       }
     );
   }
@@ -306,10 +298,7 @@ export const POST: APIRoute = async (context) => {
       }),
       {
         status: 500,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          ...SECURITY_HEADERS,
-        },
+        headers: HTML_HEADERS,
       }
     );
   }
@@ -341,10 +330,7 @@ export const POST: APIRoute = async (context) => {
         }),
         {
           status: 500,
-          headers: {
-            'Content-Type': 'text/html; charset=utf-8',
-            ...SECURITY_HEADERS,
-          },
+          headers: HTML_HEADERS,
         }
       );
     }
@@ -365,10 +351,7 @@ export const POST: APIRoute = async (context) => {
       }),
       {
         status: 200,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          ...SECURITY_HEADERS,
-        },
+        headers: HTML_HEADERS,
       }
     );
   } catch (err) {
@@ -389,10 +372,7 @@ export const POST: APIRoute = async (context) => {
       }),
       {
         status: 400,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          ...SECURITY_HEADERS,
-        },
+        headers: HTML_HEADERS,
       }
     );
   }

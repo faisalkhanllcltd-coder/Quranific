@@ -43,8 +43,33 @@ const SECURITY_HEADERS: Record<string, string> = {
 };
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  const cf = (context.request as Request & { cf?: Record<string, unknown> }).cf;
   const url = new URL(context.request.url);
+
+  // ─── CSRF Origin Check (Replaces Astro checkOrigin with /api/newsletter/unsubscribe RFC 8058 exemption) ─
+  const SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS'];
+  if (!context.isPrerendered && !SAFE_METHODS.includes(context.request.method)) {
+    const normPath = url.pathname.replace(/\/$/, '') || '/';
+    if (normPath !== '/api/newsletter/unsubscribe') {
+      const origin = context.request.headers.get('origin');
+      const contentType = context.request.headers.get('content-type');
+      const FORM_CONTENT_TYPES = [
+        'application/x-www-form-urlencoded',
+        'multipart/form-data',
+        'text/plain',
+      ];
+      const isFormLike = contentType
+        ? FORM_CONTENT_TYPES.some((ct) => contentType.toLowerCase().includes(ct))
+        : false;
+
+      if ((!contentType || isFormLike) && origin !== url.origin) {
+        return new Response(`Cross-site ${context.request.method} form submissions are forbidden`, {
+          status: 403,
+        });
+      }
+    }
+  }
+
+  const cf = (context.request as Request & { cf?: Record<string, unknown> }).cf;
 
   const isLocal =
     import.meta.env.DEV ||

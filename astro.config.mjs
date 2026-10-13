@@ -12,6 +12,9 @@ export default defineConfig({
   output: 'server',
   compressHTML: true,
   trailingSlash: 'never',
+  security: {
+    checkOrigin: false,
+  },
   adapter: cloudflare({
     imageService: 'cloudflare',
     platformProxy: {
