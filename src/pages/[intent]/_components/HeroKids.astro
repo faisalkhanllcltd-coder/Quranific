@@ -93,7 +93,7 @@ const { intent, h1, highlightWord, subhead } = Astro.props;
         <!-- CTAs: Hero = variant="emerald" per funnel mapping -->
         <div class="flex flex-col sm:flex-row gap-3">
           <Button
-            href={`/enroll/step-1?intent=${intent}`}
+            href={`/getting-started/signup?source=ad_kids_${intent}`}
             data-track-cta
             variant="primary"
             fullWidthOnMobile

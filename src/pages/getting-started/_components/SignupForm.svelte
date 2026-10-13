@@ -75,8 +75,9 @@
         if (urlVal) {
           captured[k] = urlVal;
           sessionStorage.setItem('q_track_' + k, urlVal);
+          sessionStorage.setItem(k, urlVal);
         } else {
-          const storedVal = sessionStorage.getItem('q_track_' + k);
+          const storedVal = sessionStorage.getItem('q_track_' + k) || sessionStorage.getItem(k);
           if (storedVal) captured[k] = storedVal;
         }
       });
