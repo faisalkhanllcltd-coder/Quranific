@@ -415,6 +415,8 @@ const headingClass = 'text-emerald-500 mb-5';
 
     input.addEventListener('focusin', ensureTurnstileReady, { once: true });
     input.addEventListener('pointerdown', ensureTurnstileReady, { once: true });
+    input.addEventListener('focus', ensureTurnstileReady, { once: true });
+    input.addEventListener('touchstart', ensureTurnstileReady, { once: true });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
