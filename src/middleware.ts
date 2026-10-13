@@ -36,7 +36,6 @@ const SECURITY_HEADERS: Record<string, string> = {
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    'upgrade-insecure-requests',
     'report-uri /api/csp-report',
     'report-to csp-endpoint',
   ].join('; '),
