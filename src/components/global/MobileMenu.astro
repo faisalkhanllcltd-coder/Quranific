@@ -298,6 +298,17 @@ import logoGreen from '../../assets/images/quranific-logo-green.svg';
       { signal }
     );
 
+    // Global ESC handler to ensure aria-expanded="false" is set whenever ESC is pressed
+    document.addEventListener(
+      'keydown',
+      (e: KeyboardEvent) => {
+        if (e.key === 'Escape' && overlay!.style.display !== 'none' && !closing) {
+          closeMenu(e);
+        }
+      },
+      { signal }
+    );
+
     // Click on backdrop to close
     backdrop.addEventListener(
       'click',

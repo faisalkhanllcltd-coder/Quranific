@@ -24,8 +24,8 @@
   let cardBorder = $derived(isPurple ? 'border-purple-200/60' : 'border-emerald-100');
   let cardShadow = $derived(isPurple ? 'shadow-purple-900/5' : 'shadow-emerald-900/5');
   let titleColor = $derived(isPurple ? 'text-purple-950' : 'text-emerald-950');
-  let subtitleColor = $derived(isPurple ? 'text-purple-900/70' : 'text-emerald-800/70');
-  let labelColor = $derived(isPurple ? 'text-purple-900/60' : 'text-emerald-900/60');
+  let subtitleColor = $derived(isPurple ? 'text-purple-900/90' : 'text-emerald-800');
+  let labelColor = $derived(isPurple ? 'text-purple-900/90' : 'text-emerald-800');
   let valueColor = $derived(isPurple ? 'text-purple-700' : 'text-emerald-700');
 
   let activeBtn = $derived(
@@ -35,13 +35,13 @@
   );
   let inactiveBtn = $derived(
     isPurple
-      ? 'bg-cream-50 text-purple-900/70 border-purple-200 hover:text-purple-700'
-      : 'bg-cream-50 text-emerald-900/70 border-emerald-200 hover:text-emerald-700'
+      ? 'bg-cream-50 text-purple-950 border-purple-200 hover:text-purple-700'
+      : 'bg-cream-50 text-emerald-950 border-emerald-200 hover:text-emerald-700'
   );
   let selectInput = $derived(
     isPurple
-      ? 'border-purple-200 focus:ring-purple-700 focus:border-purple-700 text-purple-900/70'
-      : 'border-emerald-200 focus:ring-emerald-700 focus:border-emerald-700 text-emerald-900/70'
+      ? 'border-purple-200 focus:ring-purple-700 focus:border-purple-700 text-purple-950 font-bold'
+      : 'border-emerald-200 focus:ring-emerald-700 focus:border-emerald-700 text-emerald-950 font-bold'
   );
   let textareaInput = $derived(
     isPurple
@@ -54,7 +54,7 @@
   let resultValue = $derived(isPurple ? 'text-purple-950' : 'text-emerald-950');
   let resultFeeLabel = $derived(isPurple ? 'text-purple-950' : 'text-emerald-950');
   let resultFeeVal = $derived(isPurple ? 'text-purple-700' : 'text-emerald-700');
-  let resultFeeSub = $derived(isPurple ? 'text-purple-900/60' : 'text-emerald-800/60');
+  let resultFeeSub = $derived(isPurple ? 'text-purple-900/90' : 'text-emerald-800');
   let resultDivider = $derived(isPurple ? 'border-purple-100' : 'border-emerald-100');
   let ctaButton = $derived(
     isPurple
@@ -364,7 +364,7 @@
         </div>
         <!-- Geo billing context — injected dynamically, empty during SSR -->
         {#if billingContext}
-          <p class="mt-2 text-[11px] font-medium text-emerald-800/50 leading-snug">
+          <p class="mt-2 text-[11px] font-medium text-emerald-800 leading-snug">
             {billingContext}
           </p>
         {/if}

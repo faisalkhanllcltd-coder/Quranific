@@ -80,18 +80,18 @@
   <div
     class="flex flex-row items-center justify-between gap-4 bg-white border border-emerald-100 rounded-xl px-4 sm:px-5 h-14 shadow-sm w-full sm:w-auto"
   >
-    <span class="eyebrow-pill text-emerald-900/50 shrink-0">Length:</span>
+    <span class="eyebrow-pill text-emerald-800 shrink-0">Length:</span>
     <div class="flex gap-1.5 shrink-0">
       <button
         class="px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {dur === '30'
           ? 'bg-emerald-700 text-white border-emerald-700'
-          : 'bg-emerald-50 text-emerald-900/70 border-emerald-200 hover:text-emerald-700 hover:border-emerald-700'}"
+          : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:text-emerald-700 hover:border-emerald-700'}"
         onclick={() => (dur = '30')}>30 min</button
       >
       <button
         class="px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border {dur === '40'
           ? 'bg-emerald-700 text-white border-emerald-700'
-          : 'bg-emerald-50 text-emerald-900/70 border-emerald-200 hover:text-emerald-700 hover:border-emerald-700'}"
+          : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:text-emerald-700 hover:border-emerald-700'}"
         onclick={() => (dur = '40')}>40 min</button
       >
     </div>
@@ -128,22 +128,22 @@
             <div
               class="eyebrow-pill {selectedPlan === '2'
                 ? 'text-emerald-700'
-                : 'text-emerald-900/40'} mb-0.5 transition-colors"
+                : 'text-emerald-800'} mb-0.5 transition-colors"
             >
               2 classes per week
             </div>
             <!-- Line 2: Subtitle -->
-            <div class="text-[11px] font-medium text-emerald-900/40 mb-0 sm:mb-3">
+            <div class="text-[11px] font-medium text-emerald-800 mb-0 sm:mb-3">
               {SESSIONS_PER_MONTH['2']} sessions per month
             </div>
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0" dir="ltr">
-            <bdi class="text-base font-bold text-emerald-900/60">{sym}</bdi>
+            <bdi class="text-base font-bold text-emerald-800">{sym}</bdi>
             <bdi class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
               >{getDisplayedMonthly('2')}</bdi
             >
-            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            <span class="text-xs font-medium text-emerald-800 ml-0.5">/mo</span>
           </div>
         </div>
       </button>
@@ -175,22 +175,22 @@
             <div
               class="eyebrow-pill {selectedPlan === '3'
                 ? 'text-emerald-700'
-                : 'text-emerald-900/40'} mb-0.5 transition-colors"
+                : 'text-emerald-800'} mb-0.5 transition-colors"
             >
               3 classes per week
             </div>
             <!-- Line 2: Subtitle -->
-            <div class="text-[11px] font-medium text-emerald-900/40 mb-0 sm:mb-3">
+            <div class="text-[11px] font-medium text-emerald-800 mb-0 sm:mb-3">
               {SESSIONS_PER_MONTH['3']} sessions per month
             </div>
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0" dir="ltr">
-            <bdi class="text-base font-bold text-emerald-900/60">{sym}</bdi>
+            <bdi class="text-base font-bold text-emerald-800">{sym}</bdi>
             <bdi class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
               >{getDisplayedMonthly('3')}</bdi
             >
-            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            <span class="text-xs font-medium text-emerald-800 ml-0.5">/mo</span>
           </div>
         </div>
       </button>
@@ -222,22 +222,22 @@
             <div
               class="eyebrow-pill {selectedPlan === '4'
                 ? 'text-emerald-700'
-                : 'text-emerald-900/40'} mb-0.5 transition-colors"
+                : 'text-emerald-800'} mb-0.5 transition-colors"
             >
               4 classes per week
             </div>
             <!-- Line 2: Subtitle -->
-            <div class="text-[11px] font-medium text-emerald-900/40 mb-0 sm:mb-3">
+            <div class="text-[11px] font-medium text-emerald-800 mb-0 sm:mb-3">
               {SESSIONS_PER_MONTH['4']} sessions per month
             </div>
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0" dir="ltr">
-            <bdi class="text-base font-bold text-emerald-900/60">{sym}</bdi>
+            <bdi class="text-base font-bold text-emerald-800">{sym}</bdi>
             <bdi class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
               >{getDisplayedMonthly('4')}</bdi
             >
-            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            <span class="text-xs font-medium text-emerald-800 ml-0.5">/mo</span>
           </div>
         </div>
       </button>
@@ -276,22 +276,22 @@
             <div
               class="eyebrow-pill {selectedPlan === '5'
                 ? 'text-emerald-700'
-                : 'text-emerald-900/40'} mb-0.5 transition-colors"
+                : 'text-emerald-800'} mb-0.5 transition-colors"
             >
               5 classes per week
             </div>
             <!-- Line 2: Subtitle -->
-            <div class="text-[11px] font-medium text-emerald-900/40 mb-0 sm:mb-3">
+            <div class="text-[11px] font-medium text-emerald-800 mb-0 sm:mb-3">
               {SESSIONS_PER_MONTH['5']} sessions per month
             </div>
           </div>
           <!-- Line 3: Price -->
           <div class="flex items-baseline gap-0.5 shrink-0" dir="ltr">
-            <bdi class="text-base font-bold text-emerald-900/60">{sym}</bdi>
+            <bdi class="text-base font-bold text-emerald-800">{sym}</bdi>
             <bdi class="font-serif text-3xl sm:text-4xl font-bold text-emerald-950"
               >{getDisplayedMonthly('5')}</bdi
             >
-            <span class="text-xs font-medium text-emerald-800/50 ml-0.5">/mo</span>
+            <span class="text-xs font-medium text-emerald-800 ml-0.5">/mo</span>
           </div>
         </div>
       </button>
@@ -303,10 +303,10 @@
     >
       <!-- Left Edge Aligned Summary -->
       <div class="flex flex-col text-left w-full sm:w-auto">
-        <span class="eyebrow-pill text-emerald-900/40 mb-1.5">Your Selection</span>
+        <span class="eyebrow-pill text-emerald-800 mb-1.5">Your Selection</span>
         <!-- Sessions / duration / cadence line -->
         <div
-          class="text-sm font-medium text-emerald-900/70 flex flex-wrap items-center justify-start gap-x-2 gap-y-1 mb-2"
+          class="text-sm font-medium text-emerald-800 flex flex-wrap items-center justify-start gap-x-2 gap-y-1 mb-2"
         >
           <span
             ><strong class="text-emerald-950 font-bold">{selectedPlan} classes</strong> / week</span
@@ -324,12 +324,12 @@
           >
             <bdi>{sym}</bdi>
             <bdi>{getDisplayedMonthly(selectedPlan)}</bdi>
-            <span class="text-xs font-bold text-emerald-800/50 ml-0.5">/mo</span>
+            <span class="text-xs font-bold text-emerald-800 ml-0.5">/mo</span>
           </span>
         </div>
         <!-- Geo billing context -->
         {#if billingContext}
-          <p class="mt-1 text-[11px] font-medium text-emerald-700/60 leading-snug">
+          <p class="mt-1 text-[11px] font-medium text-emerald-800 leading-snug">
             {billingContext}
           </p>
         {/if}

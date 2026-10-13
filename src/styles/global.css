@@ -77,11 +77,11 @@ body {
 
 /* Eyebrow Typography Tokens */
 @utility eyebrow-pill {
-  @apply text-[11px] font-bold uppercase tracking-widest;
+  @apply text-[11px] font-bold uppercase tracking-widest text-emerald-800;
 }
 @utility eyebrow-text {
-  @apply text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.2em];
+  @apply text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.2em] text-emerald-800;
 }
 @utility eyebrow-micro {
-  @apply text-[9px] font-bold uppercase tracking-wider;
+  @apply text-[9px] font-bold uppercase tracking-wider text-emerald-800;
 }

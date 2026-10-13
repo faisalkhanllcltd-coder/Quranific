@@ -52,7 +52,7 @@ const optimizedImage = (courseImages[targetPath] ?? courseImages[fallbackPath]).
   <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 text-center flex flex-col items-center">
     <!-- Anchored Breadcrumbs -->
     <div
-      class="mb-4 flex justify-center w-full overflow-hidden [&_nav_ol_li_a]:text-white/70 [&_nav_ol_li_a:hover]:text-white [&_nav_ol_li_span]:text-white/40 [&_nav_ol_li_span[aria-current]]:text-white/90"
+      class="mb-4 flex justify-center w-full overflow-hidden [&_nav_ol_li_a]:text-white/90 [&_nav_ol_li_a:hover]:text-white [&_nav_ol_li_span]:text-white/70 [&_nav_ol_li_span[aria-current]]:text-white"
     >
       <Breadcrumb />
     </div>
@@ -60,7 +60,7 @@ const optimizedImage = (courseImages[targetPath] ?? courseImages[fallbackPath]).
     <!-- Highlight Badge -->
     {
       course.highlight && (
-        <EyebrowBadge class="bg-white/10 backdrop-blur-sm border border-white/20 text-white mb-4 shadow-sm">
+        <EyebrowBadge class="bg-black/50 backdrop-blur-sm border border-white/30 text-white mb-4 shadow-sm">
           ★ {course.highlight}
         </EyebrowBadge>
       )

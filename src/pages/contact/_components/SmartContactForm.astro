@@ -32,7 +32,7 @@ const Icons = {
           exactly what we need to give you a useful answer.
         </p>
 
-        <EyebrowText class="text-emerald-900/50 mb-3"> What's your question about? </EyebrowText>
+        <EyebrowText class="text-emerald-800 mb-3"> What's your question about? </EyebrowText>
         <div class="space-y-2.5 mb-10">
           <!-- E-3 FIX: Added aria-pressed to all topic buttons. JS updates them on click. -->
           <button
@@ -48,7 +48,7 @@ const Icons = {
             </div>
             <div>
               <div class="font-bold text-emerald-950 text-sm">Enrolling a child</div><div
-                class="text-[12px] font-medium text-emerald-800/70"
+                class="text-[12px] font-medium text-emerald-800"
               >
                 Free trial, first steps, course selection
               </div>
@@ -67,7 +67,7 @@ const Icons = {
             </div>
             <div>
               <div class="font-bold text-emerald-950 text-sm">I'm an existing parent</div><div
-                class="text-[12px] font-medium text-emerald-800/70"
+                class="text-[12px] font-medium text-emerald-800"
               >
                 Progress, teacher, schedule, billing
               </div>
@@ -86,7 +86,7 @@ const Icons = {
             </div>
             <div>
               <div class="font-bold text-emerald-950 text-sm">Adult learning</div><div
-                class="text-[12px] font-medium text-emerald-800/70"
+                class="text-[12px] font-medium text-emerald-800"
               >
                 Tajweed fix, private lessons
               </div>
@@ -105,7 +105,7 @@ const Icons = {
             </div>
             <div>
               <div class="font-bold text-emerald-950 text-sm">Teaching at Quranific</div><div
-                class="text-[12px] font-medium text-emerald-800/70"
+                class="text-[12px] font-medium text-emerald-800"
               >
                 Applications, vetting, joining
               </div>
@@ -124,7 +124,7 @@ const Icons = {
             </div>
             <div>
               <div class="font-bold text-emerald-950 text-sm">Something else</div><div
-                class="text-[12px] font-medium text-emerald-800/70"
+                class="text-[12px] font-medium text-emerald-800"
               >
                 Press, partnerships, general enquiry
               </div>
@@ -163,7 +163,7 @@ const Icons = {
           <h3 class="font-bold text-xl text-emerald-950 mb-1" id="form-dynamic-title">
             Enrol a child or book a free trial
           </h3>
-          <p class="text-[13px] font-medium text-emerald-800/70 mb-8" id="form-dynamic-sub">
+          <p class="text-[13px] font-medium text-emerald-800 mb-8" id="form-dynamic-sub">
             Fill in the details below and we will get back to you within 24 hours with everything
             you need to get started.
           </p>
@@ -177,7 +177,7 @@ const Icons = {
             <div class="grid sm:grid-cols-2 gap-5">
               <div>
                 <label for="fc-name" class="block mb-2">
-                  <EyebrowText class="text-emerald-900/60">
+                  <EyebrowText class="text-emerald-800">
                     Your Name <span class="text-amber-500">*</span>
                   </EyebrowText>
                 </label>
@@ -186,14 +186,14 @@ const Icons = {
                   id="fc-name"
                   name="fc-name"
                   autocomplete="name"
-                  class="w-full px-4 py-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent placeholder:text-emerald-900/20 font-medium"
+                  class="w-full px-4 py-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent placeholder:text-emerald-900/40 font-medium"
                   placeholder="Your full name"
                   required
                 />
               </div>
               <div>
                 <label for="fc-email" class="block mb-2">
-                  <EyebrowText class="text-emerald-900/60">
+                  <EyebrowText class="text-emerald-800">
                     Email Address <span class="text-amber-500">*</span>
                   </EyebrowText>
                 </label>
@@ -202,7 +202,7 @@ const Icons = {
                   id="fc-email"
                   name="fc-email"
                   autocomplete="email"
-                  class="w-full px-4 py-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent placeholder:text-emerald-900/20 font-medium"
+                  class="w-full px-4 py-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent placeholder:text-emerald-900/40 font-medium"
                   placeholder="you@example.com"
                   required
                 />
@@ -211,23 +211,21 @@ const Icons = {
 
             <div>
               <label for="fc-whatsapp" class="block mb-2">
-                <EyebrowText class="text-emerald-900/60"> WhatsApp Number (Preferred) </EyebrowText>
+                <EyebrowText class="text-emerald-800"> WhatsApp Number (Preferred) </EyebrowText>
               </label>
               <input
                 type="tel"
                 id="fc-whatsapp"
                 name="fc-whatsapp"
                 autocomplete="tel"
-                class="w-full px-4 py-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent placeholder:text-emerald-900/20 font-medium"
+                class="w-full px-4 py-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent placeholder:text-emerald-900/40 font-medium"
                 placeholder="+44 7700 000000"
               />
             </div>
 
             <div id="dynamic-child-field">
               <label for="fc-level" class="block mb-2">
-                <EyebrowText class="text-emerald-900/60">
-                  Child's age and current level
-                </EyebrowText>
+                <EyebrowText class="text-emerald-800"> Child's age and current level </EyebrowText>
               </label>
               <select
                 id="fc-level"
@@ -246,14 +244,14 @@ const Icons = {
 
             <div>
               <label for="fc-message" class="block mb-2">
-                <EyebrowText class="text-emerald-900/60">
+                <EyebrowText class="text-emerald-800">
                   Your question or message <span class="text-amber-500">*</span>
                 </EyebrowText>
               </label>
               <textarea
                 id="fc-message"
                 name="fc-message"
-                class="w-full px-4 py-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent placeholder:text-emerald-900/20 font-medium min-h-[120px] resize-y"
+                class="w-full px-4 py-3 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent placeholder:text-emerald-900/40 font-medium min-h-[120px] resize-y"
                 placeholder="What would you like to know about enrolling or booking a free trial?"
                 required></textarea>
             </div>
@@ -272,7 +270,7 @@ const Icons = {
               <div class="text-xl shrink-0" aria-hidden="true">🚨</div>
               <div class="flex-1">
                 <div class="font-bold text-emerald-950 text-sm">This is urgent</div>
-                <div class="text-[12px] font-medium text-emerald-800/70">
+                <div class="text-[12px] font-medium text-emerald-800">
                   Tick this and we will prioritise your message for a 2-hour reply
                 </div>
               </div>
@@ -290,14 +288,13 @@ const Icons = {
               class="cf-turnstile"
               data-sitekey="0x4AAAAAAD-QWQWhupcuvhbK"
               id="smart-form-turnstile"
-              aria-label="Security check"
             >
             </div>
 
             <Button type="submit" variant="primary" class="w-full mt-2" id="form-submit-btn"
               >Send message →</Button
             >
-            <p class="text-center text-[11px] text-emerald-900/40 font-medium mt-4">
+            <p class="text-center text-[11px] text-emerald-800 font-medium mt-4">
               Your message is confidential. We do not share your information with anyone.
             </p>
           </form>

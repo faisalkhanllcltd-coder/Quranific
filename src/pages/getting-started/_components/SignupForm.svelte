@@ -247,6 +247,8 @@
     class="hidden"
     tabindex="-1"
     autocomplete="off"
+    aria-hidden="true"
+    aria-label="Do not fill this field"
   />
 
   <!-- Hidden inputs for URL context params (calculator selections + ad attribution) -->
@@ -343,7 +345,7 @@
 
   <!-- Parent / Guardian Declaration (COPPA / GDPR-K / UK Children's Code) -->
   <div class="pt-2">
-    <label class="flex items-start gap-3 cursor-pointer group select-none">
+    <label for="guardianConsent" class="flex items-start gap-3 cursor-pointer group select-none">
       <input
         type="checkbox"
         name="guardianConsent"
