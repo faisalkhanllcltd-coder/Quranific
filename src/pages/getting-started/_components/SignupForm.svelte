@@ -361,12 +361,14 @@
         <a
           href="/legal/terms"
           target="_blank"
+          rel="noopener noreferrer"
           class="text-emerald-700 underline hover:text-emerald-900 font-semibold">Terms</a
         >
         and
         <a
           href="/legal/privacy"
           target="_blank"
+          rel="noopener noreferrer"
           class="text-emerald-700 underline hover:text-emerald-900 font-semibold">Privacy Policy</a
         >.
       </span>
