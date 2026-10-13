@@ -69,18 +69,41 @@
 
       const captured: Record<string, string> = {};
 
-      // Phase A: Process Ad Tracking (Always preserve unless explicitly overwritten by URL)
-      trackingKeys.forEach((k) => {
-        const urlVal = params.get(k);
-        if (urlVal) {
-          captured[k] = urlVal;
-          sessionStorage.setItem('q_track_' + k, urlVal);
-          sessionStorage.setItem(k, urlVal);
-        } else {
-          const storedVal = sessionStorage.getItem('q_track_' + k) || sessionStorage.getItem(k);
-          if (storedVal) captured[k] = storedVal;
+      // Check if attribution capture is permitted
+      function isAttributionAllowed() {
+        const parts = (document.cookie || '').split(';');
+        for (let i = 0; i < parts.length; i++) {
+          const p = parts[i].trim();
+          if (p.indexOf('cf_consent_v1=') === 0) {
+            const val = p.substring('cf_consent_v1='.length);
+            const spl = val.split(':');
+            if (spl[0] === 'STRICT') {
+              return spl[1] === 'accepted';
+            }
+            return spl[1] !== 'rejected';
+          }
         }
-      });
+        // First visit with no cookie yet: check resolved bucket
+        const b = (window as unknown as Record<string, unknown>).__resolvedBucket;
+        if (b === 'NONE' || b === 'MODERATE') return true;
+        // In STRICT without cookie, default denied
+        return false;
+      }
+
+      // Phase A: Process Ad Tracking (Only when attribution is allowed)
+      if (isAttributionAllowed()) {
+        trackingKeys.forEach((k) => {
+          const urlVal = params.get(k);
+          if (urlVal) {
+            captured[k] = urlVal;
+            sessionStorage.setItem('q_track_' + k, urlVal);
+            sessionStorage.setItem(k, urlVal);
+          } else {
+            const storedVal = sessionStorage.getItem('q_track_' + k) || sessionStorage.getItem(k);
+            if (storedVal) captured[k] = storedVal;
+          }
+        });
+      }
 
       // Phase B: Process Form Context (Smart Wipe & Normalization)
       const isContextualVisit = contextKeys.some((k) => params.has(k));
@@ -131,6 +154,24 @@
       });
 
       ctxParams = captured;
+
+      const onConsentGranted = () => {
+        const p = new URLSearchParams(window.location.search);
+        const updated = { ...ctxParams };
+        trackingKeys.forEach((k) => {
+          const urlVal = p.get(k);
+          if (urlVal) {
+            updated[k] = urlVal;
+            sessionStorage.setItem('q_track_' + k, urlVal);
+            sessionStorage.setItem(k, urlVal);
+          } else {
+            const storedVal = sessionStorage.getItem('q_track_' + k) || sessionStorage.getItem(k);
+            if (storedVal) updated[k] = storedVal;
+          }
+        });
+        ctxParams = updated;
+      };
+      window.addEventListener('attribution-consent-granted', onConsentGranted);
 
       if (typeof localStorage !== 'undefined') {
         name = localStorage.getItem('q_draft_name') || '';

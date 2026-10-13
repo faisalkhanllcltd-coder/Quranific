@@ -75,6 +75,9 @@
     updateGtag(GRANT_ALL);
     writeConsentCookie(`${bucket}:accepted`);
     visible = false;
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('attribution-consent-granted'));
+    }
   }
 
   function rejectAll(): void {
@@ -89,6 +92,9 @@
     updateGtag(update);
     writeConsentCookie(`${bucket}:accepted`);
     visible = false;
+    if (bucket === 'MODERATE' && typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('attribution-consent-granted'));
+    }
   }
 
   // ─── Lifecycle ───────────────────────────────────────────────────────────

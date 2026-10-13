@@ -159,28 +159,56 @@ const baseSchema = {
     <!-- First-Touch Ad Attribution Persistence (sessionStorage) -->
     <script is:inline>
       (function () {
-        if (typeof window === 'undefined' || !window.sessionStorage) return;
-        try {
-          const params = new URLSearchParams(window.location.search);
-          const keys = [
-            'gclid',
-            'fbclid',
-            'ttclid',
-            'utm_source',
-            'utm_medium',
-            'utm_campaign',
-            'utm_content',
-          ];
-          for (let i = 0; i < keys.length; i++) {
-            const k = keys[i];
-            const val = params.get(k);
-            if (val && !sessionStorage.getItem(k)) {
-              sessionStorage.setItem(k, val);
-              sessionStorage.setItem('q_track_' + k, val);
+        function captureAttribution() {
+          if (typeof window === 'undefined' || !window.sessionStorage) return;
+          try {
+            const params = new URLSearchParams(window.location.search);
+            const keys = [
+              'gclid',
+              'fbclid',
+              'ttclid',
+              'utm_source',
+              'utm_medium',
+              'utm_campaign',
+              'utm_content',
+              'source',
+            ];
+            for (let i = 0; i < keys.length; i++) {
+              const k = keys[i];
+              const val = params.get(k);
+              if (val && !sessionStorage.getItem(k)) {
+                sessionStorage.setItem(k, val);
+                sessionStorage.setItem('q_track_' + k, val);
+              }
+            }
+          } catch (_e) {
+            void _e;
+          }
+        }
+
+        window.__captureAttribution = captureAttribution;
+        window.addEventListener('attribution-consent-granted', captureAttribution);
+
+        function getConsentState() {
+          const parts = (document.cookie || '').split(';');
+          for (let i = 0; i < parts.length; i++) {
+            const p = parts[i].trim();
+            if (p.indexOf('cf_consent_v1=') === 0) {
+              const val = p.substring('cf_consent_v1='.length);
+              const spl = val.split(':');
+              return { bucket: spl[0], choice: spl[1] };
             }
           }
-        } catch (_e) {
-          void _e;
+          return null;
+        }
+
+        const state = getConsentState();
+        if (state) {
+          if (state.bucket === 'STRICT') {
+            if (state.choice === 'accepted') captureAttribution();
+          } else {
+            if (state.choice !== 'rejected') captureAttribution();
+          }
         }
       })();
     </script>
@@ -420,14 +448,17 @@ const baseSchema = {
           .then(function (data) {
             const bucket = data.bucket || 'STRICT';
             const hasGPC = !!data.hasGPC;
+            window.__resolvedBucket = bucket;
 
             if (bucket === 'NONE' && !hasGPC) {
               // Silent grant — no banner
               g('update', GRANT_ALL);
+              if (window.__captureAttribution) window.__captureAttribution();
             } else if (bucket === 'MODERATE' && !hasGPC) {
               // Analytics granted, ads denied, show banner for explicit opt-in/out
               g('update', GRANT_MODERATE);
               revealBanner(bucket);
+              if (window.__captureAttribution) window.__captureAttribution();
             } else {
               // STRICT or GPC — leave denied, show banner
               revealBanner(bucket);
