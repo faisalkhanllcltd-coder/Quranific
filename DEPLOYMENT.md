@@ -523,3 +523,9 @@ The CSP is set in `src/middleware.ts` and allows:
 | `form-action` | `self`                                                                                              |
 
 `upgrade-insecure-requests` is included.
+
+---
+
+## Verification & Automated Checks
+
+For deployment verification and test execution, see `scripts/final-check.ps1` and `tests/e2e/README.md`.

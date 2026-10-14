@@ -8,7 +8,15 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', '.astro/**', '.wrangler/**', 'node_modules/**', 'src-backup-pre-ai.zip'],
+    ignores: [
+      'dist/**',
+      '.astro/**',
+      '.wrangler/**',
+      'node_modules/**',
+      'src-backup-pre-ai.zip',
+      'tests/e2e/**',
+      'docs/**',
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,

@@ -21,6 +21,19 @@ test-results/
 playwright-report/
 blob-report/
 playwright/.cache/
+html-report/
+screenshots/
+run-*.json
+*.log
+results.json
+tests/e2e/node_modules/
+tests/e2e/test-results/
+tests/e2e/html-report/
+tests/e2e/playwright-report/
+tests/e2e/screenshots/
+tests/e2e/run-*.json
+tests/e2e/results.json
+tests/e2e/*.log
 
 # Editor
 .vscode/

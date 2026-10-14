@@ -1,0 +1,19 @@
+{
+  "name": "qe2e",
+  "version": "1.0.0",
+  "description": "Quranific End-to-End Test Suite",
+  "type": "module",
+  "scripts": {
+    "test:prod": "playwright test --project=desktop-chromium --grep-invert=\"Tier B\"",
+    "test:cross": "playwright test --project=mobile-chrome --project=mobile-safari --project=desktop-firefox --grep-invert=\"Tier B\"",
+    "test:local": "npm --prefix ../../ run build && playwright test tests/tier-b-funnel.spec.ts --project=desktop-chromium",
+    "summarize": "node summarize.mjs",
+    "review-sheet": "node review-sheet.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.64.0",
+    "jose": "^6.2.12",
+    "tsx": "^4.23.15"
+  }
+}

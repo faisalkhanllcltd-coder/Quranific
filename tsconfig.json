@@ -17,5 +17,5 @@
       "@styles/*": ["src/styles/*"]
     }
   },
-  "exclude": ["dist", ".astro", "tests/consent.spec.ts"]
+  "exclude": ["dist", ".astro", "tests/consent.spec.ts", "tests/e2e"]
 }
