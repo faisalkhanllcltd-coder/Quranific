@@ -16,11 +16,6 @@
   - `OA-07`: GTM Tag Consent Settings (`GTM-5CJMMJ29`)
   - `OA-11`: Configure DLQ `ALERT_WEBHOOK_URL` Secret on `alarm-worker`
   - `OA-19`: DMARC Policy Progression (`p=none` to `quarantine`)
-  - `OA-28`: Post-Deploy CSP & GTM Console Verification
-  - `OA-29`: Geo-Pricing Display Verification (UK vs PK)
-  - `OA-30`: Container Padding Visual Inspection (1280px+)
-  - `OA-31`: Newsletter Double Opt-In End-to-End Live Validation
-  - `OA-35`: Confirm Resend Contacts API Access & Segment ID (`RESEND_AUDIENCE_ID`)
   - `OA-36`: Impressum Registration Text
   - Owner signup test: verify customer mail from `support@quranific.com` and notification to personal Gmail `faisalkhan.llc.ltd@gmail.com`
 
@@ -466,3 +461,22 @@ npx tsx tests/consent-unit.test.ts
 npm run build
 # Expected: Astro check and production build complete with exit code 0 (run once in Phase 5)
 ```
+
+---
+
+## E2E Suite
+
+- **Location:** `tests/e2e/` (isolated subproject with independent `package.json` and dependencies)
+- **Commands:**
+  - `cd tests/e2e; npm ci` — Install Playwright and test runner dependencies
+  - `npm run test:prod` — Production Tier A core suite on Desktop Chrome
+  - `npm run test:cross` — Cross-browser matrix (Mobile Chrome, Mobile Safari, Desktop Firefox)
+  - `npm run test:local` — Builds production bundle and starts local edge Worker via Wrangler on port 8787 for Tier B tests
+  - `npm run summarize <run.json>` — Attribute and summarize Playwright JSON output against classification rules
+  - `npm run review-sheet` — Full site visual review sheet generation (`D:\Live Web\quranific-review`)
+
+---
+
+## Decisions Log
+
+- **2026-10-14: Consent Architecture:** Consent mode is advanced everywhere (MODERATE and NONE buckets load GTM on page load with default or granted consent in dataLayer) EXCEPT for the STRICT bucket (EU/UK/CH/QC, unknown country fallback, and `Sec-GPC: 1`), where GTM is completely gated and will not make any network request until the user explicitly grants consent via Accept All or Customization (analytics/marketing). Returning visitors with stored accepted consent load GTM immediately after consent defaults.
