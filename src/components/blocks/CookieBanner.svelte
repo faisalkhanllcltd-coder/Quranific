@@ -15,6 +15,8 @@
   let visible = $state(false);
   let showDetails = $state(false);
   let hydrated = $state(false);
+  let analyticsChecked = $state(false);
+  let adsChecked = $state(false);
 
   // ─── Cookie helpers ───────────────────────────────────────────────────────
   const COOKIE_NAME = 'cf_consent_v1';
@@ -73,6 +75,9 @@
   // ─── Actions ─────────────────────────────────────────────────────────────
   function acceptAll(): void {
     updateGtag(GRANT_ALL);
+    if (typeof window !== 'undefined') {
+      (window as unknown as { __loadGTM?: () => void }).__loadGTM?.();
+    }
     writeConsentCookie(`${bucket}:accepted`);
     visible = false;
     if (typeof window !== 'undefined') {
@@ -90,9 +95,35 @@
     const update =
       bucket === 'MODERATE' ? GRANT_MODERATE : { ...DENY_ALL, analytics_storage: 'granted' };
     updateGtag(update);
+    if (typeof window !== 'undefined') {
+      (window as unknown as { __loadGTM?: () => void }).__loadGTM?.();
+    }
     writeConsentCookie(`${bucket}:accepted`);
     visible = false;
     if (bucket === 'MODERATE' && typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('attribution-consent-granted'));
+    }
+  }
+
+  function saveCustomPreferences(): void {
+    const update: ConsentArg = {
+      ...DENY_ALL,
+      analytics_storage: analyticsChecked ? 'granted' : 'denied',
+      ad_storage: adsChecked ? 'granted' : 'denied',
+      ad_user_data: adsChecked ? 'granted' : 'denied',
+      ad_personalization: adsChecked ? 'granted' : 'denied',
+    };
+    updateGtag(update);
+    if (analyticsChecked || adsChecked) {
+      if (typeof window !== 'undefined') {
+        (window as unknown as { __loadGTM?: () => void }).__loadGTM?.();
+      }
+      writeConsentCookie(`${bucket}:accepted`);
+    } else {
+      writeConsentCookie(`${bucket}:rejected`);
+    }
+    visible = false;
+    if ((analyticsChecked || adsChecked) && typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('attribution-consent-granted'));
     }
   }
@@ -255,7 +286,12 @@
             </span>
           </label>
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="mt-0.5 accent-emerald-600" id="analytics-toggle" />
+            <input
+              type="checkbox"
+              bind:checked={analyticsChecked}
+              class="mt-0.5 accent-emerald-600"
+              id="analytics-toggle"
+            />
             <span>
               <span class="font-semibold text-emerald-950">Analytics</span>
               <span class="text-emerald-700/70 block text-[11px]"
@@ -264,7 +300,12 @@
             </span>
           </label>
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="mt-0.5 accent-emerald-600" id="ads-toggle" />
+            <input
+              type="checkbox"
+              bind:checked={adsChecked}
+              class="mt-0.5 accent-emerald-600"
+              id="ads-toggle"
+            />
             <span>
               <span class="font-semibold text-emerald-950">Advertising</span>
               <span class="text-emerald-700/70 block text-[11px]"
@@ -272,6 +313,15 @@
               >
             </span>
           </label>
+          <button
+            type="button"
+            onclick={saveCustomPreferences}
+            disabled={!hydrated}
+            id="save-preferences-btn"
+            class="w-full mt-3 py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+          >
+            Save preferences
+          </button>
         </div>
       {/if}
 

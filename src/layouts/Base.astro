@@ -125,29 +125,101 @@ const baseSchema = {
         security_storage: 'granted',
         wait_for_update: 500,
       });
-    </script>
 
-    <!-- Google Tag Manager — runs AFTER consent defaults are set above -->
-    <script type="text/partytown">
-      if (window.location.hostname === 'quranific.com') {
-        (function (w, d, s, l, i) {
-          w[l] = w[l] || [];
-          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-          const f = d.getElementsByTagName(s)[0],
-            j = d.createElement(s),
-            dl = l != 'dataLayer' ? '&l=' + l : '';
-          j.async = true;
-          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-          f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-5CJMMJ29');
-      }
+      // Idempotent GTM loader via Partytown — gated by consent
+      window.__gtmLoaded = false;
+      window.__loadGTM = function () {
+        if (window.__gtmLoaded) return;
+        window.__gtmLoaded = true;
+        if (window.location.hostname === 'quranific.com') {
+          const s = document.createElement('script');
+          s.type = 'text/partytown';
+          s.textContent = `
+            (function (w, d, s, l, i) {
+              w[l] = w[l] || [];
+              w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+              const f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+              j.async = true;
+              j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+              f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-5CJMMJ29');
+          `;
+          document.head.appendChild(s);
+          window.dispatchEvent(new CustomEvent('ptupdate'));
+        }
+      };
+
+      // Returning visitor with stored granted consent in STRICT: load right after defaults
+      (function () {
+        try {
+          const parts = document.cookie.split(';');
+          for (let i = 0; i < parts.length; i++) {
+            const part = parts[i].trim();
+            if (part.indexOf('cf_consent_v1=') === 0) {
+              const val = part.substring('cf_consent_v1='.length);
+              const cParts = val.split(':');
+              const bucket = cParts[0];
+              const choice = cParts[1];
+              if (choice === 'accepted') {
+                if (bucket === 'MODERATE') {
+                  gtag('consent', 'update', {
+                    ad_storage: 'denied',
+                    ad_user_data: 'denied',
+                    ad_personalization: 'denied',
+                    analytics_storage: 'granted',
+                    functionality_storage: 'granted',
+                    personalization_storage: 'denied',
+                    security_storage: 'granted',
+                  });
+                } else {
+                  gtag('consent', 'update', {
+                    ad_storage: 'granted',
+                    ad_user_data: 'granted',
+                    ad_personalization: 'granted',
+                    analytics_storage: 'granted',
+                    functionality_storage: 'granted',
+                    personalization_storage: 'granted',
+                    security_storage: 'granted',
+                  });
+                }
+                window.__loadGTM();
+              } else if (choice === 'rejected') {
+                gtag('consent', 'update', {
+                  ad_storage: 'denied',
+                  ad_user_data: 'denied',
+                  ad_personalization: 'denied',
+                  analytics_storage: 'denied',
+                  functionality_storage: 'granted',
+                  personalization_storage: 'denied',
+                  security_storage: 'granted',
+                });
+                if (bucket === 'MODERATE' || bucket === 'NONE') {
+                  window.__loadGTM();
+                }
+              }
+              break;
+            }
+          }
+        } catch {
+          void 0;
+        }
+      })();
     </script>
-    <!-- End Google Tag Manager -->
 
     <!-- SPA Router Analytics Transponder -->
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       document.addEventListener('astro:page-load', function () {
+        if (typeof window !== 'undefined' && typeof window.__loadGTM === 'function') {
+          if (
+            document.cookie.indexOf('cf_consent_v1=') !== -1 &&
+            document.cookie.indexOf(':accepted') !== -1
+          ) {
+            window.__loadGTM();
+          }
+        }
         window.dataLayer.push({
           event: 'virtual_page_view',
           page_path: window.location.pathname,
@@ -427,8 +499,12 @@ const baseSchema = {
             if (bucket === 'NONE') g('update', GRANT_ALL);
             else if (bucket === 'MODERATE') g('update', GRANT_MODERATE);
             else g('update', GRANT_ALL); // STRICT:accepted = explicit accept-all
+            if (window.__loadGTM) window.__loadGTM();
           } else {
             g('update', DENY_ALL); // rejected = deny non-essential
+            if (bucket === 'MODERATE' || bucket === 'NONE') {
+              if (window.__loadGTM) window.__loadGTM();
+            }
           }
           // Banner stays hidden — user already chose
         }
@@ -453,14 +529,17 @@ const baseSchema = {
             if (bucket === 'NONE' && !hasGPC) {
               // Silent grant — no banner
               g('update', GRANT_ALL);
+              if (window.__loadGTM) window.__loadGTM();
               if (window.__captureAttribution) window.__captureAttribution();
             } else if (bucket === 'MODERATE' && !hasGPC) {
               // Analytics granted, ads denied, show banner for explicit opt-in/out
               g('update', GRANT_MODERATE);
+              if (window.__loadGTM) window.__loadGTM();
               revealBanner(bucket);
               if (window.__captureAttribution) window.__captureAttribution();
             } else {
               // STRICT or GPC — leave denied, show banner
+              // GTM is NOT loaded until consent is granted!
               revealBanner(bucket);
             }
           })
