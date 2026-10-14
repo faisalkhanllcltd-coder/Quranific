@@ -298,13 +298,22 @@ async function captureExtraStates(browser) {
       }
     }
     const filename = `extra-footer-invalid-${isMobile ? 'mobile' : 'desktop'}.jpg`;
-    const scrollHeight = await page.evaluate(() => document.documentElement.scrollHeight || document.body.scrollHeight);
-    await page.screenshot({
-      path: path.join(IMG_DIR, filename),
-      type: 'jpeg',
-      quality: 70,
-      clip: { x: 0, y: Math.max(0, scrollHeight - 1200), width: isMobile ? 390 : 1440, height: 1200 },
-    });
+    const footer = page.locator('footer').first();
+    if (await footer.isVisible()) {
+      await footer.screenshot({
+        path: path.join(IMG_DIR, filename),
+        type: 'jpeg',
+        quality: 70,
+      });
+    } else {
+      const scrollHeight = await page.evaluate(() => document.documentElement.scrollHeight || document.body.scrollHeight);
+      await page.screenshot({
+        path: path.join(IMG_DIR, filename),
+        type: 'jpeg',
+        quality: 70,
+        clip: { x: 0, y: 0, width: isMobile ? 390 : 1440, height: Math.min(scrollHeight, 4000) },
+      });
+    }
     await context.close();
   }
   extraItems.push({
@@ -725,6 +734,7 @@ async function main() {
         desktopImg,
         mobileImg,
       });
+      await new Promise((r) => setTimeout(r, 1000));
     } catch (err) {
       console.error(`Failed to capture ${routeItem.path}:`, err);
     }
