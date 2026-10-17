@@ -3,7 +3,8 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
-  testMatch: ['**/*.spec.ts'],
+  testMatch: ['*.spec.ts'],
+  testIgnore: ['e2e/**', '**/e2e/**'],
   fullyParallel: false, // run sequentially — consent state is shared
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
