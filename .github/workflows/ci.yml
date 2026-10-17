@@ -69,6 +69,8 @@ jobs:
           TURNSTILE_SECRET_KEY="1x0000000000000000000000000000000AA"
           INTERNAL_WORKER_SECRET="e2e-internal"
           EOF
+          cp .dev.vars dist/server/.dev.vars
+          cp .dev.vars .env
           npm run preview &
           SERVER_PID=$!
           # Poll until server is ready (max 60 s)
