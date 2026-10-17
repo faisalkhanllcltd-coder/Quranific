@@ -10,6 +10,11 @@ test.describe('Signup Funnel E2E', () => {
         value: 'mock-jwt-session-token',
         url: baseURL,
       },
+      {
+        name: 'cf_consent_v1',
+        value: 'STRICT:accepted',
+        url: baseURL,
+      },
     ]);
 
     // Mock Cloudflare Turnstile script to cleanly provide mock token

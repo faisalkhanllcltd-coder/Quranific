@@ -73,7 +73,7 @@ test.describe('Gate R1 — Consent snippet is bucket-agnostic', () => {
       const r = await page.goto(url);
       const html = await r!.text();
       const start = html.indexOf('Consent Mode v2');
-      const end = html.indexOf('Google Tag Manager');
+      const end = html.indexOf('</script>', start);
       return html.substring(start, end).trim();
     }
 
@@ -178,8 +178,7 @@ test.describe('Gate 4 — Banner visibility', () => {
       {
         name: COOKIE_NAME,
         value: 'STRICT:accepted',
-        domain: 'localhost',
-        path: '/',
+        url: BASE,
       },
     ]);
 
@@ -203,8 +202,7 @@ test.describe('Gate 4 — Banner visibility', () => {
       {
         name: COOKIE_NAME,
         value: 'STRICT:rejected',
-        domain: 'localhost',
-        path: '/',
+        url: BASE,
       },
     ]);
 
